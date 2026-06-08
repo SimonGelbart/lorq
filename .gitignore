@@ -1,0 +1,40 @@
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+.venv/
+venv/
+
+# .NET future implementation
+bin/
+obj/
+TestResults/
+*.user
+*.suo
+
+# Local env / secrets
+.env
+.env.*
+!.env.example
+*.local.*
+
+# Generated run outputs
+results/
+artifacts/
+*.log
+*.tmp
+*.bak
+
+# Keep curated fixtures only when explicitly placed here
+!fixtures/**
+!examples/results/README.md
+
+# OS / editors
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
