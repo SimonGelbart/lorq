@@ -1,0 +1,27 @@
+id: default-graphify-plus
+description: Default Graphify plus a lightweight query-planner companion skill; Graphify index is generated fresh in each run worktree.
+
+materialize:
+  copy:
+    - from: execution/skills/graphify
+      to: .agents/skills/graphify
+    - from: execution/skills/graphify-query-planner
+      to: .agents/skills/graphify-query-planner
+
+pre_agent:
+  setup_scope: per-run
+  commands:
+    - id: graphify-build
+      # Do not copy graphify-out by default; generate it before the AI starts.
+      argv:
+        - graphify
+        - build
+      cwd: .
+      timeout_seconds: 600
+      required: true
+
+
+expectations:
+  should_verify_with_source: true
+  should_avoid_generic_graph_queries: true
+  max_graph_queries_before_source_fallback: 2

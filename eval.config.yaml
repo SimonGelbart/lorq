@@ -1,0 +1,89 @@
+default_prompt_style: neutral
+
+repositories:
+  # Override this with --repo /path/to/your/repo or edit repositories/repositories.yaml.
+  example-local:
+    type: local
+    path: /absolute/path/to/your/repo
+    ref: HEAD
+
+worktrees:
+  root: /tmp/agent-eval-worktrees
+  strategy: git-worktree
+  # never | on-success | always
+  cleanup: never
+  # warn | fail | allow. Formal runs should generally use fail.
+  dirty_policy: warn
+
+output:
+  root: ./results
+
+agent:
+  # Select an agent profile. Codex remains the default.
+  profile: codex
+
+agent_profiles:
+  codex:
+    description: OpenAI Codex CLI in non-interactive JSONL mode.
+    backend: codex
+    command: codex
+    args:
+      - exec
+      - --json
+    input_mode: stdin
+    output_format: codex-jsonl
+    availability_args:
+      - --version
+    availability_timeout_seconds: 10
+    timeout_seconds: 1200
+
+  copilot-cli:
+    description: GitHub Copilot CLI text prompt mode. Kept as a simple shell-CLI fallback.
+    backend: copilot
+    command: copilot
+    args:
+      - --prompt
+      - "{prompt}"
+    input_mode: argument
+    output_format: text
+    availability_args:
+      - --version
+    availability_timeout_seconds: 10
+    timeout_seconds: 1200
+
+  copilot-sdk:
+    description: GitHub Copilot Python SDK session via JSON-RPC. Preferred Copilot backend for programmatic evals.
+    backend: copilot-sdk
+    model: gpt-5
+    reasoning_effort: medium
+    # Non-interactive evals need a permission policy. Run in isolated worktrees.
+    permission_policy: approve_all
+    # Defaults to a per-run .copilot-home under the output directory when omitted.
+    base_directory: null
+    github_token_env: GITHUB_TOKEN
+    use_logged_in_user: true
+    log_level: info
+    output_format: copilot-sdk-events
+    timeout_seconds: 1200
+
+  # Example only: old GitHub CLI extension, not recommended for repo-wide agent evals.
+  # gh-copilot-suggest:
+  #   backend: generic
+  #   command: gh
+  #   args:
+  #     - copilot
+  #     - suggest
+  #     - "{prompt}"
+  #   input_mode: argument
+  #   output_format: text
+  #   timeout_seconds: 300
+
+judge:
+  # Optional and disabled by default. Enable with --judge or set enabled: true.
+  enabled: false
+  command: codex
+  args:
+    - exec
+    - --json
+  timeout_seconds: 1200
+  default_rubric: repository-exploration

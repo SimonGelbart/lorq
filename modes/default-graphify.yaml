@@ -1,0 +1,26 @@
+id: default-graphify
+description: Default Graphify skill with a Graphify index generated fresh in each run worktree before agent execution.
+
+materialize:
+  copy:
+    - from: execution/skills/graphify
+      to: .agents/skills/graphify
+
+pre_agent:
+  # v0.9-clean default: every mode/case/repetition gets a clean worktree
+  # and the setup commands run inside that same worktree.
+  setup_scope: per-run
+  commands:
+    - id: graphify-build
+      # Prefer argv over shell strings for safer setup execution.
+      # Adjust this command to your real Graphify setup command.
+      argv:
+        - graphify
+        - build
+      cwd: .
+      timeout_seconds: 600
+      required: true
+
+
+expectations:
+  should_verify_with_source: true

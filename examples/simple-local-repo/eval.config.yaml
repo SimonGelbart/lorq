@@ -1,0 +1,29 @@
+default_prompt_style: neutral
+
+repositories:
+  demo:
+    type: local
+    path: ./fake_project
+    ref: HEAD
+
+worktrees:
+  root: /tmp/agent-eval-simple-worktrees
+  strategy: copy
+  cleanup: never
+  dirty_policy: allow
+
+output:
+  root: ./results
+
+agent:
+  profile: fake
+
+agent_profiles:
+  fake:
+    backend: generic
+    command: python
+    args:
+      - execution/scripts/fake_agent.py
+    input_mode: stdin
+    output_format: text
+    timeout_seconds: 60

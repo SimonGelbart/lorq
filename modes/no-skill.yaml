@@ -1,0 +1,13 @@
+id: no-skill
+description: Clean baseline without installed skills or generated tool artifacts.
+
+materialize:
+  copy: []
+
+pre_agent:
+  setup_scope: none
+  commands: []
+
+
+expectations:
+  should_verify_with_source: true

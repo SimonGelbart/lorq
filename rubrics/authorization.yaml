@@ -1,0 +1,5 @@
+id: authorization
+extends: repository-exploration
+notes: |
+  Prioritize exact files/symbols for authorization attributes, permission services,
+  permission records, and startup/registration flow.

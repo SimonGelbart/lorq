@@ -1,0 +1,12 @@
+repositories:
+  # Example local repo. You can also pass --repo /path/to/repo from the CLI.
+  # nopcommerce:
+  #   type: local
+  #   path: /Users/simon/projects/nopCommerce
+  #   ref: HEAD
+
+  # Example remote repo for CI/reproducibility.
+  # nopcommerce-github:
+  #   type: git
+  #   url: https://github.com/nopSolutions/nopCommerce.git
+  #   ref: develop

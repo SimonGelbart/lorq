@@ -1,0 +1,7 @@
+Answer the following repository exploration task.
+
+Use available repository exploration tools or skills only when they materially reduce work.
+Prefer source-backed evidence. If you use derived artifacts, verify important claims against source files.
+
+Task:
+{task}

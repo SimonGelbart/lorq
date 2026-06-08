@@ -1,0 +1,7 @@
+Answer the following repository exploration task.
+
+For this run, explicitly use the configured mode-specific workflow if applicable.
+Prefer source-backed evidence.
+
+Task:
+{task}

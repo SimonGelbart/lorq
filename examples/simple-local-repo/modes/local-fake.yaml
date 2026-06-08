@@ -1,0 +1,14 @@
+id: local-fake
+description: Demo mode that materializes a fake local agent script and has no setup commands.
+
+materialize:
+  copy:
+    - from: execution/scripts/fake_agent.py
+      to: execution/scripts/fake_agent.py
+
+pre_agent:
+  setup_scope: none
+  commands: []
+
+expectations:
+  should_verify_with_source: true

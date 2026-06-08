@@ -1,0 +1,30 @@
+id: admin-permissions
+title: Admin permissions exploration
+category: authorization
+difficulty: medium
+repo: nopcommerce
+
+task: |
+  Explain how admin permission checks work for controller actions.
+  Identify the main attributes, services, permission records, and registration points.
+  Include source-backed evidence.
+
+validation:
+  required_symbols:
+    - PermissionService
+    - AuthorizeAdminAttribute
+    - CheckPermissionAttribute
+
+  required_files:
+    - src/Presentation/Nop.Web.Framework/Mvc/Filters/AuthorizeAdminAttribute.cs
+
+  expected_concepts:
+    - admin authorization filter
+    - permission record registration
+    - permission checking service
+    - controller authorization
+
+  forbidden_claims:
+    - "All admin permissions are hardcoded directly in controllers."
+
+rubric: authorization

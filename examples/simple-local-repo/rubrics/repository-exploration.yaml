@@ -1,0 +1,6 @@
+id: repository-exploration
+dimensions:
+  correctness:
+    weight: 0.5
+  evidence:
+    weight: 0.5

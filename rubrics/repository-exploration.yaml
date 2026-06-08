@@ -1,0 +1,17 @@
+id: repository-exploration
+dimensions:
+  correctness:
+    weight: 0.35
+    scale: 1-5
+  completeness:
+    weight: 0.25
+    scale: 1-5
+  evidence:
+    weight: 0.20
+    scale: 1-5
+  task_focus:
+    weight: 0.10
+    scale: 1-5
+  caveats:
+    weight: 0.10
+    scale: 1-5

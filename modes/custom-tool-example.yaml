@@ -1,0 +1,22 @@
+id: custom-tool-example
+description: Example mode showing how to copy helper material and run a deterministic setup command before the agent.
+
+materialize:
+  copy:
+    - from: execution/scripts/example-prep.sh
+      to: tools/example-prep.sh
+
+pre_agent:
+  setup_scope: per-run
+  commands:
+    - id: example-prep
+      argv:
+        - sh
+        - tools/example-prep.sh
+      cwd: .
+      timeout_seconds: 60
+      required: true
+
+
+expectations:
+  should_verify_with_source: true
