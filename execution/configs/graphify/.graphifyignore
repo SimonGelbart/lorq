@@ -1,0 +1,17 @@
+*.md
+*.json
+*.yaml
+*.yml
+bin/
+obj/
+results/
+artifacts/
+.vs/
+.vscode/
+*.user
+*.suo
+*.g.cs
+*.g.i.cs
+*.Designer.cs
+*AssemblyInfo.cs
+graphify-out/

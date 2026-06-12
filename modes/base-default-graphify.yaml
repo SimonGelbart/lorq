@@ -1,5 +1,5 @@
 id: base-default-graphify
-description: Your base skills plus the default Graphify skill; Graphify index is generated fresh in each run worktree before agent execution.
+description: Your base skills plus the default Graphify skill, with Graphify Codex integration installed and a fresh graph generated in each run worktree before agent execution.
 
 materialize:
   copy:
@@ -7,16 +7,26 @@ materialize:
       to: .agents/skills
     - from: execution/skills/graphify
       to: .agents/skills/graphify
+    - from: execution/configs/graphify/.graphifyignore
+      to: .graphifyignore
 
 pre_agent:
   setup_scope: per-run
   commands:
-    - id: graphify-build
+    - id: graphify-codex-install
       argv:
         - graphify
-        - build
+        - codex
+        - install
       cwd: .
-      timeout_seconds: 600
+      timeout_seconds: 300
+      required: true
+    - id: graphify-generate
+      argv:
+        - graphify
+        - .
+      cwd: .
+      timeout_seconds: 900
       required: true
 
 expectations:

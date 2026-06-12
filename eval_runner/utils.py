@@ -25,13 +25,23 @@ def rm_rf(path: Path) -> None:
 
 
 
-SENSITIVE_KEY_HINTS = ("TOKEN", "SECRET", "KEY", "PASSWORD", "PASS", "CREDENTIAL")
+SENSITIVE_KEY_HINTS = ("SECRET", "PASSWORD", "PASS", "CREDENTIAL", "PRIVATE_KEY", "ACCESS_KEY", "API_KEY", "AUTH")
+# These are usage/cost metrics, not credentials. Keep them numeric in reports.
+NON_SECRET_METRIC_KEYS = {
+    "input_tokens", "output_tokens", "total_tokens", "cached_input_tokens",
+    "uncached_input_tokens", "reasoning_output_tokens", "cache_read_tokens",
+    "cache_write_tokens", "billable_input_tokens", "cache_hit_rate",
+    "input_cost_usd", "cached_input_cost_usd", "output_cost_usd",
+    "estimated_cost_usd", "cost", "cost_usd",
+    "hard_passed", "soft_passed", "behavior_hard_passed", "behavior_soft_passed",
+}
+SECRET_KEY_HINTS = ("SECRET", "PASSWORD", "CREDENTIAL", "PRIVATE_KEY", "ACCESS_KEY", "API_KEY", "AUTH_TOKEN", "BEARER_TOKEN")
 
 def _sensitive_env_values() -> list[str]:
     values: list[str] = []
     for key, value in os.environ.items():
         upper = key.upper()
-        if value and len(value) >= 8 and any(hint in upper for hint in SENSITIVE_KEY_HINTS):
+        if value and len(value) >= 8 and any(hint in upper for hint in SECRET_KEY_HINTS):
             values.append(value)
     # Longest first avoids partially redacting overlapping values.
     return sorted(set(values), key=len, reverse=True)
@@ -58,7 +68,11 @@ def redact_data(value: Any) -> Any:
         out = {}
         for key, item in value.items():
             key_str = str(key)
-            if any(hint in key_str.upper() for hint in SENSITIVE_KEY_HINTS):
+            key_lower = key_str.lower()
+            key_upper = key_str.upper()
+            if key_lower in NON_SECRET_METRIC_KEYS:
+                out[key] = redact_data(item)
+            elif any(hint in key_upper for hint in SECRET_KEY_HINTS):
                 out[key] = "[REDACTED]" if item not in (None, "") else item
             else:
                 out[key] = redact_data(item)

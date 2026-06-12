@@ -1,4 +1,4 @@
-# Generic Agent Eval Runner v1.2
+# Generic Agent Eval Runner v1.2.4
 
 A Python evaluator for comparing AI agent modes, skills, tool preparation flows, prompt styles, and agent backends in isolated repository worktrees.
 
@@ -39,11 +39,12 @@ Generated tool artifacts such as `graphify-out/` are **not copied by default**. 
 - Controlled `execution/base-skills/` bundle for production-like benchmarks
 - Codex CLI HOME / CODEX_HOME isolation to prevent user-level skill leakage
 - `active-skills.json` per run to show which workspace skills were installed
+- Cached-token accounting and optional request cost estimates via `--pricing-model` / `--pricing-file`
 
 ## Install
 
 ```bash
-cd generic-agent-eval-runner-v1.2
+cd generic-agent-eval-runner-v1.2.4
 python -m venv .venv
 source .venv/bin/activate
 pip install -e .
@@ -61,6 +62,22 @@ For development tests:
 pip install -e '.[dev]'
 pytest
 ```
+
+
+## Token accounting and pricing
+
+`agent-eval` reports `input_tokens`, `cached_input_tokens`, `uncached_input_tokens`, `output_tokens`, `reasoning_output_tokens`, `total_tokens`, and `cache_hit_rate` when the backend trace exposes them.
+
+Pricing is optional and disabled by default. Enable it with a model id configured in `eval.config.yaml` or in `pricing/openai-pricing.example.yaml`:
+
+```bash
+python3 -m eval_runner.cli \
+  --pricing-model gpt-5.5 \
+  --no-judge \
+  ...
+```
+
+For formal cost reporting, update the pricing file from the current OpenAI API pricing page before running or regenerating reports.
 
 ## Quickstart
 
@@ -122,7 +139,7 @@ agent-eval --explain-run ./results/smoke/runs/no-skill/neutral/admin-permissions
 
 ## Graphify smoke example
 
-A Graphify mode should copy skills but generate Graphify artifacts fresh before the agent starts:
+A Graphify mode should copy skills and the repository-local `.graphifyignore`, install Graphify's Codex integration, then generate Graphify artifacts fresh before the agent starts:
 
 ```yaml
 id: default-graphify-plus
@@ -132,13 +149,20 @@ materialize:
       to: .agents/skills/graphify
     - from: execution/skills/graphify-query-planner
       to: .agents/skills/graphify-query-planner
+    - from: execution/configs/graphify/.graphifyignore
+      to: .graphifyignore
 pre_agent:
   setup_scope: per-run
   commands:
-    - id: graphify-build
-      argv: [graphify, build]
+    - id: graphify-codex-install
+      argv: [graphify, codex, install]
       cwd: .
-      timeout_seconds: 600
+      timeout_seconds: 300
+      required: true
+    - id: graphify-generate
+      argv: [graphify, .]
+      cwd: .
+      timeout_seconds: 900
       required: true
 ```
 

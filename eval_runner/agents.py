@@ -13,6 +13,7 @@ from typing import Any
 
 from .utils import run_command, write_json, write_text
 from .events import canonical_event_type, summarize_normalized_events, normalize_copilot_sdk_jsonl, write_jsonl
+from .pricing import normalize_usage
 
 
 CODEX_JSONL_FORMATS = {"codex-jsonl", "jsonl", "codex"}
@@ -195,7 +196,7 @@ def extract_usage_and_counts(stdout: str, output_format: str = "codex-jsonl") ->
     counts = {"json_events": 0, "tool_events": 0, "command_events": 0}
 
     if (output_format or "").lower() not in (CODEX_JSONL_FORMATS | COPILOT_SDK_FORMATS):
-        return {"usage": usage, "counts": counts}
+        return {"usage": normalize_usage(usage), "counts": counts}
 
     def update_usage(obj: dict[str, Any]) -> None:
         keys = set(obj.keys())
@@ -671,7 +672,13 @@ class GitHubCopilotSdkAgent:
 def create_agent(profile: dict[str, Any]) -> CliAgent | GitHubCopilotSdkAgent:
     backend = str(profile.get("backend") or profile.get("type") or "codex").lower()
     command = str(profile.get("command") or ("copilot" if backend in {"copilot", "github-copilot-cli"} else "codex"))
+    # Special portable placeholder for bundled fake/local Python agents.
+    # This avoids assuming a `python` executable exists on PATH; on many systems
+    # the active interpreter is exposed as `python3` only.
+    if command == "{python}":
+        command = sys.executable
     args = split_args(profile.get("args"), ["exec", "--json"] if backend in {"codex", "codex-cli"} else ["--prompt", "{prompt}"])
+    args = [sys.executable if arg == "{python}" else arg for arg in args]
     timeout = profile.get("timeout_seconds")
     timeout_seconds = int(timeout) if timeout is not None else None
     env = profile.get("env") if isinstance(profile.get("env"), dict) else None

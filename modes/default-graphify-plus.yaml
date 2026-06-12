@@ -1,5 +1,5 @@
 id: default-graphify-plus
-description: Default Graphify plus a lightweight query-planner companion skill; Graphify index is generated fresh in each run worktree.
+description: Default Graphify plus a lightweight query-planner companion skill, with Graphify Codex integration installed and a fresh graph generated in each run worktree.
 
 materialize:
   copy:
@@ -7,19 +7,27 @@ materialize:
       to: .agents/skills/graphify
     - from: execution/skills/graphify-query-planner
       to: .agents/skills/graphify-query-planner
+    - from: execution/configs/graphify/.graphifyignore
+      to: .graphifyignore
 
 pre_agent:
   setup_scope: per-run
   commands:
-    - id: graphify-build
-      # Do not copy graphify-out by default; generate it before the AI starts.
+    - id: graphify-codex-install
       argv:
         - graphify
-        - build
+        - codex
+        - install
       cwd: .
-      timeout_seconds: 600
+      timeout_seconds: 300
       required: true
-
+    - id: graphify-generate
+      argv:
+        - graphify
+        - .
+      cwd: .
+      timeout_seconds: 900
+      required: true
 
 expectations:
   should_verify_with_source: true

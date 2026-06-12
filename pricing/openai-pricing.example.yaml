@@ -1,0 +1,18 @@
+pricing:
+  enabled: true
+  currency: USD
+  model: gpt-5.5
+  source: https://openai.com/api/pricing/ checked 2026-06-15
+  rates:
+    gpt-5.5:
+      input_per_1m: 5.00
+      cached_input_per_1m: 0.50
+      output_per_1m: 30.00
+    gpt-5.4:
+      input_per_1m: 2.50
+      cached_input_per_1m: 0.25
+      output_per_1m: 15.00
+    gpt-5.4-mini:
+      input_per_1m: 0.75
+      cached_input_per_1m: 0.075
+      output_per_1m: 4.50

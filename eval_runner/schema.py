@@ -146,7 +146,7 @@ def _list_of_symbol_specs(c: _Collector, value: Any, path: str) -> None:
 def validate_config(config: dict[str, Any], path: str | Path = "eval.config.yaml") -> None:
     c = _Collector(path)
     c.require_mapping(config, "$")
-    c.no_unknown_keys(config, "$", {"default_prompt_style", "repositories", "worktrees", "output", "agent", "agent_profiles", "agents", "judge"})
+    c.no_unknown_keys(config, "$", {"default_prompt_style", "repositories", "worktrees", "output", "agent", "agent_profiles", "agents", "judge", "pricing"})
     c.optional_string(config, "default_prompt_style", "$")
 
     repositories = c.optional_mapping(config.get("repositories"), "$.repositories")
@@ -183,6 +183,21 @@ def validate_config(config: dict[str, Any], path: str | Path = "eval.config.yaml
         validate_agent_profile(profile_id, profile, f"$.agent_profiles.{profile_id}", c)
     if agent.get("profile") and profiles and agent.get("profile") not in profiles:
         c.fail("$.agent.profile", f"unknown agent profile {agent.get('profile')!r}; available: {', '.join(sorted(profiles))}")
+
+    pricing = c.optional_mapping(config.get("pricing"), "$.pricing")
+    if pricing:
+        c.no_unknown_keys(pricing, "$.pricing", {"enabled", "currency", "model", "source", "rates"})
+        c.optional_bool(pricing, "enabled", "$.pricing")
+        c.optional_string(pricing, "model", "$.pricing")
+        c.optional_string(pricing, "currency", "$.pricing")
+        c.optional_string(pricing, "source", "$.pricing")
+        rates = c.optional_mapping(pricing.get("rates"), "$.pricing.rates")
+        for model_id, rate in rates.items():
+            rate_map = c.require_mapping(rate, f"$.pricing.rates.{model_id}")
+            c.no_unknown_keys(rate_map, f"$.pricing.rates.{model_id}", {"input_per_1m", "cached_input_per_1m", "output_per_1m"})
+            c.optional_number(rate_map, "input_per_1m", f"$.pricing.rates.{model_id}")
+            c.optional_number(rate_map, "cached_input_per_1m", f"$.pricing.rates.{model_id}")
+            c.optional_number(rate_map, "output_per_1m", f"$.pricing.rates.{model_id}")
 
     judge = c.optional_mapping(config.get("judge"), "$.judge")
     if judge:

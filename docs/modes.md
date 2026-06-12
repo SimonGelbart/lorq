@@ -16,14 +16,21 @@ materialize:
       to: .agents/skills/graphify
     - from: execution/skills/graphify-query-planner
       to: .agents/skills/graphify-query-planner
+    - from: execution/configs/graphify/.graphifyignore
+      to: .graphifyignore
 
 pre_agent:
   setup_scope: per-run
   commands:
-    - id: graphify-build
-      argv: [graphify, build]
+    - id: graphify-codex-install
+      argv: [graphify, codex, install]
       cwd: .
-      timeout_seconds: 600
+      timeout_seconds: 300
+      required: true
+    - id: graphify-generate
+      argv: [graphify, .]
+      cwd: .
+      timeout_seconds: 900
       required: true
 
 expectations:

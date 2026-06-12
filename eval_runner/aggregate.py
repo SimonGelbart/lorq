@@ -3,6 +3,10 @@ from __future__ import annotations
 from collections import defaultdict
 from statistics import mean, stdev
 from typing import Any, Iterable
+from pathlib import Path
+import json
+
+from .pricing import normalize_usage
 
 
 def _num(value: Any) -> float | None:
@@ -51,8 +55,46 @@ def _agent(record: dict[str, Any]) -> dict[str, Any]:
     return record.get("agent_summary") or {}
 
 
+def _walk_json(value: Any):
+    if isinstance(value, dict):
+        yield value
+        for child in value.values():
+            yield from _walk_json(child)
+    elif isinstance(value, list):
+        for child in value:
+            yield from _walk_json(child)
+
+
+def _repair_usage_from_raw(record: dict[str, Any]) -> dict[str, Any]:
+    run_dir = record.get("run_dir")
+    if not run_dir:
+        return {}
+    raw_path = Path(str(run_dir)) / "stdout.raw.jsonl"
+    if not raw_path.exists():
+        return {}
+    usage: dict[str, Any] = {}
+    for line in raw_path.read_text(encoding="utf-8", errors="replace").splitlines():
+        try:
+            event = json.loads(line)
+        except json.JSONDecodeError:
+            continue
+        for obj in _walk_json(event):
+            if not isinstance(obj, dict):
+                continue
+            if any(k in obj for k in ("input_tokens", "output_tokens", "total_tokens", "cached_input_tokens", "reasoning_output_tokens")):
+                for key in ("input_tokens", "output_tokens", "total_tokens", "cached_input_tokens", "reasoning_output_tokens"):
+                    if isinstance(obj.get(key), int):
+                        usage[key] = obj[key]
+    return normalize_usage(usage)
+
+
 def _usage(record: dict[str, Any]) -> dict[str, Any]:
-    return _agent(record).get("usage") or {}
+    usage = normalize_usage(_agent(record).get("usage") or {})
+    if not usage.get("input_tokens"):
+        repaired = _repair_usage_from_raw(record)
+        if repaired:
+            return repaired
+    return usage
 
 
 def _validation(record: dict[str, Any]) -> dict[str, Any]:
@@ -147,13 +189,18 @@ def summarize_group(records: list[dict[str, Any]]) -> dict[str, Any]:
         "avg_total_tokens": _avg(_usage(r).get("total_tokens") for r in records),
         "stdev_total_tokens": _stdev(_usage(r).get("total_tokens") for r in records),
         "avg_input_tokens": _avg(_usage(r).get("input_tokens") for r in records),
+        "avg_cached_input_tokens": _avg(_usage(r).get("cached_input_tokens") for r in records),
+        "avg_uncached_input_tokens": _avg(_usage(r).get("uncached_input_tokens") for r in records),
         "avg_output_tokens": _avg(_usage(r).get("output_tokens") for r in records),
+        "avg_reasoning_output_tokens": _avg(_usage(r).get("reasoning_output_tokens") for r in records),
+        "avg_cache_hit_rate": _avg(_usage(r).get("cache_hit_rate") for r in records),
         "avg_command_count": _avg(_trace(r).get("command_count") for r in records),
         "avg_search_count": _avg(_trace(r).get("search_count") for r in records),
         "avg_source_read_count": _avg(_trace(r).get("source_read_count") for r in records),
         "avg_graphify_query_count": _avg(_trace(r).get("graphify_query_count") for r in records),
         "avg_generic_graphify_query_count": _avg(_trace(r).get("generic_graphify_query_count") for r in records),
         "avg_specific_graphify_query_count": _avg(_trace(r).get("specific_graphify_query_count") for r in records),
+        "avg_estimated_total_cost": _avg(((_agent(r).get("pricing") or {}).get("estimated_cost")) for r in records),
         "judge_ok_rate": _bool_rate(_judge(r).get("ok") for r in records if _judge(r).get("enabled")),
         "avg_judge_overall_score": _avg(_judge(r).get("overall_score") for r in records),
         "stdev_judge_overall_score": _stdev(_judge(r).get("overall_score") for r in records),

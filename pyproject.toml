@@ -1,6 +1,6 @@
 [project]
 name = "generic-agent-eval-runner"
-version = "1.2.0"
+version = "1.2.4"
 description = "Portable contract-ready generic evaluator for comparing AI agent modes, skills, prepared tool environments, prompt styles, and validated YAML suites."
 readme = "README.md"
 requires-python = ">=3.10"

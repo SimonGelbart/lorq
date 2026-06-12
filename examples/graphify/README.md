@@ -14,4 +14,4 @@ agent-eval \
   --out ./results/graphify-plus-smoke
 ```
 
-The default design is fresh setup per run. Do not copy `graphify-out/`; generate it with `graphify build` in `pre_agent.commands`.
+The default design is fresh setup per run. Do not copy `graphify-out/`; write `.graphifyignore`, run `graphify codex install`, then generate it with `graphify .` in `pre_agent.commands`.

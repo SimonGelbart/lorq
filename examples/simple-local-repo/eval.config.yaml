@@ -21,7 +21,7 @@ agent:
 agent_profiles:
   fake:
     backend: generic
-    command: python
+    command: "{python}"
     args:
       - execution/scripts/fake_agent.py
     input_mode: stdin

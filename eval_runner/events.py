@@ -6,6 +6,7 @@ from pathlib import Path
 from typing import Any, Iterable
 
 from .utils import read_json, read_text, write_json, write_text
+from .pricing import normalize_usage
 from .contracts import EVENT_SUMMARY_SCHEMA_VERSION, NORMALIZED_EVENT_SCHEMA_VERSION, with_schema
 
 
@@ -221,6 +222,7 @@ def normalize_codex_jsonl(path: Path) -> list[dict[str, Any]]:
                 for key in ("input_tokens", "output_tokens", "total_tokens", "cached_input_tokens", "reasoning_output_tokens"):
                     if isinstance(obj.get(key), int):
                         usage[key] = obj[key]
+                usage = normalize_usage(usage)
                 if usage:
                     sequence += 1
                     rows.append(_new_event(
@@ -320,7 +322,8 @@ def normalize_copilot_sdk_jsonl(path: Path) -> list[dict[str, Any]]:
                 ("input_tokens", "input_tokens"),
                 ("outputTokens", "output_tokens"),
                 ("output_tokens", "output_tokens"),
-                ("cacheReadTokens", "cache_read_tokens"),
+                ("cacheReadTokens", "cached_input_tokens"),
+                ("cache_read_tokens", "cached_input_tokens"),
                 ("cacheWriteTokens", "cache_write_tokens"),
                 ("cost", "cost"),
                 ("duration", "duration_ms"),
@@ -328,6 +331,7 @@ def normalize_copilot_sdk_jsonl(path: Path) -> list[dict[str, Any]]:
                 value = data_get(data, src)
                 if isinstance(value, (int, float)):
                     usage[dest] = value
+            usage = normalize_usage(usage)
             sequence += 1
             rows.append(_new_event(
                 sequence=sequence,

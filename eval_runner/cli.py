@@ -22,6 +22,7 @@ from .worktrees import WorktreeManager, materialize_mode, run_pre_agent_commands
 from .schema import SchemaError
 from . import __version__
 from .contracts import RESULT_SCHEMA_VERSION, with_schema
+from .pricing import resolve_pricing_config, estimate_cost
 
 
 def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
@@ -33,6 +34,9 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     parser.add_argument("--cases", help="Comma-separated case ids")
     parser.add_argument("--categories", help="Comma-separated category ids")
     parser.add_argument("--prompt-style", help="Prompt style name, e.g. neutral")
+    parser.add_argument("--pricing-model", help="Enable cost estimates using this pricing model id from config pricing.rates")
+    parser.add_argument("--pricing-file", help="YAML/JSON pricing file with pricing.rates; prices are per 1M tokens")
+    parser.add_argument("--no-pricing", action="store_true", help="Disable cost estimates even if pricing is enabled in config")
     parser.add_argument("--repetitions", type=int, default=1)
     parser.add_argument("--worktree-root", help="Override worktree root")
     parser.add_argument("--out", help="Override results output root")
@@ -291,6 +295,7 @@ def _run_conformance(args: argparse.Namespace) -> int:
         "--modes", "local-fake",
         "--cases", "explain-demo",
         "--agent-profile", "fake",
+        "--agent-command", sys.executable,
         "--prompt-style", "neutral",
         "--worktree-root", str(worktree_root),
         "--out", str(results_root),
@@ -426,6 +431,7 @@ def _main(argv: list[str] | None = None) -> int:
 
     output_root = Path(args.out or (config.get("output") or {}).get("root") or "./results").expanduser().resolve()
     worktree_root = Path(args.worktree_root or (config.get("worktrees") or {}).get("root") or "/tmp/agent-eval-worktrees").expanduser().resolve()
+    pricing_config = None if args.no_pricing else resolve_pricing_config(config, model_override=args.pricing_model, pricing_file=args.pricing_file)
     worktree_strategy = args.worktree_strategy or (config.get("worktrees") or {}).get("strategy") or "git-worktree"
 
     if args.explain_run:
@@ -495,7 +501,7 @@ def _main(argv: list[str] | None = None) -> int:
 
     if args.report_only:
         run_records = load_run_records(output_root)
-        write_reports(output_root, run_records)
+        write_reports(output_root, run_records, pricing=pricing_config)
         print(f"Regenerated reports for {len(run_records)} run(s): {output_root}")
         return 0
 
@@ -590,8 +596,8 @@ def _main(argv: list[str] | None = None) -> int:
                 "materialize": materialize_records,
                 "setup": setup_summary,
             })
-            print(f"Setup check for {mode_id}: {'ok' if setup_summary.get('ok') else 'failed'}")
-        write_reports(output_root, run_records)
+            _print_setup_check_result(mode_id, check_output_dir, setup_summary)
+        write_reports(output_root, run_records, pricing=pricing_config)
         return 0
 
     for mode in selected_modes:
@@ -679,6 +685,8 @@ def _main(argv: list[str] | None = None) -> int:
                     })
                     agent = create_agent(run_agent_profile)
                     agent_summary = agent.run(run_worktree, prompt, run_output_dir)
+                    if pricing_config:
+                        agent_summary["pricing"] = estimate_cost(agent_summary.get("usage"), pricing_config)
                     agent_summary["home_isolation"] = agent_isolation
                     agent_summary["active_skills"] = active_skills
                     write_json(run_output_dir / "agent.summary.json", agent_summary)
@@ -725,14 +733,61 @@ def _main(argv: list[str] | None = None) -> int:
                 write_json(run_output_dir / "summary.json", record)
                 run_records.append(record)
                 existing_run_keys.add(run_key)
-                write_reports(output_root, run_records)
+                write_reports(output_root, run_records, pricing=pricing_config)
 
     if args.cleanup_prepared:
         write_lifecycle_event(output_root, "cleanup-prepared", {"deprecated": True, "records": []})
 
-    write_reports(output_root, run_records)
+    write_reports(output_root, run_records, pricing=pricing_config)
     return 0
 
+
+
+def _preview_text(path: Path, max_chars: int = 1200) -> str:
+    try:
+        text = path.read_text(encoding="utf-8", errors="replace")
+    except FileNotFoundError:
+        return ""
+    if len(text) > max_chars:
+        return text[:max_chars] + "\n...<truncated>"
+    return text
+
+
+def _print_setup_check_result(mode_id: str, check_output_dir: Path, setup_summary: dict[str, Any]) -> None:
+    ok = bool(setup_summary.get("ok"))
+    print(f"Setup check for {mode_id}: {'ok' if ok else 'failed'}")
+    if ok:
+        return
+    failed_id = setup_summary.get("failed_required_command")
+    if failed_id:
+        print(f"  failed required command: {failed_id}")
+    commands = setup_summary.get("commands") or []
+    failing = None
+    if failed_id:
+        failing = next((c for c in commands if c.get("id") == failed_id), None)
+    if failing is None:
+        failing = next((c for c in commands if c.get("failed")), None)
+    if not failing:
+        print(f"  setup summary: {check_output_dir / 'setup' / 'setup.summary.json'}")
+        print(f"  setup log:     {check_output_dir / 'setup' / 'setup.log'}")
+        return
+    print(f"  command: {failing.get('run')}")
+    print(f"  cwd:     {failing.get('cwd')}")
+    print(f"  exit:    {failing.get('exit_code')} timed_out={failing.get('timed_out')}")
+    stdout_path = check_output_dir / 'setup' / str(failing.get('stdout_path', ''))
+    stderr_path = check_output_dir / 'setup' / str(failing.get('stderr_path', ''))
+    stdout_preview = _preview_text(stdout_path)
+    stderr_preview = _preview_text(stderr_path)
+    if stdout_preview.strip():
+        print("  stdout preview:")
+        for line in stdout_preview.rstrip().splitlines():
+            print(f"    {line}")
+    if stderr_preview.strip():
+        print("  stderr preview:")
+        for line in stderr_preview.rstrip().splitlines():
+            print(f"    {line}")
+    print(f"  setup summary: {check_output_dir / 'setup' / 'setup.summary.json'}")
+    print(f"  setup log:     {check_output_dir / 'setup' / 'setup.log'}")
 
 def main(argv: list[str] | None = None) -> int:
     try:

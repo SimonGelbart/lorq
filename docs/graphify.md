@@ -5,11 +5,13 @@ The recommended Graphify benchmark is fairness-first:
 ```text
 fresh worktree per run
 → copy Graphify-related skills
-→ run graphify build in that worktree
+→ copy `.graphifyignore`
+→ run `graphify codex install` in that worktree
+→ run `graphify .` in that worktree
 → launch the agent with a neutral prompt
 ```
 
-Do not copy `graphify-out/` by default. Generate it with a setup command.
+Do not copy `graphify-out/` by default. Generate it with setup commands. This package writes a repository-local `.graphifyignore`, runs `graphify codex install`, then runs `graphify .`.
 
 ## Mode: default Graphify
 
@@ -19,13 +21,20 @@ materialize:
   copy:
     - from: execution/skills/graphify
       to: .agents/skills/graphify
+    - from: execution/configs/graphify/.graphifyignore
+      to: .graphifyignore
 pre_agent:
   setup_scope: per-run
   commands:
-    - id: graphify-build
-      argv: [graphify, build]
+    - id: graphify-codex-install
+      argv: [graphify, codex, install]
       cwd: .
-      timeout_seconds: 600
+      timeout_seconds: 300
+      required: true
+    - id: graphify-generate
+      argv: [graphify, .]
+      cwd: .
+      timeout_seconds: 900
       required: true
 ```
 
@@ -39,13 +48,20 @@ materialize:
       to: .agents/skills/graphify
     - from: execution/skills/graphify-query-planner
       to: .agents/skills/graphify-query-planner
+    - from: execution/configs/graphify/.graphifyignore
+      to: .graphifyignore
 pre_agent:
   setup_scope: per-run
   commands:
-    - id: graphify-build
-      argv: [graphify, build]
+    - id: graphify-codex-install
+      argv: [graphify, codex, install]
       cwd: .
-      timeout_seconds: 600
+      timeout_seconds: 300
+      required: true
+    - id: graphify-generate
+      argv: [graphify, .]
+      cwd: .
+      timeout_seconds: 900
       required: true
 ```
 

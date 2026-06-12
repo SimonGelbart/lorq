@@ -41,6 +41,47 @@
     "judge": {
       "type": "object",
       "additionalProperties": true
+    },
+    "pricing": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "enabled": {
+          "type": "boolean"
+        },
+        "currency": {
+          "type": "string"
+        },
+        "model": {
+          "type": "string"
+        },
+        "source": {
+          "type": "string"
+        },
+        "rates": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "input_per_1m": {
+                "type": "number"
+              },
+              "cached_input_per_1m": {
+                "type": "number"
+              },
+              "output_per_1m": {
+                "type": "number"
+              }
+            },
+            "required": [
+              "input_per_1m",
+              "cached_input_per_1m",
+              "output_per_1m"
+            ]
+          }
+        }
+      }
     }
   }
 }

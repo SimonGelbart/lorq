@@ -8,6 +8,8 @@ from typing import Any
 from .aggregate import build_aggregates
 from .contracts import AGGREGATE_SUMMARY_SCHEMA_VERSION, SUMMARY_SCHEMA_VERSION, with_schema
 from .utils import ensure_dir, read_json, write_json, write_text
+from .agents import extract_usage_and_counts
+from .pricing import estimate_cost, normalize_usage
 
 
 def _answer_metrics(validation: dict[str, Any]) -> dict[str, Any]:
@@ -77,6 +79,47 @@ def _setup_metrics(record: dict[str, Any]) -> dict[str, Any]:
         "setup_elapsed_ms": setup.get("elapsed_ms"),
         "setup_command_count": setup.get("command_count", len(setup.get("commands") or [])),
         "setup_failed_command": failed,
+    }
+
+
+def _usage_for_record(record: dict[str, Any]) -> dict[str, Any]:
+    agent = record.get("agent_summary") or {}
+    usage = normalize_usage(agent.get("usage") or {})
+    # v1.2.4: older summaries may have token counts redacted. Repair report-only
+    # output from raw JSONL when available.
+    if not usage.get("input_tokens") and record.get("run_dir"):
+        raw_path = Path(str(record.get("run_dir"))) / "stdout.raw.jsonl"
+        if raw_path.exists():
+            repaired = extract_usage_and_counts(raw_path.read_text(encoding="utf-8", errors="replace"), agent.get("output_format") or "codex-jsonl")
+            usage = normalize_usage(repaired.get("usage") or usage)
+    return usage
+
+
+def _pricing_for_record(record: dict[str, Any], pricing: dict[str, Any] | None = None) -> dict[str, Any] | None:
+    agent = record.get("agent_summary") or {}
+    existing = agent.get("pricing")
+    if isinstance(existing, dict) and existing.get("ok") and not pricing:
+        return existing
+    return estimate_cost(_usage_for_record(record), pricing) if pricing else existing
+
+
+def _usage_metrics(usage: dict[str, Any], pricing_payload: dict[str, Any] | None = None) -> dict[str, Any]:
+    pricing_payload = pricing_payload or {}
+    return {
+        "input_tokens": usage.get("input_tokens"),
+        "cached_input_tokens": usage.get("cached_input_tokens"),
+        "uncached_input_tokens": usage.get("uncached_input_tokens"),
+        "output_tokens": usage.get("output_tokens"),
+        "reasoning_output_tokens": usage.get("reasoning_output_tokens"),
+        "total_tokens": usage.get("total_tokens"),
+        "cache_hit_rate": usage.get("cache_hit_rate"),
+        "pricing_model": pricing_payload.get("model"),
+        "pricing_currency": pricing_payload.get("currency"),
+        "pricing_ok": pricing_payload.get("ok"),
+        "estimated_input_cost": pricing_payload.get("input_cost"),
+        "estimated_cached_input_cost": pricing_payload.get("cached_input_cost"),
+        "estimated_output_cost": pricing_payload.get("output_cost"),
+        "estimated_total_cost": pricing_payload.get("estimated_cost"),
     }
 
 
@@ -250,7 +293,7 @@ def _diagnostic_files(run_dir: Path) -> list[tuple[str, Path]]:
     return [(name, run_dir / name) for name in candidates if (run_dir / name).exists()]
 
 
-def _write_run_scorecard(results_root: Path, run_records: list[dict[str, Any]]) -> None:
+def _write_run_scorecard(results_root: Path, run_records: list[dict[str, Any]], pricing: dict[str, Any] | None = None) -> None:
     csv_path = results_root / "scorecard.csv"
     fields = [
         "mode",
@@ -273,8 +316,19 @@ def _write_run_scorecard(results_root: Path, run_records: list[dict[str, Any]]) 
         "timed_out",
         "elapsed_ms",
         "input_tokens",
+        "cached_input_tokens",
+        "uncached_input_tokens",
         "output_tokens",
+        "reasoning_output_tokens",
         "total_tokens",
+        "cache_hit_rate",
+        "pricing_model",
+        "pricing_currency",
+        "pricing_ok",
+        "estimated_input_cost",
+        "estimated_cached_input_cost",
+        "estimated_output_cost",
+        "estimated_total_cost",
         "json_events",
         "tool_events",
         "command_events",
@@ -321,7 +375,8 @@ def _write_run_scorecard(results_root: Path, run_records: list[dict[str, Any]]) 
         writer.writeheader()
         for record in run_records:
             agent = record.get("agent_summary") or {}
-            usage = agent.get("usage") or {}
+            usage = _usage_for_record(record)
+            pricing_payload = _pricing_for_record(record, pricing)
             counts = agent.get("counts") or {}
             validation = record.get("validation") or {}
             row = {
@@ -340,9 +395,7 @@ def _write_run_scorecard(results_root: Path, run_records: list[dict[str, Any]]) 
                 "exit_code": agent.get("exit_code"),
                 "timed_out": agent.get("timed_out"),
                 "elapsed_ms": agent.get("elapsed_ms"),
-                "input_tokens": usage.get("input_tokens"),
-                "output_tokens": usage.get("output_tokens"),
-                "total_tokens": usage.get("total_tokens"),
+                **_usage_metrics(usage, pricing_payload),
                 "json_events": counts.get("json_events"),
                 "tool_events": counts.get("tool_events"),
                 "command_events": counts.get("command_events"),
@@ -390,6 +443,13 @@ def _write_aggregate_scorecard(results_root: Path, aggregates: dict[str, Any]) -
         "stdev_elapsed_ms",
         "avg_total_tokens",
         "stdev_total_tokens",
+        "avg_input_tokens",
+        "avg_cached_input_tokens",
+        "avg_uncached_input_tokens",
+        "avg_output_tokens",
+        "avg_reasoning_output_tokens",
+        "avg_cache_hit_rate",
+        "avg_estimated_total_cost",
         "avg_command_count",
         "avg_search_count",
         "avg_source_read_count",
@@ -684,7 +744,7 @@ def compare_result_sets(result_sets: list[tuple[str, list[dict[str, Any]]]]) -> 
     return "\n".join(lines) + "\n"
 
 
-def write_reports(results_root: Path, run_records: list[dict[str, Any]]) -> None:
+def write_reports(results_root: Path, run_records: list[dict[str, Any]], pricing: dict[str, Any] | None = None) -> None:
     ensure_dir(results_root)
     aggregates = build_aggregates(run_records)
     write_json(results_root / "summary.json", with_schema({"runs": run_records, "aggregates": aggregates}, SUMMARY_SCHEMA_VERSION))
