@@ -1,0 +1,59 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://agent-eval.local/schemas/validation-result.schema.json",
+  "title": "Validation result",
+  "type": "object",
+  "additionalProperties": true,
+  "required": [
+    "schema_version",
+    "ok",
+    "hard_passed",
+    "hard_total",
+    "soft_passed",
+    "soft_total"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "agent-eval.validation-result.v1"
+    },
+    "contract_version": {
+      "const": "agent-eval.contract.v1"
+    },
+    "case_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "mode_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "ok": {
+      "type": "boolean"
+    },
+    "hard_passed": {
+      "type": "integer"
+    },
+    "hard_total": {
+      "type": "integer"
+    },
+    "soft_passed": {
+      "type": "integer"
+    },
+    "soft_total": {
+      "type": "integer"
+    },
+    "answer": {
+      "type": "object"
+    },
+    "behavior": {
+      "type": "object"
+    },
+    "checks": {
+      "type": "array"
+    }
+  }
+}

@@ -1,0 +1,46 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://agent-eval.local/schemas/eval-config.schema.json",
+  "title": "agent-eval config",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "default_prompt_style": {
+      "type": "string"
+    },
+    "repositories": {
+      "type": "object",
+      "additionalProperties": {
+        "$ref": "repository.schema.json"
+      }
+    },
+    "worktrees": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "output": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "agent": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "agent_profiles": {
+      "type": "object",
+      "additionalProperties": {
+        "$ref": "agent-profile.schema.json"
+      }
+    },
+    "agents": {
+      "type": "object",
+      "additionalProperties": {
+        "$ref": "agent-profile.schema.json"
+      }
+    },
+    "judge": {
+      "type": "object",
+      "additionalProperties": true
+    }
+  }
+}

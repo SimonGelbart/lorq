@@ -1,0 +1,97 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://agent-eval.local/schemas/case.schema.json",
+  "title": "Case",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "id",
+    "task"
+  ],
+  "properties": {
+    "id": {
+      "type": "string"
+    },
+    "title": {
+      "type": "string"
+    },
+    "category": {
+      "type": "string"
+    },
+    "difficulty": {
+      "type": "string"
+    },
+    "repo": {
+      "type": "string"
+    },
+    "task": {
+      "type": "string"
+    },
+    "validation": {
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "required_symbols": {
+          "type": "array",
+          "items": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "symbol"
+                ],
+                "properties": {
+                  "symbol": {
+                    "type": "string"
+                  },
+                  "must_be_near_file_reference": {
+                    "type": "boolean"
+                  }
+                }
+              }
+            ]
+          }
+        },
+        "required_files": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "expected_concepts": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "forbidden_claims": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "forbidden_patterns": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "required_evidence": {
+          "type": "object",
+          "additionalProperties": true
+        },
+        "behavior": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      }
+    },
+    "rubric": {
+      "type": "string"
+    }
+  }
+}

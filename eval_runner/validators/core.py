@@ -5,6 +5,7 @@ from pathlib import Path
 from typing import Any
 
 from ..utils import read_text, write_json
+from ..contracts import VALIDATION_RESULT_SCHEMA_VERSION, with_schema
 from .behavior import run_behavior_validators
 from .evidence import build_evidence_metrics, normalize_required_symbol, symbol_near_file_reference, worktree_from_manifest
 
@@ -155,7 +156,7 @@ def run_validators(output_dir: Path, case: dict[str, Any], mode: dict[str, Any])
     answer_result = _run_answer_validators(answer, case, mode, output_dir)
     behavior_result = run_behavior_validators(output_dir, case, mode)
     combined = _combine(answer_result, behavior_result)
-    result = {
+    result = with_schema({
         "case_id": case.get("id"),
         "mode_id": mode.get("id"),
         **combined,
@@ -163,7 +164,7 @@ def run_validators(output_dir: Path, case: dict[str, Any], mode: dict[str, Any])
         "behavior": behavior_result,
         # Keep the old flat field for compatibility with v0.1 readers.
         "checks": answer_result["checks"] + behavior_result["checks"],
-    }
+    }, VALIDATION_RESULT_SCHEMA_VERSION)
     write_json(output_dir / "validation.json", result)
     write_json(output_dir / "behavior.summary.json", behavior_result)
     return result

@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://agent-eval.local/schemas/rubric.schema.json",
+  "title": "Rubric",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "id"
+  ],
+  "properties": {
+    "id": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "dimensions": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "weight": {
+            "type": "number"
+          },
+          "description": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}

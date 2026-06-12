@@ -6,9 +6,7 @@ from pathlib import Path
 from typing import Any, Iterable
 
 from .utils import read_json, read_text, write_json, write_text
-
-
-NORMALIZED_EVENT_SCHEMA_VERSION = "1.0"
+from .contracts import EVENT_SUMMARY_SCHEMA_VERSION, NORMALIZED_EVENT_SCHEMA_VERSION, with_schema
 
 
 def walk_json(value: Any) -> Iterable[Any]:
@@ -549,10 +547,9 @@ def summarize_normalized_events(events: list[dict[str, Any]]) -> dict[str, Any]:
             for key, value in event_usage.items():
                 if isinstance(value, (int, float)):
                     usage[key] = usage.get(key, 0) + value
-    return {
-        "schema_version": NORMALIZED_EVENT_SCHEMA_VERSION,
+    return with_schema({
         "event_count": len(events),
         "event_type_counts": counts,
         "backends": sorted(backends),
         "usage": usage,
-    }
+    }, EVENT_SUMMARY_SCHEMA_VERSION)

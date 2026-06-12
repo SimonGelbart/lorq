@@ -1,5 +1,35 @@
 # Changelog
 
+## v1.2.0
+
+Controlled base-skills and Codex isolation release for Simon's Graphify test.
+
+Added:
+
+- `execution/base-skills/` populated from the uploaded base skill bundle
+- actual default `graphify` skill and `graphify-query-planner` skill under `execution/skills/`
+- base-aware modes: `base-only`, `base-default-graphify`, and `base-default-graphify-plus`
+- Codex CLI per-run `HOME` / `CODEX_HOME` isolation via agent profile settings
+- `--isolate-agent-home` and `--no-isolate-agent-home` overrides
+- `active-skills.json` per run to inspect the materialized workspace skill set
+
+Recommended first run uses `base-default-graphify,base-default-graphify-plus` with `--no-judge`.
+
+## v1.1.0
+
+Portability contract release.
+
+Added:
+
+- JSON schema files under `schemas/`
+- contract docs for architecture, results, normalized events, validation, backends, and portability
+- schema-versioned machine-readable outputs
+- `--run-conformance` no-token fixture
+- bundled golden fixture expectations
+- sample result folder generated from the conformance example
+
+This release is intended to make a future .NET port safer by freezing the external contract.
+
 ## v1.0.0
 
 First stable release of the generic agent evaluation runner.

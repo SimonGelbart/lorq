@@ -244,7 +244,7 @@ def validate_agent_profile(profile_id: str, profile: Any, path: str, c: _Collect
     own = c is None
     c = c or _Collector(path)
     prof = c.require_mapping(profile, path)
-    c.no_unknown_keys(prof, path, {"id", "description", "backend", "type", "command", "args", "availability_args", "availability_timeout_seconds", "input_mode", "output_format", "timeout_seconds", "model", "reasoning_effort", "permission_policy", "github_token_env", "use_logged_in_user", "base_directory", "log_level", "session_idle_timeout_seconds", "env", "prompt_arg", "shell"})
+    c.no_unknown_keys(prof, path, {"id", "description", "backend", "type", "command", "args", "availability_args", "availability_timeout_seconds", "input_mode", "output_format", "timeout_seconds", "model", "reasoning_effort", "permission_policy", "github_token_env", "use_logged_in_user", "base_directory", "log_level", "session_idle_timeout_seconds", "env", "prompt_arg", "shell", "isolate_home", "isolated_home", "isolate_codex_home", "isolated_codex_home"})
     backend = prof.get("backend") or prof.get("type") or "generic"
     if not isinstance(backend, str) or backend not in {"codex", "copilot", "copilot-sdk", "generic"}:
         c.fail(f"{path}.backend", "expected one of ['codex', 'copilot', 'copilot-sdk', 'generic']")
@@ -269,6 +269,10 @@ def validate_agent_profile(profile_id: str, profile: Any, path: str, c: _Collect
     c.optional_int(prof, "session_idle_timeout_seconds", path, min_value=1)
     c.optional_string(prof, "prompt_arg", path)
     c.optional_bool(prof, "shell", path)
+    c.optional_bool(prof, "isolate_home", path)
+    c.optional_bool(prof, "isolated_home", path)
+    c.optional_bool(prof, "isolate_codex_home", path)
+    c.optional_bool(prof, "isolated_codex_home", path)
     env = c.optional_mapping(prof.get("env"), f"{path}.env")
     for key, value in env.items():
         if not isinstance(key, str) or not key:

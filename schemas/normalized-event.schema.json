@@ -1,0 +1,82 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://agent-eval.local/schemas/normalized-event.schema.json",
+  "title": "Normalized event",
+  "type": "object",
+  "additionalProperties": true,
+  "required": [
+    "schema_version",
+    "sequence",
+    "backend",
+    "event_type"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "agent-eval.normalized-event.v1"
+    },
+    "contract_version": {
+      "const": "agent-eval.contract.v1"
+    },
+    "sequence": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "backend": {
+      "type": "string"
+    },
+    "source": {
+      "type": "string"
+    },
+    "raw_line": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "raw_type": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "event_type": {
+      "enum": [
+        "assistant_message",
+        "assistant_delta",
+        "tool_request",
+        "tool_call",
+        "tool_output",
+        "tool_result",
+        "usage",
+        "permission",
+        "session_idle",
+        "error",
+        "unknown"
+      ]
+    },
+    "tool": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "command": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "text": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "usage": {
+      "type": [
+        "object",
+        "null"
+      ]
+    }
+  }
+}

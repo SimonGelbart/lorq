@@ -21,6 +21,7 @@ from .validators import run_validators
 from .worktrees import WorktreeManager, materialize_mode, run_pre_agent_commands
 from .schema import SchemaError
 from . import __version__
+from .contracts import RESULT_SCHEMA_VERSION, with_schema
 
 
 def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
@@ -50,6 +51,8 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     parser.add_argument("--agent-command", default=None, help="AI agent command, default from selected profile")
     parser.add_argument("--agent-args", default=None, help="Agent args as a shell-like string, default from config or 'exec --json'")
     parser.add_argument("--agent-timeout", type=int, default=None, help="Agent timeout seconds")
+    parser.add_argument("--isolate-agent-home", dest="isolate_agent_home", action="store_true", default=None, help="Run CLI agents with per-run HOME/CODEX_HOME isolation")
+    parser.add_argument("--no-isolate-agent-home", dest="isolate_agent_home", action="store_false", help="Disable per-run HOME/CODEX_HOME isolation even if enabled in the agent profile")
     parser.add_argument("--judge", dest="judge", action="store_true", default=None, help="Run optional LLM judge after deterministic validation")
     parser.add_argument("--no-judge", dest="judge", action="store_false", help="Disable optional LLM judge even if enabled in config")
     parser.add_argument("--judge-command", default=None, help="Judge command, default from config or codex")
@@ -72,6 +75,8 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     parser.add_argument("--list-modes", action="store_true")
     parser.add_argument("--list-cases", action="store_true")
     parser.add_argument("--version", action="store_true", help="Print evaluator version and exit")
+    parser.add_argument("--run-conformance", action="store_true", help="Run the built-in no-token conformance fixture and exit")
+    parser.add_argument("--conformance-out", help="Optional output directory for --run-conformance")
     return parser.parse_args(argv)
 
 
@@ -90,6 +95,9 @@ def _apply_agent_overrides(profile: dict[str, Any], args: argparse.Namespace) ->
         resolved["args"] = split_args(args.agent_args, [])
     if args.agent_timeout is not None:
         resolved["timeout_seconds"] = args.agent_timeout
+    if getattr(args, "isolate_agent_home", None) is not None:
+        resolved["isolate_home"] = bool(args.isolate_agent_home)
+        resolved["isolate_codex_home"] = bool(args.isolate_agent_home)
     if getattr(args, "agent_model", None):
         resolved["model"] = args.agent_model
     if getattr(args, "agent_reasoning_effort", None):
@@ -173,7 +181,7 @@ def _skipped_agent_summary(reason: str) -> dict[str, Any]:
 
 
 def _setup_failed_validation(reason: str) -> dict[str, Any]:
-    return {
+    return with_schema({
         "ok": False,
         "hard_passed": 0,
         "hard_total": 1,
@@ -182,7 +190,7 @@ def _setup_failed_validation(reason: str) -> dict[str, Any]:
         "results": [
             {"id": "setup_ok", "ok": False, "hard": True, "message": reason}
         ],
-    }
+    }, "agent-eval.validation-result.v1")
 
 
 def _resolve_case_repository(repo_override: str | None, case: dict[str, Any] | None, repos: dict[str, dict[str, Any]]) -> tuple[str, dict[str, Any]]:
@@ -204,6 +212,129 @@ def _resolve_case_repository(repo_override: str | None, case: dict[str, Any] | N
     return resolve_repository(None, repos)
 
 
+
+def _bool_profile(profile: dict[str, Any], *keys: str, default: bool = False) -> bool:
+    for key in keys:
+        if key in profile:
+            return bool(profile.get(key))
+    return default
+
+
+def _active_skill_names(worktree: Path) -> list[str]:
+    skills_root = worktree / ".agents" / "skills"
+    if not skills_root.exists():
+        return []
+    names: list[str] = []
+    for skill_md in sorted(skills_root.glob("*/SKILL.md")):
+        names.append(skill_md.parent.name)
+    return names
+
+
+def _profile_for_run(base_profile: dict[str, Any], output_root: Path, run_output_dir: Path, run_id: str) -> tuple[dict[str, Any], dict[str, Any]]:
+    """Return a per-run agent profile plus isolation metadata.
+
+    When enabled, HOME is pointed at a generated per-run runtime home so Codex
+    cannot discover user-level skills from the real $HOME/.agents/skills. For
+    Codex CLI, CODEX_HOME can also be isolated to avoid global instructions.
+    """
+    profile = dict(base_profile)
+    backend = str(profile.get("backend") or profile.get("type") or "codex").lower()
+    isolate_home = _bool_profile(profile, "isolate_home", "isolated_home", default=False)
+    isolate_codex_home = _bool_profile(profile, "isolate_codex_home", "isolated_codex_home", default=isolate_home and backend in {"codex", "codex-cli"})
+    metadata = {
+        "enabled": bool(isolate_home or isolate_codex_home),
+        "isolate_home": bool(isolate_home),
+        "isolate_codex_home": bool(isolate_codex_home),
+        "runtime_home": None,
+        "codex_home": None,
+    }
+    if isolate_home or isolate_codex_home:
+        runtime_home = output_root / "runtime-homes" / slug(run_id)
+        ensure_dir(runtime_home)
+        write_generated_marker(runtime_home, kind="runtime-home", metadata={"run_id": run_id})
+        env = dict(profile.get("env") or {})
+        if isolate_home:
+            env["HOME"] = str(runtime_home)
+            metadata["runtime_home"] = str(runtime_home)
+        if isolate_codex_home:
+            codex_home = runtime_home / ".codex"
+            ensure_dir(codex_home)
+            env["CODEX_HOME"] = str(codex_home)
+            metadata["codex_home"] = str(codex_home)
+        profile["env"] = env
+    return profile, metadata
+
+def _run_conformance(args: argparse.Namespace) -> int:
+    """Run the bundled no-token fixture and verify stable contract invariants."""
+    import tempfile
+    import json as _json
+
+    package_root = Path(__file__).resolve().parents[1]
+    fixture_root = package_root / "examples" / "simple-local-repo"
+    if not fixture_root.exists():
+        print(f"Built-in conformance fixture not found: {fixture_root}", file=sys.stderr)
+        return 2
+
+    if args.conformance_out:
+        out_root = Path(args.conformance_out).expanduser().resolve()
+        worktree_root = out_root / "worktrees"
+        results_root = out_root / "results"
+        ensure_dir(out_root)
+    else:
+        temp_root = Path(tempfile.mkdtemp(prefix="agent-eval-conformance-"))
+        worktree_root = temp_root / "worktrees"
+        results_root = temp_root / "results"
+
+    code = _main([
+        "--suite-root", str(fixture_root),
+        "--repo", str(fixture_root / "fake_project"),
+        "--modes", "local-fake",
+        "--cases", "explain-demo",
+        "--agent-profile", "fake",
+        "--prompt-style", "neutral",
+        "--worktree-root", str(worktree_root),
+        "--out", str(results_root),
+        "--dirty-policy", "allow",
+        "--cleanup", "never",
+    ])
+    if code != 0:
+        print(f"Conformance run failed with exit code {code}", file=sys.stderr)
+        return code
+
+    summary = read_json(results_root / "summary.json", default={}) or {}
+    runs = summary.get("runs") or []
+    failures: list[str] = []
+    if summary.get("schema_version") != "agent-eval.summary.v1":
+        failures.append("summary.json schema_version mismatch")
+    if len(runs) != 1:
+        failures.append(f"expected exactly one run, got {len(runs)}")
+    record = runs[0] if runs else {}
+    if record.get("run_status") != "completed":
+        failures.append(f"expected completed run_status, got {record.get('run_status')!r}")
+    validation = record.get("validation") or {}
+    if validation.get("schema_version") != "agent-eval.validation-result.v1":
+        failures.append("validation schema_version mismatch")
+    if not validation.get("ok"):
+        failures.append("validation did not pass")
+    run_dir = Path(record.get("run_dir") or "")
+    if not (run_dir / "events.normalized.jsonl").exists():
+        failures.append("events.normalized.jsonl missing")
+    manifest = read_json(run_dir / "run.manifest.json", default={}) or {}
+    if manifest.get("schema_version") != "agent-eval.run-manifest.v1":
+        failures.append("run.manifest.json schema_version mismatch")
+
+    result = {
+        "schema_version": "agent-eval.conformance-result.v1",
+        "contract_version": "agent-eval.contract.v1",
+        "ok": not failures,
+        "failures": failures,
+        "results_root": str(results_root),
+        "run_dir": str(run_dir),
+    }
+    print(_json.dumps(result, indent=2, ensure_ascii=False))
+    return 0 if not failures else 2
+
+
 def _apply_dirty_policy(repo_id: str, repo_status: dict[str, Any], policy: str) -> None:
     if not repo_status.get("dirty") or policy == "allow":
         return
@@ -222,6 +353,9 @@ def _main(argv: list[str] | None = None) -> int:
     if args.version:
         print(f"agent-eval {__version__}")
         return 0
+
+    if args.run_conformance:
+        return _run_conformance(args)
 
     suite_paths, config = load_config(Path(args.suite_root), args.config)
 
@@ -374,8 +508,6 @@ def _main(argv: list[str] | None = None) -> int:
         print("Selected agent backend is unavailable:", file=sys.stderr)
         print(_json.dumps(agent_check, indent=2, ensure_ascii=False), file=sys.stderr)
         return 2
-    agent = create_agent(agent_profile)
-
     judge_config = config.get("judge") or {}
     judge_enabled = bool(judge_config.get("enabled", False)) if args.judge is None else bool(args.judge)
     judge_command = args.judge_command or judge_config.get("command") or "codex"
@@ -399,7 +531,8 @@ def _main(argv: list[str] | None = None) -> int:
     print(f"Modes: {', '.join(m['id'] for m in selected_modes)}")
     print(f"Cases: {', '.join(c['id'] for c in selected_cases)}")
     print(f"Prompt style: {prompt_style}")
-    print(f"Agent profile: {agent_profile_id} ({agent_profile.get('backend', 'generic')})")
+    isolation_label = "isolated" if _bool_profile(agent_profile, "isolate_home", "isolated_home", default=False) else "normal-home"
+    print(f"Agent profile: {agent_profile_id} ({agent_profile.get('backend', 'generic')}, {isolation_label})")
     if not agent_check.get("ok"):
         print(f"Warning: selected agent availability check failed: {agent_check.get('message') or agent_check.get('error_category')}")
     print(f"Judge: {'enabled' if judge_enabled else 'disabled'}")
@@ -524,12 +657,31 @@ def _main(argv: list[str] | None = None) -> int:
                     write_text(run_output_dir / "stdout.raw.jsonl", "")
                     write_text(run_output_dir / "stdout.raw.txt", "")
                     write_text(run_output_dir / "stderr.txt", reason + "\n")
+                    active_skills = _active_skill_names(run_worktree)
+                    write_json(run_output_dir / "active-skills.json", {
+                        "schema_version": "agent-eval.active-skills.v1",
+                        "skills": active_skills,
+                        "skill_count": len(active_skills),
+                    })
                     agent_summary = _skipped_agent_summary(reason)
+                    agent_summary["active_skills"] = active_skills
+                    write_json(run_output_dir / "agent.summary.json", agent_summary)
                     validation = _setup_failed_validation(reason)
                     write_json(run_output_dir / "validation.json", validation)
                 else:
                     prompt = render_prompt(prompt_template, case, mode, prompt_style)
+                    run_agent_profile, agent_isolation = _profile_for_run(agent_profile, output_root, run_output_dir, run_id)
+                    active_skills = _active_skill_names(run_worktree)
+                    write_json(run_output_dir / "active-skills.json", {
+                        "schema_version": "agent-eval.active-skills.v1",
+                        "skills": active_skills,
+                        "skill_count": len(active_skills),
+                    })
+                    agent = create_agent(run_agent_profile)
                     agent_summary = agent.run(run_worktree, prompt, run_output_dir)
+                    agent_summary["home_isolation"] = agent_isolation
+                    agent_summary["active_skills"] = active_skills
+                    write_json(run_output_dir / "agent.summary.json", agent_summary)
                     validation = run_validators(run_output_dir, case, mode)
                     if judge is not None:
                         rubric = resolve_rubric(rubrics, case, judge_default_rubric)
@@ -544,7 +696,7 @@ def _main(argv: list[str] | None = None) -> int:
                         write_json(run_output_dir / "validation.json", validation)
 
                 run_status = _final_status(run_setup, agent_summary, validation)
-                record = {
+                record = with_schema({
                     "run_status": run_status,
                     "repo": run_repo_id,
                     "repo_status": run_repo_status,
@@ -559,7 +711,7 @@ def _main(argv: list[str] | None = None) -> int:
                     "agent_check": agent_check,
                     "agent_summary": agent_summary,
                     "validation": validation,
-                }
+                }, RESULT_SCHEMA_VERSION)
 
                 cleanup_record = None
                 if run_worktree.exists() and (cleanup_policy == "always" or (cleanup_policy == "on-success" and run_status == "completed")):

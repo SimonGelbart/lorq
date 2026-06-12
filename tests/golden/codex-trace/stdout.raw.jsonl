@@ -1,0 +1,3 @@
+{"type":"item.completed","item":{"type":"local_shell_call","action":{"command":"rg -n PermissionService src"}}}
+{"type":"assistant_message","message":"PermissionService is defined in src/Auth/PermissionService.cs"}
+{"type":"usage","input_tokens":42,"output_tokens":7,"total_tokens":49}

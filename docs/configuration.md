@@ -79,3 +79,7 @@ Options:
 - `git-worktree`: preferred for local Git repos
 - `copy`: works for non-Git folders
 - `clone`: useful for remote Git URLs or CI
+
+## JSON schemas
+
+Version 1.1 includes JSON schema files under `schemas/`. These schemas define the public contract for configurations and result artifacts. They are intended for editor validation, CI checks, and future implementations in other languages.

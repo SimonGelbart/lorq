@@ -7,6 +7,7 @@ from pathlib import Path
 from typing import Any
 
 from . import __version__
+from .contracts import RUN_MANIFEST_SCHEMA_VERSION, with_schema
 from .utils import run_command, write_json, write_text
 
 
@@ -30,6 +31,8 @@ def capture_environment(cwd: Path) -> dict[str, Any]:
         "graphify": ["graphify", "--version"],
     }
     return {
+        "schema_version": "agent-eval.environment.v1",
+        "contract_version": "agent-eval.contract.v1",
         "suite_version": __version__,
         "python": sys.version.replace("\n", " "),
         "platform": platform.platform(),
@@ -83,7 +86,7 @@ def write_run_snapshots(
     write_json(snapshots_dir / "repo.json", {"id": repo_id, "config": repo, "status": repo_status})
     write_json(snapshots_dir / "agent_profile.json", {"id": agent_profile_id, "profile": agent_profile})
     write_text(snapshots_dir / "prompt_style.txt", prompt_template)
-    manifest = {
+    manifest = with_schema({
         "suite_version": __version__,
         "repo": repo_id,
         "repo_status": repo_status,
@@ -93,6 +96,6 @@ def write_run_snapshots(
         "agent_profile": agent_profile_id,
         "repetition": repetition,
         "worktree": str(worktree) if worktree else None,
-    }
+    }, RUN_MANIFEST_SCHEMA_VERSION)
     write_json(output_dir / "run.manifest.json", manifest)
     return manifest

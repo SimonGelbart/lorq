@@ -1,4 +1,4 @@
-# Generic Agent Eval Runner v1.0
+# Generic Agent Eval Runner v1.2
 
 A Python evaluator for comparing AI agent modes, skills, tool preparation flows, prompt styles, and agent backends in isolated repository worktrees.
 
@@ -32,11 +32,18 @@ Generated tool artifacts such as `graphify-out/` are **not copied by default**. 
 - Safe cleanup using generated-folder markers
 - Strict YAML schema validation
 - Dirty-repo policy controls
+- Explicit portability contract for future .NET/Go/Rust ports
+- JSON schemas under `schemas/` for config, modes, cases, events, validation, and results
+- Schema-versioned machine-readable outputs
+- Built-in no-token conformance fixture via `--run-conformance`
+- Controlled `execution/base-skills/` bundle for production-like benchmarks
+- Codex CLI HOME / CODEX_HOME isolation to prevent user-level skill leakage
+- `active-skills.json` per run to show which workspace skills were installed
 
 ## Install
 
 ```bash
-cd generic-agent-eval-runner-v1.0
+cd generic-agent-eval-runner-v1.2
 python -m venv .venv
 source .venv/bin/activate
 pip install -e .
@@ -70,12 +77,23 @@ agent-eval --list-modes
 agent-eval --list-cases
 ```
 
+
+Run the no-token portability conformance fixture:
+
+```bash
+agent-eval --run-conformance
+```
+
+This verifies the stable result contract without using Codex or Copilot.
+
 Check your selected agent backend:
 
 ```bash
 agent-eval --check-agent --agent-profile codex
 agent-eval --check-agent --agent-profile copilot-sdk
 ```
+
+For Codex eval isolation, the default `codex` profile in this package sets per-run `HOME` and `CODEX_HOME`. This prevents Codex from seeing user-level skills under your real `$HOME/.agents/skills` or global Codex instructions. If your local Codex authentication depends on your normal `CODEX_HOME`, temporarily disable isolation with `--no-isolate-agent-home` and prefer environment-based authentication for formal runs.
 
 Run a neutral evaluation:
 
@@ -129,12 +147,16 @@ Run only two targeted cases first:
 ```bash
 agent-eval \
   --repo /Users/simon/projects/nopCommerce \
-  --modes default-graphify,default-graphify-plus \
+  --modes base-default-graphify,base-default-graphify-plus \
   --cases admin-permissions,inactive-customers-csv \
   --prompt-style neutral \
   --dirty-policy fail \
+  --require-agent-available \
+  --no-judge \
   --out ./results/graphify-plus-smoke
 ```
+
+Use `base-only,base-default-graphify,base-default-graphify-plus` when you want to know whether Graphify adds value on top of your normal base skill environment. Use `no-skill,default-graphify,default-graphify-plus` only for a pure isolation benchmark.
 
 ## Important outputs
 
@@ -201,3 +223,17 @@ aggregates.json
 - Use `permission_policy: approve_all` for Copilot SDK only in isolated eval worktrees.
 - Cleanup commands only remove generated folders containing `.agent-eval-generated.json` markers.
 - Logs are redacted for common token/key/secret patterns, but avoid putting secrets in prompts or setup commands.
+
+## Portability contract
+
+Version 1.2 keeps the Python implementation a reference implementation for the external contract. See:
+
+- `schemas/` for JSON schemas
+- `docs/architecture.md`
+- `docs/result-contract.md`
+- `docs/normalized-events.md`
+- `docs/validation-contract.md`
+- `docs/backend-contract.md`
+- `docs/portability.md`
+
+A future .NET implementation should target these contracts rather than Python internals.

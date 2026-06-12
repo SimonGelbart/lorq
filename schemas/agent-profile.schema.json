@@ -1,0 +1,66 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://agent-eval.local/schemas/agent-profile.schema.json",
+  "title": "Agent profile",
+  "type": "object",
+  "additionalProperties": true,
+  "properties": {
+    "backend": {
+      "enum": [
+        "codex",
+        "codex-cli",
+        "copilot",
+        "copilot-cli",
+        "copilot-sdk",
+        "generic"
+      ]
+    },
+    "command": {
+      "type": "string"
+    },
+    "args": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "input_mode": {
+      "enum": [
+        "stdin",
+        "argument"
+      ]
+    },
+    "output_format": {
+      "type": "string"
+    },
+    "timeout_seconds": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "model": {
+      "type": "string"
+    },
+    "reasoning_effort": {
+      "type": "string"
+    },
+    "permission_policy": {
+      "type": "string"
+    },
+    "isolate_home": {
+      "type": "boolean",
+      "description": "Run the agent with per-run HOME pointing at a generated runtime-home directory."
+    },
+    "isolated_home": {
+      "type": "boolean",
+      "description": "Alias for isolate_home."
+    },
+    "isolate_codex_home": {
+      "type": "boolean",
+      "description": "Run Codex CLI with per-run CODEX_HOME under the runtime-home directory."
+    },
+    "isolated_codex_home": {
+      "type": "boolean",
+      "description": "Alias for isolate_codex_home."
+    }
+  }
+}

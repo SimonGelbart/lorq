@@ -1,0 +1,127 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://agent-eval.local/schemas/mode.schema.json",
+  "title": "Mode",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "id"
+  ],
+  "properties": {
+    "id": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "enabled": {
+      "type": "boolean"
+    },
+    "materialize": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "copy": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "from",
+              "to"
+            ],
+            "properties": {
+              "from": {
+                "type": "string"
+              },
+              "to": {
+                "type": "string"
+              },
+              "overwrite": {
+                "type": "boolean"
+              }
+            }
+          }
+        }
+      }
+    },
+    "pre_agent": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "setup_scope": {
+          "enum": [
+            "none",
+            "per-run",
+            "per-case"
+          ]
+        },
+        "commands": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "id"
+            ],
+            "oneOf": [
+              {
+                "required": [
+                  "argv"
+                ]
+              },
+              {
+                "required": [
+                  "run"
+                ]
+              }
+            ],
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "argv": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "run": {
+                "type": "string"
+              },
+              "cwd": {
+                "type": "string"
+              },
+              "timeout_seconds": {
+                "type": "integer",
+                "minimum": 1
+              },
+              "required": {
+                "type": "boolean"
+              },
+              "shell": {
+                "type": "boolean"
+              },
+              "continue_on_failure": {
+                "type": "boolean"
+              },
+              "env": {
+                "type": "object",
+                "additionalProperties": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "continue_on_failure": {
+          "type": "boolean"
+        }
+      }
+    },
+    "expectations": {
+      "type": "object",
+      "additionalProperties": true
+    }
+  }
+}

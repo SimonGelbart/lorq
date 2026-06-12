@@ -60,3 +60,13 @@ results/smoke/failed_runs.md
 ```bash
 agent-eval --explain-run ./results/smoke/runs/no-skill/neutral/admin-permissions/r1
 ```
+
+## No-token conformance check
+
+Before running expensive agents, verify the portability contract using the bundled fake-agent fixture:
+
+```bash
+agent-eval --run-conformance
+```
+
+The command should return a JSON object with `ok: true`. It creates a temporary result folder and verifies that the run produced schema-versioned summary, validation, manifest, and normalized-events artifacts.

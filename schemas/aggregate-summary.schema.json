@@ -1,0 +1,27 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://agent-eval.local/schemas/aggregate-summary.schema.json",
+  "title": "Aggregate summary",
+  "type": "object",
+  "additionalProperties": true,
+  "required": [
+    "schema_version"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "agent-eval.aggregate-summary.v1"
+    },
+    "contract_version": {
+      "const": "agent-eval.contract.v1"
+    },
+    "by_case": {
+      "type": "array"
+    },
+    "by_mode": {
+      "type": "array"
+    },
+    "by_mode_case": {
+      "type": "array"
+    }
+  }
+}

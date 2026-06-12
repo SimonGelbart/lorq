@@ -6,6 +6,7 @@ from pathlib import Path
 from typing import Any
 
 from .aggregate import build_aggregates
+from .contracts import AGGREGATE_SUMMARY_SCHEMA_VERSION, SUMMARY_SCHEMA_VERSION, with_schema
 from .utils import ensure_dir, read_json, write_json, write_text
 
 
@@ -686,8 +687,8 @@ def compare_result_sets(result_sets: list[tuple[str, list[dict[str, Any]]]]) -> 
 def write_reports(results_root: Path, run_records: list[dict[str, Any]]) -> None:
     ensure_dir(results_root)
     aggregates = build_aggregates(run_records)
-    write_json(results_root / "summary.json", {"runs": run_records, "aggregates": aggregates})
-    write_json(results_root / "aggregates.json", aggregates)
+    write_json(results_root / "summary.json", with_schema({"runs": run_records, "aggregates": aggregates}, SUMMARY_SCHEMA_VERSION))
+    write_json(results_root / "aggregates.json", with_schema(aggregates, AGGREGATE_SUMMARY_SCHEMA_VERSION))
     _write_run_scorecard(results_root, run_records)
     _write_aggregate_scorecard(results_root, aggregates)
     write_text(results_root / "summary.md", _summary_markdown(run_records, aggregates))

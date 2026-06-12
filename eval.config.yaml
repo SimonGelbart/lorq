@@ -36,6 +36,10 @@ agent_profiles:
       - --version
     availability_timeout_seconds: 10
     timeout_seconds: 1200
+    # v1.2: isolate Codex user-level skills/instructions during evals.
+    # Set --no-isolate-agent-home if your local auth requires your normal CODEX_HOME.
+    isolate_home: true
+    isolate_codex_home: true
 
   copilot-cli:
     description: GitHub Copilot CLI text prompt mode. Kept as a simple shell-CLI fallback.

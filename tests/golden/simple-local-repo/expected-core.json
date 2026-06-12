@@ -1,0 +1,9 @@
+{
+  "summary_schema_version": "agent-eval.summary.v1",
+  "run_schema_version": "agent-eval.result.v1",
+  "run_status": "completed",
+  "validation_schema_version": "agent-eval.validation-result.v1",
+  "validation_ok": true,
+  "manifest_schema_version": "agent-eval.run-manifest.v1",
+  "normalized_events_file": true
+}

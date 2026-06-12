@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://agent-eval.local/schemas/repository.schema.json",
+  "title": "Repository",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "type"
+  ],
+  "properties": {
+    "type": {
+      "enum": [
+        "local",
+        "git"
+      ]
+    },
+    "path": {
+      "type": "string"
+    },
+    "url": {
+      "type": "string"
+    },
+    "ref": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    }
+  }
+}
