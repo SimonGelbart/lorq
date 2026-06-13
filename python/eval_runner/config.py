@@ -48,6 +48,17 @@ def load_yaml(path: Path) -> dict[str, Any]:
 def load_config(suite_root: Path, config_name: str = "eval.config.yaml") -> tuple[SuitePaths, dict[str, Any]]:
     suite_root = suite_root.resolve()
     config_path = (suite_root / config_name).resolve()
+
+    # LORQ monorepo compatibility: Python v0 implementation lives under
+    # `python/`, while shared suite assets live at the repository root.
+    # If a caller uses `--suite-root .` from `python/`, fall back to the
+    # parent repository root when it contains the requested config.
+    if not config_path.exists():
+        parent_config_path = (suite_root.parent / config_name).resolve()
+        if parent_config_path.exists():
+            suite_root = suite_root.parent.resolve()
+            config_path = parent_config_path
+
     config = load_yaml(config_path)
     validate_config(config, config_path)
     return SuitePaths(root=suite_root, config_path=config_path), config

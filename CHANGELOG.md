@@ -1,14 +1,33 @@
 # Changelog
 
-## 1.2.4
+All notable changes to LORQ should be documented here.
 
-- Preserve token/count metrics during redaction; `input_tokens`, `cached_input_tokens`, `output_tokens`, `reasoning_output_tokens`, pass counters, and cost metrics are no longer redacted.
-- Normalize usage with `cached_input_tokens`, `uncached_input_tokens`, `cache_hit_rate`, and `total_tokens`.
-- Add optional pricing estimates using configurable per-1M-token rates.
-- Add `--pricing-model`, `--pricing-file`, and `--no-pricing`.
-- Add pricing columns to `scorecard.csv` and aggregate cost fields.
-- Add `pricing/openai-pricing.example.yaml` and `docs/pricing.md`.
+## 2026-06-18 - Increment 0: repository bootstrap artifact
 
-## 1.2.3
+### Roadmap position
 
-- Improved setup-only failure diagnostics.
+Current increment: Python v0 baseline reorganization and repository initialization.
+
+### Changed
+
+- Created the first clean LORQ repository candidate under `lorq/`.
+- Separated source-controlled repo material from agent/session material using the `lorq/` and `internal/` boundary.
+- Moved shared product assets to the repository root: `cases/`, `modes/`, `pricing/`, `execution/`, `schemas/`, `prompt_styles/`, `rubrics/`, `repositories/`, and `eval.config.yaml`.
+- Moved Python v0 implementation and tests under `python/`.
+- Added .NET v1 skeleton under `dotnet/`.
+- Added roadmap and operating documents under `docs/`.
+- Preserved generated Python v0 example results intentionally under `fixtures/python-v0-generated-results/`.
+- Patched Python v0 conformance fixture lookup so it can resolve shared root-level examples in the monorepo layout.
+
+### Validation
+
+Executed during artifact creation:
+
+- `cd python && python -m pytest -q` -> 71 passed.
+- `cd python && PYTHONPATH=. python -m eval_runner.cli --suite-root .. --validate-config` -> passed.
+- `cd python && PYTHONPATH=. python -m eval_runner.cli --run-conformance` -> passed.
+
+### Next increment
+
+- Freeze a simple deterministic orchestration benchmark using fake agent and fake judge adapters.
+- Create root-level conformance fixtures that can be consumed by both Python v0 and future .NET v1.

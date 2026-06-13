@@ -1,0 +1,8 @@
+{
+  "event_count": 0,
+  "event_type_counts": {},
+  "backends": [],
+  "usage": {},
+  "schema_version": "agent-eval.event-summary.v1",
+  "contract_version": "agent-eval.contract.v1"
+}

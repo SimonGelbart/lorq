@@ -1,0 +1,21 @@
+{
+  "agent": "fake",
+  "backend": "fake",
+  "command": [
+    "python",
+    "execution/scripts/fake_agent.py"
+  ],
+  "input_mode": "stdin",
+  "output_format": "text",
+  "exit_code": 0,
+  "timed_out": false,
+  "elapsed_ms": 1260,
+  "ok": true,
+  "error_category": null,
+  "usage": {},
+  "counts": {
+    "json_events": 0,
+    "tool_events": 0,
+    "command_events": 0
+  }
+}

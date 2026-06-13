@@ -1,0 +1,481 @@
+{
+  "runs": [
+    {
+      "run_status": "completed",
+      "repo": "fake_project",
+      "repo_status": {
+        "type": "local",
+        "ok": true,
+        "path": "/mnt/data/work_v11/generic-agent-eval-runner-v1.1/examples/simple-local-repo/fake_project",
+        "ref": "HEAD",
+        "is_git_repo": false
+      },
+      "mode": "local-fake",
+      "prompt_style": "neutral",
+      "case": "explain-demo",
+      "category": "demo",
+      "repetition": 1,
+      "worktree": "/mnt/data/work_v11/conformance_out/worktrees/local-fake__neutral__explain-demo__r1",
+      "run_dir": "/mnt/data/work_v11/conformance_out/results/runs/local-fake/neutral/explain-demo/r1",
+      "setup": {
+        "setup_scope": "none",
+        "worktree": {
+          "strategy": "copy",
+          "source": "/mnt/data/work_v11/generic-agent-eval-runner-v1.1/examples/simple-local-repo/fake_project",
+          "dest": "/mnt/data/work_v11/conformance_out/worktrees/local-fake__neutral__explain-demo__r1"
+        },
+        "materialize": [
+          {
+            "action": "copy",
+            "from": "/mnt/data/work_v11/generic-agent-eval-runner-v1.1/examples/simple-local-repo/execution/scripts/fake_agent.py",
+            "to": "/mnt/data/work_v11/conformance_out/worktrees/local-fake__neutral__explain-demo__r1/execution/scripts/fake_agent.py"
+          }
+        ],
+        "setup": {
+          "commands": [],
+          "ok": true,
+          "command_count": 0,
+          "elapsed_ms": 0
+        }
+      },
+      "agent_check": {
+        "backend": "fake",
+        "command": "python",
+        "resolved_path": "/opt/pyvenv/bin/python",
+        "available": true,
+        "ok": true,
+        "version_check": {
+          "command": [
+            "python",
+            "--version"
+          ],
+          "exit_code": 0,
+          "timed_out": false,
+          "elapsed_ms": 12,
+          "stdout_preview": "Python 3.13.5\n",
+          "stderr_preview": "",
+          "ok": true,
+          "error_category": null
+        },
+        "profile_id": "fake",
+        "backend_config": "generic"
+      },
+      "agent_summary": {
+        "agent": "fake",
+        "backend": "fake",
+        "command": [
+          "python",
+          "execution/scripts/fake_agent.py"
+        ],
+        "input_mode": "stdin",
+        "output_format": "text",
+        "exit_code": 0,
+        "timed_out": false,
+        "elapsed_ms": 1260,
+        "ok": true,
+        "error_category": null,
+        "usage": {},
+        "counts": {
+          "json_events": 0,
+          "tool_events": 0,
+          "command_events": 0
+        }
+      },
+      "validation": {
+        "case_id": "explain-demo",
+        "mode_id": "local-fake",
+        "ok": true,
+        "hard_passed": "[REDACTED]",
+        "hard_total": 8,
+        "soft_passed": "[REDACTED]",
+        "soft_total": 2,
+        "answer": {
+          "ok": true,
+          "hard_passed": "[REDACTED]",
+          "hard_total": 8,
+          "soft_passed": "[REDACTED]",
+          "soft_total": 1,
+          "checks": [
+            {
+              "type": "answer_not_empty",
+              "ok": true,
+              "message": "answer.md should contain a non-empty final answer"
+            },
+            {
+              "type": "required_symbol",
+              "value": "DemoService",
+              "ok": true
+            },
+            {
+              "type": "required_symbol_source_grounded",
+              "value": "DemoService",
+              "ok": true,
+              "message": "symbol should appear near a repository file reference"
+            },
+            {
+              "type": "required_file",
+              "value": "src/demo_service.py",
+              "ok": true
+            },
+            {
+              "type": "required_file_exists",
+              "value": "src/demo_service.py",
+              "ok": true,
+              "message": "required file path should exist in the evaluated worktree"
+            },
+            {
+              "type": "minimum_existing_file_references",
+              "ok": true,
+              "actual": 1,
+              "expected_min": 1
+            },
+            {
+              "type": "minimum_source_files",
+              "ok": true,
+              "actual": 1,
+              "expected_min": 1
+            },
+            {
+              "type": "max_missing_cited_files",
+              "ok": true,
+              "actual": 0,
+              "expected_max": 0
+            },
+            {
+              "type": "cited_file_paths_exist",
+              "ok": true,
+              "actual_missing": 0,
+              "missing": [],
+              "soft": true
+            }
+          ],
+          "evidence": {
+            "answer_empty": false,
+            "file_references": [
+              "src/demo_service.py"
+            ],
+            "file_reference_count": 1,
+            "unique_file_reference_count": 1,
+            "worktree": "/mnt/data/work_v11/conformance_out/worktrees/local-fake__neutral__explain-demo__r1",
+            "worktree_available": true,
+            "existing_file_references": [
+              "src/demo_service.py"
+            ],
+            "existing_file_reference_count": 1,
+            "missing_file_references": [],
+            "missing_file_reference_count": 0,
+            "unknown_file_references": [],
+            "unknown_file_reference_count": 0
+          }
+        },
+        "behavior": {
+          "ok": true,
+          "hard_passed": "[REDACTED]",
+          "hard_total": 0,
+          "soft_passed": "[REDACTED]",
+          "soft_total": 1,
+          "checks": [
+            {
+              "type": "source_verification_observed",
+              "ok": false,
+              "actual_source_read_count": 0,
+              "soft": true
+            }
+          ],
+          "trace": {
+            "trace_source": "none",
+            "normalized_event_count": 0,
+            "normalized_event_type_counts": {},
+            "command_count": 0,
+            "commands": [],
+            "search_count": 0,
+            "source_read_count": 0,
+            "graphify_command_count": 0,
+            "graphify_query_count": 0,
+            "generic_graphify_query_count": 0,
+            "specific_graphify_query_count": 0,
+            "graphify_queries": [],
+            "source_after_graph": false,
+            "first_graph_line": null,
+            "first_source_line": null
+          }
+        },
+        "checks": [
+          {
+            "type": "answer_not_empty",
+            "ok": true,
+            "message": "answer.md should contain a non-empty final answer"
+          },
+          {
+            "type": "required_symbol",
+            "value": "DemoService",
+            "ok": true
+          },
+          {
+            "type": "required_symbol_source_grounded",
+            "value": "DemoService",
+            "ok": true,
+            "message": "symbol should appear near a repository file reference"
+          },
+          {
+            "type": "required_file",
+            "value": "src/demo_service.py",
+            "ok": true
+          },
+          {
+            "type": "required_file_exists",
+            "value": "src/demo_service.py",
+            "ok": true,
+            "message": "required file path should exist in the evaluated worktree"
+          },
+          {
+            "type": "minimum_existing_file_references",
+            "ok": true,
+            "actual": 1,
+            "expected_min": 1
+          },
+          {
+            "type": "minimum_source_files",
+            "ok": true,
+            "actual": 1,
+            "expected_min": 1
+          },
+          {
+            "type": "max_missing_cited_files",
+            "ok": true,
+            "actual": 0,
+            "expected_max": 0
+          },
+          {
+            "type": "cited_file_paths_exist",
+            "ok": true,
+            "actual_missing": 0,
+            "missing": [],
+            "soft": true
+          },
+          {
+            "type": "source_verification_observed",
+            "ok": false,
+            "actual_source_read_count": 0,
+            "soft": true
+          }
+        ],
+        "schema_version": "agent-eval.validation-result.v1",
+        "contract_version": "agent-eval.contract.v1"
+      },
+      "schema_version": "agent-eval.result.v1",
+      "contract_version": "agent-eval.contract.v1"
+    }
+  ],
+  "aggregates": {
+    "by_mode_case_prompt": [
+      {
+        "mode": "local-fake",
+        "case": "explain-demo",
+        "prompt_style": "neutral",
+        "summary": {
+          "runs": 1,
+          "completed_rate": 1.0,
+          "setup_ok_rate": 1.0,
+          "setup_failed_count": 0,
+          "agent_failed_count": 0,
+          "validation_failed_count": 0,
+          "judge_failed_count": 0,
+          "avg_setup_elapsed_ms": 0.0,
+          "avg_setup_command_count": 0.0,
+          "exit_success_rate": 1.0,
+          "validation_ok_rate": 1.0,
+          "behavior_ok_rate": 1.0,
+          "avg_answer_file_reference_count": 1.0,
+          "avg_answer_existing_file_reference_count": 1.0,
+          "avg_answer_missing_file_reference_count": 0.0,
+          "hard_passed": "[REDACTED]",
+          "hard_total": 8,
+          "hard_pass_rate": "[REDACTED]",
+          "soft_passed": "[REDACTED]",
+          "soft_total": 2,
+          "soft_pass_rate": "[REDACTED]",
+          "validation_score": 0.9,
+          "behavior_hard_passed": "[REDACTED]",
+          "behavior_hard_total": 0,
+          "behavior_hard_pass_rate": null,
+          "behavior_soft_passed": "[REDACTED]",
+          "behavior_soft_total": 1,
+          "behavior_soft_pass_rate": "[REDACTED]",
+          "avg_elapsed_ms": 1260.0,
+          "stdev_elapsed_ms": null,
+          "avg_total_tokens": null,
+          "stdev_total_tokens": null,
+          "avg_input_tokens": null,
+          "avg_output_tokens": null,
+          "avg_command_count": 0.0,
+          "avg_search_count": 0.0,
+          "avg_source_read_count": 0.0,
+          "avg_graphify_query_count": 0.0,
+          "avg_generic_graphify_query_count": 0.0,
+          "avg_specific_graphify_query_count": 0.0,
+          "judge_ok_rate": null,
+          "avg_judge_overall_score": null,
+          "stdev_judge_overall_score": null
+        }
+      }
+    ],
+    "by_mode": [
+      {
+        "mode": "local-fake",
+        "prompt_style": "neutral",
+        "summary": {
+          "runs": 1,
+          "completed_rate": 1.0,
+          "setup_ok_rate": 1.0,
+          "setup_failed_count": 0,
+          "agent_failed_count": 0,
+          "validation_failed_count": 0,
+          "judge_failed_count": 0,
+          "avg_setup_elapsed_ms": 0.0,
+          "avg_setup_command_count": 0.0,
+          "exit_success_rate": 1.0,
+          "validation_ok_rate": 1.0,
+          "behavior_ok_rate": 1.0,
+          "avg_answer_file_reference_count": 1.0,
+          "avg_answer_existing_file_reference_count": 1.0,
+          "avg_answer_missing_file_reference_count": 0.0,
+          "hard_passed": "[REDACTED]",
+          "hard_total": 8,
+          "hard_pass_rate": "[REDACTED]",
+          "soft_passed": "[REDACTED]",
+          "soft_total": 2,
+          "soft_pass_rate": "[REDACTED]",
+          "validation_score": 0.9,
+          "behavior_hard_passed": "[REDACTED]",
+          "behavior_hard_total": 0,
+          "behavior_hard_pass_rate": null,
+          "behavior_soft_passed": "[REDACTED]",
+          "behavior_soft_total": 1,
+          "behavior_soft_pass_rate": "[REDACTED]",
+          "avg_elapsed_ms": 1260.0,
+          "stdev_elapsed_ms": null,
+          "avg_total_tokens": null,
+          "stdev_total_tokens": null,
+          "avg_input_tokens": null,
+          "avg_output_tokens": null,
+          "avg_command_count": 0.0,
+          "avg_search_count": 0.0,
+          "avg_source_read_count": 0.0,
+          "avg_graphify_query_count": 0.0,
+          "avg_generic_graphify_query_count": 0.0,
+          "avg_specific_graphify_query_count": 0.0,
+          "judge_ok_rate": null,
+          "avg_judge_overall_score": null,
+          "stdev_judge_overall_score": null
+        }
+      }
+    ],
+    "by_case": [
+      {
+        "case": "explain-demo",
+        "prompt_style": "neutral",
+        "winner_heuristic": "local-fake",
+        "summary": {
+          "runs": 1,
+          "completed_rate": 1.0,
+          "setup_ok_rate": 1.0,
+          "setup_failed_count": 0,
+          "agent_failed_count": 0,
+          "validation_failed_count": 0,
+          "judge_failed_count": 0,
+          "avg_setup_elapsed_ms": 0.0,
+          "avg_setup_command_count": 0.0,
+          "exit_success_rate": 1.0,
+          "validation_ok_rate": 1.0,
+          "behavior_ok_rate": 1.0,
+          "avg_answer_file_reference_count": 1.0,
+          "avg_answer_existing_file_reference_count": 1.0,
+          "avg_answer_missing_file_reference_count": 0.0,
+          "hard_passed": "[REDACTED]",
+          "hard_total": 8,
+          "hard_pass_rate": "[REDACTED]",
+          "soft_passed": "[REDACTED]",
+          "soft_total": 2,
+          "soft_pass_rate": "[REDACTED]",
+          "validation_score": 0.9,
+          "behavior_hard_passed": "[REDACTED]",
+          "behavior_hard_total": 0,
+          "behavior_hard_pass_rate": null,
+          "behavior_soft_passed": "[REDACTED]",
+          "behavior_soft_total": 1,
+          "behavior_soft_pass_rate": "[REDACTED]",
+          "avg_elapsed_ms": 1260.0,
+          "stdev_elapsed_ms": null,
+          "avg_total_tokens": null,
+          "stdev_total_tokens": null,
+          "avg_input_tokens": null,
+          "avg_output_tokens": null,
+          "avg_command_count": 0.0,
+          "avg_search_count": 0.0,
+          "avg_source_read_count": 0.0,
+          "avg_graphify_query_count": 0.0,
+          "avg_generic_graphify_query_count": 0.0,
+          "avg_specific_graphify_query_count": 0.0,
+          "judge_ok_rate": null,
+          "avg_judge_overall_score": null,
+          "stdev_judge_overall_score": null
+        },
+        "modes": [
+          {
+            "mode": "local-fake",
+            "case": "explain-demo",
+            "prompt_style": "neutral",
+            "summary": {
+              "runs": 1,
+              "completed_rate": 1.0,
+              "setup_ok_rate": 1.0,
+              "setup_failed_count": 0,
+              "agent_failed_count": 0,
+              "validation_failed_count": 0,
+              "judge_failed_count": 0,
+              "avg_setup_elapsed_ms": 0.0,
+              "avg_setup_command_count": 0.0,
+              "exit_success_rate": 1.0,
+              "validation_ok_rate": 1.0,
+              "behavior_ok_rate": 1.0,
+              "avg_answer_file_reference_count": 1.0,
+              "avg_answer_existing_file_reference_count": 1.0,
+              "avg_answer_missing_file_reference_count": 0.0,
+              "hard_passed": "[REDACTED]",
+              "hard_total": 8,
+              "hard_pass_rate": "[REDACTED]",
+              "soft_passed": "[REDACTED]",
+              "soft_total": 2,
+              "soft_pass_rate": "[REDACTED]",
+              "validation_score": 0.9,
+              "behavior_hard_passed": "[REDACTED]",
+              "behavior_hard_total": 0,
+              "behavior_hard_pass_rate": null,
+              "behavior_soft_passed": "[REDACTED]",
+              "behavior_soft_total": 1,
+              "behavior_soft_pass_rate": "[REDACTED]",
+              "avg_elapsed_ms": 1260.0,
+              "stdev_elapsed_ms": null,
+              "avg_total_tokens": null,
+              "stdev_total_tokens": null,
+              "avg_input_tokens": null,
+              "avg_output_tokens": null,
+              "avg_command_count": 0.0,
+              "avg_search_count": 0.0,
+              "avg_source_read_count": 0.0,
+              "avg_graphify_query_count": 0.0,
+              "avg_generic_graphify_query_count": 0.0,
+              "avg_specific_graphify_query_count": 0.0,
+              "judge_ok_rate": null,
+              "avg_judge_overall_score": null,
+              "stdev_judge_overall_score": null
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "schema_version": "agent-eval.summary.v1",
+  "contract_version": "agent-eval.contract.v1"
+}

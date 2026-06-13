@@ -1,39 +1,43 @@
 # Python
 __pycache__/
 *.py[cod]
+*.egg-info/
 .pytest_cache/
 .mypy_cache/
 .ruff_cache/
-.coverage
-htmlcov/
 .venv/
 venv/
 
-# .NET future implementation
+# .NET
 bin/
 obj/
-TestResults/
+.vs/
 *.user
 *.suo
 
-# Local env / secrets
+# Local environment
 .env
 .env.*
 !.env.example
-*.local.*
 
-# Generated run outputs
+# LORQ / eval generated local outputs
 results/
-artifacts/
+worktrees/
+.lorq/tmp/
+.agent-eval-generated.json
+runtime-homes/
+
+# Logs and scratch
 *.log
-*.tmp
-*.bak
+scratch/
+internal/
 
-# Keep curated fixtures only when explicitly placed here
-!fixtures/**
-!examples/results/README.md
+# Archives
+*.zip
+*.tar
+*.tar.gz
 
-# OS / editors
+# OS/editor
 .DS_Store
 Thumbs.db
 .idea/

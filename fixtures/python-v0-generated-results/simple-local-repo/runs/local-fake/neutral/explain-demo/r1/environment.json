@@ -1,0 +1,52 @@
+{
+  "schema_version": "agent-eval.environment.v1",
+  "contract_version": "agent-eval.contract.v1",
+  "suite_version": "1.1.0",
+  "python": "3.13.5 (main, Jun 25 2025, 18:55:22) [GCC 14.2.0]",
+  "platform": "Linux-4.4.0-x86_64-with-glibc2.41",
+  "executable": "/opt/pyvenv/bin/python",
+  "cwd": "/mnt/data/work_v11/conformance_out/worktrees/local-fake__neutral__explain-demo__r1",
+  "env_present": {
+    "OPENAI_API_KEY": "[REDACTED]",
+    "GITHUB_TOKEN": "[REDACTED]",
+    "ANTHROPIC_API_KEY": "[REDACTED]"
+  },
+  "commands": {
+    "git": {
+      "command": [
+        "git",
+        "--version"
+      ],
+      "available": true,
+      "exit_code": 0,
+      "version": "git version 2.47.3"
+    },
+    "codex": {
+      "command": [
+        "codex",
+        "--version"
+      ],
+      "available": false,
+      "exit_code": 127,
+      "version": "[Errno 2] No such file or directory: 'codex'"
+    },
+    "copilot": {
+      "command": [
+        "copilot",
+        "--version"
+      ],
+      "available": false,
+      "exit_code": 127,
+      "version": "[Errno 2] No such file or directory: 'copilot'"
+    },
+    "graphify": {
+      "command": [
+        "graphify",
+        "--version"
+      ],
+      "available": false,
+      "exit_code": 127,
+      "version": "[Errno 2] No such file or directory: 'graphify'"
+    }
+  }
+}

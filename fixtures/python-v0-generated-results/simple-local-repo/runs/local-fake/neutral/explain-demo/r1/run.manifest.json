@@ -1,0 +1,20 @@
+{
+  "suite_version": "1.1.0",
+  "repo": "fake_project",
+  "repo_status": {
+    "type": "local",
+    "ok": true,
+    "path": "/mnt/data/work_v11/generic-agent-eval-runner-v1.1/examples/simple-local-repo/fake_project",
+    "ref": "HEAD",
+    "is_git_repo": false
+  },
+  "mode": "local-fake",
+  "case": "explain-demo",
+  "prompt_style": "neutral",
+  "agent_profile": "fake",
+  "repetition": 1,
+  "worktree": "/mnt/data/work_v11/conformance_out/worktrees/local-fake__neutral__explain-demo__r1",
+  "schema_version": "agent-eval.run-manifest.v1",
+  "contract_version": "agent-eval.contract.v1",
+  "run_status": "completed"
+}

@@ -1,0 +1,15 @@
+{
+  "id": "fake_project",
+  "config": {
+    "type": "local",
+    "path": "/mnt/data/work_v11/generic-agent-eval-runner-v1.1/examples/simple-local-repo/fake_project",
+    "ref": "HEAD"
+  },
+  "status": {
+    "type": "local",
+    "ok": true,
+    "path": "/mnt/data/work_v11/generic-agent-eval-runner-v1.1/examples/simple-local-repo/fake_project",
+    "ref": "HEAD",
+    "is_git_repo": false
+  }
+}

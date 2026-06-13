@@ -274,7 +274,11 @@ def _run_conformance(args: argparse.Namespace) -> int:
     import json as _json
 
     package_root = Path(__file__).resolve().parents[1]
-    fixture_root = package_root / "examples" / "simple-local-repo"
+    candidate_roots = [package_root, package_root.parent]
+    fixture_root = next(
+        (root / "examples" / "simple-local-repo" for root in candidate_roots if (root / "examples" / "simple-local-repo").exists()),
+        package_root / "examples" / "simple-local-repo",
+    )
     if not fixture_root.exists():
         print(f"Built-in conformance fixture not found: {fixture_root}", file=sys.stderr)
         return 2

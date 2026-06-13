@@ -1,0 +1,25 @@
+{
+  "id": "explain-demo",
+  "title": "Explain demo service",
+  "category": "demo",
+  "difficulty": "easy",
+  "repo": "demo",
+  "task": "Explain what the DemoService does and cite the source file.\n",
+  "validation": {
+    "required_symbols": [
+      {
+        "symbol": "DemoService",
+        "must_be_near_file_reference": true
+      }
+    ],
+    "required_files": [
+      "src/demo_service.py"
+    ],
+    "required_evidence": {
+      "min_existing_file_references": 1,
+      "min_source_files": 1,
+      "max_missing_cited_files": 0
+    }
+  },
+  "_path": "/mnt/data/work_v11/generic-agent-eval-runner-v1.1/examples/simple-local-repo/cases/explain-demo.yaml"
+}

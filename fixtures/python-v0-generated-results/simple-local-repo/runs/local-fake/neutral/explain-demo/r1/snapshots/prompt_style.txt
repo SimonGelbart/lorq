@@ -1,0 +1,7 @@
+Answer the following repository exploration task.
+
+Use the repository, available files, and available tools as needed.
+Prefer source-backed evidence.
+
+Task:
+{task}

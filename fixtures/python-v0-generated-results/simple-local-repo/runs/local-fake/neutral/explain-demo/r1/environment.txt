@@ -1,0 +1,9 @@
+suite_version: 1.1.0
+python: 3.13.5 (main, Jun 25 2025, 18:55:22) [GCC 14.2.0]
+platform: Linux-4.4.0-x86_64-with-glibc2.41
+
+commands:
+- git: available git version 2.47.3
+- codex: missing/error [Errno 2] No such file or directory: 'codex'
+- copilot: missing/error [Errno 2] No such file or directory: 'copilot'
+- graphify: missing/error [Errno 2] No such file or directory: 'graphify'

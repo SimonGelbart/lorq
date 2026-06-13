@@ -1,0 +1,32 @@
+{
+  "ok": true,
+  "hard_passed": "[REDACTED]",
+  "hard_total": 0,
+  "soft_passed": "[REDACTED]",
+  "soft_total": 1,
+  "checks": [
+    {
+      "type": "source_verification_observed",
+      "ok": false,
+      "actual_source_read_count": 0,
+      "soft": true
+    }
+  ],
+  "trace": {
+    "trace_source": "none",
+    "normalized_event_count": 0,
+    "normalized_event_type_counts": {},
+    "command_count": 0,
+    "commands": [],
+    "search_count": 0,
+    "source_read_count": 0,
+    "graphify_command_count": 0,
+    "graphify_query_count": 0,
+    "generic_graphify_query_count": 0,
+    "specific_graphify_query_count": 0,
+    "graphify_queries": [],
+    "source_after_graph": false,
+    "first_graph_line": null,
+    "first_source_line": null
+  }
+}

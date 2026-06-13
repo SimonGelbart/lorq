@@ -1,0 +1,14 @@
+{
+  "id": "fake",
+  "profile": {
+    "backend": "generic",
+    "command": "python",
+    "args": [
+      "execution/scripts/fake_agent.py"
+    ],
+    "input_mode": "stdin",
+    "output_format": "text",
+    "timeout_seconds": 60,
+    "id": "fake"
+  }
+}
