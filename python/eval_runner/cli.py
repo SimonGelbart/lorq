@@ -14,7 +14,7 @@ from .prompts import load_prompt_style, render_prompt, validate_prompt_styles_di
 from .reports import compare_result_sets, explain_run_markdown, load_run_record_from_path, write_reports
 from .repositories import inspect_repository, load_repositories, resolve_repository
 from .rubrics import load_rubrics, resolve_rubric
-from .lorq_package import LorqPackageError, export_lorq_run_shard, merge_lorq_run_shards
+from .lorq_package import LorqPackageError, attach_lorq_deterministic_judgement, export_lorq_run_shard, merge_lorq_run_shards
 from .lifecycle import clean_results_root, clean_worktree_root, list_generated_worktrees, load_run_records, prune_git_worktrees, remove_execution_path, write_generated_marker, write_lifecycle_event
 from .metadata import write_environment_files, write_run_snapshots
 from .utils import ensure_dir, read_json, slug, write_json
@@ -91,6 +91,9 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     parser.add_argument("--lorq-merge-out", help="Output directory for --merge-lorq-shards")
     parser.add_argument("--lorq-benchmark", help="Optional deterministic benchmark.yaml used to compute expected cells for merge coverage")
     parser.add_argument("--lorq-allow-incompatible", action="store_true", help="Allow duplicate cells or fingerprint mismatches during migration-only LORQ merge and mark integrity instead of failing")
+    parser.add_argument("--judge-lorq-package", help="Migration-only: attach a deterministic fake judgement pass to an existing v1-alpha LORQ package")
+    parser.add_argument("--lorq-judge-name", default="judge-primary", help="Judgement pass name for --judge-lorq-package; default: judge-primary")
+    parser.add_argument("--lorq-judge-fixture", help="Deterministic fake judge fixture file for --judge-lorq-package; relative paths resolve against --suite-root")
     return parser.parse_args(argv)
 
 
@@ -416,6 +419,28 @@ def _main(argv: list[str] | None = None) -> int:
             )
         except LorqPackageError as exc:
             print(f"LORQ merge failed: {exc}", file=sys.stderr)
+            return 2
+        print(_json.dumps(result, indent=2, ensure_ascii=False))
+        return 0 if result.get("ok") else 2
+
+    if args.judge_lorq_package:
+        import json as _json
+        fixture_value = args.lorq_judge_fixture or args.judge_fixture_file
+        if not fixture_value:
+            print("--judge-lorq-package requires --lorq-judge-fixture or --judge-fixture-file", file=sys.stderr)
+            return 2
+        fixture_file = Path(fixture_value).expanduser()
+        if not fixture_file.is_absolute():
+            fixture_file = Path(args.suite_root).expanduser().resolve() / fixture_file
+        try:
+            result = attach_lorq_deterministic_judgement(
+                Path(args.judge_lorq_package),
+                judge_name=args.lorq_judge_name,
+                fixture_file=fixture_file,
+                strict=not args.lorq_allow_incompatible,
+            )
+        except LorqPackageError as exc:
+            print(f"LORQ judgement failed: {exc}", file=sys.stderr)
             return 2
         print(_json.dumps(result, indent=2, ensure_ascii=False))
         return 0 if result.get("ok") else 2

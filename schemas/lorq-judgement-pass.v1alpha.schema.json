@@ -1,0 +1,64 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://lorq.local/schemas/lorq-judgement-pass.v1alpha.schema.json",
+  "title": "LORQ judgement pass manifest v1-alpha",
+  "type": "object",
+  "additionalProperties": true,
+  "required": [
+    "schema_version",
+    "contract_version",
+    "judgement_name",
+    "backend",
+    "cell_count",
+    "judged_cell_count",
+    "score_summary"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "lorq.judgement-pass.v1alpha1"
+    },
+    "contract_version": {
+      "const": "lorq.contract.v1alpha1"
+    },
+    "judgement_name": {
+      "type": "string",
+      "minLength": 1
+    },
+    "backend": {
+      "type": "string"
+    },
+    "source": {
+      "type": "object"
+    },
+    "cell_count": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "judged_cell_count": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "missing_fixture_cell_ids": {
+      "type": "array",
+      "items": {"type": "string"}
+    },
+    "missing_expected_cell_ids": {
+      "type": "array",
+      "items": {"type": "string"}
+    },
+    "score_summary": {
+      "type": "object"
+    },
+    "cell_judgement_refs": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["cell_id", "path"],
+        "properties": {
+          "cell_id": {"type": "string"},
+          "path": {"type": "string"}
+        }
+      }
+    }
+  }
+}

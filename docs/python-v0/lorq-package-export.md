@@ -51,7 +51,7 @@ shard-001/
       <cell-id>.json
 ```
 
-This is a run-shard package, not a fully judged experiment. Python v0 now also has a migration-only merge path for run shards; deterministic fake judgement attachment, JSON report, Markdown rendering, and per-case packs still remain future increments.
+This is a run-shard package, not a fully judged experiment. Python v0 now also has migration-only merge and deterministic fake judgement attachment paths. JSON report, Markdown rendering, and per-case packs still remain future increments.
 
 
 ## Migration-only shard merge
@@ -72,6 +72,40 @@ The merge copies each shard payload under `runs/<shard-id>/`, rebuilds `.lorq/ce
 By default, merge fails on duplicate cell IDs or incompatible repository fingerprints. Missing expected cells are warnings rather than hard failures because partial coverage is an intentional benchmark condition. Use `--lorq-allow-incompatible` only for diagnostic edge fixtures where the merged package should be written with integrity errors instead of stopping.
 
 When `--lorq-benchmark` points to a deterministic benchmark shape, expected cells are computed as the case × mode × attempt matrix. This exposes intentionally omitted cells such as `skipped-coverage__graphify-plus__attempt-001`.
+
+
+
+## Migration-only deterministic judgement attachment
+
+Python v0 can attach a named deterministic fake judgement pass to an already-merged package without invoking Codex, Copilot, or any LLM judge:
+
+```bash
+cd python
+PYTHONPATH=. python -m eval_runner.cli \
+  --judge-lorq-package /path/to/experiment-001 \
+  --lorq-judge-name judge-primary \
+  --suite-root ../fixtures/conformance/deterministic-orchestration \
+  --lorq-judge-fixture fixtures/fake-judge.yaml
+```
+
+The command reads `.lorq/cells/*.json`, matches each present cell against the deterministic fake judge fixture, and writes:
+
+```text
+experiment-001/
+  judgements/
+    judge-primary/
+      judgement.manifest.json
+      judgement.summary.json
+      cells/
+        <cell-id>.json
+  .lorq/
+    judgements/
+      judge-primary.json
+```
+
+A missing expected coverage cell is recorded in the judgement manifest as `missing_expected_cell_ids`; it is not judged because no cell evidence exists. A missing fixture entry for a present cell fails by default because every evaluated cell must have an explicit deterministic quality record.
+
+Each cell judgement records `source.real_llm_used: false` and references the input cell evidence rather than re-running an agent or judge.
 
 ## Cell identity
 
@@ -153,7 +187,7 @@ The session workflow can generate two candidate run shards under `internal/gener
 
 ## Current limitations
 
-The current Python v0 migration slice establishes run-shard export, deterministic fake adapters, and package-level shard merge. It does not yet implement:
+The current Python v0 migration slice establishes run-shard export, deterministic fake adapters, package-level shard merge, and package-level deterministic judgement attachment. It does not yet implement:
 
 - duplicate-cell conflict fixture
 - fingerprint mismatch fixture

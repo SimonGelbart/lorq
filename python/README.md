@@ -110,13 +110,19 @@ judge:
 
 This is only a baseline generator for the future .NET migration; it is not the final LORQ product core.
 
-The migration-only package tools can export run shards and merge them without loading suite config:
+The migration-only package tools can export run shards, merge them, and attach deterministic fake judgement passes without loading suite config or calling a real LLM judge:
 
 ```bash
 PYTHONPATH=. python -m eval_runner.cli \
   --merge-lorq-shards ../internal/generated/deterministic-benchmark/shard-001 ../internal/generated/deterministic-benchmark/shard-002 \
   --lorq-merge-out ../internal/generated/deterministic-benchmark/experiment-001 \
   --lorq-benchmark ../fixtures/conformance/deterministic-orchestration/benchmark.yaml
+
+PYTHONPATH=. python -m eval_runner.cli \
+  --judge-lorq-package ../internal/generated/deterministic-benchmark/experiment-001 \
+  --lorq-judge-name judge-primary \
+  --suite-root ../fixtures/conformance/deterministic-orchestration \
+  --lorq-judge-fixture fixtures/fake-judge.yaml
 ```
 
 

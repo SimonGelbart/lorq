@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.2.8-lorq-package-judgement
+
+- Add migration-only `--judge-lorq-package` for attaching deterministic fake judgement passes to v1-alpha LORQ packages.
+- Write `judgements/<name>/judgement.manifest.json`, `judgements/<name>/judgement.summary.json`, per-cell judgement JSON, and `.lorq/judgements/<name>.json`.
+- Add judgement contract constants and v1-alpha schemas for cell judgements and judgement pass manifests.
+- Fail by default when a present cell has no deterministic fixture judgement.
+
 ## 1.2.7-lorq-merge
 
 - Add migration-only `--merge-lorq-shards` and `--lorq-merge-out` for v1-alpha LORQ run-shard packages.
