@@ -1,8 +1,9 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\Lorq.Core\Lorq.Core.csproj" />
     <ProjectReference Include="..\..\src\Lorq.Reporting\Lorq.Reporting.csproj" />
+    <PackageReference Include="TUnit" />
   </ItemGroup>
 
   <PropertyGroup>

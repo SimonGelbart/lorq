@@ -2,6 +2,41 @@
 
 All notable changes to LORQ should be documented here.
 
+## 2026-06-18 - Increment 2 setup: .NET engineering and TUnit standard
+
+### Roadmap position
+
+Current increment: Increment 2, .NET foundation and package model. This session consolidated the .NET coding guidelines before adding more product behavior.
+
+### Added
+
+- Added source-controlled .NET engineering rules for clean architecture boundaries, object-calisthenics domain discipline, modern C# usage, deliberate design pattern use, and TUnit testing.
+- Added `dotnet/docs/engineering-guidelines.md` and `.agents/LORQ_DOTNET_ENGINEERING_RULES.md`.
+- Added root `global.json` to opt `dotnet test` into Microsoft.Testing.Platform mode for .NET 10.
+- Added central TUnit package version management under `dotnet/Directory.Packages.props`.
+
+### Changed
+
+- Migrated `Lorq.Core.Tests` from a custom console assertion harness to TUnit tests.
+- Updated `.gitignore` to exclude .NET `TestResults/`.
+- Updated .NET README validation commands to use `dotnet test`.
+
+### Validation
+
+Executed during this increment:
+
+- `dotnet restore dotnet/Lorq.slnx --source <local package cache> -p:Platform="Any CPU"` -> passed.
+- `dotnet build dotnet/Lorq.slnx --no-restore -p:Platform="Any CPU"` -> passed.
+- `dotnet test --solution dotnet/Lorq.slnx --no-restore -p:Platform="Any CPU" --disable-logo --minimum-expected-tests 5` -> 5 passed.
+- `cd python && python -m pytest -q` -> passed.
+- `cd python && PYTHONPATH=. python -m eval_runner.cli --suite-root .. --validate-config` -> passed.
+- `cd python && PYTHONPATH=. python -m eval_runner.cli --suite-root ../fixtures/conformance/deterministic-orchestration --validate-config` -> passed.
+- `cd python && PYTHONPATH=. python -m eval_runner.cli --run-conformance` -> passed.
+
+### Next increment
+
+- Add .NET package writer/index rebuild support for already-loaded packages, then validate stable regenerated `.lorq` indexes against the frozen Python golden package.
+
 ## 2026-06-18 - Increment 2 foundation: .NET package validation
 
 ### Roadmap position
@@ -34,7 +69,7 @@ Executed during this increment:
 
 - .NET does not yet write packages or rebuild indexes.
 - .NET `run`, `merge`, `judge`, and `report` remain future increments.
-- The current test harness intentionally avoids external NuGet test packages; it is a console assertion harness.
+- This increment originally used a temporary no-dependency console assertion harness; a later Increment 2 setup change migrates the tests to TUnit.
 
 ## 2026-06-18 - Increment 1 fixture: deterministic package judgement
 

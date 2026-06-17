@@ -7,5 +7,6 @@ These rules are source-controlled because they preserve product direction and co
 Start with:
 
 - `LORQ_AGENT_RULES.md` for mandatory repo, roadmap, validation, and handoff rules.
+- `LORQ_DOTNET_ENGINEERING_RULES.md` for .NET architecture, style, testing, and pattern rules.
 
 Session-specific notes, generated outputs, local scripts, logs, extracted archives, and one-off handoffs must stay outside this repository under the sibling `internal/` workspace directory used by delivery artifacts.
