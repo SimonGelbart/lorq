@@ -58,6 +58,16 @@ public sealed record PackageValidationResult(
     public IReadOnlyList<LorqDiagnostic> Warnings => Diagnostics.Where(d => d.Severity == "warning").ToArray();
 }
 
+
+public sealed record LorqIndexRebuildResult(
+    bool Ok,
+    string TargetRoot,
+    IReadOnlyList<string> GeneratedFiles,
+    IReadOnlyList<LorqDiagnostic> Diagnostics)
+{
+    public IReadOnlyList<LorqDiagnostic> Errors => Diagnostics.Where(d => d.Severity == "error").ToArray();
+}
+
 public sealed record MergeInputValidationResult(
     bool Ok,
     IReadOnlyList<LorqDiagnostic> Diagnostics,

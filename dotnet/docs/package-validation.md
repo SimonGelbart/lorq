@@ -13,10 +13,10 @@ Lorq.slnx
 src/Lorq.Core/        Domain records and package validation.
 src/Lorq.Reporting/   JSON summary shaping for CLI output.
 src/Lorq.Cli/         Minimal validation command surface.
-tests/Lorq.Core.Tests Manual no-dependency fixture validation harness.
+tests/Lorq.Core.Tests TUnit fixture validation tests.
 ```
 
-The test harness is currently a console project instead of an xUnit/MSTest project so it does not require external NuGet packages during the migration bootstrap.
+The test project uses TUnit through Microsoft.Testing.Platform on .NET 10.
 
 ## Commands
 
@@ -35,6 +35,18 @@ dotnet run --project src/Lorq.Cli -- validate-merge-inputs \
   ../fixtures/conformance/deterministic-orchestration/edge-fixtures/duplicate-cell-conflict/shard-a \
   ../fixtures/conformance/deterministic-orchestration/edge-fixtures/duplicate-cell-conflict/shard-b
 ```
+
+
+Rebuild package indexes from already-existing package evidence:
+
+```bash
+cd dotnet
+dotnet run --project src/Lorq.Cli -- rebuild-indexes \
+  ../fixtures/golden/deterministic-orchestration/experiment-001 \
+  ../internal/generated/dotnet-index-rebuild/experiment-001
+```
+
+The rebuild command writes `.lorq/cells/`, `coverage.json`, `fingerprints.json`, `integrity.json`, judgement indexes, `merge-log.json`, and `report.json` under the target root. It is intentionally not a .NET merge implementation yet; it proves .NET can write stable package indexes from the frozen Python evidence contract.
 
 ## Stable validation codes introduced
 

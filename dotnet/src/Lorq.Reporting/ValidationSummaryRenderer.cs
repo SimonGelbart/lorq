@@ -39,4 +39,17 @@ public static class ValidationSummaryRenderer
             diagnostics = result.Diagnostics,
         };
     }
+
+    public static object FromIndexRebuildResult(LorqIndexRebuildResult result)
+    {
+        return new
+        {
+            ok = result.Ok,
+            target_root = result.TargetRoot,
+            generated_file_count = result.GeneratedFiles.Count,
+            generated_files = result.GeneratedFiles,
+            diagnostics = result.Diagnostics,
+        };
+    }
+
 }
