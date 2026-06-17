@@ -2,6 +2,43 @@
 
 All notable changes to LORQ should be documented here.
 
+## 2026-06-18 - Increment 1 foundation: LORQ v1-alpha package export
+
+### Roadmap position
+
+Current increment: Increment 1, Python frozen conformance baseline. This session advanced the fixture foundation by adding a migration-only exporter from Python v0 results into the planned LORQ run-shard package shape.
+
+### Added
+
+- Added Python v0 `--export-lorq-shard` with `--lorq-shard-id` and `--lorq-package-id` to export existing run results into a v1-alpha LORQ run-shard package without invoking agents or judges.
+- Added `eval_runner/lorq_package.py` to normalize Python v0 run records into `experiment.yaml`, `runs/<shard>/cells/`, `.lorq/cells/`, `.lorq/coverage.json`, `.lorq/fingerprints.json`, `.lorq/integrity.json`, and `.lorq/merge-log.json`.
+- Added a v1-alpha `lorq.cell-evidence.v1alpha1` schema file under `schemas/`.
+- Added fixture definition files under `fixtures/conformance/deterministic-orchestration/` for the frozen deterministic orchestration benchmark shape.
+- Added Python tests for LORQ run-shard package export and missing-final-answer integrity warnings.
+- Added Python v0 package export documentation.
+
+### Changed
+
+- Updated Python v0 docs index and README to include the migration-only LORQ package export path.
+- Added LORQ v1-alpha migration fixture constants to Python v0 contracts.
+- Imported `sys` in `eval_runner/agents.py` so the existing `{python}` command placeholder is resolvable when used.
+- Updated fixture documentation to clarify the deterministic orchestration conformance directory.
+
+### Validation
+
+Executed during this increment:
+
+- `cd python && python -m pytest tests/test_lorq_package.py -q` -> 2 passed.
+- Python fake-agent smoke run plus `--export-lorq-shard` -> produced a v1-alpha package with 1 cell.
+
+Full-suite validation is expected before packaging this artifact.
+
+### Known limitations
+
+- This is not the complete frozen benchmark yet. It does not implement two-shard merge, deterministic fake judge, judge fixtures, canonical `report.json`, Markdown rendering, per-case review packs, duplicate conflict fixtures, or fingerprint mismatch fixtures.
+- Exported adapter timing still reflects the source Python v0 run; deterministic timing requires the next fake adapter increment.
+- No roadmap amendment was required.
+
 ## 2026-06-18 - Increment 1 preparation: repo boundary and agent operating rules
 
 ### Roadmap position
