@@ -1,0 +1,59 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://lorq.local/schemas/fake-judge-fixture.v1alpha.schema.json",
+  "title": "LORQ deterministic fake judge fixture v1-alpha",
+  "type": "object",
+  "additionalProperties": true,
+  "required": [
+    "schema_version",
+    "judgements"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "lorq.fake-judge-fixture.v1alpha1"
+    },
+    "judgements": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "case",
+          "mode",
+          "overall_score",
+          "dimensions"
+        ],
+        "properties": {
+          "case": {
+            "type": "string"
+          },
+          "mode": {
+            "type": "string"
+          },
+          "attempt": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "ok": {
+            "type": "boolean"
+          },
+          "overall_score": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "confidence": {
+            "type": "string"
+          },
+          "dimensions": {
+            "type": "object"
+          },
+          "summary": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}

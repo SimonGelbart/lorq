@@ -1,0 +1,12 @@
+id: repository-exploration
+notes: Deterministic migration fixture rubric. Scores are read from fake-judge fixtures.
+dimensions:
+  correctness:
+    weight: 0.5
+    description: Answer matches the repository evidence.
+  completeness:
+    weight: 0.3
+    description: Answer covers the requested orchestration concepts.
+  evidence:
+    weight: 0.2
+    description: Answer cites concrete source files or artifacts.

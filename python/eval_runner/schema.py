@@ -201,9 +201,13 @@ def validate_config(config: dict[str, Any], path: str | Path = "eval.config.yaml
 
     judge = c.optional_mapping(config.get("judge"), "$.judge")
     if judge:
-        c.no_unknown_keys(judge, "$.judge", {"enabled", "command", "args", "timeout_seconds", "default_rubric"})
+        c.no_unknown_keys(judge, "$.judge", {"enabled", "backend", "command", "args", "timeout_seconds", "default_rubric", "fixture_file"})
         c.optional_bool(judge, "enabled", "$.judge")
+        c.enum_value(judge, "backend", "$.judge", {"codex", "deterministic-fake"})
         c.optional_string(judge, "command", "$.judge")
+        c.optional_string(judge, "fixture_file", "$.judge")
+        if judge.get("backend") == "deterministic-fake" and judge.get("enabled") and not judge.get("fixture_file"):
+            c.fail("$.judge.fixture_file", "deterministic-fake judge requires fixture_file")
         c.list_of_strings(judge.get("args"), "$.judge.args")
         c.optional_int(judge, "timeout_seconds", "$.judge", min_value=1)
         c.optional_string(judge, "default_rubric", "$.judge")
@@ -259,15 +263,19 @@ def validate_agent_profile(profile_id: str, profile: Any, path: str, c: _Collect
     own = c is None
     c = c or _Collector(path)
     prof = c.require_mapping(profile, path)
-    c.no_unknown_keys(prof, path, {"id", "description", "backend", "type", "command", "args", "availability_args", "availability_timeout_seconds", "input_mode", "output_format", "timeout_seconds", "model", "reasoning_effort", "permission_policy", "github_token_env", "use_logged_in_user", "base_directory", "log_level", "session_idle_timeout_seconds", "env", "prompt_arg", "shell", "isolate_home", "isolated_home", "isolate_codex_home", "isolated_codex_home"})
+    c.no_unknown_keys(prof, path, {"id", "description", "backend", "type", "command", "args", "availability_args", "availability_timeout_seconds", "input_mode", "output_format", "timeout_seconds", "model", "reasoning_effort", "permission_policy", "github_token_env", "use_logged_in_user", "base_directory", "log_level", "session_idle_timeout_seconds", "env", "prompt_arg", "shell", "isolate_home", "isolated_home", "isolate_codex_home", "isolated_codex_home", "fixture_file", "scenario_file"})
     backend = prof.get("backend") or prof.get("type") or "generic"
-    if not isinstance(backend, str) or backend not in {"codex", "copilot", "copilot-sdk", "generic"}:
-        c.fail(f"{path}.backend", "expected one of ['codex', 'copilot', 'copilot-sdk', 'generic']")
+    if not isinstance(backend, str) or backend not in {"codex", "copilot", "copilot-sdk", "generic", "deterministic-fake"}:
+        c.fail(f"{path}.backend", "expected one of ['codex', 'copilot', 'copilot-sdk', 'generic', 'deterministic-fake']")
     c.optional_string(prof, "description", path)
     if backend in {"codex", "copilot", "generic"}:
         c.require_string(prof, "command", path)
     else:
         c.optional_string(prof, "command", path)
+    c.optional_string(prof, "fixture_file", path)
+    c.optional_string(prof, "scenario_file", path)
+    if backend == "deterministic-fake" and not (prof.get("fixture_file") or prof.get("scenario_file")):
+        c.fail(path, "deterministic-fake profiles require fixture_file")
     c.list_of_strings(prof.get("args"), f"{path}.args")
     c.list_of_strings(prof.get("availability_args"), f"{path}.availability_args")
     c.optional_int(prof, "availability_timeout_seconds", path, min_value=1)

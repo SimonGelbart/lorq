@@ -1,0 +1,80 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://lorq.local/schemas/fake-agent-fixture.v1alpha.schema.json",
+  "title": "LORQ deterministic fake agent fixture v1-alpha",
+  "type": "object",
+  "additionalProperties": true,
+  "required": [
+    "schema_version",
+    "cells"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "lorq.fake-agent-fixture.v1alpha1"
+    },
+    "default_cell": {
+      "type": "object"
+    },
+    "cells": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "case",
+          "mode",
+          "final_answer"
+        ],
+        "properties": {
+          "case": {
+            "type": "string"
+          },
+          "mode": {
+            "type": "string"
+          },
+          "attempt": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "status": {
+            "type": "string"
+          },
+          "final_answer": {
+            "type": "string"
+          },
+          "elapsed_ms": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "timed_out": {
+            "type": "boolean"
+          },
+          "exit_code": {
+            "type": "integer"
+          },
+          "usage": {
+            "type": "object"
+          },
+          "events": {
+            "type": "array",
+            "items": {
+              "type": "object"
+            }
+          },
+          "artifacts": {
+            "type": "array",
+            "items": {
+              "type": "object"
+            }
+          },
+          "integrity_warnings": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    }
+  }
+}

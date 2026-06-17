@@ -1,0 +1,206 @@
+schema_version: lorq.fake-agent-fixture.v1alpha1
+description: No-LLM deterministic cells for the Python v0 LORQ migration benchmark.
+cells:
+- case: successful-comparison
+  mode: baseline
+  attempt: 1
+  status: completed
+  elapsed_ms: 110
+  final_answer: baseline records cell evidence through LedgerWriter and describes
+    run shard metadata with ShardManifest. The implementation is in `src/ledger.py`,
+    where LedgerWriter.write_cell returns a cell evidence record and ShardManifest.to_dict
+    returns a run shard manifest.
+  usage:
+    input_tokens: 101
+    cached_input_tokens: 20
+    output_tokens: 41
+  events:
+  - type: tool.command
+    command: read src/ledger.py
+    case: successful-comparison
+    mode: baseline
+  - type: assistant.message
+    text: source-backed final answer emitted
+  artifacts:
+  - path: src/ledger.py
+    kind: source-reference
+  integrity_warnings: []
+- case: successful-comparison
+  mode: graphify
+  attempt: 1
+  status: completed
+  elapsed_ms: 120
+  final_answer: graphify records cell evidence through LedgerWriter and describes
+    run shard metadata with ShardManifest. The implementation is in `src/ledger.py`,
+    where LedgerWriter.write_cell returns a cell evidence record and ShardManifest.to_dict
+    returns a run shard manifest.
+  usage:
+    input_tokens: 102
+    cached_input_tokens: 20
+    output_tokens: 42
+  events:
+  - type: tool.command
+    command: read src/ledger.py
+    case: successful-comparison
+    mode: graphify
+  - type: assistant.message
+    text: source-backed final answer emitted
+  artifacts:
+  - path: src/ledger.py
+    kind: source-reference
+  integrity_warnings:
+  - synthetic integrity warning for migration coverage
+- case: successful-comparison
+  mode: graphify-plus
+  attempt: 1
+  status: completed
+  elapsed_ms: 130
+  final_answer: graphify-plus records cell evidence through LedgerWriter and describes
+    run shard metadata with ShardManifest. The implementation is in `src/ledger.py`,
+    where LedgerWriter.write_cell returns a cell evidence record and ShardManifest.to_dict
+    returns a run shard manifest.
+  usage:
+    input_tokens: 103
+    cached_input_tokens: 20
+    output_tokens: 43
+  events:
+  - type: tool.command
+    command: read src/ledger.py
+    case: successful-comparison
+    mode: graphify-plus
+  - type: assistant.message
+    text: source-backed final answer emitted
+  artifacts:
+  - path: src/ledger.py
+    kind: source-reference
+  integrity_warnings: []
+- case: no-final-answer
+  mode: baseline
+  attempt: 1
+  status: no_final_answer
+  elapsed_ms: 201
+  final_answer: ''
+  exit_code: 0
+  timed_out: false
+  error_category: no_final_answer
+  usage:
+    input_tokens: 81
+    output_tokens: 0
+  events:
+  - type: tool.command
+    command: read src/ledger.py
+    case: no-final-answer
+    mode: baseline
+  artifacts: []
+  integrity_warnings:
+  - missing final answer emitted intentionally
+- case: no-final-answer
+  mode: graphify
+  attempt: 1
+  status: no_final_answer
+  elapsed_ms: 202
+  final_answer: ''
+  exit_code: 0
+  timed_out: false
+  error_category: no_final_answer
+  usage:
+    input_tokens: 82
+    output_tokens: 0
+  events:
+  - type: tool.command
+    command: read src/ledger.py
+    case: no-final-answer
+    mode: graphify
+  artifacts: []
+  integrity_warnings:
+  - missing final answer emitted intentionally
+- case: no-final-answer
+  mode: graphify-plus
+  attempt: 1
+  status: no_final_answer
+  elapsed_ms: 203
+  final_answer: ''
+  exit_code: 0
+  timed_out: false
+  error_category: no_final_answer
+  usage:
+    input_tokens: 83
+    output_tokens: 0
+  events:
+  - type: tool.command
+    command: read src/ledger.py
+    case: no-final-answer
+    mode: graphify-plus
+  artifacts: []
+  integrity_warnings:
+  - missing final answer emitted intentionally
+- case: skipped-coverage
+  mode: baseline
+  attempt: 1
+  status: completed
+  elapsed_ms: 157
+  final_answer: baseline identifies partial coverage by comparing expected cells with
+    present shard cells. ShardManifest in `src/ledger.py` records the run shard identity,
+    while omitted cell coverage remains visible as an absent cell in the shard index.
+  usage:
+    input_tokens: 91
+    cached_input_tokens: 10
+    output_tokens: 34
+  events:
+  - type: tool.command
+    command: read src/ledger.py
+    case: skipped-coverage
+    mode: baseline
+  - type: assistant.message
+    text: partial coverage answer emitted
+  artifacts:
+  - path: src/ledger.py
+    kind: source-reference
+  integrity_warnings: []
+- case: skipped-coverage
+  mode: graphify
+  attempt: 1
+  status: completed
+  elapsed_ms: 164
+  final_answer: graphify identifies partial coverage by comparing expected cells with
+    present shard cells. ShardManifest in `src/ledger.py` records the run shard identity,
+    while omitted cell coverage remains visible as an absent cell in the shard index.
+  usage:
+    input_tokens: 92
+    cached_input_tokens: 10
+    output_tokens: 35
+  events:
+  - type: tool.command
+    command: read src/ledger.py
+    case: skipped-coverage
+    mode: graphify
+  - type: assistant.message
+    text: partial coverage answer emitted
+  artifacts:
+  - path: src/ledger.py
+    kind: source-reference
+  integrity_warnings: []
+- case: skipped-coverage
+  mode: graphify-plus
+  attempt: 1
+  status: completed
+  elapsed_ms: 171
+  final_answer: graphify-plus identifies partial coverage by comparing expected cells
+    with present shard cells. ShardManifest in `src/ledger.py` records the run shard
+    identity, while omitted cell coverage remains visible as an absent cell in the
+    shard index.
+  usage:
+    input_tokens: 93
+    cached_input_tokens: 10
+    output_tokens: 36
+  events:
+  - type: tool.command
+    command: read src/ledger.py
+    case: skipped-coverage
+    mode: graphify-plus
+  - type: assistant.message
+    text: partial coverage answer emitted
+  artifacts:
+  - path: src/ledger.py
+    kind: source-reference
+  integrity_warnings: []

@@ -3,6 +3,8 @@ from __future__ import annotations
 import json
 import re
 import time
+
+import yaml
 from pathlib import Path
 from typing import Any
 
@@ -157,6 +159,124 @@ def normalize_judge_payload(payload: dict[str, Any] | None, error: str | None = 
         "summary": payload.get("summary") or "",
         "raw": payload,
     }
+
+
+
+
+def _load_yaml_or_json(path: Path) -> dict[str, Any]:
+    if not path.exists():
+        raise FileNotFoundError(path)
+    text = path.read_text(encoding="utf-8")
+    data = json.loads(text or "{}") if path.suffix.lower() == ".json" else (yaml.safe_load(text) or {})
+    if not isinstance(data, dict):
+        raise ValueError(f"Expected mapping in {path}")
+    return data
+
+
+def _judge_fixture_key(case_id: str | None, mode_id: str | None, attempt: int | str | None) -> str:
+    return f"{case_id or ''}|{mode_id or ''}|{attempt or 1}"
+
+
+def _read_identity(output_dir: Path, case: dict[str, Any], mode: dict[str, Any]) -> dict[str, Any]:
+    manifest: dict[str, Any] = {}
+    manifest_path = output_dir / "run.manifest.json"
+    if manifest_path.exists():
+        try:
+            loaded = json.loads(manifest_path.read_text(encoding="utf-8") or "{}")
+            if isinstance(loaded, dict):
+                manifest = loaded
+        except json.JSONDecodeError:
+            pass
+    return {
+        "case_id": case.get("id") or manifest.get("case"),
+        "mode_id": mode.get("id") or manifest.get("mode"),
+        "attempt": manifest.get("repetition") or 1,
+    }
+
+
+def _normalize_judgements(data: dict[str, Any]) -> dict[str, dict[str, Any]]:
+    raw = data.get("judgements") or data.get("judgments") or {}
+    out: dict[str, dict[str, Any]] = {}
+    if isinstance(raw, dict):
+        for key, value in raw.items():
+            if isinstance(value, dict):
+                out[str(key)] = dict(value)
+        return out
+    if isinstance(raw, list):
+        for item in raw:
+            if not isinstance(item, dict):
+                continue
+            case_id = item.get("case") or item.get("case_id")
+            mode_id = item.get("mode") or item.get("mode_id")
+            attempt = item.get("attempt") or item.get("repetition") or 1
+            out[_judge_fixture_key(str(case_id), str(mode_id), attempt)] = dict(item)
+    return out
+
+
+class DeterministicFakeJudge:
+    """No-LLM deterministic judge used only for migration fixtures."""
+
+    def __init__(self, fixture_file: str) -> None:
+        self.fixture_file = fixture_file
+
+    def run(
+        self,
+        *,
+        worktree: Path,
+        output_dir: Path,
+        case: dict[str, Any],
+        mode: dict[str, Any],
+        rubric: dict[str, Any],
+        validation: dict[str, Any],
+    ) -> dict[str, Any]:
+        fixture_path = Path(self.fixture_file).expanduser().resolve()
+        fixture = _load_yaml_or_json(fixture_path)
+        identity = _read_identity(output_dir, case, mode)
+        key = _judge_fixture_key(str(identity.get("case_id")), str(identity.get("mode_id")), identity.get("attempt"))
+        judgements = _normalize_judgements(fixture)
+        payload = judgements.get(key) or judgements.get(_judge_fixture_key(str(identity.get("case_id")), str(identity.get("mode_id")), 1))
+        if payload is None:
+            available = ", ".join(sorted(judgements)) or "<none>"
+            payload = {
+                "ok": False,
+                "overall_score": None,
+                "confidence": "low",
+                "dimensions": {},
+                "summary": f"No deterministic fake judgement for {key}; available: {available}",
+            }
+        normalized = normalize_judge_payload(dict(payload))
+        normalized["judge_adapter"] = "deterministic-fake"
+        normalized["fixture"] = {
+            "schema_version": fixture.get("schema_version"),
+            "path": str(fixture_path),
+            "case": identity.get("case_id"),
+            "mode": identity.get("mode_id"),
+            "attempt": identity.get("attempt"),
+        }
+        normalized["run_summary"] = {
+            "agent": "deterministic-fake-judge",
+            "command": "deterministic fake fixture",
+            "exit_code": 0,
+            "timed_out": False,
+            "elapsed_ms": int(payload.get("elapsed_ms") or 0) if isinstance(payload, dict) else 0,
+            "usage": {},
+            "counts": {"json_events": 0, "tool_events": 0, "command_events": 0},
+        }
+        prompt = build_judge_prompt(
+            case=case,
+            mode=mode,
+            rubric=rubric,
+            prompt=read_text(output_dir / "prompt.txt"),
+            answer=read_text(output_dir / "answer.md"),
+            validation=validation,
+        )
+        write_text(output_dir / "judge.prompt.txt", prompt)
+        write_text(output_dir / "judge.stdout.raw.jsonl", "")
+        write_text(output_dir / "judge.stderr.txt", "")
+        write_text(output_dir / "judge.answer.txt", json.dumps(payload, indent=2, sort_keys=True, ensure_ascii=False))
+        write_json(output_dir / "judge.json", normalized)
+        write_json(output_dir / "judge.summary.json", normalized["run_summary"])
+        return normalized
 
 
 class CodexCliJudge:

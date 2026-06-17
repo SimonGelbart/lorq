@@ -1,0 +1,31 @@
+default_prompt_style: neutral
+
+repositories:
+  deterministic-demo:
+    type: local
+    path: ./fake_project
+    ref: HEAD
+
+worktrees:
+  root: /tmp/lorq-deterministic-worktrees
+  strategy: copy
+  cleanup: never
+  dirty_policy: allow
+
+output:
+  root: ./results
+
+agent:
+  profile: deterministic-fake
+
+agent_profiles:
+  deterministic-fake:
+    description: No-LLM deterministic migration fixture adapter.
+    backend: deterministic-fake
+    fixture_file: fixtures/fake-agent.yaml
+
+judge:
+  enabled: false
+  backend: deterministic-fake
+  fixture_file: fixtures/fake-judge.yaml
+  default_rubric: repository-exploration

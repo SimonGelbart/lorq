@@ -2,6 +2,43 @@
 
 All notable changes to LORQ should be documented here.
 
+## 2026-06-18 - Increment 1 fixture: deterministic adapter and judge
+
+### Roadmap position
+
+Current increment: Increment 1, Python frozen conformance baseline. This session added the deterministic fake adapter and fake judge fixture pair needed to start generating the no-LLM orchestration benchmark shards.
+
+### Added
+
+- Added Python v0 `deterministic-fake` agent backend that reads per-cell fixture data and writes full evidence files, including `adapter.evidence.json`, normalized events, usage/counts, timing, artifact refs, and integrity warnings.
+- Added Python v0 deterministic fake judge support through `judge.backend: deterministic-fake` and `judge.fixture_file`.
+- Added self-contained deterministic orchestration benchmark material under `fixtures/conformance/deterministic-orchestration/`, including cases, modes, prompt style, rubric, tiny fake repository, fake agent fixture, and fake judge fixture.
+- Added v1-alpha fake agent and fake judge fixture schemas under `schemas/`.
+- Added Python tests for deterministic fake agent output, missing-final-answer modeling, and deterministic fake judge output.
+
+### Changed
+
+- Extended config validation and JSON schemas to accept deterministic fake agent and judge fixture settings.
+- Extended LORQ package export to copy `adapter.evidence.json` into cell evidence directories when present.
+- Documented deterministic fake adapters in Python v0 backend and package-export docs.
+
+### Validation
+
+Executed during this increment:
+
+- `cd python && python -m pytest -q` -> 77 passed.
+- `cd python && PYTHONPATH=. python -m eval_runner.cli --suite-root .. --validate-config` -> passed.
+- `cd python && PYTHONPATH=. python -m eval_runner.cli --suite-root ../fixtures/conformance/deterministic-orchestration --validate-config` -> passed.
+- `cd python && PYTHONPATH=. python -m eval_runner.cli --run-conformance` -> passed.
+- Generated two candidate deterministic run-shard packages under `internal/generated/deterministic-benchmark/`: `shard-001` with 3 cells and `shard-002` with 5 cells.
+- Ran a deterministic fake judge smoke test with `--judge --judge-backend deterministic-fake`.
+
+### Known limitations
+
+- The two-shard merge command, package-level judge attachment, canonical reports, per-case packs, duplicate conflict fixture, fingerprint mismatch fixture, and committed golden outputs are still pending.
+- The intentionally omitted `skipped-coverage/graphify-plus/attempt-001` cell is documented in the benchmark plan but not yet surfaced as `missing_cells` because package-level merge/coverage expectation logic is future work.
+- No roadmap amendment was required.
+
 ## 2026-06-18 - Increment 1 foundation: LORQ v1-alpha package export
 
 ### Roadmap position

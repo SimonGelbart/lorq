@@ -1,0 +1,21 @@
+id: successful-comparison
+title: Successful orchestration comparison
+category: migration-baseline
+difficulty: easy
+repo: deterministic-demo
+task: |
+  Explain how the deterministic project models LORQ cell evidence and shard manifests.
+  Mention the key classes and cite the source file.
+validation:
+  required_symbols:
+    - LedgerWriter
+    - ShardManifest
+  required_files:
+    - src/ledger.py
+  expected_concepts:
+    - cell evidence
+    - run shard
+  required_evidence:
+    min_existing_file_references: 1
+    min_source_files: 1
+rubric: repository-exploration

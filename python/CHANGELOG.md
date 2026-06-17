@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.2.6-lorq-deterministic-fixtures
+
+- Add `backend: deterministic-fake` for no-LLM migration benchmark cells.
+- Add deterministic fake judge support with `judge.backend: deterministic-fake` and `judge.fixture_file`.
+- Write `adapter.evidence.json` for deterministic fake runs and include it in LORQ shard export.
+- Add self-contained deterministic orchestration benchmark fixture under `fixtures/conformance/deterministic-orchestration/`.
+- Add schemas and tests for deterministic fake agent/judge fixtures.
+
 ## 1.2.5-lorq-migration
 
 - Add migration-only `--export-lorq-shard` to export existing Python v0 results into the v1-alpha LORQ run-shard package layout.

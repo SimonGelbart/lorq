@@ -120,12 +120,21 @@ Adapter output is intentionally more than a final answer. It carries answer pres
 
 The exporter records integrity warnings in `.lorq/integrity.json` for trust-relevant conditions such as missing final answers or non-completed cells. It does not use real LLM quality as the migration gate.
 
+
+## Deterministic fake fixture slice
+
+`fixtures/conformance/deterministic-orchestration/` now contains the runnable no-LLM benchmark slice for Python v0:
+
+- `fixtures/fake-agent.yaml` drives deterministic adapter output for each case/mode/attempt.
+- `fixtures/fake-judge.yaml` drives deterministic quality scores without real LLM calls.
+- `cases/`, `modes/`, `prompt_styles/`, `rubrics/`, and `fake_project/` make the fixture self-contained.
+
+The session workflow can generate two candidate run shards under `internal/generated/deterministic-benchmark/`. The generated outputs remain outside source control until the benchmark is fully frozen and promoted to committed golden fixtures.
+
 ## Current limitations
 
 This increment only establishes the export path and evidence shape. It does not yet implement:
 
-- deterministic fake judge adapter
-- fake judge fixture format
 - two-shard merge
 - duplicate-cell conflict fixture
 - fingerprint mismatch fixture

@@ -1,0 +1,208 @@
+schema_version: lorq.fake-judge-fixture.v1alpha1
+description: No-LLM deterministic quality scores for migration benchmark cells.
+judgements:
+- case: successful-comparison
+  mode: baseline
+  attempt: 1
+  ok: true
+  overall_score: 3
+  confidence: high
+  dimensions:
+    correctness:
+      score: 3
+      rationale: Fixture score is deterministic.
+    completeness:
+      score: 3
+      rationale: Fixture coverage is predefined.
+    evidence:
+      score: 3
+      rationale: Evidence is present only when final answer is present.
+  strengths:
+  - source-backed deterministic answer
+  weaknesses: []
+  missing_or_questionable: []
+  summary: baseline fixture answer is deterministically scored for successful comparison.
+  elapsed_ms: 5
+- case: successful-comparison
+  mode: graphify
+  attempt: 1
+  ok: true
+  overall_score: 4
+  confidence: high
+  dimensions:
+    correctness:
+      score: 4
+      rationale: Fixture score is deterministic.
+    completeness:
+      score: 4
+      rationale: Fixture coverage is predefined.
+    evidence:
+      score: 4
+      rationale: Evidence is present only when final answer is present.
+  strengths:
+  - source-backed deterministic answer
+  weaknesses: []
+  missing_or_questionable: []
+  summary: graphify fixture answer is deterministically scored for successful comparison.
+  elapsed_ms: 5
+- case: successful-comparison
+  mode: graphify-plus
+  attempt: 1
+  ok: true
+  overall_score: 5
+  confidence: high
+  dimensions:
+    correctness:
+      score: 5
+      rationale: Fixture score is deterministic.
+    completeness:
+      score: 5
+      rationale: Fixture coverage is predefined.
+    evidence:
+      score: 5
+      rationale: Evidence is present only when final answer is present.
+  strengths:
+  - source-backed deterministic answer
+  weaknesses: []
+  missing_or_questionable: []
+  summary: graphify-plus fixture answer is deterministically scored for successful
+    comparison.
+  elapsed_ms: 5
+- case: no-final-answer
+  mode: baseline
+  attempt: 1
+  ok: true
+  overall_score: 1
+  confidence: high
+  dimensions:
+    correctness:
+      score: 1
+      rationale: Fixture score is deterministic.
+    completeness:
+      score: 1
+      rationale: Fixture coverage is predefined.
+    evidence:
+      score: 1
+      rationale: Evidence is present only when final answer is present.
+  strengths: []
+  weaknesses:
+  - missing final answer
+  missing_or_questionable:
+  - final answer
+  summary: The answer is intentionally missing; this judgement records low quality
+    without using an LLM.
+  elapsed_ms: 5
+- case: no-final-answer
+  mode: graphify
+  attempt: 1
+  ok: true
+  overall_score: 1
+  confidence: high
+  dimensions:
+    correctness:
+      score: 1
+      rationale: Fixture score is deterministic.
+    completeness:
+      score: 1
+      rationale: Fixture coverage is predefined.
+    evidence:
+      score: 1
+      rationale: Evidence is present only when final answer is present.
+  strengths: []
+  weaknesses:
+  - missing final answer
+  missing_or_questionable:
+  - final answer
+  summary: The answer is intentionally missing; this judgement records low quality
+    without using an LLM.
+  elapsed_ms: 5
+- case: no-final-answer
+  mode: graphify-plus
+  attempt: 1
+  ok: true
+  overall_score: 1
+  confidence: high
+  dimensions:
+    correctness:
+      score: 1
+      rationale: Fixture score is deterministic.
+    completeness:
+      score: 1
+      rationale: Fixture coverage is predefined.
+    evidence:
+      score: 1
+      rationale: Evidence is present only when final answer is present.
+  strengths: []
+  weaknesses:
+  - missing final answer
+  missing_or_questionable:
+  - final answer
+  summary: The answer is intentionally missing; this judgement records low quality
+    without using an LLM.
+  elapsed_ms: 5
+- case: skipped-coverage
+  mode: baseline
+  attempt: 1
+  ok: true
+  overall_score: 3
+  confidence: high
+  dimensions:
+    correctness:
+      score: 3
+      rationale: Fixture score is deterministic.
+    completeness:
+      score: 3
+      rationale: Fixture coverage is predefined.
+    evidence:
+      score: 3
+      rationale: Evidence is present only when final answer is present.
+  strengths:
+  - source-backed deterministic answer
+  weaknesses: []
+  missing_or_questionable: []
+  summary: baseline fixture answer explains partial coverage and omitted cells.
+  elapsed_ms: 5
+- case: skipped-coverage
+  mode: graphify
+  attempt: 1
+  ok: true
+  overall_score: 4
+  confidence: high
+  dimensions:
+    correctness:
+      score: 4
+      rationale: Fixture score is deterministic.
+    completeness:
+      score: 4
+      rationale: Fixture coverage is predefined.
+    evidence:
+      score: 4
+      rationale: Evidence is present only when final answer is present.
+  strengths:
+  - source-backed deterministic answer
+  weaknesses: []
+  missing_or_questionable: []
+  summary: graphify fixture answer explains partial coverage and omitted cells.
+  elapsed_ms: 5
+- case: skipped-coverage
+  mode: graphify-plus
+  attempt: 1
+  ok: true
+  overall_score: 4
+  confidence: high
+  dimensions:
+    correctness:
+      score: 4
+      rationale: Fixture score is deterministic.
+    completeness:
+      score: 4
+      rationale: Fixture coverage is predefined.
+    evidence:
+      score: 4
+      rationale: Evidence is present only when final answer is present.
+  strengths:
+  - source-backed deterministic answer
+  weaknesses: []
+  missing_or_questionable: []
+  summary: graphify-plus fixture answer explains partial coverage and omitted cells.
+  elapsed_ms: 5

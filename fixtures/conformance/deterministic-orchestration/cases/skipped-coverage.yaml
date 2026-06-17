@@ -1,0 +1,18 @@
+id: skipped-coverage
+title: Incomplete coverage fixture
+category: migration-baseline
+difficulty: easy
+repo: deterministic-demo
+task: |
+  Explain how a shard manifest records partial coverage. One benchmark shard intentionally omits a mode for this case.
+validation:
+  required_symbols:
+    - ShardManifest
+  required_files:
+    - src/ledger.py
+  expected_concepts:
+    - partial coverage
+    - omitted cell
+  required_evidence:
+    min_existing_file_references: 1
+rubric: repository-exploration

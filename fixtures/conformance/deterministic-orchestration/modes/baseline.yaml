@@ -1,0 +1,7 @@
+id: baseline
+description: Deterministic fixture mode baseline; no real tools or LLM calls are used.
+pre_agent:
+  setup_scope: none
+  commands: []
+expectations:
+  should_verify_with_source: true
