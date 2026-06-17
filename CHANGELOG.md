@@ -2,6 +2,40 @@
 
 All notable changes to LORQ should be documented here.
 
+## 2026-06-18 - Increment 2 foundation: .NET package validation
+
+### Roadmap position
+
+Current increment: Increment 2, .NET foundation and package model. This session started .NET v1 after the Python frozen conformance baseline by adding package IO/domain validation only. It did not add real agent, judge, merge, report, Codex, or Copilot runtime behavior.
+
+### Added
+
+- Added `dotnet/Lorq.slnx` with `Lorq.Core`, `Lorq.Reporting`, `Lorq.Cli`, and a no-dependency `Lorq.Core.Tests` console test harness.
+- Added .NET domain records for experiment packages, run shards, run cells, judgement passes, report references, diagnostics, and merge-input validation results.
+- Added package validation for the frozen LORQ v1-alpha package shape, including required files, package schema version, run shard references, cell references, coverage, fingerprints, integrity, judgement references, and report references.
+- Added merge-input validation for deterministic negative fixtures with stable error codes for duplicate cells and fingerprint mismatches.
+- Added validation-only CLI commands: `validate-package` and `validate-merge-inputs`, both returning JSON summaries.
+- Documented .NET package validation scope and stable validation codes under `dotnet/docs/package-validation.md`.
+
+### Validation
+
+Executed during this increment:
+
+- `cd dotnet && dotnet build Lorq.slnx -p:Platform="Any CPU"` -> passed.
+- `cd lorq && dotnet run --project dotnet/tests/Lorq.Core.Tests/Lorq.Core.Tests.csproj --property:Platform="Any CPU"` -> passed.
+- `cd lorq && dotnet run --project dotnet/src/Lorq.Cli/Lorq.Cli.csproj --property:Platform="Any CPU" -- validate-package fixtures/golden/deterministic-orchestration/experiment-001` -> passed.
+- `cd lorq && dotnet run --project dotnet/src/Lorq.Cli/Lorq.Cli.csproj --property:Platform="Any CPU" -- validate-merge-inputs fixtures/conformance/deterministic-orchestration/edge-fixtures/duplicate-cell-conflict/shard-a fixtures/conformance/deterministic-orchestration/edge-fixtures/duplicate-cell-conflict/shard-b` -> failed intentionally with `LORQ210`.
+- `cd python && python -m pytest -q` -> passed.
+- `cd python && PYTHONPATH=. python -m eval_runner.cli --suite-root .. --validate-config` -> passed.
+- `cd python && PYTHONPATH=. python -m eval_runner.cli --suite-root ../fixtures/conformance/deterministic-orchestration --validate-config` -> passed.
+- `cd python && PYTHONPATH=. python -m eval_runner.cli --run-conformance` -> passed.
+
+### Known limitations
+
+- .NET does not yet write packages or rebuild indexes.
+- .NET `run`, `merge`, `judge`, and `report` remain future increments.
+- The current test harness intentionally avoids external NuGet test packages; it is a console assertion harness.
+
 ## 2026-06-18 - Increment 1 fixture: deterministic package judgement
 
 ### Roadmap position
