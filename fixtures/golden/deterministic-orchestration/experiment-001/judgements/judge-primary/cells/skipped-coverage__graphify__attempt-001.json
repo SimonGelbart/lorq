@@ -1,0 +1,50 @@
+{
+  "schema_version": "lorq.cell-judgement.v1alpha1",
+  "contract_version": "lorq.contract.v1alpha1",
+  "judgement_name": "judge-primary",
+  "cell_id": "skipped-coverage__graphify__attempt-001",
+  "case_id": "skipped-coverage",
+  "mode_id": "graphify",
+  "attempt_id": "attempt-001",
+  "cell_status": "completed",
+  "status": "judged",
+  "source": {
+    "backend": "deterministic-fake",
+    "fixture_schema_version": "lorq.fake-judge-fixture.v1alpha1",
+    "fixture_file": "fake-judge.yaml",
+    "fixture_key": "skipped-coverage|graphify|1",
+    "real_llm_used": false
+  },
+  "quality": {
+    "ok": true,
+    "overall_score": 4.0,
+    "confidence": "high",
+    "dimensions": {
+      "correctness": {
+        "score": 4,
+        "rationale": "Fixture score is deterministic."
+      },
+      "completeness": {
+        "score": 4,
+        "rationale": "Fixture coverage is predefined."
+      },
+      "evidence": {
+        "score": 4,
+        "rationale": "Evidence is present only when final answer is present."
+      }
+    },
+    "strengths": [
+      "source-backed deterministic answer"
+    ],
+    "weaknesses": [],
+    "missing_or_questionable": [],
+    "summary": "graphify fixture answer explains partial coverage and omitted cells."
+  },
+  "input_refs": {
+    "cell_result": "runs/shard-002/cells/skipped-coverage__graphify__attempt-001/cell_result.json",
+    "cell_dir": "runs/shard-002/cells/skipped-coverage__graphify__attempt-001",
+    "final_answer": "runs/shard-002/cells/skipped-coverage__graphify__attempt-001/answer.md",
+    "validation": "runs/shard-002/cells/skipped-coverage__graphify__attempt-001/validation.json",
+    "trace": "runs/shard-002/cells/skipped-coverage__graphify__attempt-001/events.normalized.jsonl"
+  }
+}

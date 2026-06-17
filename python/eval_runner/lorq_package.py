@@ -299,6 +299,16 @@ def _integrity(
     }
 
 
+def _portable_path(path: Path, base: Path) -> str:
+    try:
+        return path.resolve().relative_to(base.resolve()).as_posix()
+    except ValueError:
+        try:
+            return path.resolve().relative_to(base.resolve().parent).as_posix()
+        except ValueError:
+            return path.name
+
+
 def _experiment_yaml(*, package_id: str, package_kind: str, shard_ids: list[str], cell_count: int) -> str:
     rendered_shards = "\n".join(f"  - {shard_id}" for shard_id in shard_ids)
     return f"""package_schema_version: {LORQ_PACKAGE_SCHEMA_VERSION}\npackage_kind: {package_kind}\npackage_id: {package_id}\ncreated_by:\n  name: agent-eval python-v0\n  implementation: python\n  version: {__version__}\nshards:\n{rendered_shards}\ncell_count: {cell_count}\n"""
@@ -445,7 +455,7 @@ def merge_lorq_run_shards(
         shard_cells = _load_package_cells(shard_root)
         shard_id = _read_shard_id(shard_root, shard_cells)
         shard_ids.append(shard_id)
-        inputs.append({"kind": "lorq-run-shard", "path": str(shard_root), "shard_id": shard_id, "cell_count": len(shard_cells)})
+        inputs.append({"kind": "lorq-run-shard", "path": _portable_path(shard_root, output_root), "shard_id": shard_id, "cell_count": len(shard_cells)})
         shard_integrity = read_json(shard_root / ".lorq" / "integrity.json", default={}) or {}
         for warning in shard_integrity.get("warnings") or []:
             if isinstance(warning, dict):
@@ -506,7 +516,7 @@ def merge_lorq_run_shards(
         "contract_version": LORQ_CONTRACT_VERSION,
         "operation": "python-v0-merge-run-shards",
         "inputs": inputs,
-        "outputs": [{"kind": "lorq-merged-experiment", "package_id": package_id, "path": str(output_root)}],
+        "outputs": [{"kind": "lorq-merged-experiment", "package_id": package_id, "path": "."}],
         "strict": strict,
         "cell_count": len(unique_cells),
         "expected_cell_count": coverage["expected_cell_count"],
@@ -697,7 +707,7 @@ def attach_lorq_deterministic_judgement(
             "source": {
                 "backend": "deterministic-fake",
                 "fixture_schema_version": fixture.get("schema_version"),
-                "fixture_file": str(fixture_file),
+                "fixture_file": _portable_path(fixture_file, package_root),
                 "fixture_key": matched_key,
                 "real_llm_used": False,
             },
@@ -726,11 +736,11 @@ def attach_lorq_deterministic_judgement(
         "schema_version": LORQ_JUDGEMENT_PASS_SCHEMA_VERSION,
         "contract_version": LORQ_CONTRACT_VERSION,
         "judgement_name": judge_name,
-        "package_root": str(package_root),
+        "package_root": ".",
         "backend": "deterministic-fake",
         "source": {
             "fixture_schema_version": fixture.get("schema_version"),
-            "fixture_file": str(fixture_file),
+            "fixture_file": _portable_path(fixture_file, package_root),
             "real_llm_used": False,
         },
         "cell_count": len(cells),
@@ -961,7 +971,7 @@ def render_lorq_package_report(package_root: Path, *, primary_judgement: str = "
             "package_kind": package.get("package_kind") or "unknown",
             "schema_version": package.get("package_schema_version"),
             "shards": package.get("shards") or [],
-            "package_root": str(package_root),
+            "package_root": ".",
         },
         "summary": {
             "cell_count": len(cells),

@@ -1,0 +1,13 @@
+{
+  "schema_version": "lorq.integrity.v1alpha1",
+  "contract_version": "lorq.contract.v1alpha1",
+  "ok": true,
+  "warnings": [
+    {
+      "type": "adapter_integrity_warning",
+      "cell_id": "successful-comparison__graphify__attempt-001",
+      "message": "synthetic integrity warning for migration coverage",
+      "severity": "warning"
+    }
+  ]
+}

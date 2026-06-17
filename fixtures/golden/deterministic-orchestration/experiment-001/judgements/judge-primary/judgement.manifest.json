@@ -1,0 +1,67 @@
+{
+  "schema_version": "lorq.judgement-pass.v1alpha1",
+  "contract_version": "lorq.contract.v1alpha1",
+  "judgement_name": "judge-primary",
+  "package_root": ".",
+  "backend": "deterministic-fake",
+  "source": {
+    "fixture_schema_version": "lorq.fake-judge-fixture.v1alpha1",
+    "fixture_file": "fake-judge.yaml",
+    "real_llm_used": false
+  },
+  "cell_count": 8,
+  "judged_cell_count": 8,
+  "missing_fixture_cell_ids": [],
+  "missing_expected_cell_ids": [
+    "skipped-coverage__graphify-plus__attempt-001"
+  ],
+  "score_summary": {
+    "overall_average": 2.75,
+    "overall_min": 1.0,
+    "overall_max": 5.0,
+    "by_mode": {
+      "baseline": 2.333,
+      "graphify": 3.0,
+      "graphify-plus": 3.0
+    },
+    "by_case": {
+      "no-final-answer": 1.0,
+      "skipped-coverage": 3.5,
+      "successful-comparison": 4.0
+    }
+  },
+  "cell_judgement_refs": [
+    {
+      "cell_id": "no-final-answer__baseline__attempt-001",
+      "path": "judgements/judge-primary/cells/no-final-answer__baseline__attempt-001.json"
+    },
+    {
+      "cell_id": "no-final-answer__graphify-plus__attempt-001",
+      "path": "judgements/judge-primary/cells/no-final-answer__graphify-plus__attempt-001.json"
+    },
+    {
+      "cell_id": "no-final-answer__graphify__attempt-001",
+      "path": "judgements/judge-primary/cells/no-final-answer__graphify__attempt-001.json"
+    },
+    {
+      "cell_id": "skipped-coverage__baseline__attempt-001",
+      "path": "judgements/judge-primary/cells/skipped-coverage__baseline__attempt-001.json"
+    },
+    {
+      "cell_id": "skipped-coverage__graphify__attempt-001",
+      "path": "judgements/judge-primary/cells/skipped-coverage__graphify__attempt-001.json"
+    },
+    {
+      "cell_id": "successful-comparison__baseline__attempt-001",
+      "path": "judgements/judge-primary/cells/successful-comparison__baseline__attempt-001.json"
+    },
+    {
+      "cell_id": "successful-comparison__graphify-plus__attempt-001",
+      "path": "judgements/judge-primary/cells/successful-comparison__graphify-plus__attempt-001.json"
+    },
+    {
+      "cell_id": "successful-comparison__graphify__attempt-001",
+      "path": "judgements/judge-primary/cells/successful-comparison__graphify__attempt-001.json"
+    }
+  ]
+}

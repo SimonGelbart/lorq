@@ -1,0 +1,69 @@
+{
+  "schema_version": "lorq.case-review-pack.v1alpha1",
+  "contract_version": "lorq.contract.v1alpha1",
+  "case_id": "successful-comparison",
+  "cell_count": 3,
+  "missing_expected_cell_count": 0,
+  "missing_expected_cell_ids": [],
+  "score_summary": {
+    "average": 4.0,
+    "min": 3.0,
+    "max": 5.0
+  },
+  "cells": [
+    {
+      "cell_id": "successful-comparison__baseline__attempt-001",
+      "mode_id": "baseline",
+      "attempt_id": "attempt-001",
+      "status": "completed",
+      "score": 3.0,
+      "final_answer_present": true,
+      "evidence_refs": {
+        "cell_dir": "runs/shard-001/cells/successful-comparison__baseline__attempt-001",
+        "final_answer": "runs/shard-001/cells/successful-comparison__baseline__attempt-001/answer.md",
+        "cell_result": "runs/shard-001/cells/successful-comparison__baseline__attempt-001/cell_result.json",
+        "prompt": "runs/shard-001/cells/successful-comparison__baseline__attempt-001/prompt.txt",
+        "validation": "runs/shard-001/cells/successful-comparison__baseline__attempt-001/validation.json",
+        "trace": "runs/shard-001/cells/successful-comparison__baseline__attempt-001/events.normalized.jsonl"
+      },
+      "judgement_ref": "judgements/judge-primary/cells/successful-comparison__baseline__attempt-001.json",
+      "integrity_warnings": []
+    },
+    {
+      "cell_id": "successful-comparison__graphify-plus__attempt-001",
+      "mode_id": "graphify-plus",
+      "attempt_id": "attempt-001",
+      "status": "completed",
+      "score": 5.0,
+      "final_answer_present": true,
+      "evidence_refs": {
+        "cell_dir": "runs/shard-001/cells/successful-comparison__graphify-plus__attempt-001",
+        "final_answer": "runs/shard-001/cells/successful-comparison__graphify-plus__attempt-001/answer.md",
+        "cell_result": "runs/shard-001/cells/successful-comparison__graphify-plus__attempt-001/cell_result.json",
+        "prompt": "runs/shard-001/cells/successful-comparison__graphify-plus__attempt-001/prompt.txt",
+        "validation": "runs/shard-001/cells/successful-comparison__graphify-plus__attempt-001/validation.json",
+        "trace": "runs/shard-001/cells/successful-comparison__graphify-plus__attempt-001/events.normalized.jsonl"
+      },
+      "judgement_ref": "judgements/judge-primary/cells/successful-comparison__graphify-plus__attempt-001.json",
+      "integrity_warnings": []
+    },
+    {
+      "cell_id": "successful-comparison__graphify__attempt-001",
+      "mode_id": "graphify",
+      "attempt_id": "attempt-001",
+      "status": "completed",
+      "score": 4.0,
+      "final_answer_present": true,
+      "evidence_refs": {
+        "cell_dir": "runs/shard-001/cells/successful-comparison__graphify__attempt-001",
+        "final_answer": "runs/shard-001/cells/successful-comparison__graphify__attempt-001/answer.md",
+        "cell_result": "runs/shard-001/cells/successful-comparison__graphify__attempt-001/cell_result.json",
+        "prompt": "runs/shard-001/cells/successful-comparison__graphify__attempt-001/prompt.txt",
+        "validation": "runs/shard-001/cells/successful-comparison__graphify__attempt-001/validation.json",
+        "trace": "runs/shard-001/cells/successful-comparison__graphify__attempt-001/events.normalized.jsonl"
+      },
+      "judgement_ref": "judgements/judge-primary/cells/successful-comparison__graphify__attempt-001.json",
+      "integrity_warnings": []
+    }
+  ]
+}

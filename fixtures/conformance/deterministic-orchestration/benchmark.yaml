@@ -6,7 +6,7 @@ purpose: >
   Markdown rendering, and per-case review packs.
 
 current_slice:
-  status: runnable_python_v0_agent_judge_merge_and_package_judgement_fixtures
+  status: frozen_python_v0_full_loop_golden_baseline
   implemented:
     - deterministic fake agent fixture
     - deterministic fake judge fixture
@@ -14,9 +14,9 @@ current_slice:
     - two candidate run-shard export path under internal/generated during sessions
     - migration-only package-level merge command with expected coverage
     - package-level deterministic judgement attachment under judgements/judge-primary
-  not_yet_implemented:
     - report.json and report.md rendering
-    - committed golden outputs
+    - committed golden outputs under fixtures/golden/deterministic-orchestration
+  not_yet_implemented: []
 
 shape:
   cases: 3

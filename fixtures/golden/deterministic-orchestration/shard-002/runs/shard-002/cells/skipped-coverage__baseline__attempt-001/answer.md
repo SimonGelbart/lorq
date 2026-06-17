@@ -1,0 +1,1 @@
+baseline identifies partial coverage by comparing expected cells with present shard cells. ShardManifest in `src/ledger.py` records the run shard identity, while omitted cell coverage remains visible as an absent cell in the shard index.

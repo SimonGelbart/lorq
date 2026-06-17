@@ -1,0 +1,1 @@
+{"type": "tool.command", "command": "read src/ledger.py", "case": "no-final-answer", "mode": "baseline", "fixture_sequence": 0, "schema_version": "agent-eval.normalized-event.v1", "event_index": 0, "timestamp_ms": 201, "event_type": "tool.command", "source": "deterministic-fake-agent"}

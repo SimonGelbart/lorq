@@ -1,0 +1,4 @@
+You are evaluating repository evidence. Use only the provided repository context.
+
+Task:
+Explain how a shard manifest records partial coverage. One benchmark shard intentionally omits a mode for this case.

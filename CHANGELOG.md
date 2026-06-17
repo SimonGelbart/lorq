@@ -234,3 +234,20 @@ Current increment: Python v0 frozen conformance baseline.
 ### Validation
 
 - Added fixture-backed merge failure tests.
+
+## 2026-06-18 - Increment 1g: frozen deterministic golden baseline
+
+### Roadmap position
+
+Current increment: Python v0 frozen conformance baseline.
+
+### Changed
+
+- Promoted the deterministic no-LLM full-loop package into `fixtures/golden/deterministic-orchestration/`.
+- Added committed golden outputs for two run shards, one merged experiment, one deterministic judgement pass, canonical JSON/Markdown reports, and per-case review packs.
+- Updated the practical roadmap to record Increment 1 as frozen on this branch once validation is green.
+- Added a test that verifies the golden package shape and blocks sandbox-specific absolute paths.
+
+### Validation
+
+- Regenerated the full deterministic loop from the conformance fixture before promotion.

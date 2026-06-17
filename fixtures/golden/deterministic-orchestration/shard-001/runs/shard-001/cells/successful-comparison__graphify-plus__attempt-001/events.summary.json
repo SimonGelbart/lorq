@@ -1,0 +1,11 @@
+{
+  "event_count": 2,
+  "event_type_counts": {
+    "tool.command": 1,
+    "assistant.message": 1
+  },
+  "backends": [],
+  "usage": {},
+  "schema_version": "agent-eval.event-summary.v1",
+  "contract_version": "agent-eval.contract.v1"
+}

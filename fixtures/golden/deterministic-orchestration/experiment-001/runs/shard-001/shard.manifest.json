@@ -1,0 +1,15 @@
+{
+  "schema_version": "lorq.run-shard-manifest.v1alpha1",
+  "contract_version": "lorq.contract.v1alpha1",
+  "shard_id": "shard-001",
+  "cell_count": 3,
+  "cell_ids": [
+    "successful-comparison__baseline__attempt-001",
+    "successful-comparison__graphify-plus__attempt-001",
+    "successful-comparison__graphify__attempt-001"
+  ],
+  "source": {
+    "kind": "python-v0-results",
+    "label": "shard-001"
+  }
+}

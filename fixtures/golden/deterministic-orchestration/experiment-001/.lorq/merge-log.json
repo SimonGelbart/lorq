@@ -1,0 +1,32 @@
+{
+  "schema_version": "lorq.merge-log.v1alpha1",
+  "contract_version": "lorq.contract.v1alpha1",
+  "operation": "python-v0-merge-run-shards",
+  "inputs": [
+    {
+      "kind": "lorq-run-shard",
+      "path": "shard-001",
+      "shard_id": "shard-001",
+      "cell_count": 3
+    },
+    {
+      "kind": "lorq-run-shard",
+      "path": "shard-002",
+      "shard_id": "shard-002",
+      "cell_count": 5
+    }
+  ],
+  "outputs": [
+    {
+      "kind": "lorq-merged-experiment",
+      "package_id": "deterministic-benchmark",
+      "path": "."
+    }
+  ],
+  "strict": true,
+  "cell_count": 8,
+  "expected_cell_count": 9,
+  "missing_cell_count": 1,
+  "duplicate_cell_count": 0,
+  "fingerprint_mismatch": false
+}

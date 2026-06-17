@@ -1,0 +1,2 @@
+{"type": "tool.command", "command": "read src/ledger.py", "case": "skipped-coverage", "mode": "graphify", "fixture_sequence": 0, "schema_version": "agent-eval.normalized-event.v1", "event_index": 0, "timestamp_ms": 164, "event_type": "tool.command", "source": "deterministic-fake-agent"}
+{"type": "assistant.message", "text": "partial coverage answer emitted", "fixture_sequence": 1, "schema_version": "agent-eval.normalized-event.v1", "event_index": 1, "timestamp_ms": 165, "event_type": "assistant.message", "source": "deterministic-fake-agent"}

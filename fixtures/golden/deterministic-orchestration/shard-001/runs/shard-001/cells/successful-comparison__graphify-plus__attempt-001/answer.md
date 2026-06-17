@@ -1,0 +1,1 @@
+graphify-plus records cell evidence through LedgerWriter and describes run shard metadata with ShardManifest. The implementation is in `src/ledger.py`, where LedgerWriter.write_cell returns a cell evidence record and ShardManifest.to_dict returns a run shard manifest.

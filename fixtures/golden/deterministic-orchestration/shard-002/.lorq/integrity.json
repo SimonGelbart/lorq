@@ -1,0 +1,58 @@
+{
+  "schema_version": "lorq.integrity.v1alpha1",
+  "contract_version": "lorq.contract.v1alpha1",
+  "ok": true,
+  "warnings": [
+    {
+      "type": "missing_final_answer",
+      "cell_id": "no-final-answer__baseline__attempt-001",
+      "severity": "warning"
+    },
+    {
+      "type": "non_completed_cell",
+      "cell_id": "no-final-answer__baseline__attempt-001",
+      "status": "invalid_artifact",
+      "severity": "warning"
+    },
+    {
+      "type": "adapter_integrity_warning",
+      "cell_id": "no-final-answer__baseline__attempt-001",
+      "message": "missing final answer emitted intentionally",
+      "severity": "warning"
+    },
+    {
+      "type": "missing_final_answer",
+      "cell_id": "no-final-answer__graphify__attempt-001",
+      "severity": "warning"
+    },
+    {
+      "type": "non_completed_cell",
+      "cell_id": "no-final-answer__graphify__attempt-001",
+      "status": "invalid_artifact",
+      "severity": "warning"
+    },
+    {
+      "type": "adapter_integrity_warning",
+      "cell_id": "no-final-answer__graphify__attempt-001",
+      "message": "missing final answer emitted intentionally",
+      "severity": "warning"
+    },
+    {
+      "type": "missing_final_answer",
+      "cell_id": "no-final-answer__graphify-plus__attempt-001",
+      "severity": "warning"
+    },
+    {
+      "type": "non_completed_cell",
+      "cell_id": "no-final-answer__graphify-plus__attempt-001",
+      "status": "invalid_artifact",
+      "severity": "warning"
+    },
+    {
+      "type": "adapter_integrity_warning",
+      "cell_id": "no-final-answer__graphify-plus__attempt-001",
+      "message": "missing final answer emitted intentionally",
+      "severity": "warning"
+    }
+  ]
+}

@@ -52,3 +52,8 @@
 ## 2026-06-18 - Negative merge fixtures
 
 - Added tests against committed duplicate-cell and fingerprint-mismatch LORQ fixture packages.
+
+## 2026-06-18 - Frozen deterministic golden baseline
+
+- Added tests for the committed full-loop deterministic golden package.
+- Kept Python v0 as the migration baseline generator, not the final product core.

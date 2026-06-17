@@ -1,0 +1,14 @@
+{
+  "schema_version": "lorq.fake-agent-evidence.v1alpha1",
+  "fixture_schema_version": "lorq.fake-agent-fixture.v1alpha1",
+  "fixture_file": "../../../conformance/deterministic-orchestration/fixtures/fake-agent.yaml",
+  "case": "no-final-answer",
+  "mode": "graphify",
+  "attempt": 1,
+  "status": "no_final_answer",
+  "final_answer_present": false,
+  "artifacts": [],
+  "integrity_warnings": [
+    "missing final answer emitted intentionally"
+  ]
+}
