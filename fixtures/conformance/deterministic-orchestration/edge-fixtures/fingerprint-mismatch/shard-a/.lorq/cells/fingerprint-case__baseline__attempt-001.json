@@ -1,0 +1,32 @@
+{
+  "cell_id": "fingerprint-case__baseline__attempt-001",
+  "case_id": "fingerprint-case",
+  "mode_id": "baseline",
+  "attempt_id": "attempt-001",
+  "status": "completed",
+  "fingerprint": {
+    "repo": "demo",
+    "repo_type": "local",
+    "ref": "HEAD",
+    "commit": "aaa111",
+    "dirty": false,
+    "is_git_repo": true
+  },
+  "schema_version": "lorq.cell-evidence.v1alpha1",
+  "contract_version": "lorq.contract.v1alpha1",
+  "shard_id": "shard-a",
+  "source": {
+    "implementation": "fixture"
+  },
+  "adapter_output": {
+    "final_answer_present": true,
+    "usage": {},
+    "counts": {},
+    "trace": {},
+    "validation": {}
+  },
+  "evidence_refs": {
+    "cell_dir": "runs/shard-a/cells/fingerprint-case__baseline__attempt-001",
+    "cell_result": "runs/shard-a/cells/fingerprint-case__baseline__attempt-001/cell_result.json"
+  }
+}

@@ -59,12 +59,12 @@ required_edge_fixtures:
     type: duplicate_cell
     expected_phase: merge
     expected_result: fail_by_default
-    status: planned
+    status: covered_by_negative_fixture_package
   - id: fingerprint-mismatch
     type: fingerprint_mismatch
     expected_phase: merge
     expected_result: fail_by_default
-    status: planned
+    status: covered_by_negative_fixture_package
   - id: missing-final-answer
     type: invalid_artifact
     expected_phase: package_validation
