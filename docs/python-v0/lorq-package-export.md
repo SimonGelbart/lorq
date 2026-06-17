@@ -51,7 +51,27 @@ shard-001/
       <cell-id>.json
 ```
 
-This is a run-shard package, not a fully merged judged experiment. The future frozen baseline still needs two shards, merge, deterministic fake judgement, JSON report, Markdown rendering, and per-case packs.
+This is a run-shard package, not a fully judged experiment. Python v0 now also has a migration-only merge path for run shards; deterministic fake judgement attachment, JSON report, Markdown rendering, and per-case packs still remain future increments.
+
+
+## Migration-only shard merge
+
+Python v0 can merge exported run-shard packages into a v1-alpha merged experiment package without invoking an agent, judge, Copilot, Codex, or another LLM:
+
+```bash
+cd python
+PYTHONPATH=. python -m eval_runner.cli \
+  --merge-lorq-shards /path/to/shard-001 /path/to/shard-002 \
+  --lorq-merge-out /path/to/experiment-001 \
+  --lorq-package-id experiment-001 \
+  --lorq-benchmark ../fixtures/conformance/deterministic-orchestration/benchmark.yaml
+```
+
+The merge copies each shard payload under `runs/<shard-id>/`, rebuilds `.lorq/cells/`, writes merged `coverage.json`, `fingerprints.json`, `integrity.json`, and records a `merge-log.json`.
+
+By default, merge fails on duplicate cell IDs or incompatible repository fingerprints. Missing expected cells are warnings rather than hard failures because partial coverage is an intentional benchmark condition. Use `--lorq-allow-incompatible` only for diagnostic edge fixtures where the merged package should be written with integrity errors instead of stopping.
+
+When `--lorq-benchmark` points to a deterministic benchmark shape, expected cells are computed as the case × mode × attempt matrix. This exposes intentionally omitted cells such as `skipped-coverage__graphify-plus__attempt-001`.
 
 ## Cell identity
 
@@ -133,9 +153,8 @@ The session workflow can generate two candidate run shards under `internal/gener
 
 ## Current limitations
 
-This increment only establishes the export path and evidence shape. It does not yet implement:
+The current Python v0 migration slice establishes run-shard export, deterministic fake adapters, and package-level shard merge. It does not yet implement:
 
-- two-shard merge
 - duplicate-cell conflict fixture
 - fingerprint mismatch fixture
 - `reports/report.json`

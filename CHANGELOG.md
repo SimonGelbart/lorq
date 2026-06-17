@@ -2,6 +2,41 @@
 
 All notable changes to LORQ should be documented here.
 
+## 2026-06-18 - Increment 1 fixture: migration package merge
+
+### Roadmap position
+
+Current increment: Increment 1, Python frozen conformance baseline. This session added the migration-only package merge needed to combine deterministic run shards before package-level judgement and reporting.
+
+### Added
+
+- Added Python v0 `--merge-lorq-shards` with `--lorq-merge-out`, `--lorq-benchmark`, `--lorq-package-id`, and `--lorq-allow-incompatible` for v1-alpha run-shard merge.
+- Added `merge_lorq_run_shards` to build a merged experiment package with copied shard payloads, rebuilt `.lorq/cells/`, merged coverage, fingerprint, integrity, and merge-log indexes.
+- Added expected-cell coverage from deterministic `benchmark.yaml`, surfacing intentionally omitted cells as `missing_cells`.
+- Added default merge failure behavior for duplicate cell IDs and incompatible repository fingerprints.
+- Added merge-result schema under `schemas/lorq-package-merge-result.v1alpha.schema.json`.
+- Added tests for successful merge coverage, duplicate-cell failure, and fingerprint-mismatch failure.
+
+### Changed
+
+- Extended LORQ package integrity output to preserve adapter-level integrity warnings from `adapter.evidence.json`.
+- Updated deterministic fixture and Python package docs to include the shard merge command.
+
+### Validation
+
+Executed during this increment:
+
+- `cd python && python -m pytest -q` -> 80 passed.
+- `cd python && PYTHONPATH=. python -m eval_runner.cli --suite-root .. --validate-config` -> passed.
+- `cd python && PYTHONPATH=. python -m eval_runner.cli --suite-root ../fixtures/conformance/deterministic-orchestration --validate-config` -> passed.
+- `cd python && PYTHONPATH=. python -m eval_runner.cli --run-conformance` -> passed.
+- Merged deterministic `shard-001` and `shard-002` candidate packages into `internal/generated/deterministic-benchmark/experiment-001`; merge returned 8 present cells, 9 expected cells, and 1 missing expected cell.
+
+### Known limitations
+
+- Package-level deterministic judgement attachment, canonical `reports/report.json`, Markdown report rendering, per-case packs, duplicate/fingerprint edge fixture packages, and committed golden outputs are still pending.
+- No roadmap amendment was required.
+
 ## 2026-06-18 - Increment 1 fixture: deterministic adapter and judge
 
 ### Roadmap position

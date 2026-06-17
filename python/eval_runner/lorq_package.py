@@ -5,10 +5,12 @@ import shutil
 from pathlib import Path
 from typing import Any
 
+import yaml
+
 from . import __version__
 from .contracts import LORQ_CELL_EVIDENCE_SCHEMA_VERSION, LORQ_CONTRACT_VERSION, LORQ_PACKAGE_SCHEMA_VERSION
 from .lifecycle import load_run_records
-from .utils import ensure_dir, read_json, read_text, slug, write_json, write_text
+from .utils import ensure_dir, read_json, read_text, rm_rf, slug, write_json, write_text
 
 
 COPY_EVIDENCE_FILES = (
@@ -34,6 +36,10 @@ STATUS_MAP = {
 }
 
 
+class LorqPackageError(ValueError):
+    """Raised when a migration-only LORQ package operation is invalid."""
+
+
 def attempt_id_for_record(record: dict[str, Any]) -> str:
     repetition = record.get("repetition", 1)
     try:
@@ -47,6 +53,15 @@ def cell_id_for_record(record: dict[str, Any]) -> str:
     case_id = str(record.get("case") or "case")
     mode_id = str(record.get("mode") or "mode")
     return f"{slug(case_id)}__{slug(mode_id)}__{attempt_id_for_record(record)}"
+
+
+def cell_id_for_parts(case_id: str, mode_id: str, attempt: int | str = 1) -> str:
+    if isinstance(attempt, int):
+        attempt_id = f"attempt-{attempt:03d}"
+    else:
+        attempt_text = str(attempt)
+        attempt_id = attempt_text if attempt_text.startswith("attempt-") else f"attempt-{slug(attempt_text)}"
+    return f"{slug(str(case_id))}__{slug(str(mode_id))}__{attempt_id}"
 
 
 def _safe_copy(src: Path, dst: Path) -> bool:
@@ -173,12 +188,25 @@ def build_cell_evidence(record: dict[str, Any], *, shard_id: str, package_root: 
     return evidence
 
 
-def _coverage(cells: list[dict[str, Any]]) -> dict[str, Any]:
+def _load_adapter_integrity_warnings(package_root: Path, cell: dict[str, Any]) -> list[str]:
+    cell_dir = package_root / str((cell.get("evidence_refs") or {}).get("cell_dir") or "")
+    adapter_evidence = read_json(cell_dir / "adapter.evidence.json", default={}) or {}
+    warnings = adapter_evidence.get("integrity_warnings") or []
+    if isinstance(warnings, str):
+        return [warnings]
+    if isinstance(warnings, list):
+        return [str(item) for item in warnings if str(item).strip()]
+    return []
+
+
+def _coverage(cells: list[dict[str, Any]], *, expected_cell_ids: list[str] | None = None) -> dict[str, Any]:
     status_counts: dict[str, int] = {}
     cases = sorted({str(cell.get("case_id")) for cell in cells})
     modes = sorted({str(cell.get("mode_id")) for cell in cells})
     attempts = sorted({str(cell.get("attempt_id")) for cell in cells})
     present_cell_ids = sorted(str(cell.get("cell_id")) for cell in cells)
+    expected = sorted(set(expected_cell_ids or present_cell_ids))
+    present = set(present_cell_ids)
     for cell in cells:
         status = str(cell.get("status") or "unknown")
         status_counts[status] = status_counts.get(status, 0) + 1
@@ -186,12 +214,14 @@ def _coverage(cells: list[dict[str, Any]]) -> dict[str, Any]:
         "schema_version": "lorq.coverage.v1alpha1",
         "contract_version": LORQ_CONTRACT_VERSION,
         "cell_count": len(cells),
+        "expected_cell_count": len(expected),
         "cases": cases,
         "modes": modes,
         "attempts": attempts,
         "present_cell_ids": present_cell_ids,
+        "expected_cell_ids": expected,
         "status_counts": status_counts,
-        "missing_cells": [],
+        "missing_cells": [cell_id for cell_id in expected if cell_id not in present],
         "skipped_cells": [cell["cell_id"] for cell in cells if cell.get("status") == "skipped"],
     }
 
@@ -206,6 +236,7 @@ def _fingerprints(cells: list[dict[str, Any]]) -> dict[str, Any]:
         "schema_version": "lorq.fingerprints.v1alpha1",
         "contract_version": LORQ_CONTRACT_VERSION,
         "by_cell": by_cell,
+        "unique_fingerprint_count": len(unique),
         "unique_fingerprints": [
             {"fingerprint": json.loads(key), "cell_ids": sorted(cell_ids)}
             for key, cell_ids in sorted(unique.items())
@@ -213,7 +244,15 @@ def _fingerprints(cells: list[dict[str, Any]]) -> dict[str, Any]:
     }
 
 
-def _integrity(cells: list[dict[str, Any]]) -> dict[str, Any]:
+def _integrity(
+    cells: list[dict[str, Any]],
+    *,
+    package_root: Path | None = None,
+    missing_cells: list[str] | None = None,
+    duplicate_cells: list[dict[str, Any]] | None = None,
+    fingerprint_mismatch: bool = False,
+    shard_warnings: list[dict[str, Any]] | None = None,
+) -> dict[str, Any]:
     warnings: list[dict[str, Any]] = []
     seen: set[str] = set()
     for cell in cells:
@@ -226,6 +265,24 @@ def _integrity(cells: list[dict[str, Any]]) -> dict[str, Any]:
             warnings.append({"type": "missing_final_answer", "cell_id": cell_id, "severity": "warning"})
         if cell.get("status") not in {"completed", "skipped"}:
             warnings.append({"type": "non_completed_cell", "cell_id": cell_id, "status": cell.get("status"), "severity": "warning"})
+        if package_root is not None:
+            for message in _load_adapter_integrity_warnings(package_root, cell):
+                warnings.append({
+                    "type": "adapter_integrity_warning",
+                    "cell_id": cell_id,
+                    "message": message,
+                    "severity": "warning",
+                })
+    for cell_id in missing_cells or []:
+        warnings.append({"type": "missing_expected_cell", "cell_id": cell_id, "severity": "warning"})
+    for duplicate in duplicate_cells or []:
+        warnings.append({"type": "duplicate_cell", **duplicate, "severity": "error"})
+    if fingerprint_mismatch:
+        warnings.append({"type": "fingerprint_mismatch", "severity": "error"})
+    for warning in shard_warnings or []:
+        preserved = {"type": "source_shard_integrity_warning", "severity": warning.get("severity", "warning")}
+        preserved.update(warning)
+        warnings.append(preserved)
     return {
         "schema_version": "lorq.integrity.v1alpha1",
         "contract_version": LORQ_CONTRACT_VERSION,
@@ -234,8 +291,9 @@ def _integrity(cells: list[dict[str, Any]]) -> dict[str, Any]:
     }
 
 
-def _experiment_yaml(*, package_id: str, shard_id: str, cell_count: int) -> str:
-    return f"""package_schema_version: {LORQ_PACKAGE_SCHEMA_VERSION}\npackage_kind: run_shard\npackage_id: {package_id}\ncreated_by:\n  name: agent-eval python-v0\n  implementation: python\n  version: {__version__}\nshards:\n  - {shard_id}\ncell_count: {cell_count}\n"""
+def _experiment_yaml(*, package_id: str, package_kind: str, shard_ids: list[str], cell_count: int) -> str:
+    rendered_shards = "\n".join(f"  - {shard_id}" for shard_id in shard_ids)
+    return f"""package_schema_version: {LORQ_PACKAGE_SCHEMA_VERSION}\npackage_kind: {package_kind}\npackage_id: {package_id}\ncreated_by:\n  name: agent-eval python-v0\n  implementation: python\n  version: {__version__}\nshards:\n{rendered_shards}\ncell_count: {cell_count}\n"""
 
 
 def export_lorq_run_shard(results_root: Path, package_root: Path, *, shard_id: str = "shard-001", package_id: str | None = None) -> dict[str, Any]:
@@ -262,10 +320,11 @@ def export_lorq_run_shard(results_root: Path, package_root: Path, *, shard_id: s
         write_json(package_root / ".lorq" / "cells" / f"{cell['cell_id']}.json", cell)
 
     package_id = package_id or package_root.name or shard_id
-    write_text(package_root / "experiment.yaml", _experiment_yaml(package_id=package_id, shard_id=shard_id, cell_count=len(cells)))
-    write_json(package_root / ".lorq" / "coverage.json", _coverage(cells))
+    write_text(package_root / "experiment.yaml", _experiment_yaml(package_id=package_id, package_kind="run_shard", shard_ids=[shard_id], cell_count=len(cells)))
+    coverage = _coverage(cells)
+    write_json(package_root / ".lorq" / "coverage.json", coverage)
     write_json(package_root / ".lorq" / "fingerprints.json", _fingerprints(cells))
-    write_json(package_root / ".lorq" / "integrity.json", _integrity(cells))
+    write_json(package_root / ".lorq" / "integrity.json", _integrity(cells, package_root=package_root, missing_cells=coverage["missing_cells"]))
     write_json(package_root / ".lorq" / "merge-log.json", {
         "schema_version": "lorq.merge-log.v1alpha1",
         "contract_version": LORQ_CONTRACT_VERSION,
@@ -292,4 +351,172 @@ def export_lorq_run_shard(results_root: Path, package_root: Path, *, shard_id: s
         "shard_id": shard_id,
         "cell_count": len(cells),
         "cell_ids": sorted(cell["cell_id"] for cell in cells),
+    }
+
+
+def _load_package_cells(package_root: Path) -> list[dict[str, Any]]:
+    cells_dir = package_root / ".lorq" / "cells"
+    if not cells_dir.exists():
+        raise LorqPackageError(f"Missing LORQ cell index: {cells_dir}")
+    cells = [read_json(path) for path in sorted(cells_dir.glob("*.json"))]
+    return [cell for cell in cells if isinstance(cell, dict)]
+
+
+def _read_shard_id(package_root: Path, cells: list[dict[str, Any]]) -> str:
+    shard_ids = sorted({str(cell.get("shard_id")) for cell in cells if cell.get("shard_id")})
+    if len(shard_ids) != 1:
+        raise LorqPackageError(f"Expected exactly one shard id in {package_root}, found {shard_ids}")
+    return shard_ids[0]
+
+
+def expected_cells_from_benchmark(benchmark_file: Path) -> list[str]:
+    """Read deterministic benchmark shape and return expected v1-alpha cell ids."""
+    data = yaml.safe_load(benchmark_file.read_text(encoding="utf-8")) or {}
+    cases = [str(item["id"] if isinstance(item, dict) else item) for item in data.get("cases", [])]
+    modes = [str(item["id"] if isinstance(item, dict) else item) for item in data.get("modes", [])]
+    attempts = int((data.get("shape") or {}).get("attempts_per_case_mode") or 1)
+    expected: list[str] = []
+    for case_id in cases:
+        for mode_id in modes:
+            for attempt in range(1, attempts + 1):
+                expected.append(cell_id_for_parts(case_id, mode_id, attempt))
+    return sorted(expected)
+
+
+def _copy_shard_payload(src_root: Path, dst_root: Path, shard_id: str) -> None:
+    src_run = src_root / "runs" / shard_id
+    if not src_run.exists():
+        raise LorqPackageError(f"Missing run shard payload: {src_run}")
+    dst_run = dst_root / "runs" / shard_id
+    rm_rf(dst_run)
+    ensure_dir(dst_run.parent)
+    shutil.copytree(src_run, dst_run)
+
+
+def _duplicate_cell_errors(cell_sources: dict[str, list[str]]) -> list[dict[str, Any]]:
+    return [
+        {"cell_id": cell_id, "source_shards": sources}
+        for cell_id, sources in sorted(cell_sources.items())
+        if len(sources) > 1
+    ]
+
+
+def _fingerprint_mismatch(fingerprints: dict[str, Any]) -> bool:
+    return int(fingerprints.get("unique_fingerprint_count") or 0) > 1
+
+
+def merge_lorq_run_shards(
+    shard_roots: list[Path],
+    output_root: Path,
+    *,
+    package_id: str | None = None,
+    benchmark_file: Path | None = None,
+    strict: bool = True,
+) -> dict[str, Any]:
+    """Merge v1-alpha LORQ run-shard packages into an experiment package.
+
+    This is migration-only Python v0 scaffolding for the frozen conformance
+    benchmark. It verifies orchestration/package semantics and intentionally
+    fails by default on duplicate cell ids or incompatible source fingerprints.
+    """
+    if len(shard_roots) < 1:
+        raise LorqPackageError("At least one LORQ run-shard package is required")
+
+    normalized_shards = [Path(root).expanduser().resolve() for root in shard_roots]
+    output_root = output_root.expanduser().resolve()
+    package_id = package_id or output_root.name or "experiment"
+    expected_cell_ids = expected_cells_from_benchmark(benchmark_file.expanduser().resolve()) if benchmark_file else None
+
+    inputs: list[dict[str, Any]] = []
+    cells: list[dict[str, Any]] = []
+    cell_sources: dict[str, list[str]] = {}
+    shard_ids: list[str] = []
+    source_shard_warnings: list[dict[str, Any]] = []
+
+    for shard_root in normalized_shards:
+        shard_cells = _load_package_cells(shard_root)
+        shard_id = _read_shard_id(shard_root, shard_cells)
+        shard_ids.append(shard_id)
+        inputs.append({"kind": "lorq-run-shard", "path": str(shard_root), "shard_id": shard_id, "cell_count": len(shard_cells)})
+        shard_integrity = read_json(shard_root / ".lorq" / "integrity.json", default={}) or {}
+        for warning in shard_integrity.get("warnings") or []:
+            if isinstance(warning, dict):
+                source_shard_warnings.append({"source_shard": shard_id, **warning})
+        for cell in shard_cells:
+            copied = dict(cell)
+            copied["source_shard_id"] = shard_id
+            cells.append(copied)
+            cell_sources.setdefault(str(cell.get("cell_id")), []).append(shard_id)
+
+    duplicate_cells = _duplicate_cell_errors(cell_sources)
+    if duplicate_cells and strict:
+        raise LorqPackageError(f"Duplicate LORQ cell ids while merging shards: {duplicate_cells}")
+
+    unique_cells: list[dict[str, Any]] = []
+    seen: set[str] = set()
+    for cell in cells:
+        cell_id = str(cell.get("cell_id"))
+        if cell_id in seen:
+            continue
+        seen.add(cell_id)
+        unique_cells.append(cell)
+
+    coverage = _coverage(unique_cells, expected_cell_ids=expected_cell_ids)
+    fingerprints = _fingerprints(unique_cells)
+    fingerprint_mismatch = _fingerprint_mismatch(fingerprints)
+    if fingerprint_mismatch and strict:
+        raise LorqPackageError("Input shards contain incompatible repository fingerprints")
+
+    rm_rf(output_root)
+    ensure_dir(output_root / "runs")
+    ensure_dir(output_root / "judgements")
+    ensure_dir(output_root / "reports" / "cases")
+    ensure_dir(output_root / ".lorq" / "cells")
+
+    for shard_root, shard_id in zip(normalized_shards, shard_ids):
+        _copy_shard_payload(shard_root, output_root, shard_id)
+
+    for cell in unique_cells:
+        cell_id = str(cell["cell_id"])
+        write_json(output_root / ".lorq" / "cells" / f"{cell_id}.json", cell)
+
+    integrity = _integrity(
+        unique_cells,
+        package_root=output_root,
+        missing_cells=coverage["missing_cells"],
+        duplicate_cells=duplicate_cells,
+        fingerprint_mismatch=fingerprint_mismatch,
+        shard_warnings=source_shard_warnings,
+    )
+
+    write_text(output_root / "experiment.yaml", _experiment_yaml(package_id=package_id, package_kind="merged_experiment", shard_ids=sorted(shard_ids), cell_count=len(unique_cells)))
+    write_json(output_root / ".lorq" / "coverage.json", coverage)
+    write_json(output_root / ".lorq" / "fingerprints.json", fingerprints)
+    write_json(output_root / ".lorq" / "integrity.json", integrity)
+    write_json(output_root / ".lorq" / "merge-log.json", {
+        "schema_version": "lorq.merge-log.v1alpha1",
+        "contract_version": LORQ_CONTRACT_VERSION,
+        "operation": "python-v0-merge-run-shards",
+        "inputs": inputs,
+        "outputs": [{"kind": "lorq-merged-experiment", "package_id": package_id, "path": str(output_root)}],
+        "strict": strict,
+        "cell_count": len(unique_cells),
+        "expected_cell_count": coverage["expected_cell_count"],
+        "missing_cell_count": len(coverage["missing_cells"]),
+        "duplicate_cell_count": len(duplicate_cells),
+        "fingerprint_mismatch": fingerprint_mismatch,
+    })
+
+    return {
+        "schema_version": "lorq.package-merge-result.v1alpha1",
+        "contract_version": LORQ_CONTRACT_VERSION,
+        "ok": integrity["ok"],
+        "package_root": str(output_root),
+        "package_id": package_id,
+        "shard_ids": sorted(shard_ids),
+        "cell_count": len(unique_cells),
+        "expected_cell_count": coverage["expected_cell_count"],
+        "missing_cell_ids": coverage["missing_cells"],
+        "duplicate_cell_ids": [item["cell_id"] for item in duplicate_cells],
+        "fingerprint_mismatch": fingerprint_mismatch,
     }

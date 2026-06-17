@@ -110,6 +110,16 @@ judge:
 
 This is only a baseline generator for the future .NET migration; it is not the final LORQ product core.
 
+The migration-only package tools can export run shards and merge them without loading suite config:
+
+```bash
+PYTHONPATH=. python -m eval_runner.cli \
+  --merge-lorq-shards ../internal/generated/deterministic-benchmark/shard-001 ../internal/generated/deterministic-benchmark/shard-002 \
+  --lorq-merge-out ../internal/generated/deterministic-benchmark/experiment-001 \
+  --lorq-benchmark ../fixtures/conformance/deterministic-orchestration/benchmark.yaml
+```
+
+
 ## Token accounting and pricing
 
 `agent-eval` reports `input_tokens`, `cached_input_tokens`, `uncached_input_tokens`, `output_tokens`, `reasoning_output_tokens`, `total_tokens`, and `cache_hit_rate` when the backend trace exposes them.
