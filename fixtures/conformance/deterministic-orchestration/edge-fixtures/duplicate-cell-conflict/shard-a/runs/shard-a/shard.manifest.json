@@ -1,0 +1,9 @@
+{
+  "schema_version": "lorq.run-shard-manifest.v1alpha1",
+  "contract_version": "lorq.contract.v1alpha1",
+  "shard_id": "shard-a",
+  "cell_count": 1,
+  "cell_ids": [
+    "duplicate-case__baseline__attempt-001"
+  ]
+}

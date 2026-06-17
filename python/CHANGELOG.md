@@ -48,3 +48,7 @@
 
 - Added `--report-lorq-package` with `--primary-judgement` for migration-only deterministic package reports.
 - Added report rendering tests.
+
+## 2026-06-18 - Negative merge fixtures
+
+- Added tests against committed duplicate-cell and fingerprint-mismatch LORQ fixture packages.

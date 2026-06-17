@@ -58,3 +58,7 @@ The merged package intentionally reports one missing expected cell: `skipped-cov
 ## Scope boundary
 
 This benchmark fixture is not the final product implementation. Python v0 remains a deterministic baseline generator. .NET v1 will later consume the frozen outputs as migration fixtures.
+
+## Negative merge fixtures
+
+`edge-fixtures/duplicate-cell-conflict/` and `edge-fixtures/fingerprint-mismatch/` are intentionally committed tiny LORQ packages. They verify that the migration-only merge fails by default on duplicate cell ids and incompatible repository fingerprints.

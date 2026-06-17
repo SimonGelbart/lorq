@@ -375,3 +375,25 @@ def test_render_lorq_package_report_writes_json_markdown_and_case_packs(tmp_path
     assert case_pack["schema_version"] == "lorq.case-review-pack.v1alpha1"
     assert case_pack["missing_expected_cell_ids"] == [missing]
     assert (package_root / ".lorq" / "report.json").exists()
+
+
+def test_committed_duplicate_cell_edge_fixture_fails_by_default():
+    root = Path(__file__).resolve().parents[2]
+    edge = root / "fixtures" / "conformance" / "deterministic-orchestration" / "edge-fixtures" / "duplicate-cell-conflict"
+    try:
+        merge_lorq_run_shards([edge / "shard-a", edge / "shard-b"], edge / "_tmp-should-not-be-created")
+    except LorqPackageError as exc:
+        assert "Duplicate LORQ cell ids" in str(exc)
+    else:  # pragma: no cover
+        raise AssertionError("expected committed duplicate-cell fixture to fail")
+
+
+def test_committed_fingerprint_mismatch_edge_fixture_fails_by_default():
+    root = Path(__file__).resolve().parents[2]
+    edge = root / "fixtures" / "conformance" / "deterministic-orchestration" / "edge-fixtures" / "fingerprint-mismatch"
+    try:
+        merge_lorq_run_shards([edge / "shard-a", edge / "shard-b"], edge / "_tmp-should-not-be-created")
+    except LorqPackageError as exc:
+        assert "incompatible repository fingerprints" in str(exc)
+    else:  # pragma: no cover
+        raise AssertionError("expected committed fingerprint-mismatch fixture to fail")

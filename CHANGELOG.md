@@ -218,3 +218,19 @@ Current increment: Python v0 frozen conformance baseline.
 ### Validation
 
 - Added tests for report rendering from a judged merged package.
+
+## 2026-06-18 - Increment 1f: negative deterministic merge fixtures
+
+### Roadmap position
+
+Current increment: Python v0 frozen conformance baseline.
+
+### Changed
+
+- Added committed negative LORQ fixture packages for duplicate-cell conflicts and repository fingerprint mismatches.
+- Updated the deterministic benchmark metadata to mark the merge edge fixtures as covered.
+- Added tests proving both edge fixtures fail by default.
+
+### Validation
+
+- Added fixture-backed merge failure tests.
