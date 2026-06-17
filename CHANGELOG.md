@@ -202,3 +202,19 @@ Executed during artifact creation:
 
 - Freeze a simple deterministic orchestration benchmark using fake agent and fake judge adapters.
 - Create root-level conformance fixtures that can be consumed by both Python v0 and future .NET v1.
+
+## 2026-06-18 - Increment 1e: deterministic package reporting
+
+### Roadmap position
+
+Current increment: Python v0 frozen conformance baseline.
+
+### Changed
+
+- Added migration-only package reporting for judged LORQ experiment packages.
+- Wrote canonical `reports/report.json`, Markdown `reports/report.md`, and per-case review packs under `reports/cases/`.
+- Added v1-alpha schemas for package reports and case review packs.
+
+### Validation
+
+- Added tests for report rendering from a judged merged package.

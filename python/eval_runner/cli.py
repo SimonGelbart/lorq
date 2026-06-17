@@ -14,7 +14,7 @@ from .prompts import load_prompt_style, render_prompt, validate_prompt_styles_di
 from .reports import compare_result_sets, explain_run_markdown, load_run_record_from_path, write_reports
 from .repositories import inspect_repository, load_repositories, resolve_repository
 from .rubrics import load_rubrics, resolve_rubric
-from .lorq_package import LorqPackageError, attach_lorq_deterministic_judgement, export_lorq_run_shard, merge_lorq_run_shards
+from .lorq_package import LorqPackageError, attach_lorq_deterministic_judgement, export_lorq_run_shard, merge_lorq_run_shards, render_lorq_package_report
 from .lifecycle import clean_results_root, clean_worktree_root, list_generated_worktrees, load_run_records, prune_git_worktrees, remove_execution_path, write_generated_marker, write_lifecycle_event
 from .metadata import write_environment_files, write_run_snapshots
 from .utils import ensure_dir, read_json, slug, write_json
@@ -94,6 +94,8 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     parser.add_argument("--judge-lorq-package", help="Migration-only: attach a deterministic fake judgement pass to an existing v1-alpha LORQ package")
     parser.add_argument("--lorq-judge-name", default="judge-primary", help="Judgement pass name for --judge-lorq-package; default: judge-primary")
     parser.add_argument("--lorq-judge-fixture", help="Deterministic fake judge fixture file for --judge-lorq-package; relative paths resolve against --suite-root")
+    parser.add_argument("--report-lorq-package", help="Migration-only: render report.json, report.md, and case packs for a judged LORQ package")
+    parser.add_argument("--primary-judgement", default="judge-primary", help="Primary judgement pass to use for --report-lorq-package; default: judge-primary")
     return parser.parse_args(argv)
 
 
@@ -419,6 +421,20 @@ def _main(argv: list[str] | None = None) -> int:
             )
         except LorqPackageError as exc:
             print(f"LORQ merge failed: {exc}", file=sys.stderr)
+            return 2
+        print(_json.dumps(result, indent=2, ensure_ascii=False))
+        return 0 if result.get("ok") else 2
+
+
+    if args.report_lorq_package:
+        import json as _json
+        try:
+            result = render_lorq_package_report(
+                Path(args.report_lorq_package),
+                primary_judgement=args.primary_judgement,
+            )
+        except LorqPackageError as exc:
+            print(f"LORQ report failed: {exc}", file=sys.stderr)
             return 2
         print(_json.dumps(result, indent=2, ensure_ascii=False))
         return 0 if result.get("ok") else 2
