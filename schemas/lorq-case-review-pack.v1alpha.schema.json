@@ -1,0 +1,18 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://lorq.local/schemas/lorq-case-review-pack.v1alpha.schema.json",
+  "title": "LORQ case review pack v1-alpha",
+  "type": "object",
+  "required": ["schema_version", "contract_version", "case_id", "cell_count", "cells"],
+  "properties": {
+    "schema_version": {"const": "lorq.case-review-pack.v1alpha1"},
+    "contract_version": {"const": "lorq.contract.v1alpha1"},
+    "case_id": {"type": "string"},
+    "cell_count": {"type": "integer"},
+    "missing_expected_cell_count": {"type": "integer"},
+    "missing_expected_cell_ids": {"type": "array", "items": {"type": "string"}},
+    "score_summary": {"type": "object"},
+    "cells": {"type": "array", "items": {"type": "object"}}
+  },
+  "additionalProperties": true
+}

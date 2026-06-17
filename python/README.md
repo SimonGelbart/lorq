@@ -336,3 +336,13 @@ Version 1.2 keeps the Python implementation a reference implementation for the e
 
 A future .NET implementation should target these contracts rather than Python internals.
 
+### Render a LORQ package report
+
+```bash
+PYTHONPATH=. python -m eval_runner.cli \
+  --report-lorq-package ../../internal/generated/deterministic-benchmark/experiment-001 \
+  --primary-judgement judge-primary
+```
+
+This migration-only command writes `reports/report.json`, `reports/report.md`, and per-case review packs.
+

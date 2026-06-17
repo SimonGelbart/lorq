@@ -195,3 +195,25 @@ The current Python v0 migration slice establishes run-shard export, deterministi
 - `reports/report.md`
 - per-case review packs
 - golden committed exported package
+
+## Migration-only package reporting
+
+After deterministic judgement attachment, Python v0 can render the canonical report slice used by the migration benchmark:
+
+```bash
+PYTHONPATH=. python -m eval_runner.cli \
+  --report-lorq-package ../../internal/generated/deterministic-benchmark/experiment-001 \
+  --primary-judgement judge-primary
+```
+
+This writes:
+
+```text
+reports/report.json
+reports/report.md
+reports/cases/<case-id>/case-review.json
+reports/cases/<case-id>/case-review.md
+.lorq/report.json
+```
+
+The report renderer reads merged package evidence and an existing deterministic judgement pass. It does not call a judge LLM and it does not mutate source run evidence.

@@ -25,4 +25,6 @@ LORQ_PACKAGE_SCHEMA_VERSION = 1
 LORQ_CELL_EVIDENCE_SCHEMA_VERSION = "lorq.cell-evidence.v1alpha1"
 LORQ_CELL_JUDGEMENT_SCHEMA_VERSION = "lorq.cell-judgement.v1alpha1"
 LORQ_JUDGEMENT_PASS_SCHEMA_VERSION = "lorq.judgement-pass.v1alpha1"
+LORQ_REPORT_SCHEMA_VERSION = "lorq.report.v1alpha1"
+LORQ_CASE_REVIEW_PACK_SCHEMA_VERSION = "lorq.case-review-pack.v1alpha1"
 

@@ -110,7 +110,7 @@ def test_export_lorq_run_shard_marks_missing_final_answer_as_integrity_warning(t
         {"type": "non_completed_cell", "cell_id": cell_id, "status": "no_final_answer", "severity": "warning"},
     ]
 
-from eval_runner.lorq_package import LorqPackageError, attach_lorq_deterministic_judgement, cell_id_for_parts, merge_lorq_run_shards
+from eval_runner.lorq_package import LorqPackageError, attach_lorq_deterministic_judgement, cell_id_for_parts, merge_lorq_run_shards, render_lorq_package_report
 
 
 def _write_lorq_shard(package_root: Path, *, shard_id: str, cells: list[dict]) -> None:
@@ -313,3 +313,65 @@ def test_attach_lorq_deterministic_judgement_fails_on_missing_present_cell_fixtu
         assert "Missing deterministic judgement fixture entries" in str(exc)
     else:  # pragma: no cover
         raise AssertionError("expected missing deterministic judgement failure")
+
+
+
+def test_render_lorq_package_report_writes_json_markdown_and_case_packs(tmp_path: Path):
+    package_root = tmp_path / "experiment"
+    baseline_cell = cell_id_for_parts("case-a", "baseline", 1)
+    graphify_cell = cell_id_for_parts("case-a", "graphify", 1)
+    _write_lorq_shard(package_root, shard_id="shard-001", cells=[
+        {
+            "cell_id": baseline_cell,
+            "case_id": "case-a",
+            "mode_id": "baseline",
+            "attempt_id": "attempt-001",
+            "status": "completed",
+            "adapter_output": {"final_answer_present": True, "usage": {}, "counts": {}, "trace": {}, "validation": {}},
+        },
+        {
+            "cell_id": graphify_cell,
+            "case_id": "case-a",
+            "mode_id": "graphify",
+            "attempt_id": "attempt-001",
+            "status": "no_final_answer",
+            "adapter_output": {"final_answer_present": False, "usage": {}, "counts": {}, "trace": {}, "validation": {}},
+        },
+    ])
+    write_text(package_root / "experiment.yaml", "package_schema_version: 1\npackage_kind: experiment\npackage_id: experiment-001\nshards:\n  - shard-001\ncell_count: 2\n")
+    missing = cell_id_for_parts("case-a", "graphify-plus", 1)
+    write_json(package_root / ".lorq" / "coverage.json", {
+        "schema_version": "lorq.coverage.v1alpha1",
+        "contract_version": "lorq.contract.v1alpha1",
+        "cell_count": 2,
+        "expected_cell_count": 3,
+        "missing_cells": [missing],
+    })
+    write_json(package_root / ".lorq" / "integrity.json", {
+        "schema_version": "lorq.integrity.v1alpha1",
+        "contract_version": "lorq.contract.v1alpha1",
+        "ok": True,
+        "warnings": [{"type": "missing_expected_cell", "cell_id": missing, "severity": "warning"}],
+    })
+    fixture = tmp_path / "fake-judge.yaml"
+    _write_fake_judge_fixture(fixture, [
+        {"case": "case-a", "mode": "baseline", "attempt": 1, "overall_score": 4, "dimensions": {}},
+        {"case": "case-a", "mode": "graphify", "attempt": 1, "overall_score": 2, "dimensions": {}},
+    ])
+    attach_lorq_deterministic_judgement(package_root, judge_name="judge-primary", fixture_file=fixture)
+
+    result = render_lorq_package_report(package_root, primary_judgement="judge-primary")
+
+    assert result["ok"] is True
+    assert result["case_pack_count"] == 1
+    report = read_json(package_root / "reports" / "report.json")
+    assert report["schema_version"] == "lorq.report.v1alpha1"
+    assert report["package"]["package_id"] == "experiment-001"
+    assert report["summary"]["missing_expected_cell_ids"] == [missing]
+    assert report["summary"]["status_counts"] == {"completed": 1, "no_final_answer": 1}
+    assert report["primary_judgement"]["source"]["real_llm_used"] is False
+    assert (package_root / "reports" / "report.md").read_text(encoding="utf-8").startswith("# LORQ package report")
+    case_pack = read_json(package_root / "reports" / "cases" / "case-a" / "case-review.json")
+    assert case_pack["schema_version"] == "lorq.case-review-pack.v1alpha1"
+    assert case_pack["missing_expected_cell_ids"] == [missing]
+    assert (package_root / ".lorq" / "report.json").exists()

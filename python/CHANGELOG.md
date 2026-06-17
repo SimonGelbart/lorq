@@ -43,3 +43,8 @@
 ## 1.2.3
 
 - Improved setup-only failure diagnostics.
+
+## 2026-06-18 - Package reporting
+
+- Added `--report-lorq-package` with `--primary-judgement` for migration-only deterministic package reports.
+- Added report rendering tests.

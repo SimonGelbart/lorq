@@ -14,6 +14,8 @@ from .contracts import (
     LORQ_CONTRACT_VERSION,
     LORQ_JUDGEMENT_PASS_SCHEMA_VERSION,
     LORQ_PACKAGE_SCHEMA_VERSION,
+    LORQ_REPORT_SCHEMA_VERSION,
+    LORQ_CASE_REVIEW_PACK_SCHEMA_VERSION,
 )
 from .lifecycle import load_run_records
 from .utils import ensure_dir, read_json, read_text, rm_rf, slug, write_json, write_text
@@ -766,4 +768,263 @@ def attach_lorq_deterministic_judgement(
         "missing_fixture_cell_ids": missing_fixture_cell_ids,
         "missing_expected_cell_ids": [str(item) for item in missing_expected],
         "score_summary": manifest["score_summary"],
+    }
+
+
+def _read_package_metadata(package_root: Path) -> dict[str, Any]:
+    experiment_file = package_root / "experiment.yaml"
+    if not experiment_file.exists():
+        return {"package_id": package_root.name, "package_kind": "unknown", "shards": []}
+    data = yaml.safe_load(experiment_file.read_text(encoding="utf-8")) or {}
+    if not isinstance(data, dict):
+        return {"package_id": package_root.name, "package_kind": "unknown", "shards": []}
+    return data
+
+
+def _load_primary_judgements(package_root: Path, primary_judgement: str) -> tuple[dict[str, Any], dict[str, dict[str, Any]]]:
+    manifest = read_json(package_root / ".lorq" / "judgements" / f"{primary_judgement}.json", default=None)
+    if manifest is None:
+        manifest = read_json(package_root / "judgements" / primary_judgement / "judgement.manifest.json", default=None)
+    if not isinstance(manifest, dict):
+        raise LorqPackageError(f"Missing primary LORQ judgement pass: {primary_judgement}")
+    judgements: dict[str, dict[str, Any]] = {}
+    cells_dir = package_root / "judgements" / primary_judgement / "cells"
+    for path in sorted(cells_dir.glob("*.json")):
+        item = read_json(path, default={}) or {}
+        if isinstance(item, dict) and item.get("cell_id"):
+            judgements[str(item["cell_id"])] = item
+    return manifest, judgements
+
+
+def _status_counts(cells: list[dict[str, Any]]) -> dict[str, int]:
+    counts: dict[str, int] = {}
+    for cell in cells:
+        status = str(cell.get("status") or "unknown")
+        counts[status] = counts.get(status, 0) + 1
+    return dict(sorted(counts.items()))
+
+
+def _scores_by_cell(judgements: dict[str, dict[str, Any]]) -> dict[str, float | None]:
+    scores: dict[str, float | None] = {}
+    for cell_id, judgement in sorted(judgements.items()):
+        score = (judgement.get("quality") or {}).get("overall_score")
+        try:
+            scores[cell_id] = float(score)
+        except (TypeError, ValueError):
+            scores[cell_id] = None
+    return scores
+
+
+def _case_pack_markdown(case_pack: dict[str, Any]) -> str:
+    case_id = case_pack["case_id"]
+    lines = [
+        f"# LORQ case review: {case_id}",
+        "",
+        f"Cells: {case_pack['cell_count']}",
+        f"Missing expected cells: {case_pack['missing_expected_cell_count']}",
+        f"Average score: {case_pack['score_summary']['average']}",
+        "",
+        "| Cell | Mode | Status | Score | Final answer |",
+        "| --- | --- | --- | ---: | --- |",
+    ]
+    for cell in case_pack["cells"]:
+        lines.append(
+            f"| `{cell['cell_id']}` | `{cell['mode_id']}` | {cell['status']} | "
+            f"{cell.get('score')} | {cell.get('final_answer_present')} |"
+        )
+    if case_pack["missing_expected_cell_ids"]:
+        lines.extend(["", "## Missing expected cells"])
+        for cell_id in case_pack["missing_expected_cell_ids"]:
+            lines.append(f"- `{cell_id}`")
+    return "\n".join(lines) + "\n"
+
+
+def _average_or_none(values: list[float]) -> float | None:
+    return round(sum(values) / len(values), 3) if values else None
+
+
+def _case_review_packs(
+    cells: list[dict[str, Any]],
+    judgements: dict[str, dict[str, Any]],
+    missing_expected_cell_ids: list[str],
+) -> list[dict[str, Any]]:
+    cases = sorted({str(cell.get("case_id")) for cell in cells} | {str(item).split("__", 1)[0] for item in missing_expected_cell_ids})
+    packs: list[dict[str, Any]] = []
+    for case_id in cases:
+        case_cells = [cell for cell in sorted(cells, key=lambda item: str(item.get("cell_id"))) if str(cell.get("case_id")) == case_id]
+        case_missing = [cell_id for cell_id in missing_expected_cell_ids if cell_id.startswith(f"{case_id}__")]
+        row_cells: list[dict[str, Any]] = []
+        scores: list[float] = []
+        for cell in case_cells:
+            cell_id = str(cell.get("cell_id"))
+            judgement = judgements.get(cell_id) or {}
+            score = (judgement.get("quality") or {}).get("overall_score")
+            try:
+                score_value = float(score)
+                scores.append(score_value)
+            except (TypeError, ValueError):
+                score_value = None
+            adapter_output = cell.get("adapter_output") if isinstance(cell.get("adapter_output"), dict) else {}
+            row_cells.append({
+                "cell_id": cell_id,
+                "mode_id": cell.get("mode_id"),
+                "attempt_id": cell.get("attempt_id"),
+                "status": cell.get("status"),
+                "score": score_value,
+                "final_answer_present": adapter_output.get("final_answer_present"),
+                "evidence_refs": cell.get("evidence_refs") or {},
+                "judgement_ref": f"judgements/{judgement.get('judgement_name', '')}/cells/{cell_id}.json" if judgement else None,
+                "integrity_warnings": [],
+            })
+        pack = {
+            "schema_version": LORQ_CASE_REVIEW_PACK_SCHEMA_VERSION,
+            "contract_version": LORQ_CONTRACT_VERSION,
+            "case_id": case_id,
+            "cell_count": len(case_cells),
+            "missing_expected_cell_count": len(case_missing),
+            "missing_expected_cell_ids": case_missing,
+            "score_summary": {
+                "average": _average_or_none(scores),
+                "min": min(scores) if scores else None,
+                "max": max(scores) if scores else None,
+            },
+            "cells": row_cells,
+        }
+        packs.append(pack)
+    return packs
+
+
+def _report_markdown(report: dict[str, Any]) -> str:
+    summary = report["summary"]
+    package = report["package"]
+    judgement = report["primary_judgement"]
+    lines = [
+        "# LORQ package report",
+        "",
+        f"Package: `{package['package_id']}`",
+        f"Kind: `{package['package_kind']}`",
+        f"Primary judgement: `{judgement['name']}`",
+        f"Real LLM used for judgement: `{judgement['source'].get('real_llm_used')}`",
+        "",
+        "## Summary",
+        "",
+        f"- Cells: {summary['cell_count']} present / {summary['expected_cell_count']} expected",
+        f"- Missing expected cells: {summary['missing_expected_cell_count']}",
+        f"- Integrity OK: {summary['integrity_ok']}",
+        f"- Warning count: {summary['warning_count']}",
+        f"- Average score: {summary['score_summary'].get('overall_average')}",
+        "",
+        "## Status counts",
+        "",
+    ]
+    for status, count in summary["status_counts"].items():
+        lines.append(f"- `{status}`: {count}")
+    if summary["missing_expected_cell_ids"]:
+        lines.extend(["", "## Missing expected cells", ""])
+        for cell_id in summary["missing_expected_cell_ids"]:
+            lines.append(f"- `{cell_id}`")
+    lines.extend(["", "## Cases", "", "| Case | Cells | Missing | Average score |", "| --- | ---: | ---: | ---: |"])
+    for case in report["case_packs"]:
+        lines.append(
+            f"| `{case['case_id']}` | {case['cell_count']} | {case['missing_expected_cell_count']} | {case['score_summary']['average']} |"
+        )
+    return "\n".join(lines) + "\n"
+
+
+def render_lorq_package_report(package_root: Path, *, primary_judgement: str = "judge-primary") -> dict[str, Any]:
+    """Render canonical JSON/Markdown reports and per-case review packs.
+
+    This is migration-only Python v0 scaffolding for the frozen benchmark. It
+    reads a merged package plus a named deterministic judgement pass and writes
+    stable report artifacts without calling an LLM or mutating run evidence.
+    """
+    package_root = package_root.expanduser().resolve()
+    cells = _load_package_cells(package_root)
+    if not cells:
+        raise LorqPackageError(f"No LORQ cells found in package: {package_root}")
+    package = _read_package_metadata(package_root)
+    coverage = read_json(package_root / ".lorq" / "coverage.json", default={}) or {}
+    integrity = read_json(package_root / ".lorq" / "integrity.json", default={}) or {}
+    fingerprint_index = read_json(package_root / ".lorq" / "fingerprints.json", default={}) or {}
+    judgement_manifest, judgements = _load_primary_judgements(package_root, primary_judgement)
+
+    missing_expected = [str(item) for item in (coverage.get("missing_cells") or [])]
+    warning_items = integrity.get("warnings") if isinstance(integrity.get("warnings"), list) else []
+    case_packs = _case_review_packs(cells, judgements, missing_expected)
+    scores_by_cell = _scores_by_cell(judgements)
+
+    report = {
+        "schema_version": LORQ_REPORT_SCHEMA_VERSION,
+        "contract_version": LORQ_CONTRACT_VERSION,
+        "package": {
+            "package_id": package.get("package_id") or package_root.name,
+            "package_kind": package.get("package_kind") or "unknown",
+            "schema_version": package.get("package_schema_version"),
+            "shards": package.get("shards") or [],
+            "package_root": str(package_root),
+        },
+        "summary": {
+            "cell_count": len(cells),
+            "expected_cell_count": int(coverage.get("expected_cell_count") or len(cells)),
+            "missing_expected_cell_count": len(missing_expected),
+            "missing_expected_cell_ids": missing_expected,
+            "status_counts": _status_counts(cells),
+            "integrity_ok": bool(integrity.get("ok", False)),
+            "warning_count": len(warning_items),
+            "score_summary": judgement_manifest.get("score_summary") or {},
+        },
+        "primary_judgement": {
+            "name": primary_judgement,
+            "backend": judgement_manifest.get("backend"),
+            "source": judgement_manifest.get("source") or {},
+            "cell_count": judgement_manifest.get("cell_count"),
+            "judged_cell_count": judgement_manifest.get("judged_cell_count"),
+            "scores_by_cell": scores_by_cell,
+        },
+        "integrity": integrity,
+        "coverage": coverage,
+        "fingerprints": {
+            "unique_fingerprint_count": fingerprint_index.get("unique_fingerprint_count"),
+        },
+        "case_packs": [
+            {
+                "case_id": item["case_id"],
+                "path": f"reports/cases/{item['case_id']}/case-review.json",
+                "markdown_path": f"reports/cases/{item['case_id']}/case-review.md",
+                "cell_count": item["cell_count"],
+                "missing_expected_cell_count": item["missing_expected_cell_count"],
+                "score_summary": item["score_summary"],
+            }
+            for item in case_packs
+        ],
+    }
+
+    reports_dir = package_root / "reports"
+    ensure_dir(reports_dir / "cases")
+    write_json(reports_dir / "report.json", report)
+    write_text(reports_dir / "report.md", _report_markdown(report))
+    for pack in case_packs:
+        case_dir = reports_dir / "cases" / pack["case_id"]
+        write_json(case_dir / "case-review.json", pack)
+        write_text(case_dir / "case-review.md", _case_pack_markdown(pack))
+    write_json(package_root / ".lorq" / "report.json", {
+        "schema_version": LORQ_REPORT_SCHEMA_VERSION,
+        "contract_version": LORQ_CONTRACT_VERSION,
+        "report": "reports/report.json",
+        "markdown": "reports/report.md",
+        "primary_judgement": primary_judgement,
+        "case_count": len(case_packs),
+    })
+
+    return {
+        "schema_version": "lorq.report-render-result.v1alpha1",
+        "contract_version": LORQ_CONTRACT_VERSION,
+        "ok": True,
+        "package_root": str(package_root),
+        "primary_judgement": primary_judgement,
+        "report_json": "reports/report.json",
+        "report_markdown": "reports/report.md",
+        "case_pack_count": len(case_packs),
+        "missing_expected_cell_ids": missing_expected,
+        "score_summary": judgement_manifest.get("score_summary") or {},
     }

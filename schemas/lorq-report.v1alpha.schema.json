@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://lorq.local/schemas/lorq-report.v1alpha.schema.json",
+  "title": "LORQ package report v1-alpha",
+  "type": "object",
+  "required": ["schema_version", "contract_version", "package", "summary", "primary_judgement", "case_packs"],
+  "properties": {
+    "schema_version": {"const": "lorq.report.v1alpha1"},
+    "contract_version": {"const": "lorq.contract.v1alpha1"},
+    "package": {"type": "object"},
+    "summary": {"type": "object"},
+    "primary_judgement": {"type": "object"},
+    "integrity": {"type": "object"},
+    "coverage": {"type": "object"},
+    "fingerprints": {"type": "object"},
+    "case_packs": {"type": "array", "items": {"type": "object"}}
+  },
+  "additionalProperties": true
+}
