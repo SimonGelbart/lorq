@@ -1,0 +1,130 @@
+{
+  "schema_version": "lorq.cell-evidence.v1alpha1",
+  "contract_version": "lorq.contract.v1alpha1",
+  "cell_id": "no-final-answer__graphify-plus__attempt-001",
+  "case_id": "no-final-answer",
+  "mode_id": "graphify-plus",
+  "attempt_id": "attempt-001",
+  "shard_id": "shard-002",
+  "prompt_style": "neutral",
+  "category": "migration-baseline",
+  "status": "invalid_artifact",
+  "source": {
+    "implementation": "python-v0",
+    "python_package": "generic-agent-eval-runner",
+    "python_version": "1.2.4",
+    "source_schema_version": "agent-eval.result.v1"
+  },
+  "fingerprint": {
+    "repo": "fake_project",
+    "repo_type": "local",
+    "ref": "HEAD",
+    "commit": "07e6cdc7b3e58436088c73c984f6d38b2d1fc18a",
+    "dirty": true,
+    "is_git_repo": true
+  },
+  "adapter_output": {
+    "status": "invalid_artifact",
+    "final_answer_present": false,
+    "final_answer_chars": 0,
+    "prompt_chars": 200,
+    "adapter": {
+      "id": "deterministic-fake",
+      "backend": "deterministic-fake",
+      "output_format": "deterministic-fake-events",
+      "input_mode": "fixture",
+      "exit_code": 0,
+      "timed_out": false,
+      "ok": true,
+      "error_category": "no_final_answer"
+    },
+    "usage": {
+      "input_tokens": 83,
+      "output_tokens": 0,
+      "cached_input_tokens": 0,
+      "uncached_input_tokens": 83,
+      "total_tokens": 83,
+      "cache_hit_rate": 0.0
+    },
+    "counts": {
+      "json_events": 1,
+      "tool_events": 1,
+      "command_events": 1
+    },
+    "timing": {
+      "elapsed_ms": 203,
+      "setup_elapsed_ms": 0
+    },
+    "trace": {
+      "summary": {
+        "event_count": 1,
+        "event_type_counts": {
+          "tool.command": 1
+        },
+        "backends": [],
+        "usage": {},
+        "schema_version": "agent-eval.event-summary.v1",
+        "contract_version": "agent-eval.contract.v1"
+      },
+      "normalized_events_path": "events.normalized.jsonl"
+    },
+    "validation": {
+      "ok": false,
+      "hard_passed": 1,
+      "hard_total": 5,
+      "soft_passed": 0,
+      "soft_total": 1
+    },
+    "artifacts": [
+      {
+        "path": "runs/shard-002/cells/no-final-answer__graphify-plus__attempt-001/prompt.txt",
+        "kind": "prompt.txt"
+      },
+      {
+        "path": "runs/shard-002/cells/no-final-answer__graphify-plus__attempt-001/answer.md",
+        "kind": "answer.md"
+      },
+      {
+        "path": "runs/shard-002/cells/no-final-answer__graphify-plus__attempt-001/validation.json",
+        "kind": "validation.json"
+      },
+      {
+        "path": "runs/shard-002/cells/no-final-answer__graphify-plus__attempt-001/events.normalized.jsonl",
+        "kind": "events.normalized.jsonl"
+      },
+      {
+        "path": "runs/shard-002/cells/no-final-answer__graphify-plus__attempt-001/events.summary.json",
+        "kind": "events.summary.json"
+      },
+      {
+        "path": "runs/shard-002/cells/no-final-answer__graphify-plus__attempt-001/stdout.raw.jsonl",
+        "kind": "stdout.raw.jsonl"
+      },
+      {
+        "path": "runs/shard-002/cells/no-final-answer__graphify-plus__attempt-001/stdout.raw.txt",
+        "kind": "stdout.raw.txt"
+      },
+      {
+        "path": "runs/shard-002/cells/no-final-answer__graphify-plus__attempt-001/stderr.txt",
+        "kind": "stderr.txt"
+      },
+      {
+        "path": "runs/shard-002/cells/no-final-answer__graphify-plus__attempt-001/active-skills.json",
+        "kind": "active-skills.json"
+      },
+      {
+        "path": "runs/shard-002/cells/no-final-answer__graphify-plus__attempt-001/adapter.evidence.json",
+        "kind": "adapter.evidence.json"
+      }
+    ]
+  },
+  "evidence_refs": {
+    "cell_dir": "runs/shard-002/cells/no-final-answer__graphify-plus__attempt-001",
+    "final_answer": "runs/shard-002/cells/no-final-answer__graphify-plus__attempt-001/answer.md",
+    "cell_result": "runs/shard-002/cells/no-final-answer__graphify-plus__attempt-001/cell_result.json",
+    "prompt": "runs/shard-002/cells/no-final-answer__graphify-plus__attempt-001/prompt.txt",
+    "validation": "runs/shard-002/cells/no-final-answer__graphify-plus__attempt-001/validation.json",
+    "trace": "runs/shard-002/cells/no-final-answer__graphify-plus__attempt-001/events.normalized.jsonl"
+  },
+  "source_shard_id": "shard-002"
+}

@@ -1,0 +1,53 @@
+{
+  "schema_version": "lorq.case-review-pack.v1alpha1",
+  "contract_version": "lorq.contract.v1alpha1",
+  "case_id": "skipped-coverage",
+  "cell_count": 2,
+  "missing_expected_cell_count": 1,
+  "missing_expected_cell_ids": [
+    "skipped-coverage__graphify-plus__attempt-001"
+  ],
+  "score_summary": {
+    "average": 3.5,
+    "min": 3.0,
+    "max": 4.0
+  },
+  "cells": [
+    {
+      "cell_id": "skipped-coverage__baseline__attempt-001",
+      "mode_id": "baseline",
+      "attempt_id": "attempt-001",
+      "status": "completed",
+      "score": 3.0,
+      "final_answer_present": true,
+      "evidence_refs": {
+        "cell_dir": "runs/shard-002/cells/skipped-coverage__baseline__attempt-001",
+        "final_answer": "runs/shard-002/cells/skipped-coverage__baseline__attempt-001/answer.md",
+        "cell_result": "runs/shard-002/cells/skipped-coverage__baseline__attempt-001/cell_result.json",
+        "prompt": "runs/shard-002/cells/skipped-coverage__baseline__attempt-001/prompt.txt",
+        "validation": "runs/shard-002/cells/skipped-coverage__baseline__attempt-001/validation.json",
+        "trace": "runs/shard-002/cells/skipped-coverage__baseline__attempt-001/events.normalized.jsonl"
+      },
+      "judgement_ref": "judgements/judge-primary/cells/skipped-coverage__baseline__attempt-001.json",
+      "integrity_warnings": []
+    },
+    {
+      "cell_id": "skipped-coverage__graphify__attempt-001",
+      "mode_id": "graphify",
+      "attempt_id": "attempt-001",
+      "status": "completed",
+      "score": 4.0,
+      "final_answer_present": true,
+      "evidence_refs": {
+        "cell_dir": "runs/shard-002/cells/skipped-coverage__graphify__attempt-001",
+        "final_answer": "runs/shard-002/cells/skipped-coverage__graphify__attempt-001/answer.md",
+        "cell_result": "runs/shard-002/cells/skipped-coverage__graphify__attempt-001/cell_result.json",
+        "prompt": "runs/shard-002/cells/skipped-coverage__graphify__attempt-001/prompt.txt",
+        "validation": "runs/shard-002/cells/skipped-coverage__graphify__attempt-001/validation.json",
+        "trace": "runs/shard-002/cells/skipped-coverage__graphify__attempt-001/events.normalized.jsonl"
+      },
+      "judgement_ref": "judgements/judge-primary/cells/skipped-coverage__graphify__attempt-001.json",
+      "integrity_warnings": []
+    }
+  ]
+}

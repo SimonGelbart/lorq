@@ -1,0 +1,38 @@
+{
+  "schema_version": "lorq.coverage.v1alpha1",
+  "contract_version": "lorq.contract.v1alpha1",
+  "cell_count": 5,
+  "expected_cell_count": 5,
+  "cases": [
+    "no-final-answer",
+    "skipped-coverage"
+  ],
+  "modes": [
+    "baseline",
+    "graphify",
+    "graphify-plus"
+  ],
+  "attempts": [
+    "attempt-001"
+  ],
+  "present_cell_ids": [
+    "no-final-answer__baseline__attempt-001",
+    "no-final-answer__graphify-plus__attempt-001",
+    "no-final-answer__graphify__attempt-001",
+    "skipped-coverage__baseline__attempt-001",
+    "skipped-coverage__graphify__attempt-001"
+  ],
+  "expected_cell_ids": [
+    "no-final-answer__baseline__attempt-001",
+    "no-final-answer__graphify-plus__attempt-001",
+    "no-final-answer__graphify__attempt-001",
+    "skipped-coverage__baseline__attempt-001",
+    "skipped-coverage__graphify__attempt-001"
+  ],
+  "status_counts": {
+    "invalid_artifact": 3,
+    "completed": 2
+  },
+  "missing_cells": [],
+  "skipped_cells": []
+}

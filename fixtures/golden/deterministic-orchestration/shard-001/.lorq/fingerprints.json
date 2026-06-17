@@ -1,0 +1,48 @@
+{
+  "schema_version": "lorq.fingerprints.v1alpha1",
+  "contract_version": "lorq.contract.v1alpha1",
+  "by_cell": {
+    "successful-comparison__baseline__attempt-001": {
+      "repo": "fake_project",
+      "repo_type": "local",
+      "ref": "HEAD",
+      "commit": "07e6cdc7b3e58436088c73c984f6d38b2d1fc18a",
+      "dirty": true,
+      "is_git_repo": true
+    },
+    "successful-comparison__graphify__attempt-001": {
+      "repo": "fake_project",
+      "repo_type": "local",
+      "ref": "HEAD",
+      "commit": "07e6cdc7b3e58436088c73c984f6d38b2d1fc18a",
+      "dirty": true,
+      "is_git_repo": true
+    },
+    "successful-comparison__graphify-plus__attempt-001": {
+      "repo": "fake_project",
+      "repo_type": "local",
+      "ref": "HEAD",
+      "commit": "07e6cdc7b3e58436088c73c984f6d38b2d1fc18a",
+      "dirty": true,
+      "is_git_repo": true
+    }
+  },
+  "unique_fingerprint_count": 1,
+  "unique_fingerprints": [
+    {
+      "fingerprint": {
+        "commit": "07e6cdc7b3e58436088c73c984f6d38b2d1fc18a",
+        "dirty": true,
+        "is_git_repo": true,
+        "ref": "HEAD",
+        "repo": "fake_project",
+        "repo_type": "local"
+      },
+      "cell_ids": [
+        "successful-comparison__baseline__attempt-001",
+        "successful-comparison__graphify-plus__attempt-001",
+        "successful-comparison__graphify__attempt-001"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,5 @@
+You are evaluating repository evidence. Use only the provided repository context.
+
+Task:
+Explain how the deterministic project models LORQ cell evidence and shard manifests.
+Mention the key classes and cite the source file.

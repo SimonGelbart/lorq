@@ -1,0 +1,1 @@
+{"case": "no-final-answer", "command": "read src/ledger.py", "fixture_sequence": 0, "mode": "graphify", "type": "tool.command"}

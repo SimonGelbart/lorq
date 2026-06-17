@@ -62,3 +62,7 @@ This benchmark fixture is not the final product implementation. Python v0 remain
 ## Negative merge fixtures
 
 `edge-fixtures/duplicate-cell-conflict/` and `edge-fixtures/fingerprint-mismatch/` are intentionally committed tiny LORQ packages. They verify that the migration-only merge fails by default on duplicate cell ids and incompatible repository fingerprints.
+
+## Frozen golden baseline
+
+The committed full-loop expected outputs live under `fixtures/golden/deterministic-orchestration/`. They contain two run shards, one merged experiment package, one `judge-primary` deterministic judgement pass, canonical reports, and per-case review packs.

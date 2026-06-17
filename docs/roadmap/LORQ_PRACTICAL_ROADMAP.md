@@ -118,6 +118,10 @@ This is a planning and alignment increment. It does not need to produce final co
 - Python-to-.NET migration strategy.
 - list of alignment review gates.
 
+### Current branch status
+
+Increment 1 is frozen on `feat/migration` once the committed golden fixture under `fixtures/golden/deterministic-orchestration/` validates. The frozen slice includes two deterministic shards, one merged experiment package, one deterministic judgement pass, canonical JSON and Markdown reports, per-case review packs, and hand-authored negative merge fixtures.
+
 ### Quantifiable exit criteria
 
 - 1 canonical product goal statement exists.
@@ -209,6 +213,10 @@ It must include at least:
 1 missing final answer / invalid artifact fixture
 ```
 
+### Current branch status
+
+Increment 1 is frozen on `feat/migration` once the committed golden fixture under `fixtures/golden/deterministic-orchestration/` validates. The frozen slice includes two deterministic shards, one merged experiment package, one deterministic judgement pass, canonical JSON and Markdown reports, per-case review packs, and hand-authored negative merge fixtures.
+
 ### Quantifiable exit criteria
 
 - Python exports 1 complete canonical LORQ experiment package.
@@ -272,6 +280,10 @@ This increment is about domain modeling, package IO, validation, and fixture com
 - integrity index builder.
 - golden fixture test harness.
 - basic command summaries as JSON.
+
+### Current branch status
+
+Increment 1 is frozen on `feat/migration` once the committed golden fixture under `fixtures/golden/deterministic-orchestration/` validates. The frozen slice includes two deterministic shards, one merged experiment package, one deterministic judgement pass, canonical JSON and Markdown reports, per-case review packs, and hand-authored negative merge fixtures.
 
 ### Quantifiable exit criteria
 
@@ -347,6 +359,10 @@ It should still avoid real LLM/runtime integration. The goal is orchestration co
 - merge log generation.
 - coverage/fingerprint/integrity index generation.
 - materialized package option, if inexpensive.
+
+### Current branch status
+
+Increment 1 is frozen on `feat/migration` once the committed golden fixture under `fixtures/golden/deterministic-orchestration/` validates. The frozen slice includes two deterministic shards, one merged experiment package, one deterministic judgement pass, canonical JSON and Markdown reports, per-case review packs, and hand-authored negative merge fixtures.
 
 ### Quantifiable exit criteria
 
@@ -424,6 +440,10 @@ It must keep quality judgement separate from execution/integrity.
 - default `report.md` renderer.
 - per-case `case.json` and `case.md` review packs.
 - stable artifact links to full answers, traces, and judge JSON.
+
+### Current branch status
+
+Increment 1 is frozen on `feat/migration` once the committed golden fixture under `fixtures/golden/deterministic-orchestration/` validates. The frozen slice includes two deterministic shards, one merged experiment package, one deterministic judgement pass, canonical JSON and Markdown reports, per-case review packs, and hand-authored negative merge fixtures.
 
 ### Quantifiable exit criteria
 
@@ -530,6 +550,10 @@ adapter.stderr.log
 adapter.exit_code
 ```
 
+### Current branch status
+
+Increment 1 is frozen on `feat/migration` once the committed golden fixture under `fixtures/golden/deterministic-orchestration/` validates. The frozen slice includes two deterministic shards, one merged experiment package, one deterministic judgement pass, canonical JSON and Markdown reports, per-case review packs, and hand-authored negative merge fixtures.
+
 ### Quantifiable exit criteria
 
 - `lorq adapter conformance` runs at least 10 protocol scenarios.
@@ -591,6 +615,10 @@ This increment validates integration paths. It should not turn into broad model-
 - provider extension block examples.
 - one single-runtime official report from a real adapter, if stable.
 
+### Current branch status
+
+Increment 1 is frozen on `feat/migration` once the committed golden fixture under `fixtures/golden/deterministic-orchestration/` validates. The frozen slice includes two deterministic shards, one merged experiment package, one deterministic judgement pass, canonical JSON and Markdown reports, per-case review packs, and hand-authored negative merge fixtures.
+
 ### Quantifiable exit criteria
 
 - Codex adapter can produce at least 1 valid `cell_result.json` with final answer, usage/timing where available, trace/log capture, and artifacts.
@@ -647,6 +675,10 @@ This increment is about reliability, documentation, packaging, validation, and a
 - quickstart using one real adapter.
 - v1 sample package.
 - v1 sample report.
+
+### Current branch status
+
+Increment 1 is frozen on `feat/migration` once the committed golden fixture under `fixtures/golden/deterministic-orchestration/` validates. The frozen slice includes two deterministic shards, one merged experiment package, one deterministic judgement pass, canonical JSON and Markdown reports, per-case review packs, and hand-authored negative merge fixtures.
 
 ### Quantifiable exit criteria
 

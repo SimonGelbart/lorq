@@ -1,0 +1,289 @@
+{
+  "schema_version": "lorq.report.v1alpha1",
+  "contract_version": "lorq.contract.v1alpha1",
+  "package": {
+    "package_id": "deterministic-benchmark",
+    "package_kind": "merged_experiment",
+    "schema_version": 1,
+    "shards": [
+      "shard-001",
+      "shard-002"
+    ],
+    "package_root": "."
+  },
+  "summary": {
+    "cell_count": 8,
+    "expected_cell_count": 9,
+    "missing_expected_cell_count": 1,
+    "missing_expected_cell_ids": [
+      "skipped-coverage__graphify-plus__attempt-001"
+    ],
+    "status_counts": {
+      "completed": 5,
+      "invalid_artifact": 3
+    },
+    "integrity_ok": true,
+    "warning_count": 21,
+    "score_summary": {
+      "overall_average": 2.75,
+      "overall_min": 1.0,
+      "overall_max": 5.0,
+      "by_mode": {
+        "baseline": 2.333,
+        "graphify": 3.0,
+        "graphify-plus": 3.0
+      },
+      "by_case": {
+        "no-final-answer": 1.0,
+        "skipped-coverage": 3.5,
+        "successful-comparison": 4.0
+      }
+    }
+  },
+  "primary_judgement": {
+    "name": "judge-primary",
+    "backend": "deterministic-fake",
+    "source": {
+      "fixture_schema_version": "lorq.fake-judge-fixture.v1alpha1",
+      "fixture_file": "fake-judge.yaml",
+      "real_llm_used": false
+    },
+    "cell_count": 8,
+    "judged_cell_count": 8,
+    "scores_by_cell": {
+      "no-final-answer__baseline__attempt-001": 1.0,
+      "no-final-answer__graphify-plus__attempt-001": 1.0,
+      "no-final-answer__graphify__attempt-001": 1.0,
+      "skipped-coverage__baseline__attempt-001": 3.0,
+      "skipped-coverage__graphify__attempt-001": 4.0,
+      "successful-comparison__baseline__attempt-001": 3.0,
+      "successful-comparison__graphify-plus__attempt-001": 5.0,
+      "successful-comparison__graphify__attempt-001": 4.0
+    }
+  },
+  "integrity": {
+    "schema_version": "lorq.integrity.v1alpha1",
+    "contract_version": "lorq.contract.v1alpha1",
+    "ok": true,
+    "warnings": [
+      {
+        "type": "adapter_integrity_warning",
+        "cell_id": "successful-comparison__graphify__attempt-001",
+        "message": "synthetic integrity warning for migration coverage",
+        "severity": "warning"
+      },
+      {
+        "type": "missing_final_answer",
+        "cell_id": "no-final-answer__baseline__attempt-001",
+        "severity": "warning"
+      },
+      {
+        "type": "non_completed_cell",
+        "cell_id": "no-final-answer__baseline__attempt-001",
+        "status": "invalid_artifact",
+        "severity": "warning"
+      },
+      {
+        "type": "adapter_integrity_warning",
+        "cell_id": "no-final-answer__baseline__attempt-001",
+        "message": "missing final answer emitted intentionally",
+        "severity": "warning"
+      },
+      {
+        "type": "missing_final_answer",
+        "cell_id": "no-final-answer__graphify-plus__attempt-001",
+        "severity": "warning"
+      },
+      {
+        "type": "non_completed_cell",
+        "cell_id": "no-final-answer__graphify-plus__attempt-001",
+        "status": "invalid_artifact",
+        "severity": "warning"
+      },
+      {
+        "type": "adapter_integrity_warning",
+        "cell_id": "no-final-answer__graphify-plus__attempt-001",
+        "message": "missing final answer emitted intentionally",
+        "severity": "warning"
+      },
+      {
+        "type": "missing_final_answer",
+        "cell_id": "no-final-answer__graphify__attempt-001",
+        "severity": "warning"
+      },
+      {
+        "type": "non_completed_cell",
+        "cell_id": "no-final-answer__graphify__attempt-001",
+        "status": "invalid_artifact",
+        "severity": "warning"
+      },
+      {
+        "type": "adapter_integrity_warning",
+        "cell_id": "no-final-answer__graphify__attempt-001",
+        "message": "missing final answer emitted intentionally",
+        "severity": "warning"
+      },
+      {
+        "type": "missing_expected_cell",
+        "cell_id": "skipped-coverage__graphify-plus__attempt-001",
+        "severity": "warning"
+      },
+      {
+        "type": "adapter_integrity_warning",
+        "severity": "warning",
+        "source_shard": "shard-001",
+        "cell_id": "successful-comparison__graphify__attempt-001",
+        "message": "synthetic integrity warning for migration coverage"
+      },
+      {
+        "type": "missing_final_answer",
+        "severity": "warning",
+        "source_shard": "shard-002",
+        "cell_id": "no-final-answer__baseline__attempt-001"
+      },
+      {
+        "type": "non_completed_cell",
+        "severity": "warning",
+        "source_shard": "shard-002",
+        "cell_id": "no-final-answer__baseline__attempt-001",
+        "status": "invalid_artifact"
+      },
+      {
+        "type": "adapter_integrity_warning",
+        "severity": "warning",
+        "source_shard": "shard-002",
+        "cell_id": "no-final-answer__baseline__attempt-001",
+        "message": "missing final answer emitted intentionally"
+      },
+      {
+        "type": "missing_final_answer",
+        "severity": "warning",
+        "source_shard": "shard-002",
+        "cell_id": "no-final-answer__graphify__attempt-001"
+      },
+      {
+        "type": "non_completed_cell",
+        "severity": "warning",
+        "source_shard": "shard-002",
+        "cell_id": "no-final-answer__graphify__attempt-001",
+        "status": "invalid_artifact"
+      },
+      {
+        "type": "adapter_integrity_warning",
+        "severity": "warning",
+        "source_shard": "shard-002",
+        "cell_id": "no-final-answer__graphify__attempt-001",
+        "message": "missing final answer emitted intentionally"
+      },
+      {
+        "type": "missing_final_answer",
+        "severity": "warning",
+        "source_shard": "shard-002",
+        "cell_id": "no-final-answer__graphify-plus__attempt-001"
+      },
+      {
+        "type": "non_completed_cell",
+        "severity": "warning",
+        "source_shard": "shard-002",
+        "cell_id": "no-final-answer__graphify-plus__attempt-001",
+        "status": "invalid_artifact"
+      },
+      {
+        "type": "adapter_integrity_warning",
+        "severity": "warning",
+        "source_shard": "shard-002",
+        "cell_id": "no-final-answer__graphify-plus__attempt-001",
+        "message": "missing final answer emitted intentionally"
+      }
+    ]
+  },
+  "coverage": {
+    "schema_version": "lorq.coverage.v1alpha1",
+    "contract_version": "lorq.contract.v1alpha1",
+    "cell_count": 8,
+    "expected_cell_count": 9,
+    "cases": [
+      "no-final-answer",
+      "skipped-coverage",
+      "successful-comparison"
+    ],
+    "modes": [
+      "baseline",
+      "graphify",
+      "graphify-plus"
+    ],
+    "attempts": [
+      "attempt-001"
+    ],
+    "present_cell_ids": [
+      "no-final-answer__baseline__attempt-001",
+      "no-final-answer__graphify-plus__attempt-001",
+      "no-final-answer__graphify__attempt-001",
+      "skipped-coverage__baseline__attempt-001",
+      "skipped-coverage__graphify__attempt-001",
+      "successful-comparison__baseline__attempt-001",
+      "successful-comparison__graphify-plus__attempt-001",
+      "successful-comparison__graphify__attempt-001"
+    ],
+    "expected_cell_ids": [
+      "no-final-answer__baseline__attempt-001",
+      "no-final-answer__graphify-plus__attempt-001",
+      "no-final-answer__graphify__attempt-001",
+      "skipped-coverage__baseline__attempt-001",
+      "skipped-coverage__graphify-plus__attempt-001",
+      "skipped-coverage__graphify__attempt-001",
+      "successful-comparison__baseline__attempt-001",
+      "successful-comparison__graphify-plus__attempt-001",
+      "successful-comparison__graphify__attempt-001"
+    ],
+    "status_counts": {
+      "completed": 5,
+      "invalid_artifact": 3
+    },
+    "missing_cells": [
+      "skipped-coverage__graphify-plus__attempt-001"
+    ],
+    "skipped_cells": []
+  },
+  "fingerprints": {
+    "unique_fingerprint_count": 1
+  },
+  "case_packs": [
+    {
+      "case_id": "no-final-answer",
+      "path": "reports/cases/no-final-answer/case-review.json",
+      "markdown_path": "reports/cases/no-final-answer/case-review.md",
+      "cell_count": 3,
+      "missing_expected_cell_count": 0,
+      "score_summary": {
+        "average": 1.0,
+        "min": 1.0,
+        "max": 1.0
+      }
+    },
+    {
+      "case_id": "skipped-coverage",
+      "path": "reports/cases/skipped-coverage/case-review.json",
+      "markdown_path": "reports/cases/skipped-coverage/case-review.md",
+      "cell_count": 2,
+      "missing_expected_cell_count": 1,
+      "score_summary": {
+        "average": 3.5,
+        "min": 3.0,
+        "max": 4.0
+      }
+    },
+    {
+      "case_id": "successful-comparison",
+      "path": "reports/cases/successful-comparison/case-review.json",
+      "markdown_path": "reports/cases/successful-comparison/case-review.md",
+      "cell_count": 3,
+      "missing_expected_cell_count": 0,
+      "score_summary": {
+        "average": 4.0,
+        "min": 3.0,
+        "max": 5.0
+      }
+    }
+  ]
+}

@@ -1,0 +1,8 @@
+{
+  "schema_version": "lorq.report.v1alpha1",
+  "contract_version": "lorq.contract.v1alpha1",
+  "report": "reports/report.json",
+  "markdown": "reports/report.md",
+  "primary_judgement": "judge-primary",
+  "case_count": 3
+}

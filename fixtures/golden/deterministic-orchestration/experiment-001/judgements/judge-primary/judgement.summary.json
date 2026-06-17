@@ -1,0 +1,24 @@
+{
+  "schema_version": "lorq.judgement-summary.v1alpha1",
+  "contract_version": "lorq.contract.v1alpha1",
+  "judgement_name": "judge-primary",
+  "cell_count": 8,
+  "judged_cell_count": 8,
+  "missing_fixture_cell_count": 0,
+  "missing_expected_cell_count": 1,
+  "score_summary": {
+    "overall_average": 2.75,
+    "overall_min": 1.0,
+    "overall_max": 5.0,
+    "by_mode": {
+      "baseline": 2.333,
+      "graphify": 3.0,
+      "graphify-plus": 3.0
+    },
+    "by_case": {
+      "no-final-answer": 1.0,
+      "skipped-coverage": 3.5,
+      "successful-comparison": 4.0
+    }
+  }
+}

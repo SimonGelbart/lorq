@@ -1,0 +1,140 @@
+{
+  "case_id": "no-final-answer",
+  "mode_id": "baseline",
+  "ok": false,
+  "hard_passed": 1,
+  "hard_total": 5,
+  "soft_passed": 0,
+  "soft_total": 1,
+  "answer": {
+    "ok": false,
+    "hard_passed": 1,
+    "hard_total": 5,
+    "soft_passed": 0,
+    "soft_total": 0,
+    "checks": [
+      {
+        "type": "answer_not_empty",
+        "ok": false,
+        "message": "answer.md should contain a non-empty final answer"
+      },
+      {
+        "type": "required_symbol",
+        "value": "LedgerWriter",
+        "ok": false
+      },
+      {
+        "type": "required_file",
+        "value": "src/ledger.py",
+        "ok": false
+      },
+      {
+        "type": "required_file_exists",
+        "value": "src/ledger.py",
+        "ok": true,
+        "message": "required file path should exist in the evaluated worktree"
+      },
+      {
+        "type": "minimum_existing_file_references",
+        "ok": false,
+        "actual": 0,
+        "expected_min": 1
+      }
+    ],
+    "evidence": {
+      "answer_empty": true,
+      "file_references": [],
+      "file_reference_count": 0,
+      "unique_file_reference_count": 0,
+      "worktree": "<golden-worktree-root>/shard-002/baseline__neutral__no-final-answer__r1",
+      "worktree_available": true,
+      "existing_file_references": [],
+      "existing_file_reference_count": 0,
+      "missing_file_references": [],
+      "missing_file_reference_count": 0,
+      "unknown_file_references": [],
+      "unknown_file_reference_count": 0
+    }
+  },
+  "behavior": {
+    "ok": true,
+    "hard_passed": 0,
+    "hard_total": 0,
+    "soft_passed": 0,
+    "soft_total": 1,
+    "checks": [
+      {
+        "type": "source_verification_observed",
+        "ok": false,
+        "actual_source_read_count": 0,
+        "soft": true
+      }
+    ],
+    "trace": {
+      "trace_source": "normalized",
+      "normalized_event_count": 1,
+      "normalized_event_type_counts": {
+        "tool.command": 1
+      },
+      "command_count": 1,
+      "commands": [
+        {
+          "line": 1,
+          "raw_line": null,
+          "sequence": null,
+          "command": "read src/ledger.py",
+          "type": "tool.command",
+          "tool": null,
+          "backend": null
+        }
+      ],
+      "search_count": 0,
+      "source_read_count": 0,
+      "graphify_command_count": 0,
+      "graphify_query_count": 0,
+      "generic_graphify_query_count": 0,
+      "specific_graphify_query_count": 0,
+      "graphify_queries": [],
+      "source_after_graph": false,
+      "first_graph_line": null,
+      "first_source_line": null
+    }
+  },
+  "checks": [
+    {
+      "type": "answer_not_empty",
+      "ok": false,
+      "message": "answer.md should contain a non-empty final answer"
+    },
+    {
+      "type": "required_symbol",
+      "value": "LedgerWriter",
+      "ok": false
+    },
+    {
+      "type": "required_file",
+      "value": "src/ledger.py",
+      "ok": false
+    },
+    {
+      "type": "required_file_exists",
+      "value": "src/ledger.py",
+      "ok": true,
+      "message": "required file path should exist in the evaluated worktree"
+    },
+    {
+      "type": "minimum_existing_file_references",
+      "ok": false,
+      "actual": 0,
+      "expected_min": 1
+    },
+    {
+      "type": "source_verification_observed",
+      "ok": false,
+      "actual_source_read_count": 0,
+      "soft": true
+    }
+  ],
+  "schema_version": "agent-eval.validation-result.v1",
+  "contract_version": "agent-eval.contract.v1"
+}

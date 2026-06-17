@@ -397,3 +397,29 @@ def test_committed_fingerprint_mismatch_edge_fixture_fails_by_default():
         assert "incompatible repository fingerprints" in str(exc)
     else:  # pragma: no cover
         raise AssertionError("expected committed fingerprint-mismatch fixture to fail")
+
+
+def test_frozen_deterministic_golden_outputs_have_full_loop_and_no_local_paths():
+    root = Path(__file__).resolve().parents[2]
+    golden = root / "fixtures" / "golden" / "deterministic-orchestration"
+    expected_missing = "skipped-coverage__graphify-plus__attempt-001"
+
+    report = read_json(golden / "experiment-001" / "reports" / "report.json")
+    assert report["schema_version"] == "lorq.report.v1alpha1"
+    assert report["package"]["package_id"] == "deterministic-benchmark"
+    assert report["summary"]["cell_count"] == 8
+    assert report["summary"]["expected_cell_count"] == 9
+    assert report["summary"]["missing_expected_cell_ids"] == [expected_missing]
+    assert report["primary_judgement"]["source"]["real_llm_used"] is False
+    assert (golden / "experiment-001" / "reports" / "report.md").exists()
+    for case_id in ["successful-comparison", "no-final-answer", "skipped-coverage"]:
+        assert (golden / "experiment-001" / "reports" / "cases" / case_id / "case-review.json").exists()
+        assert (golden / "experiment-001" / "reports" / "cases" / case_id / "case-review.md").exists()
+
+    for path in golden.rglob("*"):
+        if not path.is_file():
+            continue
+        text = path.read_text(encoding="utf-8")
+        assert "/mnt/data" not in text
+        assert "lorq_finish" not in text
+        assert "internal/generated" not in text

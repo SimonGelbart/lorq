@@ -1,0 +1,19 @@
+{
+  "schema_version": "lorq.merge-log.v1alpha1",
+  "contract_version": "lorq.contract.v1alpha1",
+  "operation": "python-v0-single-shard-export",
+  "inputs": [
+    {
+      "kind": "python-v0-results",
+      "label": "shard-002"
+    }
+  ],
+  "outputs": [
+    {
+      "kind": "lorq-run-shard",
+      "package_id": "deterministic-benchmark",
+      "shard_id": "shard-002"
+    }
+  ],
+  "cell_count": 5
+}

@@ -1,0 +1,11 @@
+package_schema_version: 1
+package_kind: merged_experiment
+package_id: deterministic-benchmark
+created_by:
+  name: agent-eval python-v0
+  implementation: python
+  version: 1.2.4
+shards:
+  - shard-001
+  - shard-002
+cell_count: 8

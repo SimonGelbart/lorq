@@ -1,0 +1,50 @@
+{
+  "schema_version": "lorq.cell-judgement.v1alpha1",
+  "contract_version": "lorq.contract.v1alpha1",
+  "judgement_name": "judge-primary",
+  "cell_id": "successful-comparison__graphify-plus__attempt-001",
+  "case_id": "successful-comparison",
+  "mode_id": "graphify-plus",
+  "attempt_id": "attempt-001",
+  "cell_status": "completed",
+  "status": "judged",
+  "source": {
+    "backend": "deterministic-fake",
+    "fixture_schema_version": "lorq.fake-judge-fixture.v1alpha1",
+    "fixture_file": "fake-judge.yaml",
+    "fixture_key": "successful-comparison|graphify-plus|1",
+    "real_llm_used": false
+  },
+  "quality": {
+    "ok": true,
+    "overall_score": 5.0,
+    "confidence": "high",
+    "dimensions": {
+      "correctness": {
+        "score": 5,
+        "rationale": "Fixture score is deterministic."
+      },
+      "completeness": {
+        "score": 5,
+        "rationale": "Fixture coverage is predefined."
+      },
+      "evidence": {
+        "score": 5,
+        "rationale": "Evidence is present only when final answer is present."
+      }
+    },
+    "strengths": [
+      "source-backed deterministic answer"
+    ],
+    "weaknesses": [],
+    "missing_or_questionable": [],
+    "summary": "graphify-plus fixture answer is deterministically scored for successful comparison."
+  },
+  "input_refs": {
+    "cell_result": "runs/shard-001/cells/successful-comparison__graphify-plus__attempt-001/cell_result.json",
+    "cell_dir": "runs/shard-001/cells/successful-comparison__graphify-plus__attempt-001",
+    "final_answer": "runs/shard-001/cells/successful-comparison__graphify-plus__attempt-001/answer.md",
+    "validation": "runs/shard-001/cells/successful-comparison__graphify-plus__attempt-001/validation.json",
+    "trace": "runs/shard-001/cells/successful-comparison__graphify-plus__attempt-001/events.normalized.jsonl"
+  }
+}

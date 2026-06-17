@@ -1,0 +1,2 @@
+{"case": "skipped-coverage", "command": "read src/ledger.py", "fixture_sequence": 0, "mode": "graphify", "type": "tool.command"}
+{"fixture_sequence": 1, "text": "partial coverage answer emitted", "type": "assistant.message"}

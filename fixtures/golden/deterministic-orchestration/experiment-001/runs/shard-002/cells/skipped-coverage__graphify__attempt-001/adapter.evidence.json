@@ -1,0 +1,17 @@
+{
+  "schema_version": "lorq.fake-agent-evidence.v1alpha1",
+  "fixture_schema_version": "lorq.fake-agent-fixture.v1alpha1",
+  "fixture_file": "../../../conformance/deterministic-orchestration/fixtures/fake-agent.yaml",
+  "case": "skipped-coverage",
+  "mode": "graphify",
+  "attempt": 1,
+  "status": "completed",
+  "final_answer_present": true,
+  "artifacts": [
+    {
+      "path": "src/ledger.py",
+      "kind": "source-reference"
+    }
+  ],
+  "integrity_warnings": []
+}
