@@ -120,7 +120,7 @@ This is a planning and alignment increment. It does not need to produce final co
 
 ### Current branch status
 
-Increment 1 is frozen on `feat/migration` once the committed golden fixture under `fixtures/golden/deterministic-orchestration/` validates. The frozen slice includes two deterministic shards, one merged experiment package, one deterministic judgement pass, canonical JSON and Markdown reports, per-case review packs, and hand-authored negative merge fixtures.
+Increment 1 is frozen on `feat/migration`. Increment 2 has started with a .NET package validation foundation that reads the committed Python golden fixtures, validates package/index references, and rejects duplicate-cell and fingerprint-mismatch merge inputs with stable error codes.
 
 ### Quantifiable exit criteria
 
@@ -215,7 +215,7 @@ It must include at least:
 
 ### Current branch status
 
-Increment 1 is frozen on `feat/migration` once the committed golden fixture under `fixtures/golden/deterministic-orchestration/` validates. The frozen slice includes two deterministic shards, one merged experiment package, one deterministic judgement pass, canonical JSON and Markdown reports, per-case review packs, and hand-authored negative merge fixtures.
+Increment 1 is frozen on `feat/migration`. Increment 2 has started with a .NET package validation foundation that reads the committed Python golden fixtures, validates package/index references, and rejects duplicate-cell and fingerprint-mismatch merge inputs with stable error codes.
 
 ### Quantifiable exit criteria
 
@@ -283,7 +283,7 @@ This increment is about domain modeling, package IO, validation, and fixture com
 
 ### Current branch status
 
-Increment 1 is frozen on `feat/migration` once the committed golden fixture under `fixtures/golden/deterministic-orchestration/` validates. The frozen slice includes two deterministic shards, one merged experiment package, one deterministic judgement pass, canonical JSON and Markdown reports, per-case review packs, and hand-authored negative merge fixtures.
+Increment 1 is frozen on `feat/migration`. Increment 2 has started with a .NET package validation foundation that reads the committed Python golden fixtures, validates package/index references, and rejects duplicate-cell and fingerprint-mismatch merge inputs with stable error codes.
 
 ### Quantifiable exit criteria
 
@@ -362,7 +362,7 @@ It should still avoid real LLM/runtime integration. The goal is orchestration co
 
 ### Current branch status
 
-Increment 1 is frozen on `feat/migration` once the committed golden fixture under `fixtures/golden/deterministic-orchestration/` validates. The frozen slice includes two deterministic shards, one merged experiment package, one deterministic judgement pass, canonical JSON and Markdown reports, per-case review packs, and hand-authored negative merge fixtures.
+Increment 1 is frozen on `feat/migration`. Increment 2 has started with a .NET package validation foundation that reads the committed Python golden fixtures, validates package/index references, and rejects duplicate-cell and fingerprint-mismatch merge inputs with stable error codes.
 
 ### Quantifiable exit criteria
 
@@ -443,7 +443,7 @@ It must keep quality judgement separate from execution/integrity.
 
 ### Current branch status
 
-Increment 1 is frozen on `feat/migration` once the committed golden fixture under `fixtures/golden/deterministic-orchestration/` validates. The frozen slice includes two deterministic shards, one merged experiment package, one deterministic judgement pass, canonical JSON and Markdown reports, per-case review packs, and hand-authored negative merge fixtures.
+Increment 1 is frozen on `feat/migration`. Increment 2 has started with a .NET package validation foundation that reads the committed Python golden fixtures, validates package/index references, and rejects duplicate-cell and fingerprint-mismatch merge inputs with stable error codes.
 
 ### Quantifiable exit criteria
 
@@ -552,7 +552,7 @@ adapter.exit_code
 
 ### Current branch status
 
-Increment 1 is frozen on `feat/migration` once the committed golden fixture under `fixtures/golden/deterministic-orchestration/` validates. The frozen slice includes two deterministic shards, one merged experiment package, one deterministic judgement pass, canonical JSON and Markdown reports, per-case review packs, and hand-authored negative merge fixtures.
+Increment 1 is frozen on `feat/migration`. Increment 2 has started with a .NET package validation foundation that reads the committed Python golden fixtures, validates package/index references, and rejects duplicate-cell and fingerprint-mismatch merge inputs with stable error codes.
 
 ### Quantifiable exit criteria
 
@@ -617,7 +617,7 @@ This increment validates integration paths. It should not turn into broad model-
 
 ### Current branch status
 
-Increment 1 is frozen on `feat/migration` once the committed golden fixture under `fixtures/golden/deterministic-orchestration/` validates. The frozen slice includes two deterministic shards, one merged experiment package, one deterministic judgement pass, canonical JSON and Markdown reports, per-case review packs, and hand-authored negative merge fixtures.
+Increment 1 is frozen on `feat/migration`. Increment 2 has started with a .NET package validation foundation that reads the committed Python golden fixtures, validates package/index references, and rejects duplicate-cell and fingerprint-mismatch merge inputs with stable error codes.
 
 ### Quantifiable exit criteria
 
@@ -678,7 +678,7 @@ This increment is about reliability, documentation, packaging, validation, and a
 
 ### Current branch status
 
-Increment 1 is frozen on `feat/migration` once the committed golden fixture under `fixtures/golden/deterministic-orchestration/` validates. The frozen slice includes two deterministic shards, one merged experiment package, one deterministic judgement pass, canonical JSON and Markdown reports, per-case review packs, and hand-authored negative merge fixtures.
+Increment 1 is frozen on `feat/migration`. Increment 2 has started with a .NET package validation foundation that reads the committed Python golden fixtures, validates package/index references, and rejects duplicate-cell and fingerprint-mismatch merge inputs with stable error codes.
 
 ### Quantifiable exit criteria
 

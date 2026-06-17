@@ -1,0 +1,10 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/Lorq.Cli/Lorq.Cli.csproj" />
+    <Project Path="src/Lorq.Core/Lorq.Core.csproj" />
+    <Project Path="src/Lorq.Reporting/Lorq.Reporting.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/Lorq.Core.Tests/Lorq.Core.Tests.csproj" />
+  </Folder>
+</Solution>

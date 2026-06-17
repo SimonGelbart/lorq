@@ -1,0 +1,42 @@
+using Lorq.Core;
+
+namespace Lorq.Reporting;
+
+public static class ValidationSummaryRenderer
+{
+    public static object FromPackageResult(PackageValidationResult result)
+    {
+        return new
+        {
+            ok = result.Ok,
+            package = result.Package is null ? null : new
+            {
+                package_id = result.Package.PackageId,
+                package_kind = result.Package.PackageKind,
+                schema_version = result.Package.PackageSchemaVersion,
+                shards = result.Package.DeclaredShardIds,
+                run_shard_count = result.Package.RunShards.Count,
+                cell_count = result.Package.Cells.Count,
+                expected_cell_count = result.Package.ExpectedCellIds.Count,
+                missing_cell_count = result.Package.MissingCellIds.Count,
+                judgement_count = result.Package.Judgements.Count,
+                report_present = result.Package.Report is not null,
+                integrity_ok = result.Package.IntegrityOk,
+                integrity_warning_count = result.Package.IntegrityWarningCount,
+            },
+            diagnostics = result.Diagnostics,
+        };
+    }
+
+    public static object FromMergeInputResult(MergeInputValidationResult result)
+    {
+        return new
+        {
+            ok = result.Ok,
+            cell_count = result.CellIds.Count,
+            duplicate_cell_ids = result.DuplicateCellIds,
+            fingerprint_mismatch = result.FingerprintMismatch,
+            diagnostics = result.Diagnostics,
+        };
+    }
+}
