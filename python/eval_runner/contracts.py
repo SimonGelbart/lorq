@@ -23,4 +23,6 @@ def with_schema(data: dict[str, Any], schema_version: str) -> dict[str, Any]:
 LORQ_CONTRACT_VERSION = "lorq.contract.v1alpha1"
 LORQ_PACKAGE_SCHEMA_VERSION = 1
 LORQ_CELL_EVIDENCE_SCHEMA_VERSION = "lorq.cell-evidence.v1alpha1"
+LORQ_CELL_JUDGEMENT_SCHEMA_VERSION = "lorq.cell-judgement.v1alpha1"
+LORQ_JUDGEMENT_PASS_SCHEMA_VERSION = "lorq.judgement-pass.v1alpha1"
 

@@ -110,7 +110,7 @@ def test_export_lorq_run_shard_marks_missing_final_answer_as_integrity_warning(t
         {"type": "non_completed_cell", "cell_id": cell_id, "status": "no_final_answer", "severity": "warning"},
     ]
 
-from eval_runner.lorq_package import LorqPackageError, cell_id_for_parts, merge_lorq_run_shards
+from eval_runner.lorq_package import LorqPackageError, attach_lorq_deterministic_judgement, cell_id_for_parts, merge_lorq_run_shards
 
 
 def _write_lorq_shard(package_root: Path, *, shard_id: str, cells: list[dict]) -> None:
@@ -229,3 +229,87 @@ def test_merge_lorq_run_shards_fails_by_default_on_fingerprint_mismatch(tmp_path
         assert "incompatible repository fingerprints" in str(exc)
     else:  # pragma: no cover
         raise AssertionError("expected fingerprint mismatch merge failure")
+
+
+
+def _write_fake_judge_fixture(path: Path, entries: list[dict]) -> None:
+    import yaml
+
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(yaml.safe_dump({
+        "schema_version": "lorq.fake-judge-fixture.v1alpha1",
+        "judgements": entries,
+    }, sort_keys=False), encoding="utf-8")
+
+
+def test_attach_lorq_deterministic_judgement_writes_named_pass(tmp_path: Path):
+    package_root = tmp_path / "experiment"
+    cell_id = cell_id_for_parts("case-a", "baseline", 1)
+    _write_lorq_shard(package_root, shard_id="shard-001", cells=[{
+        "cell_id": cell_id,
+        "case_id": "case-a",
+        "mode_id": "baseline",
+        "attempt_id": "attempt-001",
+        "status": "completed",
+    }])
+    write_json(package_root / ".lorq" / "coverage.json", {
+        "schema_version": "lorq.coverage.v1alpha1",
+        "contract_version": "lorq.contract.v1alpha1",
+        "missing_cells": [cell_id_for_parts("case-a", "graphify", 1)],
+    })
+    fixture = tmp_path / "fake-judge.yaml"
+    _write_fake_judge_fixture(fixture, [{
+        "case": "case-a",
+        "mode": "baseline",
+        "attempt": 1,
+        "ok": True,
+        "overall_score": 4,
+        "confidence": "high",
+        "dimensions": {"correctness": {"score": 4, "rationale": "fixture"}},
+        "summary": "deterministic score",
+    }])
+
+    result = attach_lorq_deterministic_judgement(package_root, judge_name="judge-primary", fixture_file=fixture)
+
+    assert result["ok"] is True
+    assert result["judged_cell_count"] == 1
+    assert result["missing_expected_cell_ids"] == [cell_id_for_parts("case-a", "graphify", 1)]
+    assert result["score_summary"]["overall_average"] == 4.0
+
+    cell_judgement = read_json(package_root / "judgements" / "judge-primary" / "cells" / f"{cell_id}.json")
+    assert cell_judgement["schema_version"] == "lorq.cell-judgement.v1alpha1"
+    assert cell_judgement["quality"]["overall_score"] == 4.0
+    assert cell_judgement["source"]["backend"] == "deterministic-fake"
+    assert cell_judgement["source"]["real_llm_used"] is False
+
+    manifest = read_json(package_root / "judgements" / "judge-primary" / "judgement.manifest.json")
+    indexed_manifest = read_json(package_root / ".lorq" / "judgements" / "judge-primary.json")
+    assert manifest == indexed_manifest
+    assert manifest["judgement_name"] == "judge-primary"
+
+
+def test_attach_lorq_deterministic_judgement_fails_on_missing_present_cell_fixture(tmp_path: Path):
+    package_root = tmp_path / "experiment"
+    cell_id = cell_id_for_parts("case-a", "baseline", 1)
+    _write_lorq_shard(package_root, shard_id="shard-001", cells=[{
+        "cell_id": cell_id,
+        "case_id": "case-a",
+        "mode_id": "baseline",
+        "attempt_id": "attempt-001",
+        "status": "completed",
+    }])
+    fixture = tmp_path / "fake-judge.yaml"
+    _write_fake_judge_fixture(fixture, [{
+        "case": "other-case",
+        "mode": "baseline",
+        "attempt": 1,
+        "overall_score": 2,
+        "dimensions": {},
+    }])
+
+    try:
+        attach_lorq_deterministic_judgement(package_root, judge_name="judge-primary", fixture_file=fixture)
+    except LorqPackageError as exc:
+        assert "Missing deterministic judgement fixture entries" in str(exc)
+    else:  # pragma: no cover
+        raise AssertionError("expected missing deterministic judgement failure")

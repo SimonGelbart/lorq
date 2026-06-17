@@ -1,0 +1,103 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://lorq.local/schemas/lorq-cell-judgement.v1alpha.schema.json",
+  "title": "LORQ cell judgement v1-alpha",
+  "type": "object",
+  "additionalProperties": true,
+  "required": [
+    "schema_version",
+    "contract_version",
+    "judgement_name",
+    "cell_id",
+    "quality",
+    "source"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "lorq.cell-judgement.v1alpha1"
+    },
+    "contract_version": {
+      "const": "lorq.contract.v1alpha1"
+    },
+    "judgement_name": {
+      "type": "string",
+      "minLength": 1
+    },
+    "cell_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "case_id": {
+      "type": ["string", "null"]
+    },
+    "mode_id": {
+      "type": ["string", "null"]
+    },
+    "attempt_id": {
+      "type": ["string", "null"]
+    },
+    "cell_status": {
+      "type": ["string", "null"]
+    },
+    "status": {
+      "type": "string"
+    },
+    "source": {
+      "type": "object",
+      "required": ["backend", "real_llm_used"],
+      "properties": {
+        "backend": {
+          "type": "string"
+        },
+        "fixture_schema_version": {
+          "type": ["string", "null"]
+        },
+        "fixture_file": {
+          "type": "string"
+        },
+        "fixture_key": {
+          "type": ["string", "null"]
+        },
+        "real_llm_used": {
+          "const": false
+        }
+      }
+    },
+    "quality": {
+      "type": "object",
+      "required": ["ok", "overall_score", "dimensions"],
+      "properties": {
+        "ok": {
+          "type": "boolean"
+        },
+        "overall_score": {
+          "type": ["number", "null"]
+        },
+        "confidence": {
+          "type": ["string", "null"]
+        },
+        "dimensions": {
+          "type": "object"
+        },
+        "strengths": {
+          "type": "array",
+          "items": {"type": "string"}
+        },
+        "weaknesses": {
+          "type": "array",
+          "items": {"type": "string"}
+        },
+        "missing_or_questionable": {
+          "type": "array",
+          "items": {"type": "string"}
+        },
+        "summary": {
+          "type": "string"
+        }
+      }
+    },
+    "input_refs": {
+      "type": "object"
+    }
+  }
+}

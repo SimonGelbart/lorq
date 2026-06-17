@@ -6,15 +6,15 @@ purpose: >
   Markdown rendering, and per-case review packs.
 
 current_slice:
-  status: runnable_python_v0_agent_judge_and_merge_fixtures
+  status: runnable_python_v0_agent_judge_merge_and_package_judgement_fixtures
   implemented:
     - deterministic fake agent fixture
     - deterministic fake judge fixture
     - self-contained cases, modes, prompt style, rubric, and tiny repository
     - two candidate run-shard export path under internal/generated during sessions
     - migration-only package-level merge command with expected coverage
+    - package-level deterministic judgement attachment under judgements/judge-primary
   not_yet_implemented:
-    - package-level judge attachment
     - report.json and report.md rendering
     - committed golden outputs
 
@@ -84,7 +84,7 @@ judge_contract:
   backend: deterministic-fake
   deterministic: true
   fixture_file: fixtures/fake-judge.yaml
-  current_python_v0_scope: per-run optional judge adapter
+  current_python_v0_scope: per-run optional judge adapter and merged package judgement attachment
   future_lorq_scope: merged experiment package judgement pass
   output_root: judgements/judge-primary
   quality_source: fake fixture data

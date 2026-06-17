@@ -2,6 +2,39 @@
 
 All notable changes to LORQ should be documented here.
 
+## 2026-06-18 - Increment 1 fixture: deterministic package judgement
+
+### Roadmap position
+
+Current increment: Increment 1, Python frozen conformance baseline. This session added migration-only package-level deterministic judgement attachment for merged experiment packages.
+
+### Added
+
+- Added Python v0 `--judge-lorq-package` with `--lorq-judge-name` and `--lorq-judge-fixture` to attach a named no-LLM judgement pass to an existing v1-alpha LORQ package.
+- Added `attach_lorq_deterministic_judgement` to read `.lorq/cells/*.json`, match present cells to `fixtures/fake-judge.yaml`, and write `judgements/<name>/` plus `.lorq/judgements/<name>.json`.
+- Added v1-alpha cell judgement and judgement pass schemas under `schemas/`.
+- Added tests for successful package judgement attachment and missing deterministic fixture entries.
+
+### Changed
+
+- Updated deterministic benchmark metadata and Python v0 package docs to show package-level judgement attachment as implemented.
+- Added LORQ v1-alpha judgement contract constants to Python v0 contracts.
+
+### Validation
+
+Executed during this increment:
+
+- `cd python && python -m pytest -q` -> 82 passed.
+- `cd python && PYTHONPATH=. python -m eval_runner.cli --suite-root .. --validate-config` -> passed.
+- `cd python && PYTHONPATH=. python -m eval_runner.cli --suite-root ../fixtures/conformance/deterministic-orchestration --validate-config` -> passed.
+- `cd python && PYTHONPATH=. python -m eval_runner.cli --run-conformance` -> passed.
+- Attached `judge-primary` to the deterministic merged package under `internal/generated/deterministic-benchmark/experiment-001`; the pass judged 8 present cells and preserved 1 missing expected cell.
+
+### Known limitations
+
+- Canonical `reports/report.json`, Markdown report rendering, per-case packs, duplicate/fingerprint edge fixture packages, and committed golden outputs are still pending.
+- No roadmap amendment was required.
+
 ## 2026-06-18 - Increment 1 fixture: migration package merge
 
 ### Roadmap position

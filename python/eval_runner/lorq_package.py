@@ -8,7 +8,13 @@ from typing import Any
 import yaml
 
 from . import __version__
-from .contracts import LORQ_CELL_EVIDENCE_SCHEMA_VERSION, LORQ_CONTRACT_VERSION, LORQ_PACKAGE_SCHEMA_VERSION
+from .contracts import (
+    LORQ_CELL_EVIDENCE_SCHEMA_VERSION,
+    LORQ_CELL_JUDGEMENT_SCHEMA_VERSION,
+    LORQ_CONTRACT_VERSION,
+    LORQ_JUDGEMENT_PASS_SCHEMA_VERSION,
+    LORQ_PACKAGE_SCHEMA_VERSION,
+)
 from .lifecycle import load_run_records
 from .utils import ensure_dir, read_json, read_text, rm_rf, slug, write_json, write_text
 
@@ -519,4 +525,245 @@ def merge_lorq_run_shards(
         "missing_cell_ids": coverage["missing_cells"],
         "duplicate_cell_ids": [item["cell_id"] for item in duplicate_cells],
         "fingerprint_mismatch": fingerprint_mismatch,
+    }
+
+
+def _load_yaml_or_json(path: Path) -> dict[str, Any]:
+    if not path.exists():
+        raise LorqPackageError(f"Missing deterministic judge fixture: {path}")
+    text = path.read_text(encoding="utf-8")
+    data = json.loads(text or "{}") if path.suffix.lower() == ".json" else (yaml.safe_load(text) or {})
+    if not isinstance(data, dict):
+        raise LorqPackageError(f"Expected mapping in deterministic judge fixture: {path}")
+    return data
+
+
+def _normalise_fixture_judgements(data: dict[str, Any]) -> dict[str, dict[str, Any]]:
+    raw = data.get("judgements") or data.get("judgments") or {}
+    judgements: dict[str, dict[str, Any]] = {}
+    if isinstance(raw, dict):
+        for key, value in raw.items():
+            if isinstance(value, dict):
+                judgements[str(key)] = dict(value)
+        return judgements
+    if isinstance(raw, list):
+        for item in raw:
+            if not isinstance(item, dict):
+                continue
+            case_id = item.get("case") or item.get("case_id")
+            mode_id = item.get("mode") or item.get("mode_id")
+            attempt = item.get("attempt") or item.get("repetition") or 1
+            judgements[f"{case_id}|{mode_id}|{attempt}"] = dict(item)
+    return judgements
+
+
+def _attempt_number(attempt_id: Any) -> int | None:
+    text = str(attempt_id or "")
+    if text.startswith("attempt-"):
+        text = text.removeprefix("attempt-")
+    try:
+        return int(text)
+    except ValueError:
+        return None
+
+
+def _cell_fixture_keys(cell: dict[str, Any]) -> list[str]:
+    case_id = str(cell.get("case_id") or "")
+    mode_id = str(cell.get("mode_id") or "")
+    attempt_id = cell.get("attempt_id") or "attempt-001"
+    attempt_number = _attempt_number(attempt_id)
+    keys: list[str] = []
+    if attempt_number is not None:
+        keys.append(f"{case_id}|{mode_id}|{attempt_number}")
+    keys.append(f"{case_id}|{mode_id}|{attempt_id}")
+    # Preserve deterministic fixture compatibility for single-attempt cells.
+    if attempt_number != 1:
+        keys.append(f"{case_id}|{mode_id}|1")
+    return keys
+
+
+def _quality_from_fixture_payload(payload: dict[str, Any]) -> dict[str, Any]:
+    dimensions = payload.get("dimensions") if isinstance(payload.get("dimensions"), dict) else {}
+    scores: list[float] = []
+    for value in dimensions.values():
+        if isinstance(value, dict):
+            try:
+                scores.append(float(value.get("score")))
+            except (TypeError, ValueError):
+                continue
+    overall = payload.get("overall_score")
+    try:
+        overall_score = float(overall)
+    except (TypeError, ValueError):
+        overall_score = round(sum(scores) / len(scores), 3) if scores else None
+    return {
+        "ok": bool(payload.get("ok", overall_score is not None)),
+        "overall_score": overall_score,
+        "confidence": payload.get("confidence"),
+        "dimensions": dimensions,
+        "strengths": payload.get("strengths") or [],
+        "weaknesses": payload.get("weaknesses") or [],
+        "missing_or_questionable": payload.get("missing_or_questionable") or [],
+        "summary": payload.get("summary") or "",
+    }
+
+
+def _score_summary(cell_judgements: list[dict[str, Any]]) -> dict[str, Any]:
+    scores: list[float] = []
+    by_mode: dict[str, list[float]] = {}
+    by_case: dict[str, list[float]] = {}
+    for judgement in cell_judgements:
+        score = ((judgement.get("quality") or {}).get("overall_score"))
+        if score is None:
+            continue
+        score_value = float(score)
+        scores.append(score_value)
+        by_mode.setdefault(str(judgement.get("mode_id")), []).append(score_value)
+        by_case.setdefault(str(judgement.get("case_id")), []).append(score_value)
+
+    def _average(values: list[float]) -> float | None:
+        return round(sum(values) / len(values), 3) if values else None
+
+    return {
+        "overall_average": _average(scores),
+        "overall_min": min(scores) if scores else None,
+        "overall_max": max(scores) if scores else None,
+        "by_mode": {key: _average(values) for key, values in sorted(by_mode.items())},
+        "by_case": {key: _average(values) for key, values in sorted(by_case.items())},
+    }
+
+
+def _input_refs_for_cell(cell: dict[str, Any]) -> dict[str, Any]:
+    refs = cell.get("evidence_refs") if isinstance(cell.get("evidence_refs"), dict) else {}
+    return {
+        "cell_result": refs.get("cell_result"),
+        "cell_dir": refs.get("cell_dir"),
+        "final_answer": refs.get("final_answer"),
+        "validation": refs.get("validation"),
+        "trace": refs.get("trace"),
+    }
+
+
+def attach_lorq_deterministic_judgement(
+    package_root: Path,
+    *,
+    judge_name: str = "judge-primary",
+    fixture_file: Path,
+    strict: bool = True,
+) -> dict[str, Any]:
+    """Attach a deterministic fake judgement pass to a merged LORQ package.
+
+    This is migration-only Python v0 scaffolding. It reads cell evidence from a
+    merged package and fixture scores from a deterministic YAML/JSON file; it
+    does not call Codex, Copilot, a judge LLM, or any external service.
+    """
+    package_root = package_root.expanduser().resolve()
+    fixture_file = fixture_file.expanduser().resolve()
+    cells = _load_package_cells(package_root)
+    if not cells:
+        raise LorqPackageError(f"No LORQ cells found in package: {package_root}")
+
+    fixture = _load_yaml_or_json(fixture_file)
+    fixture_judgements = _normalise_fixture_judgements(fixture)
+    if not fixture_judgements:
+        raise LorqPackageError(f"No deterministic judgements found in fixture: {fixture_file}")
+
+    missing_fixture_cell_ids: list[str] = []
+    cell_judgements: list[dict[str, Any]] = []
+    for cell in sorted(cells, key=lambda item: str(item.get("cell_id"))):
+        cell_id = str(cell.get("cell_id"))
+        payload = None
+        matched_key = None
+        for key in _cell_fixture_keys(cell):
+            if key in fixture_judgements:
+                payload = fixture_judgements[key]
+                matched_key = key
+                break
+        if payload is None:
+            missing_fixture_cell_ids.append(cell_id)
+            continue
+        judgement = {
+            "schema_version": LORQ_CELL_JUDGEMENT_SCHEMA_VERSION,
+            "contract_version": LORQ_CONTRACT_VERSION,
+            "judgement_name": judge_name,
+            "cell_id": cell_id,
+            "case_id": cell.get("case_id"),
+            "mode_id": cell.get("mode_id"),
+            "attempt_id": cell.get("attempt_id"),
+            "cell_status": cell.get("status"),
+            "status": "judged",
+            "source": {
+                "backend": "deterministic-fake",
+                "fixture_schema_version": fixture.get("schema_version"),
+                "fixture_file": str(fixture_file),
+                "fixture_key": matched_key,
+                "real_llm_used": False,
+            },
+            "quality": _quality_from_fixture_payload(payload),
+            "input_refs": _input_refs_for_cell(cell),
+        }
+        cell_judgements.append(judgement)
+
+    if missing_fixture_cell_ids and strict:
+        raise LorqPackageError(f"Missing deterministic judgement fixture entries for cells: {missing_fixture_cell_ids}")
+
+    coverage = read_json(package_root / ".lorq" / "coverage.json", default={}) or {}
+    missing_expected = coverage.get("missing_cells") or []
+    if not isinstance(missing_expected, list):
+        missing_expected = []
+
+    judgement_dir = package_root / "judgements" / judge_name
+    cells_dir = judgement_dir / "cells"
+    ensure_dir(cells_dir)
+    ensure_dir(package_root / ".lorq" / "judgements")
+
+    for judgement in cell_judgements:
+        write_json(cells_dir / f"{judgement['cell_id']}.json", judgement)
+
+    manifest = {
+        "schema_version": LORQ_JUDGEMENT_PASS_SCHEMA_VERSION,
+        "contract_version": LORQ_CONTRACT_VERSION,
+        "judgement_name": judge_name,
+        "package_root": str(package_root),
+        "backend": "deterministic-fake",
+        "source": {
+            "fixture_schema_version": fixture.get("schema_version"),
+            "fixture_file": str(fixture_file),
+            "real_llm_used": False,
+        },
+        "cell_count": len(cells),
+        "judged_cell_count": len(cell_judgements),
+        "missing_fixture_cell_ids": missing_fixture_cell_ids,
+        "missing_expected_cell_ids": [str(item) for item in missing_expected],
+        "score_summary": _score_summary(cell_judgements),
+        "cell_judgement_refs": [
+            {"cell_id": item["cell_id"], "path": f"judgements/{judge_name}/cells/{item['cell_id']}.json"}
+            for item in cell_judgements
+        ],
+    }
+    write_json(judgement_dir / "judgement.manifest.json", manifest)
+    write_json(judgement_dir / "judgement.summary.json", {
+        "schema_version": "lorq.judgement-summary.v1alpha1",
+        "contract_version": LORQ_CONTRACT_VERSION,
+        "judgement_name": judge_name,
+        "cell_count": len(cells),
+        "judged_cell_count": len(cell_judgements),
+        "missing_fixture_cell_count": len(missing_fixture_cell_ids),
+        "missing_expected_cell_count": len(missing_expected),
+        "score_summary": manifest["score_summary"],
+    })
+    write_json(package_root / ".lorq" / "judgements" / f"{judge_name}.json", manifest)
+
+    return {
+        "schema_version": "lorq.judgement-attach-result.v1alpha1",
+        "contract_version": LORQ_CONTRACT_VERSION,
+        "ok": not missing_fixture_cell_ids,
+        "package_root": str(package_root),
+        "judgement_name": judge_name,
+        "backend": "deterministic-fake",
+        "cell_count": len(cells),
+        "judged_cell_count": len(cell_judgements),
+        "missing_fixture_cell_ids": missing_fixture_cell_ids,
+        "missing_expected_cell_ids": [str(item) for item in missing_expected],
+        "score_summary": manifest["score_summary"],
     }
