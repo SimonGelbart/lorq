@@ -21,7 +21,7 @@ New .NET code follows clean architecture boundaries, object-calisthenics discipl
 ```bash
 cd dotnet
 dotnet build Lorq.slnx
-dotnet test --solution Lorq.slnx --disable-logo --minimum-expected-tests 5
+dotnet test --solution Lorq.slnx --disable-logo --minimum-expected-tests 7
 ```
 
 Validate a frozen package:
@@ -29,6 +29,16 @@ Validate a frozen package:
 ```bash
 dotnet run --project src/Lorq.Cli -- \
   validate-package ../fixtures/golden/deterministic-orchestration/experiment-001
+```
+
+
+Rebuild package indexes from an existing package into a target package root:
+
+```bash
+dotnet run --project src/Lorq.Cli -- \
+  rebuild-indexes \
+  ../fixtures/golden/deterministic-orchestration/experiment-001 \
+  ../internal/generated/dotnet-index-rebuild/experiment-001
 ```
 
 Validate merge inputs for conflict checks:
