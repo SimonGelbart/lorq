@@ -4,6 +4,8 @@ import asyncio
 import importlib.util
 import json
 import os
+
+import yaml
 import shlex
 import shutil
 import sys
@@ -257,6 +259,226 @@ def _which(command: str) -> str | None:
         candidate = Path(executable).expanduser()
         return str(candidate) if candidate.exists() else None
     return shutil.which(executable)
+
+
+
+
+def _load_yaml_or_json(path: Path) -> dict[str, Any]:
+    if not path.exists():
+        raise FileNotFoundError(path)
+    text = path.read_text(encoding="utf-8")
+    if path.suffix.lower() == ".json":
+        data = json.loads(text or "{}")
+    else:
+        data = yaml.safe_load(text) or {}
+    if not isinstance(data, dict):
+        raise ValueError(f"Expected mapping in {path}")
+    return data
+
+
+def _cell_fixture_key(case_id: str | None, mode_id: str | None, attempt: int | str | None) -> str:
+    return f"{case_id or ''}|{mode_id or ''}|{attempt or 1}"
+
+
+def _read_run_identity(output_dir: Path) -> dict[str, Any]:
+    snapshots = output_dir / "snapshots"
+    case: dict[str, Any] = {}
+    mode: dict[str, Any] = {}
+    manifest: dict[str, Any] = {}
+    for target, path in (("case", snapshots / "case.json"), ("mode", snapshots / "mode.json"), ("manifest", output_dir / "run.manifest.json")):
+        if path.exists():
+            try:
+                loaded = json.loads(path.read_text(encoding="utf-8") or "{}")
+                if isinstance(loaded, dict):
+                    if target == "case":
+                        case = loaded
+                    elif target == "mode":
+                        mode = loaded
+                    else:
+                        manifest = loaded
+            except json.JSONDecodeError:
+                pass
+    return {
+        "case_id": case.get("id") or manifest.get("case"),
+        "mode_id": mode.get("id") or manifest.get("mode"),
+        "attempt": manifest.get("repetition") or 1,
+        "case": case,
+        "mode": mode,
+        "manifest": manifest,
+    }
+
+
+def _normalize_fixture_cells(data: dict[str, Any]) -> dict[str, dict[str, Any]]:
+    raw_cells = data.get("cells") or {}
+    cells: dict[str, dict[str, Any]] = {}
+    if isinstance(raw_cells, dict):
+        for key, value in raw_cells.items():
+            if isinstance(value, dict):
+                cells[str(key)] = dict(value)
+        return cells
+    if isinstance(raw_cells, list):
+        for item in raw_cells:
+            if not isinstance(item, dict):
+                continue
+            case_id = item.get("case") or item.get("case_id")
+            mode_id = item.get("mode") or item.get("mode_id")
+            attempt = item.get("attempt") or item.get("repetition") or 1
+            cells[_cell_fixture_key(str(case_id), str(mode_id), attempt)] = dict(item)
+    return cells
+
+
+def _event_from_fixture(event: dict[str, Any], sequence: int, *, elapsed_ms: int) -> dict[str, Any]:
+    out = dict(event)
+    out.setdefault("schema_version", "agent-eval.normalized-event.v1")
+    out.setdefault("event_index", sequence)
+    out.setdefault("timestamp_ms", elapsed_ms + sequence)
+    out.setdefault("type", out.get("event_type") or "fixture.event")
+    out.setdefault("event_type", out.get("type"))
+    out.setdefault("source", "deterministic-fake-agent")
+    return out
+
+
+@dataclass
+class DeterministicFakeAgent:
+    """No-LLM deterministic adapter used only for migration fixtures.
+
+    The adapter chooses one cell from a YAML/JSON fixture by reading the run
+    snapshots already written by Python v0. It writes the same surface files as
+    process-backed adapters plus an adapter evidence file, so migration tests can
+    exercise orchestration, evidence capture, status handling, and package export
+    without measuring LLM intelligence.
+    """
+
+    fixture_file: str
+    backend_id: str = "deterministic-fake"
+
+    def _load_cell(self, output_dir: Path) -> tuple[dict[str, Any], dict[str, Any], dict[str, Any]]:
+        fixture_path = Path(self.fixture_file).expanduser().resolve()
+        fixture = _load_yaml_or_json(fixture_path)
+        identity = _read_run_identity(output_dir)
+        key = _cell_fixture_key(str(identity.get("case_id")), str(identity.get("mode_id")), identity.get("attempt"))
+        cells = _normalize_fixture_cells(fixture)
+        default_cell = fixture.get("default_cell") if isinstance(fixture.get("default_cell"), dict) else {}
+        cell = cells.get(key) or cells.get(_cell_fixture_key(str(identity.get("case_id")), str(identity.get("mode_id")), 1))
+        if cell is None:
+            available = ", ".join(sorted(cells)) or "<none>"
+            raise KeyError(f"No deterministic fake cell for {key}; available: {available}")
+        merged = dict(default_cell)
+        merged.update(cell)
+        return fixture, identity, merged
+
+    def check_availability(self, cwd: Path | None = None) -> dict[str, Any]:
+        path = Path(self.fixture_file).expanduser()
+        if not path.is_absolute() and cwd is not None:
+            path = cwd / path
+        path = path.resolve()
+        exists = path.exists()
+        payload: dict[str, Any] = {
+            "backend": self.backend_id,
+            "available": exists,
+            "ok": exists,
+            "fixture_file": str(path),
+        }
+        if not exists:
+            payload["error_category"] = "fixture_not_found"
+            payload["message"] = f"Deterministic fake fixture not found: {path}"
+        return payload
+
+    def run(self, worktree: Path, prompt: str, output_dir: Path) -> dict[str, Any]:
+        write_text(output_dir / "prompt.txt", prompt)
+        fixture, identity, cell = self._load_cell(output_dir)
+
+        answer = str(cell.get("final_answer") or cell.get("answer") or "")
+        if answer and not answer.endswith("\n"):
+            answer += "\n"
+        status = str(cell.get("status") or "completed")
+        exit_code = int(cell.get("exit_code") if cell.get("exit_code") is not None else (124 if status == "timeout" else 0))
+        timed_out = bool(cell.get("timed_out", status == "timeout"))
+        elapsed_ms = int(cell.get("elapsed_ms") or 0)
+        error_category = cell.get("error_category")
+        if not error_category and timed_out:
+            error_category = "timeout"
+        if not error_category and status in {"no_final_answer", "invalid_artifact"}:
+            error_category = status
+
+        raw_events = cell.get("raw_events") or cell.get("events") or []
+        if not isinstance(raw_events, list):
+            raw_events = []
+        raw_jsonl_events = []
+        normalized_events = []
+        for i, event in enumerate(raw_events):
+            if not isinstance(event, dict):
+                continue
+            raw = dict(event)
+            raw.setdefault("type", raw.get("event_type") or "fixture.event")
+            raw.setdefault("fixture_sequence", i)
+            raw_jsonl_events.append(raw)
+            normalized_events.append(_event_from_fixture(raw, i, elapsed_ms=elapsed_ms))
+
+        stdout = "".join(json.dumps(event, sort_keys=True, ensure_ascii=False) + "\n" for event in raw_jsonl_events)
+        if not stdout and answer:
+            stdout = answer
+        stderr = str(cell.get("stderr") or "")
+        if stderr and not stderr.endswith("\n"):
+            stderr += "\n"
+
+        usage = normalize_usage(cell.get("usage") if isinstance(cell.get("usage"), dict) else {})
+        counts = {
+            "json_events": len(raw_jsonl_events),
+            "tool_events": sum(1 for event in raw_jsonl_events if "tool" in str(event.get("type", "")).lower()),
+            "command_events": sum(1 for event in raw_jsonl_events if "command" in str(event.get("type", "")).lower() or event.get("command")),
+        }
+        artifacts = cell.get("artifacts") if isinstance(cell.get("artifacts"), list) else []
+        integrity_warnings = cell.get("integrity_warnings") if isinstance(cell.get("integrity_warnings"), list) else []
+
+        write_text(output_dir / "stdout.raw.jsonl", stdout)
+        write_text(output_dir / "stdout.raw.txt", stdout)
+        write_text(output_dir / "stderr.txt", stderr)
+        write_text(output_dir / "answer.md", answer)
+        write_jsonl(output_dir / "events.normalized.jsonl", normalized_events)
+        write_json(output_dir / "events.summary.json", summarize_normalized_events(normalized_events))
+
+        evidence = {
+            "schema_version": "lorq.fake-agent-evidence.v1alpha1",
+            "fixture_schema_version": fixture.get("schema_version"),
+            "fixture_file": str(Path(self.fixture_file).expanduser().resolve()),
+            "case": identity.get("case_id"),
+            "mode": identity.get("mode_id"),
+            "attempt": identity.get("attempt"),
+            "status": status,
+            "final_answer_present": bool(answer.strip()),
+            "artifacts": artifacts,
+            "integrity_warnings": integrity_warnings,
+        }
+        write_json(output_dir / "adapter.evidence.json", evidence)
+
+        summary = {
+            "agent": self.backend_id,
+            "backend": self.backend_id,
+            "command": "deterministic fake fixture",
+            "input_mode": "fixture",
+            "output_format": "deterministic-fake-events",
+            "exit_code": exit_code,
+            "timed_out": timed_out,
+            "elapsed_ms": elapsed_ms,
+            "ok": exit_code == 0 and not timed_out,
+            "error_category": error_category,
+            "status": status,
+            "final_answer_present": bool(answer.strip()),
+            "usage": usage,
+            "counts": counts,
+            "artifacts": artifacts,
+            "integrity_warnings": integrity_warnings,
+            "fixture": {
+                "schema_version": fixture.get("schema_version"),
+                "path": str(Path(self.fixture_file).expanduser().resolve()),
+                "case": identity.get("case_id"),
+                "mode": identity.get("mode_id"),
+                "attempt": identity.get("attempt"),
+            },
+        }
+        write_json(output_dir / "agent.summary.json", summary)
+        return summary
 
 
 @dataclass
@@ -670,7 +892,7 @@ class GitHubCopilotSdkAgent:
         return summary
 
 
-def create_agent(profile: dict[str, Any]) -> CliAgent | GitHubCopilotSdkAgent:
+def create_agent(profile: dict[str, Any]) -> CliAgent | GitHubCopilotSdkAgent | DeterministicFakeAgent:
     backend = str(profile.get("backend") or profile.get("type") or "codex").lower()
     command = str(profile.get("command") or ("copilot" if backend in {"copilot", "github-copilot-cli"} else "codex"))
     # Special portable placeholder for bundled fake/local Python agents.
@@ -710,6 +932,11 @@ def create_agent(profile: dict[str, Any]) -> CliAgent | GitHubCopilotSdkAgent:
         )
         agent.availability_timeout_seconds = availability_timeout_seconds
         return agent
+    if backend in {"fake", "deterministic-fake", "lorq-fake"}:
+        fixture_file = profile.get("fixture_file") or profile.get("scenario_file")
+        if not fixture_file:
+            raise ValueError("deterministic fake agent profiles require fixture_file")
+        return DeterministicFakeAgent(fixture_file=str(fixture_file))
     if backend in {"copilot-sdk", "github-copilot-sdk", "github-copilot-python-sdk"}:
         return GitHubCopilotSdkAgent(
             model=str(profile.get("model") or "gpt-5"),

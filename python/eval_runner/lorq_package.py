@@ -21,6 +21,7 @@ COPY_EVIDENCE_FILES = (
     "stdout.raw.txt",
     "stderr.txt",
     "active-skills.json",
+    "adapter.evidence.json",
 )
 
 

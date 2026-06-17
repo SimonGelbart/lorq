@@ -40,7 +40,37 @@
     },
     "judge": {
       "type": "object",
-      "additionalProperties": true
+      "additionalProperties": true,
+      "properties": {
+        "enabled": {
+          "type": "boolean"
+        },
+        "backend": {
+          "enum": [
+            "codex",
+            "deterministic-fake"
+          ]
+        },
+        "command": {
+          "type": "string"
+        },
+        "args": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "timeout_seconds": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "default_rubric": {
+          "type": "string"
+        },
+        "fixture_file": {
+          "type": "string"
+        }
+      }
     },
     "pricing": {
       "type": "object",

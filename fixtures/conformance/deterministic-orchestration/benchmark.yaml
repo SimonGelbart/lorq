@@ -5,6 +5,19 @@ purpose: >
   merge, judgement attachment, integrity checks, JSON report canonicalization,
   Markdown rendering, and per-case review packs.
 
+current_slice:
+  status: runnable_python_v0_agent_and_judge_fixtures
+  implemented:
+    - deterministic fake agent fixture
+    - deterministic fake judge fixture
+    - self-contained cases, modes, prompt style, rubric, and tiny repository
+    - two candidate run-shard export path under internal/generated during sessions
+  not_yet_implemented:
+    - package-level merge command
+    - package-level judge attachment
+    - report.json and report.md rendering
+    - committed golden outputs
+
 shape:
   cases: 3
   modes: 3
@@ -26,29 +39,52 @@ modes:
   - id: graphify
   - id: graphify-plus
 
+planned_shards:
+  - id: shard-001
+    cells:
+      cases: [successful-comparison]
+      modes: [baseline, graphify, graphify-plus]
+  - id: shard-002
+    cells:
+      cases: [no-final-answer]
+      modes: [baseline, graphify, graphify-plus]
+    additional_partial_coverage_cells:
+      cases: [skipped-coverage]
+      modes: [baseline, graphify]
+      intentionally_omitted:
+        - skipped-coverage/graphify-plus/attempt-001
+
 required_edge_fixtures:
   - id: duplicate-cell-conflict
     type: duplicate_cell
     expected_phase: merge
     expected_result: fail_by_default
+    status: planned
   - id: fingerprint-mismatch
     type: fingerprint_mismatch
     expected_phase: merge
     expected_result: fail_by_default
+    status: planned
   - id: missing-final-answer
     type: invalid_artifact
     expected_phase: package_validation
     expected_result: integrity_warning
+    status: covered_by_fake_agent_fixture
 
 adapter_contract:
-  result_file: cell_result.json
-  final_answer_file: final_answer.md
-  artifacts_dir: artifacts
-  trace_dir: trace
+  backend: deterministic-fake
+  fixture_file: fixtures/fake-agent.yaml
+  evidence_file: adapter.evidence.json
+  result_file_after_export: cell_result.json
+  final_answer_file_after_export: answer.md
+  trace_file_after_export: events.normalized.jsonl
   stdout_stderr_role: logs_only
 
 judge_contract:
+  backend: deterministic-fake
   deterministic: true
-  input_scope: merged experiment package
+  fixture_file: fixtures/fake-judge.yaml
+  current_python_v0_scope: per-run optional judge adapter
+  future_lorq_scope: merged experiment package judgement pass
   output_root: judgements/judge-primary
   quality_source: fake fixture data

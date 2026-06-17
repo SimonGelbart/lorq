@@ -1,0 +1,4 @@
+You are evaluating repository evidence. Use only the provided repository context.
+
+Task:
+{task}

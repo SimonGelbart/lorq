@@ -1,0 +1,15 @@
+id: no-final-answer
+title: Missing final answer fixture
+category: migration-baseline
+difficulty: easy
+repo: deterministic-demo
+task: |
+  Produce a final answer about LedgerWriter. The fake adapter intentionally emits no final answer for this case.
+validation:
+  required_symbols:
+    - LedgerWriter
+  required_files:
+    - src/ledger.py
+  required_evidence:
+    min_existing_file_references: 1
+rubric: repository-exploration

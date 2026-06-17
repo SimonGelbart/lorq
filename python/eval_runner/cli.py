@@ -9,7 +9,7 @@ from .cases import load_cases, select_cases
 from .config import load_config
 from .agents import check_agent_availability, create_agent, resolve_agent_profile, split_args
 from .modes import load_modes, select_modes
-from .judge import CodexCliJudge
+from .judge import CodexCliJudge, DeterministicFakeJudge
 from .prompts import load_prompt_style, render_prompt, validate_prompt_styles_dir
 from .reports import compare_result_sets, explain_run_markdown, load_run_record_from_path, write_reports
 from .repositories import inspect_repository, load_repositories, resolve_repository
@@ -45,7 +45,7 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     parser.add_argument("--dirty-policy", choices=["warn", "fail", "allow"], help="How to handle dirty local Git repositories: warn (default), fail, or allow")
     parser.add_argument("--setup-scope", choices=["none", "per-run", "per-case", "per-mode"], help="Override setup scope. Default is per-run. per-case is an alias for per-run; per-mode is deprecated and rejected for real runs.")
     parser.add_argument("--agent-profile", default=None, help="Agent profile id from agent_profiles in config, e.g. codex or copilot")
-    parser.add_argument("--agent-backend", choices=["codex", "copilot", "copilot-sdk", "generic"], default=None, help="Override agent backend type")
+    parser.add_argument("--agent-backend", choices=["codex", "copilot", "copilot-sdk", "generic", "deterministic-fake"], default=None, help="Override agent backend type")
     parser.add_argument("--agent-model", default=None, help="Override SDK/model name for agent profiles that support it")
     parser.add_argument("--agent-reasoning-effort", default=None, help="Override reasoning effort for agent profiles that support it")
     parser.add_argument("--agent-permission-policy", default=None, help="Override permission policy for SDK agents, e.g. approve_all or manual")
@@ -60,10 +60,12 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     parser.add_argument("--no-isolate-agent-home", dest="isolate_agent_home", action="store_false", help="Disable per-run HOME/CODEX_HOME isolation even if enabled in the agent profile")
     parser.add_argument("--judge", dest="judge", action="store_true", default=None, help="Run optional LLM judge after deterministic validation")
     parser.add_argument("--no-judge", dest="judge", action="store_false", help="Disable optional LLM judge even if enabled in config")
+    parser.add_argument("--judge-backend", choices=["codex", "deterministic-fake"], default=None, help="Judge backend, default from config or codex")
     parser.add_argument("--judge-command", default=None, help="Judge command, default from config or codex")
     parser.add_argument("--judge-args", default=None, help="Judge args as a shell-like string, default from config or 'exec --json'")
     parser.add_argument("--judge-timeout", type=int, default=None, help="Judge timeout seconds")
     parser.add_argument("--judge-rubric", default=None, help="Override rubric id for all judged cases")
+    parser.add_argument("--judge-fixture-file", default=None, help="Deterministic fake judge fixture path, relative to suite root when not absolute")
     parser.add_argument("--setup-only", action="store_true", help="Materialize selected modes and run pre-agent setup in disposable check worktrees, then stop before agent execution")
     parser.add_argument("--dry-run", action="store_true", help="Print selected plan without running setup or agent")
     parser.add_argument("--report-only", action="store_true", help="Regenerate reports from an existing summary.json in --out")
@@ -87,6 +89,30 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     parser.add_argument("--lorq-package-id", default=None, help="Optional package id for --export-lorq-shard; default: output directory name")
     return parser.parse_args(argv)
 
+
+
+def _resolve_fixture_path(value: str | None, suite_root: Path) -> str | None:
+    if not value:
+        return value
+    path = Path(value).expanduser()
+    if not path.is_absolute():
+        path = suite_root / path
+    return str(path.resolve())
+
+
+def _resolve_profile_paths(profile: dict[str, Any], suite_root: Path) -> dict[str, Any]:
+    resolved = dict(profile)
+    for key in ("fixture_file", "scenario_file"):
+        if key in resolved and resolved[key] is not None:
+            resolved[key] = _resolve_fixture_path(str(resolved[key]), suite_root)
+    return resolved
+
+
+def _resolve_judge_config_paths(config: dict[str, Any], suite_root: Path) -> dict[str, Any]:
+    resolved = dict(config)
+    if resolved.get("fixture_file") is not None:
+        resolved["fixture_file"] = _resolve_fixture_path(str(resolved["fixture_file"]), suite_root)
+    return resolved
 
 def _agent_args_from_string(value: str | None, default: list[str]) -> list[str]:
     # Backwards-compatible wrapper; v0.6 uses shlex-aware split_args.
@@ -416,16 +442,19 @@ def _main(argv: list[str] | None = None) -> int:
                 for profile_id, profile in profiles.items():
                     merged = dict(profile or {})
                     merged.setdefault("id", profile_id)
+                    merged = _resolve_profile_paths(merged, suite_paths.root)
                     checks.append(check_agent_availability(merged, cwd=suite_paths.root))
             else:
                 profile_id, profile = resolve_agent_profile(config, profile_name=args.agent_profile)
                 profile = _apply_agent_overrides(profile, args)
                 profile.setdefault("id", profile_id)
+                profile = _resolve_profile_paths(profile, suite_paths.root)
                 checks.append(check_agent_availability(profile, cwd=suite_paths.root))
         else:
             profile_id, profile = resolve_agent_profile(config, profile_name=args.agent_profile)
             profile = _apply_agent_overrides(profile, args)
             profile.setdefault("id", profile_id)
+            profile = _resolve_profile_paths(profile, suite_paths.root)
             checks.append(check_agent_availability(profile, cwd=suite_paths.root))
 
         for check in checks:
@@ -528,20 +557,28 @@ def _main(argv: list[str] | None = None) -> int:
     agent_profile_id, agent_profile = resolve_agent_profile(config, profile_name=args.agent_profile)
     agent_profile = _apply_agent_overrides(agent_profile, args)
     agent_profile.setdefault("id", agent_profile_id)
+    agent_profile = _resolve_profile_paths(agent_profile, suite_paths.root)
     agent_check = check_agent_availability(agent_profile, cwd=suite_paths.root)
     if args.require_agent_available and not agent_check.get("ok"):
         import json as _json
         print("Selected agent backend is unavailable:", file=sys.stderr)
         print(_json.dumps(agent_check, indent=2, ensure_ascii=False), file=sys.stderr)
         return 2
-    judge_config = config.get("judge") or {}
+    judge_config = _resolve_judge_config_paths(config.get("judge") or {}, suite_paths.root)
     judge_enabled = bool(judge_config.get("enabled", False)) if args.judge is None else bool(args.judge)
+    judge_backend = args.judge_backend or judge_config.get("backend") or "codex"
     judge_command = args.judge_command or judge_config.get("command") or "codex"
     default_judge_args = judge_config.get("args") or ["exec", "--json"]
     judge_args = _agent_args_from_string(args.judge_args, default_judge_args)
     judge_timeout = args.judge_timeout or judge_config.get("timeout_seconds")
     judge_default_rubric = args.judge_rubric or judge_config.get("default_rubric")
-    judge = CodexCliJudge(judge_command, judge_args, judge_timeout) if judge_enabled else None
+    judge_fixture_file = _resolve_fixture_path(args.judge_fixture_file, suite_paths.root) or judge_config.get("fixture_file")
+    if judge_enabled and judge_backend in {"fake", "deterministic-fake", "lorq-fake"}:
+        if not judge_fixture_file:
+            raise ValueError("deterministic fake judge requires judge.fixture_file or --judge-fixture-file")
+        judge = DeterministicFakeJudge(str(judge_fixture_file))
+    else:
+        judge = CodexCliJudge(judge_command, judge_args, judge_timeout) if judge_enabled else None
     rubrics = load_rubrics(suite_paths.rubrics_dir) if judge_enabled else {}
 
     # Resolve selected repositories once for clear pre-run diagnostics and dirty-repo policy.

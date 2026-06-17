@@ -92,6 +92,24 @@ pytest
 ```
 
 
+## LORQ deterministic migration fixtures
+
+Python v0 includes a migration-only deterministic fake adapter and deterministic fake judge. They are used by `fixtures/conformance/deterministic-orchestration/` to generate reproducible evidence without real LLM calls.
+
+```yaml
+agent_profiles:
+  deterministic-fake:
+    backend: deterministic-fake
+    fixture_file: fixtures/fake-agent.yaml
+
+judge:
+  enabled: false
+  backend: deterministic-fake
+  fixture_file: fixtures/fake-judge.yaml
+```
+
+This is only a baseline generator for the future .NET migration; it is not the final LORQ product core.
+
 ## Token accounting and pricing
 
 `agent-eval` reports `input_tokens`, `cached_input_tokens`, `uncached_input_tokens`, `output_tokens`, `reasoning_output_tokens`, `total_tokens`, and `cache_hit_rate` when the backend trace exposes them.

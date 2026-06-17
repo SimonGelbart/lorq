@@ -12,7 +12,8 @@
         "copilot",
         "copilot-cli",
         "copilot-sdk",
-        "generic"
+        "generic",
+        "deterministic-fake"
       ]
     },
     "command": {
@@ -61,6 +62,14 @@
     "isolated_codex_home": {
       "type": "boolean",
       "description": "Alias for isolate_codex_home."
+    },
+    "fixture_file": {
+      "type": "string",
+      "description": "YAML/JSON deterministic fake agent fixture, relative to suite root when loaded by the CLI."
+    },
+    "scenario_file": {
+      "type": "string",
+      "description": "Alias for fixture_file for deterministic fake agent profiles."
     }
   }
 }
