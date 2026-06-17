@@ -1,0 +1,54 @@
+schema_version: lorq.deterministic-benchmark.v1alpha1
+benchmark_id: deterministic-orchestration-v1alpha
+purpose: >
+  Small no-LLM migration benchmark for proving LORQ run-shard export,
+  merge, judgement attachment, integrity checks, JSON report canonicalization,
+  Markdown rendering, and per-case review packs.
+
+shape:
+  cases: 3
+  modes: 3
+  attempts_per_case_mode: 1
+  shards: 2
+  judgement_passes:
+    - judge-primary
+
+cases:
+  - id: successful-comparison
+    expected_fixture_role: successful comparison
+  - id: no-final-answer
+    expected_fixture_role: timeout or no_final_answer case
+  - id: skipped-coverage
+    expected_fixture_role: intentionally skipped cell / incomplete coverage fixture
+
+modes:
+  - id: baseline
+  - id: graphify
+  - id: graphify-plus
+
+required_edge_fixtures:
+  - id: duplicate-cell-conflict
+    type: duplicate_cell
+    expected_phase: merge
+    expected_result: fail_by_default
+  - id: fingerprint-mismatch
+    type: fingerprint_mismatch
+    expected_phase: merge
+    expected_result: fail_by_default
+  - id: missing-final-answer
+    type: invalid_artifact
+    expected_phase: package_validation
+    expected_result: integrity_warning
+
+adapter_contract:
+  result_file: cell_result.json
+  final_answer_file: final_answer.md
+  artifacts_dir: artifacts
+  trace_dir: trace
+  stdout_stderr_role: logs_only
+
+judge_contract:
+  deterministic: true
+  input_scope: merged experiment package
+  output_root: judgements/judge-primary
+  quality_source: fake fixture data

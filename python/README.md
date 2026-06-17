@@ -159,6 +159,18 @@ Regenerate reports from existing run artifacts:
 agent-eval --report-only --out ./results/smoke
 ```
 
+Export existing Python v0 results into the v1-alpha LORQ run-shard package shape for migration fixtures:
+
+```bash
+PYTHONPATH=. python -m eval_runner.cli \
+  --suite-root .. \
+  --out ./results/smoke \
+  --export-lorq-shard ../internal/generated/shard-001 \
+  --lorq-shard-id shard-001
+```
+
+This exporter is migration-only. It does not run agents or judges; it normalizes existing evidence into the planned public LORQ package layout.
+
 Explain a single run:
 
 ```bash

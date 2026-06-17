@@ -1,0 +1,79 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://lorq.local/schemas/lorq-cell-evidence.v1alpha.schema.json",
+  "title": "LORQ v1-alpha cell evidence",
+  "type": "object",
+  "additionalProperties": true,
+  "required": [
+    "schema_version",
+    "contract_version",
+    "cell_id",
+    "case_id",
+    "mode_id",
+    "attempt_id",
+    "shard_id",
+    "status",
+    "adapter_output",
+    "evidence_refs"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "lorq.cell-evidence.v1alpha1"
+    },
+    "contract_version": {
+      "const": "lorq.contract.v1alpha1"
+    },
+    "cell_id": {
+      "type": "string"
+    },
+    "case_id": {
+      "type": "string"
+    },
+    "mode_id": {
+      "type": "string"
+    },
+    "attempt_id": {
+      "type": "string"
+    },
+    "shard_id": {
+      "type": "string"
+    },
+    "status": {
+      "enum": [
+        "completed",
+        "skipped",
+        "timeout",
+        "no_final_answer",
+        "setup_failed",
+        "adapter_failed",
+        "invalid_artifact",
+        "judge_failed",
+        "unknown"
+      ]
+    },
+    "fingerprint": {
+      "type": "object"
+    },
+    "adapter_output": {
+      "type": "object",
+      "required": [
+        "status",
+        "final_answer_present",
+        "adapter",
+        "usage",
+        "counts",
+        "timing",
+        "trace",
+        "validation",
+        "artifacts"
+      ]
+    },
+    "evidence_refs": {
+      "type": "object",
+      "required": [
+        "cell_dir",
+        "cell_result"
+      ]
+    }
+  }
+}

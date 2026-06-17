@@ -14,6 +14,7 @@ from .prompts import load_prompt_style, render_prompt, validate_prompt_styles_di
 from .reports import compare_result_sets, explain_run_markdown, load_run_record_from_path, write_reports
 from .repositories import inspect_repository, load_repositories, resolve_repository
 from .rubrics import load_rubrics, resolve_rubric
+from .lorq_package import export_lorq_run_shard
 from .lifecycle import clean_results_root, clean_worktree_root, list_generated_worktrees, load_run_records, prune_git_worktrees, remove_execution_path, write_generated_marker, write_lifecycle_event
 from .metadata import write_environment_files, write_run_snapshots
 from .utils import ensure_dir, read_json, slug, write_json
@@ -81,6 +82,9 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     parser.add_argument("--version", action="store_true", help="Print evaluator version and exit")
     parser.add_argument("--run-conformance", action="store_true", help="Run the built-in no-token conformance fixture and exit")
     parser.add_argument("--conformance-out", help="Optional output directory for --run-conformance")
+    parser.add_argument("--export-lorq-shard", help="Migration-only: export existing Python v0 --out results into a v1-alpha LORQ run-shard package at this directory")
+    parser.add_argument("--lorq-shard-id", default="shard-001", help="Shard id to write into --export-lorq-shard; default: shard-001")
+    parser.add_argument("--lorq-package-id", default=None, help="Optional package id for --export-lorq-shard; default: output directory name")
     return parser.parse_args(argv)
 
 
@@ -507,6 +511,18 @@ def _main(argv: list[str] | None = None) -> int:
         run_records = load_run_records(output_root)
         write_reports(output_root, run_records, pricing=pricing_config)
         print(f"Regenerated reports for {len(run_records)} run(s): {output_root}")
+        return 0
+
+    if args.export_lorq_shard:
+        import json as _json
+        package_root = Path(args.export_lorq_shard).expanduser().resolve()
+        result = export_lorq_run_shard(
+            output_root,
+            package_root,
+            shard_id=args.lorq_shard_id,
+            package_id=args.lorq_package_id,
+        )
+        print(_json.dumps(result, indent=2, ensure_ascii=False))
         return 0
 
     agent_profile_id, agent_profile = resolve_agent_profile(config, profile_name=args.agent_profile)
