@@ -16,7 +16,7 @@ benchmark.yaml          Target benchmark shape and remaining edge fixtures.
 
 ## Current runnable slice
 
-The current slice can produce two Python v0 result shards and export them into LORQ v1-alpha run-shard packages:
+The current slice can produce two Python v0 result shards, export them into LORQ v1-alpha run-shard packages, and merge those shards into a migration experiment package:
 
 ```bash
 cd python
@@ -40,6 +40,20 @@ PYTHONPATH=. python -m eval_runner.cli \
 ```
 
 Generate the second candidate shard by running `no-final-answer` for all modes, then `skipped-coverage` for only `baseline,graphify` with `--resume`; this intentionally leaves one omitted cell for coverage-review work in the future merge/report increment.
+
+
+Merge the two exported shards:
+
+```bash
+cd python
+PYTHONPATH=. python -m eval_runner.cli \
+  --merge-lorq-shards ../../internal/generated/deterministic-benchmark/shard-001 ../../internal/generated/deterministic-benchmark/shard-002 \
+  --lorq-merge-out ../../internal/generated/deterministic-benchmark/experiment-001 \
+  --lorq-package-id deterministic-benchmark \
+  --lorq-benchmark ../fixtures/conformance/deterministic-orchestration/benchmark.yaml
+```
+
+The merged package intentionally reports one missing expected cell: `skipped-coverage__graphify-plus__attempt-001`.
 
 ## Scope boundary
 

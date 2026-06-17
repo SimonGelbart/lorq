@@ -109,3 +109,123 @@ def test_export_lorq_run_shard_marks_missing_final_answer_as_integrity_warning(t
         {"type": "missing_final_answer", "cell_id": cell_id, "severity": "warning"},
         {"type": "non_completed_cell", "cell_id": cell_id, "status": "no_final_answer", "severity": "warning"},
     ]
+
+from eval_runner.lorq_package import LorqPackageError, cell_id_for_parts, merge_lorq_run_shards
+
+
+def _write_lorq_shard(package_root: Path, *, shard_id: str, cells: list[dict]) -> None:
+    for cell in cells:
+        cell_id = cell["cell_id"]
+        cell.setdefault("schema_version", "lorq.cell-evidence.v1alpha1")
+        cell.setdefault("contract_version", "lorq.contract.v1alpha1")
+        cell.setdefault("shard_id", shard_id)
+        cell.setdefault("source", {"implementation": "test"})
+        cell.setdefault("fingerprint", {"repo": "demo", "repo_type": "local", "ref": "HEAD", "commit": "abc", "dirty": False, "is_git_repo": True})
+        cell.setdefault("adapter_output", {"final_answer_present": True, "usage": {}, "counts": {}, "trace": {}, "validation": {}})
+        cell.setdefault("evidence_refs", {"cell_dir": f"runs/{shard_id}/cells/{cell_id}", "cell_result": f"runs/{shard_id}/cells/{cell_id}/cell_result.json"})
+        write_json(package_root / ".lorq" / "cells" / f"{cell_id}.json", cell)
+        write_json(package_root / "runs" / shard_id / "cells" / cell_id / "cell_result.json", cell)
+        if cell.get("adapter_warning"):
+            write_json(package_root / "runs" / shard_id / "cells" / cell_id / "adapter.evidence.json", {"integrity_warnings": [cell["adapter_warning"]]})
+    write_json(package_root / "runs" / shard_id / "shard.manifest.json", {
+        "schema_version": "lorq.run-shard-manifest.v1alpha1",
+        "contract_version": "lorq.contract.v1alpha1",
+        "shard_id": shard_id,
+        "cell_count": len(cells),
+        "cell_ids": sorted(cell["cell_id"] for cell in cells),
+    })
+    write_json(package_root / ".lorq" / "integrity.json", {
+        "schema_version": "lorq.integrity.v1alpha1",
+        "contract_version": "lorq.contract.v1alpha1",
+        "ok": True,
+        "warnings": [],
+    })
+
+
+def test_merge_lorq_run_shards_builds_experiment_indexes_and_missing_coverage(tmp_path: Path):
+    shard_001 = tmp_path / "shard-001"
+    shard_002 = tmp_path / "shard-002"
+    baseline_cell = cell_id_for_parts("case-a", "baseline", 1)
+    graphify_cell = cell_id_for_parts("case-a", "graphify", 1)
+    _write_lorq_shard(shard_001, shard_id="shard-001", cells=[{
+        "cell_id": baseline_cell,
+        "case_id": "case-a",
+        "mode_id": "baseline",
+        "attempt_id": "attempt-001",
+        "status": "completed",
+        "adapter_warning": "preserved adapter warning",
+    }])
+    _write_lorq_shard(shard_002, shard_id="shard-002", cells=[{
+        "cell_id": graphify_cell,
+        "case_id": "case-a",
+        "mode_id": "graphify",
+        "attempt_id": "attempt-001",
+        "status": "completed",
+    }])
+    benchmark = tmp_path / "benchmark.yaml"
+    benchmark.write_text(
+        "shape:\n  attempts_per_case_mode: 1\ncases:\n  - id: case-a\nmodes:\n  - id: baseline\n  - id: graphify\n  - id: graphify-plus\n",
+        encoding="utf-8",
+    )
+
+    result = merge_lorq_run_shards([shard_001, shard_002], tmp_path / "experiment", package_id="experiment-001", benchmark_file=benchmark)
+
+    missing = cell_id_for_parts("case-a", "graphify-plus", 1)
+    assert result["ok"] is True
+    assert result["cell_count"] == 2
+    assert result["expected_cell_count"] == 3
+    assert result["missing_cell_ids"] == [missing]
+    assert (tmp_path / "experiment" / "runs" / "shard-001" / "cells" / baseline_cell / "cell_result.json").exists()
+    assert (tmp_path / "experiment" / "runs" / "shard-002" / "cells" / graphify_cell / "cell_result.json").exists()
+
+    coverage = read_json(tmp_path / "experiment" / ".lorq" / "coverage.json")
+    assert coverage["missing_cells"] == [missing]
+    integrity = read_json(tmp_path / "experiment" / ".lorq" / "integrity.json")
+    warning_types = [warning["type"] for warning in integrity["warnings"]]
+    assert "missing_expected_cell" in warning_types
+    assert "adapter_integrity_warning" in warning_types
+    assert integrity["ok"] is True
+
+
+def test_merge_lorq_run_shards_fails_by_default_on_duplicate_cells(tmp_path: Path):
+    cell_id = cell_id_for_parts("case-a", "baseline", 1)
+    shard_001 = tmp_path / "shard-001"
+    shard_002 = tmp_path / "shard-002"
+    cell = {"cell_id": cell_id, "case_id": "case-a", "mode_id": "baseline", "attempt_id": "attempt-001", "status": "completed"}
+    _write_lorq_shard(shard_001, shard_id="shard-001", cells=[dict(cell)])
+    _write_lorq_shard(shard_002, shard_id="shard-002", cells=[dict(cell)])
+
+    try:
+        merge_lorq_run_shards([shard_001, shard_002], tmp_path / "experiment")
+    except LorqPackageError as exc:
+        assert "Duplicate LORQ cell ids" in str(exc)
+    else:  # pragma: no cover - explicit assertion message is clearer.
+        raise AssertionError("expected duplicate cell merge failure")
+
+
+def test_merge_lorq_run_shards_fails_by_default_on_fingerprint_mismatch(tmp_path: Path):
+    shard_001 = tmp_path / "shard-001"
+    shard_002 = tmp_path / "shard-002"
+    _write_lorq_shard(shard_001, shard_id="shard-001", cells=[{
+        "cell_id": cell_id_for_parts("case-a", "baseline", 1),
+        "case_id": "case-a",
+        "mode_id": "baseline",
+        "attempt_id": "attempt-001",
+        "status": "completed",
+        "fingerprint": {"repo": "demo", "repo_type": "local", "ref": "HEAD", "commit": "abc", "dirty": False, "is_git_repo": True},
+    }])
+    _write_lorq_shard(shard_002, shard_id="shard-002", cells=[{
+        "cell_id": cell_id_for_parts("case-a", "graphify", 1),
+        "case_id": "case-a",
+        "mode_id": "graphify",
+        "attempt_id": "attempt-001",
+        "status": "completed",
+        "fingerprint": {"repo": "demo", "repo_type": "local", "ref": "HEAD", "commit": "def", "dirty": False, "is_git_repo": True},
+    }])
+
+    try:
+        merge_lorq_run_shards([shard_001, shard_002], tmp_path / "experiment")
+    except LorqPackageError as exc:
+        assert "incompatible repository fingerprints" in str(exc)
+    else:  # pragma: no cover
+        raise AssertionError("expected fingerprint mismatch merge failure")

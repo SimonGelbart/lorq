@@ -14,7 +14,7 @@ from .prompts import load_prompt_style, render_prompt, validate_prompt_styles_di
 from .reports import compare_result_sets, explain_run_markdown, load_run_record_from_path, write_reports
 from .repositories import inspect_repository, load_repositories, resolve_repository
 from .rubrics import load_rubrics, resolve_rubric
-from .lorq_package import export_lorq_run_shard
+from .lorq_package import LorqPackageError, export_lorq_run_shard, merge_lorq_run_shards
 from .lifecycle import clean_results_root, clean_worktree_root, list_generated_worktrees, load_run_records, prune_git_worktrees, remove_execution_path, write_generated_marker, write_lifecycle_event
 from .metadata import write_environment_files, write_run_snapshots
 from .utils import ensure_dir, read_json, slug, write_json
@@ -86,7 +86,11 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     parser.add_argument("--conformance-out", help="Optional output directory for --run-conformance")
     parser.add_argument("--export-lorq-shard", help="Migration-only: export existing Python v0 --out results into a v1-alpha LORQ run-shard package at this directory")
     parser.add_argument("--lorq-shard-id", default="shard-001", help="Shard id to write into --export-lorq-shard; default: shard-001")
-    parser.add_argument("--lorq-package-id", default=None, help="Optional package id for --export-lorq-shard; default: output directory name")
+    parser.add_argument("--lorq-package-id", default=None, help="Optional package id for --export-lorq-shard or --merge-lorq-shards; default: output directory name")
+    parser.add_argument("--merge-lorq-shards", nargs="+", help="Migration-only: merge one or more v1-alpha LORQ run-shard packages")
+    parser.add_argument("--lorq-merge-out", help="Output directory for --merge-lorq-shards")
+    parser.add_argument("--lorq-benchmark", help="Optional deterministic benchmark.yaml used to compute expected cells for merge coverage")
+    parser.add_argument("--lorq-allow-incompatible", action="store_true", help="Allow duplicate cells or fingerprint mismatches during migration-only LORQ merge and mark integrity instead of failing")
     return parser.parse_args(argv)
 
 
@@ -395,6 +399,26 @@ def _main(argv: list[str] | None = None) -> int:
 
     if args.run_conformance:
         return _run_conformance(args)
+
+    if args.merge_lorq_shards:
+        import json as _json
+        if not args.lorq_merge_out:
+            print("--merge-lorq-shards requires --lorq-merge-out", file=sys.stderr)
+            return 2
+        benchmark_file = Path(args.lorq_benchmark).expanduser().resolve() if args.lorq_benchmark else None
+        try:
+            result = merge_lorq_run_shards(
+                [Path(value) for value in args.merge_lorq_shards],
+                Path(args.lorq_merge_out),
+                package_id=args.lorq_package_id,
+                benchmark_file=benchmark_file,
+                strict=not args.lorq_allow_incompatible,
+            )
+        except LorqPackageError as exc:
+            print(f"LORQ merge failed: {exc}", file=sys.stderr)
+            return 2
+        print(_json.dumps(result, indent=2, ensure_ascii=False))
+        return 0 if result.get("ok") else 2
 
     suite_paths, config = load_config(Path(args.suite_root), args.config)
 

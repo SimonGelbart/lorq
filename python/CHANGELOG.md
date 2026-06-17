@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.2.7-lorq-merge
+
+- Add migration-only `--merge-lorq-shards` and `--lorq-merge-out` for v1-alpha LORQ run-shard packages.
+- Add expected-cell coverage from deterministic `benchmark.yaml` via `--lorq-benchmark`.
+- Fail merge by default on duplicate cell IDs and repository fingerprint mismatches.
+- Preserve adapter-level integrity warnings from `adapter.evidence.json` in package integrity output.
+- Add tests for merge success, missing coverage, duplicate cells, and fingerprint mismatch.
+
 ## 1.2.6-lorq-deterministic-fixtures
 
 - Add `backend: deterministic-fake` for no-LLM migration benchmark cells.

@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://lorq.dev/schemas/lorq-package-merge-result.v1alpha.schema.json",
+  "title": "LORQ package merge result v1-alpha",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "contract_version",
+    "ok",
+    "package_root",
+    "package_id",
+    "shard_ids",
+    "cell_count",
+    "expected_cell_count",
+    "missing_cell_ids",
+    "duplicate_cell_ids",
+    "fingerprint_mismatch"
+  ],
+  "properties": {
+    "schema_version": {"const": "lorq.package-merge-result.v1alpha1"},
+    "contract_version": {"const": "lorq.contract.v1alpha1"},
+    "ok": {"type": "boolean"},
+    "package_root": {"type": "string"},
+    "package_id": {"type": "string"},
+    "shard_ids": {"type": "array", "items": {"type": "string"}},
+    "cell_count": {"type": "integer", "minimum": 0},
+    "expected_cell_count": {"type": "integer", "minimum": 0},
+    "missing_cell_ids": {"type": "array", "items": {"type": "string"}},
+    "duplicate_cell_ids": {"type": "array", "items": {"type": "string"}},
+    "fingerprint_mismatch": {"type": "boolean"}
+  },
+  "additionalProperties": true
+}
