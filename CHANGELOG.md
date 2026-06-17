@@ -2,6 +2,35 @@
 
 All notable changes to LORQ should be documented here.
 
+## 2026-06-18 - Increment 1 preparation: repo boundary and agent operating rules
+
+### Roadmap position
+
+Current increment: preparing for Increment 1, the Python frozen conformance baseline. This session preserved direction and repository hygiene before benchmark implementation.
+
+### Added
+
+- Added `.agents/` with reusable LORQ agent operating rules for roadmap alignment, source-control boundaries, validation, and deterministic benchmark discipline.
+- Added `.agents/README.md` to explain why the rules are source-controlled and where session-specific material belongs.
+- Added a session handoff under `internal/handoffs/` for non-source-controlled workspace continuity.
+
+### Changed
+
+- Documented `.agents/` in the root repository layout in `README.md`.
+
+### Validation
+
+Executed during this increment:
+
+- `cd python && python -m pytest -q` -> 71 passed.
+- `cd python && PYTHONPATH=. python -m eval_runner.cli --suite-root .. --validate-config` -> passed.
+- `cd python && PYTHONPATH=. python -m eval_runner.cli --run-conformance` -> passed.
+
+### Known limitations
+
+- No deterministic orchestration benchmark, fake agent adapter, fake judge adapter, or canonical v1 package exporter was added in this increment.
+- No roadmap amendment was required.
+
 ## 2026-06-18 - Increment 0: repository bootstrap artifact
 
 ### Roadmap position

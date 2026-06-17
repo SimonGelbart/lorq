@@ -10,6 +10,7 @@ LORQ is not primarily an LLM intelligence benchmark. The product goal is orchest
 
 ```text
 lorq/
+  .agents/           Source-controlled reusable AI-agent operating rules.
   cases/             Shared benchmark case definitions.
   modes/             Shared mode definitions.
   pricing/           Shared pricing profiles.
