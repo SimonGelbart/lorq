@@ -4,6 +4,10 @@ This directory contains the future LORQ v1 implementation.
 
 The Python v0 deterministic orchestration baseline is now frozen under `fixtures/golden/deterministic-orchestration/`. The .NET work starts from package IO and validation against that baseline before adding run, merge, judge, report, or industrial adapters.
 
+## Engineering standard
+
+New .NET code follows clean architecture boundaries, object-calisthenics discipline in domain code, modern C# where it adds value, deliberate pattern use, and TUnit tests through Microsoft.Testing.Platform on .NET 10. See `docs/engineering-guidelines.md`.
+
 ## Current projects
 
 - `Lorq.Cli` - command-line entry point. Currently exposes validation-only bootstrap commands.
@@ -17,7 +21,7 @@ The Python v0 deterministic orchestration baseline is now frozen under `fixtures
 ```bash
 cd dotnet
 dotnet build Lorq.slnx
-dotnet run --project tests/Lorq.Core.Tests
+dotnet test --solution Lorq.slnx --disable-logo --minimum-expected-tests 5
 ```
 
 Validate a frozen package:
@@ -36,7 +40,7 @@ dotnet run --project src/Lorq.Cli -- \
   ../fixtures/conformance/deterministic-orchestration/edge-fixtures/duplicate-cell-conflict/shard-b
 ```
 
-See `docs/package-validation.md` for the validator scope and stable error codes.
+See `docs/package-validation.md` for the validator scope and stable error codes. See `docs/engineering-guidelines.md` for .NET architecture, style, testing, and pattern rules.
 
 ## Not implemented yet
 
