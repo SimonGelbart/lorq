@@ -53,6 +53,54 @@ public sealed class CommandOptionsParserTests
         await Assert.That(result.Options.AdapterWorkingDirectory).IsEqualTo(".");
     }
 
+
+
+    [Test]
+    public async Task ParsesCodexProfileRunOptions()
+    {
+        var result = LorqCommandOptionsParser.ParseRun(new[]
+        {
+            "--no-judge",
+            "--out",
+            "shard-001",
+            "--adapter-command",
+            "lorq-codex-wrapper",
+            "--adapter-profile",
+            "codex-cli",
+            "--codex-command",
+            "codex-test",
+            "--codex-arg",
+            "exec",
+            "--codex-arg",
+            "--json",
+        });
+
+        await Assert.That(result.Ok).IsTrue().Because(result.ErrorMessage ?? "parse failed");
+        await Assert.That(result.Options!.AdapterProfile).IsEqualTo("codex-cli");
+        await Assert.That(result.Options.CodexCommand).IsEqualTo("codex-test");
+        await Assert.That(result.Options.CodexArguments).IsEquivalentTo(new[] { "exec", "--json" });
+    }
+
+
+
+
+    [Test]
+    public async Task RejectsCodexProfileWithoutWrapperCommand()
+    {
+        var result = LorqCommandOptionsParser.ParseRun(new[]
+        {
+            "--no-judge",
+            "--out",
+            "shard-001",
+            "--adapter-profile",
+            "codex-cli",
+        });
+
+        await Assert.That(result.Ok).IsFalse();
+        await Assert.That(result.ErrorMessage).Contains("--adapter-command");
+    }
+
+
     [Test]
     public async Task RejectsIncompleteJudgeOptions()
     {

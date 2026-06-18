@@ -10,4 +10,7 @@ public sealed record RunOptions(
     bool NoJudge,
     string? AdapterCommand,
     IReadOnlyList<string> AdapterArguments,
-    string? AdapterWorkingDirectory) : CommandOptions;
+    string? AdapterWorkingDirectory,
+    string? AdapterProfile,
+    string? CodexCommand,
+    IReadOnlyList<string> CodexArguments) : CommandOptions;

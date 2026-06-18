@@ -120,7 +120,7 @@ This is a planning and alignment increment. It does not need to produce final co
 
 ### Current branch status
 
-Increment 1 is frozen on `feat/migration`. Increment 2 is complete: .NET validates the frozen package model, rebuilds deterministic indexes, merges frozen run shards, attaches deterministic fake judgements, renders deterministic reports, and proves full package-level byte parity against the Python golden baseline. Increment 3 has started with the file-based one-shot adapter protocol contract, a CLI command-handler quality gate, deterministic `run --no-judge` for frozen benchmark shards, and external one-shot file adapter invocation; general .NET repository orchestration, Codex, and Copilot runtime behavior remain future work.
+Increment 1 is frozen on `feat/migration`. Increment 2 is complete: .NET validates the frozen package model, rebuilds deterministic indexes, merges frozen run shards, attaches deterministic fake judgements, renders deterministic reports, and proves full package-level byte parity against the Python golden baseline. Increment 3 has started with the file-based one-shot adapter protocol contract, a CLI command-handler quality gate, deterministic `run --no-judge` for frozen benchmark shards, and external one-shot file adapter invocation, and a Codex-oriented process profile for wrapper-based adapters; general .NET repository orchestration, direct Codex runtime behavior, and Copilot SDK runtime behavior remain future work.
 
 ### Quantifiable exit criteria
 
@@ -215,7 +215,7 @@ It must include at least:
 
 ### Current branch status
 
-Increment 1 is frozen on `feat/migration`. Increment 2 is complete: .NET validates the frozen package model, rebuilds deterministic indexes, merges frozen run shards, attaches deterministic fake judgements, renders deterministic reports, and proves full package-level byte parity against the Python golden baseline. Increment 3 has started with the file-based one-shot adapter protocol contract, a CLI command-handler quality gate, deterministic `run --no-judge` for frozen benchmark shards, and external one-shot file adapter invocation; general .NET repository orchestration, Codex, and Copilot runtime behavior remain future work.
+Increment 1 is frozen on `feat/migration`. Increment 2 is complete: .NET validates the frozen package model, rebuilds deterministic indexes, merges frozen run shards, attaches deterministic fake judgements, renders deterministic reports, and proves full package-level byte parity against the Python golden baseline. Increment 3 has started with the file-based one-shot adapter protocol contract, a CLI command-handler quality gate, deterministic `run --no-judge` for frozen benchmark shards, and external one-shot file adapter invocation, and a Codex-oriented process profile for wrapper-based adapters; general .NET repository orchestration, direct Codex runtime behavior, and Copilot SDK runtime behavior remain future work.
 
 ### Quantifiable exit criteria
 
@@ -283,7 +283,7 @@ This increment is about domain modeling, package IO, validation, and fixture com
 
 ### Current branch status
 
-Increment 1 is frozen on `feat/migration`. Increment 2 is complete: .NET validates the frozen package model, rebuilds deterministic indexes, merges frozen run shards, attaches deterministic fake judgements, renders deterministic reports, and proves full package-level byte parity against the Python golden baseline. Increment 3 has started with the file-based one-shot adapter protocol contract, a CLI command-handler quality gate, deterministic `run --no-judge` for frozen benchmark shards, and external one-shot file adapter invocation; general .NET repository orchestration, Codex, and Copilot runtime behavior remain future work.
+Increment 1 is frozen on `feat/migration`. Increment 2 is complete: .NET validates the frozen package model, rebuilds deterministic indexes, merges frozen run shards, attaches deterministic fake judgements, renders deterministic reports, and proves full package-level byte parity against the Python golden baseline. Increment 3 has started with the file-based one-shot adapter protocol contract, a CLI command-handler quality gate, deterministic `run --no-judge` for frozen benchmark shards, and external one-shot file adapter invocation, and a Codex-oriented process profile for wrapper-based adapters; general .NET repository orchestration, direct Codex runtime behavior, and Copilot SDK runtime behavior remain future work.
 
 ### Quantifiable exit criteria
 
@@ -334,6 +334,11 @@ Before implementing `lorq run --no-judge`, the .NET CLI was refactored into type
 The first runtime slice now supports deterministic `run --no-judge` for planned shards in `fixtures/conformance/deterministic-orchestration/benchmark.yaml`. It invokes the deterministic fake file adapter by default, can launch external one-shot file adapters through the same evidence contract, writes full adapter evidence per cell, creates a run-shard package, and rebuilds `.lorq` indexes. This is still not general repository orchestration, Codex, or Copilot runtime integration.
 
 
+### 7.2 Codex-oriented process profile
+
+The first Codex integration step is intentionally a file-adapter wrapper profile, not direct Codex execution. `run --no-judge` can pass `--adapter-profile codex-cli`, `--codex-command`, and repeated `--codex-arg` values to an external wrapper process. The wrapper remains responsible for turning Codex-specific output into the full LORQ evidence contract. Deterministic tests use a local test host and do not invoke real Codex.
+
+
 ### Outcome
 
 Make the shard-safe execution model work in .NET using the deterministic fake adapter.
@@ -371,7 +376,7 @@ It should still avoid real LLM/runtime integration. The goal is orchestration co
 
 ### Current branch status
 
-Increment 1 is frozen on `feat/migration`. Increment 2 is complete: .NET validates the frozen package model, rebuilds deterministic indexes, merges frozen run shards, attaches deterministic fake judgements, renders deterministic reports, and proves full package-level byte parity against the Python golden baseline. Increment 3 has started with the file-based one-shot adapter protocol contract, a CLI command-handler quality gate, deterministic `run --no-judge` for frozen benchmark shards, and external one-shot file adapter invocation; general .NET repository orchestration, Codex, and Copilot runtime behavior remain future work.
+Increment 1 is frozen on `feat/migration`. Increment 2 is complete: .NET validates the frozen package model, rebuilds deterministic indexes, merges frozen run shards, attaches deterministic fake judgements, renders deterministic reports, and proves full package-level byte parity against the Python golden baseline. Increment 3 has started with the file-based one-shot adapter protocol contract, a CLI command-handler quality gate, deterministic `run --no-judge` for frozen benchmark shards, and external one-shot file adapter invocation, and a Codex-oriented process profile for wrapper-based adapters; general .NET repository orchestration, direct Codex runtime behavior, and Copilot SDK runtime behavior remain future work.
 
 ### Quantifiable exit criteria
 
@@ -452,7 +457,7 @@ It must keep quality judgement separate from execution/integrity.
 
 ### Current branch status
 
-Increment 1 is frozen on `feat/migration`. Increment 2 is complete: .NET validates the frozen package model, rebuilds deterministic indexes, merges frozen run shards, attaches deterministic fake judgements, renders deterministic reports, and proves full package-level byte parity against the Python golden baseline. Increment 3 has started with the file-based one-shot adapter protocol contract, a CLI command-handler quality gate, deterministic `run --no-judge` for frozen benchmark shards, and external one-shot file adapter invocation; general .NET repository orchestration, Codex, and Copilot runtime behavior remain future work.
+Increment 1 is frozen on `feat/migration`. Increment 2 is complete: .NET validates the frozen package model, rebuilds deterministic indexes, merges frozen run shards, attaches deterministic fake judgements, renders deterministic reports, and proves full package-level byte parity against the Python golden baseline. Increment 3 has started with the file-based one-shot adapter protocol contract, a CLI command-handler quality gate, deterministic `run --no-judge` for frozen benchmark shards, and external one-shot file adapter invocation, and a Codex-oriented process profile for wrapper-based adapters; general .NET repository orchestration, direct Codex runtime behavior, and Copilot SDK runtime behavior remain future work.
 
 ### Quantifiable exit criteria
 
@@ -561,7 +566,7 @@ adapter.exit_code
 
 ### Current branch status
 
-Increment 1 is frozen on `feat/migration`. Increment 2 is complete: .NET validates the frozen package model, rebuilds deterministic indexes, merges frozen run shards, attaches deterministic fake judgements, renders deterministic reports, and proves full package-level byte parity against the Python golden baseline. Increment 3 has started with the file-based one-shot adapter protocol contract, a CLI command-handler quality gate, deterministic `run --no-judge` for frozen benchmark shards, and external one-shot file adapter invocation; general .NET repository orchestration, Codex, and Copilot runtime behavior remain future work.
+Increment 1 is frozen on `feat/migration`. Increment 2 is complete: .NET validates the frozen package model, rebuilds deterministic indexes, merges frozen run shards, attaches deterministic fake judgements, renders deterministic reports, and proves full package-level byte parity against the Python golden baseline. Increment 3 has started with the file-based one-shot adapter protocol contract, a CLI command-handler quality gate, deterministic `run --no-judge` for frozen benchmark shards, and external one-shot file adapter invocation, and a Codex-oriented process profile for wrapper-based adapters; general .NET repository orchestration, direct Codex runtime behavior, and Copilot SDK runtime behavior remain future work.
 
 ### Quantifiable exit criteria
 
@@ -626,7 +631,7 @@ This increment validates integration paths. It should not turn into broad model-
 
 ### Current branch status
 
-Increment 1 is frozen on `feat/migration`. Increment 2 is complete: .NET validates the frozen package model, rebuilds deterministic indexes, merges frozen run shards, attaches deterministic fake judgements, renders deterministic reports, and proves full package-level byte parity against the Python golden baseline. Increment 3 has started with the file-based one-shot adapter protocol contract, a CLI command-handler quality gate, deterministic `run --no-judge` for frozen benchmark shards, and external one-shot file adapter invocation; general .NET repository orchestration, Codex, and Copilot runtime behavior remain future work.
+Increment 1 is frozen on `feat/migration`. Increment 2 is complete: .NET validates the frozen package model, rebuilds deterministic indexes, merges frozen run shards, attaches deterministic fake judgements, renders deterministic reports, and proves full package-level byte parity against the Python golden baseline. Increment 3 has started with the file-based one-shot adapter protocol contract, a CLI command-handler quality gate, deterministic `run --no-judge` for frozen benchmark shards, and external one-shot file adapter invocation, and a Codex-oriented process profile for wrapper-based adapters; general .NET repository orchestration, direct Codex runtime behavior, and Copilot SDK runtime behavior remain future work.
 
 ### Quantifiable exit criteria
 
@@ -687,7 +692,7 @@ This increment is about reliability, documentation, packaging, validation, and a
 
 ### Current branch status
 
-Increment 1 is frozen on `feat/migration`. Increment 2 is complete: .NET validates the frozen package model, rebuilds deterministic indexes, merges frozen run shards, attaches deterministic fake judgements, renders deterministic reports, and proves full package-level byte parity against the Python golden baseline. Increment 3 has started with the file-based one-shot adapter protocol contract, a CLI command-handler quality gate, deterministic `run --no-judge` for frozen benchmark shards, and external one-shot file adapter invocation; general .NET repository orchestration, Codex, and Copilot runtime behavior remain future work.
+Increment 1 is frozen on `feat/migration`. Increment 2 is complete: .NET validates the frozen package model, rebuilds deterministic indexes, merges frozen run shards, attaches deterministic fake judgements, renders deterministic reports, and proves full package-level byte parity against the Python golden baseline. Increment 3 has started with the file-based one-shot adapter protocol contract, a CLI command-handler quality gate, deterministic `run --no-judge` for frozen benchmark shards, and external one-shot file adapter invocation, and a Codex-oriented process profile for wrapper-based adapters; general .NET repository orchestration, direct Codex runtime behavior, and Copilot SDK runtime behavior remain future work.
 
 ### Quantifiable exit criteria
 

@@ -14,14 +14,14 @@ New .NET code follows clean architecture boundaries, object-calisthenics discipl
 - `Lorq.Core` - experiment, run shard, merge-input, package, judgement, and report domain model plus package validation.
 - `Lorq.Reporting` - JSON command summary shaping.
 - `Lorq.Adapters.Copilot` - reserved for the first-class industrial Copilot SDK adapter.
-- `Lorq.Adapters.Process` - file-based one-shot adapter protocol contracts, deterministic fake file adapter, and future Codex process adapter foundation.
+- `Lorq.Adapters.Process` - file-based one-shot adapter protocol contracts, deterministic fake file adapter, external one-shot process adapter, and Codex-oriented process profile foundation.
 
 ## Current validation commands
 
 ```bash
 cd dotnet
 dotnet build Lorq.slnx
-dotnet test --solution Lorq.slnx --disable-logo --minimum-expected-tests 22
+dotnet test --solution Lorq.slnx --disable-logo --minimum-expected-tests 39
 ```
 
 
@@ -125,3 +125,5 @@ Those will be implemented only after the package model, merge writer, and fixtur
 ## External file adapters
 
 Increment 3 includes the first external one-shot file adapter runner. `run --no-judge` can pass `--adapter-command` plus repeated `--adapter-arg` values. The external process receives `LORQ_ADAPTER_REQUEST` and `LORQ_ADAPTER_EVIDENCE` environment variables and must write the full `lorq.file-adapter-evidence.v1alpha1` contract.
+
+The Codex-oriented adapter profile is now available through `--adapter-profile codex-cli`. It configures a wrapper process with Codex metadata but intentionally does not invoke real Codex from LORQ; see `docs/adapters/codex-file-adapter-profile.md`.

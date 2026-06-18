@@ -16,12 +16,15 @@ public static class LorqCommandOptionsParser
         string? adapterFixturePath = null;
         string? adapterCommand = null;
         string? adapterWorkingDirectory = null;
+        string? adapterProfile = null;
+        string? codexCommand = null;
         var adapterArguments = new List<string>();
+        var codexArguments = new List<string>();
         var noJudge = false;
 
         for (var index = 0; index < values.Count; index++)
         {
-            index = ParseRunValue(values, index, ref outputRoot, ref suiteRoot, ref shardId, ref packageId, ref benchmarkPath, ref adapterFixturePath, ref adapterCommand, adapterArguments, ref adapterWorkingDirectory, ref noJudge);
+            index = ParseRunValue(values, index, ref outputRoot, ref suiteRoot, ref shardId, ref packageId, ref benchmarkPath, ref adapterFixturePath, ref adapterCommand, adapterArguments, ref adapterWorkingDirectory, ref adapterProfile, ref codexCommand, codexArguments, ref noJudge);
         }
 
         if (string.IsNullOrWhiteSpace(outputRoot))
@@ -34,10 +37,15 @@ public static class LorqCommandOptionsParser
             return ParseResult<RunOptions>.Failure("Only run --no-judge is implemented in this migration slice.");
         }
 
+        if (!string.IsNullOrWhiteSpace(adapterProfile) && string.IsNullOrWhiteSpace(adapterCommand))
+        {
+            return ParseResult<RunOptions>.Failure("run --adapter-profile requires --adapter-command <wrapper>.");
+        }
+
         shardId ??= Path.GetFileName(Path.TrimEndingDirectorySeparator(outputRoot));
         benchmarkPath ??= "benchmark.yaml";
         adapterFixturePath ??= Path.Combine("fixtures", "fake-agent.yaml");
-        return ParseResult<RunOptions>.Success(new RunOptions(outputRoot, suiteRoot, shardId, packageId, benchmarkPath, adapterFixturePath, noJudge, adapterCommand, adapterArguments, adapterWorkingDirectory));
+        return ParseResult<RunOptions>.Success(new RunOptions(outputRoot, suiteRoot, shardId, packageId, benchmarkPath, adapterFixturePath, noJudge, adapterCommand, adapterArguments, adapterWorkingDirectory, adapterProfile, codexCommand, codexArguments));
     }
 
     public static ParseResult<ValidatePackageOptions> ParseValidatePackage(IReadOnlyList<string> values)
@@ -142,6 +150,9 @@ public static class LorqCommandOptionsParser
         ref string? adapterCommand,
         List<string> adapterArguments,
         ref string? adapterWorkingDirectory,
+        ref string? adapterProfile,
+        ref string? codexCommand,
+        List<string> codexArguments,
         ref bool noJudge)
     {
         var value = values[index];
@@ -176,6 +187,15 @@ public static class LorqCommandOptionsParser
                 return index + 1;
             case "--adapter-working-directory" when index + 1 < values.Count:
                 adapterWorkingDirectory = values[index + 1];
+                return index + 1;
+            case "--adapter-profile" when index + 1 < values.Count:
+                adapterProfile = values[index + 1];
+                return index + 1;
+            case "--codex-command" when index + 1 < values.Count:
+                codexCommand = values[index + 1];
+                return index + 1;
+            case "--codex-arg" when index + 1 < values.Count:
+                codexArguments.Add(values[index + 1]);
                 return index + 1;
             default:
                 return index;

@@ -59,3 +59,8 @@ The runner captures process stdout/stderr into `adapter-process.stdout.txt` and 
 This protocol is for deterministic fake adapters, Codex process adapters, and external one-shot adapters. Copilot SDK remains a first-class industrial adapter target, but it should produce the same evidence shape after normalization.
 
 The current .NET `run --no-judge` path can use this process adapter for deterministic planned shards. General repository orchestration, Codex, and Copilot runtime integration remain future increments.
+
+
+## Built-in process profiles
+
+The first built-in process profile is `codex-cli`. It injects Codex wrapper metadata into an external one-shot adapter process while preserving the same request/evidence contract. See `codex-file-adapter-profile.md`.
