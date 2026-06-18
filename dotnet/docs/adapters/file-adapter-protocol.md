@@ -6,7 +6,7 @@ The first external adapter protocol is file-based and one-shot:
 
 1. LORQ materializes an isolated cell workspace.
 2. LORQ writes `adapter-request.json` into an exchange directory.
-3. LORQ launches the adapter process with that exchange directory.
+3. LORQ launches the adapter process with request/evidence paths exposed through environment variables.
 4. The adapter writes `adapter-evidence.json` and referenced artifacts.
 5. LORQ validates the evidence and turns it into a run-shard cell package.
 
@@ -43,8 +43,19 @@ The evidence file must be a full evidence contract, not just a final answer. It 
 - integrity warnings
 - diagnostics
 
+## Process invocation
+
+The .NET process adapter writes `adapter-request.json`, then launches the configured adapter executable without shell expansion. The process receives:
+
+- `LORQ_ADAPTER_REQUEST`: absolute path to `adapter-request.json`
+- `LORQ_ADAPTER_EVIDENCE`: absolute path where `adapter-evidence.json` must be written
+- `LORQ_ADAPTER_EXCHANGE_DIR`: directory shared for request, evidence, and raw adapter files
+- `LORQ_ADAPTER_WORKSPACE_ROOT`: workspace root visible to the adapter
+
+The runner captures process stdout/stderr into `adapter-process.stdout.txt` and `adapter-process.stderr.txt` for diagnostics, but the adapter remains responsible for writing the full evidence contract. If no evidence file is produced, the invocation fails with a stable protocol error.
+
 ## Scope boundary
 
 This protocol is for deterministic fake adapters, Codex process adapters, and external one-shot adapters. Copilot SDK remains a first-class industrial adapter target, but it should produce the same evidence shape after normalization.
 
-This increment does not implement `lorq run` yet. It only freezes the process boundary that future run orchestration must satisfy.
+The current .NET `run --no-judge` path can use this process adapter for deterministic planned shards. General repository orchestration, Codex, and Copilot runtime integration remain future increments.

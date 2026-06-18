@@ -94,12 +94,68 @@ public sealed class FileAdapterProtocolTests
         await Assert.That(File.ReadAllText(Path.Combine(workspace.Path, FileAdapterProtocol.EvidenceFileName))).Contains("trace");
     }
 
+
+    [Test]
+    public async Task ExternalProcessAdapterReadsEvidenceFromOneShotProtocol()
+    {
+        using var workspace = TemporaryDirectory.Create();
+        var request = AdapterRequest(workspace.Path, "external-case__baseline__attempt-001");
+        var adapter = new ExternalFileAdapterProcess(new FileAdapterProcessCommand(DotnetExecutable(), new[] { TestHostDll() }, TestPaths.RepoRoot()));
+
+        var evidence = await adapter.InvokeAsync(request);
+
+        await Assert.That(evidence.Adapter.Id).IsEqualTo("external-test-adapter");
+        await Assert.That(evidence.CellId).IsEqualTo(request.Cell.CellId);
+        await Assert.That(evidence.FinalAnswer.Present).IsTrue();
+        await Assert.That(File.Exists(Path.Combine(workspace.Path, FileAdapterProtocol.RequestFileName))).IsTrue();
+        await Assert.That(File.Exists(Path.Combine(workspace.Path, FileAdapterProtocol.EvidenceFileName))).IsTrue();
+        await Assert.That(File.Exists(Path.Combine(workspace.Path, "adapter-process.stdout.txt"))).IsTrue();
+        await Assert.That(File.Exists(Path.Combine(workspace.Path, "adapter-process.stderr.txt"))).IsTrue();
+    }
+
+    [Test]
+    public async Task ExternalProcessAdapterFailsWhenEvidenceIsMissing()
+    {
+        using var workspace = TemporaryDirectory.Create();
+        var request = AdapterRequest(workspace.Path, "missing-evidence__baseline__attempt-001");
+        var adapter = new ExternalFileAdapterProcess(new FileAdapterProcessCommand(DotnetExecutable(), new[] { TestHostDll(), "--fail-without-evidence" }, TestPaths.RepoRoot()));
+
+        var exception = await Assert.ThrowsAsync<FileAdapterProtocolException>(() => adapter.InvokeAsync(request).AsTask());
+
+        await Assert.That(exception!.Code).IsEqualTo("LORQ-ADAPTER-EVIDENCE-MISSING");
+    }
+
     private static string SchemaConst(string fileName)
     {
         var path = Path.Combine(TestPaths.RepoRoot(), "schemas", fileName);
         using var document = JsonDocument.Parse(File.ReadAllText(path));
         return document.RootElement.GetProperty("properties").GetProperty("schema_version").GetProperty("const").GetString()
             ?? throw new InvalidOperationException($"Schema {fileName} does not declare schema_version const.");
+    }
+
+
+    private static FileAdapterRequest AdapterRequest(string workspace, string cellId)
+    {
+        return new FileAdapterRequest(
+            FileAdapterProtocol.RequestSchemaVersion,
+            FileAdapterProtocol.ContractVersion,
+            new FileAdapterCell(cellId, "external-case", "baseline", "attempt-001", "shard-001"),
+            new FileAdapterWorkspace(TestPaths.RepoRoot(), workspace, Path.Combine(workspace, "artifacts")),
+            new FileAdapterTask("prompt.txt", "Explain deterministic evidence."),
+            new FileAdapterLimits(30000),
+            new FileAdapterExpectedOutput(FileAdapterProtocol.EvidenceFileName, "answer.md"));
+    }
+
+    private static string TestHostDll()
+    {
+        return Path.Combine(TestPaths.RepoRoot(), "dotnet", "tests", "Lorq.Adapter.TestHost", "bin", "Debug", "net10.0", "Lorq.Adapter.TestHost.dll");
+    }
+
+    private static string DotnetExecutable()
+    {
+        return Environment.GetEnvironmentVariable("DOTNET_ROOT") is { Length: > 0 } dotnetRoot
+            ? Path.Combine(dotnetRoot, "dotnet")
+            : "dotnet";
     }
 
     private sealed class TemporaryDirectory : IDisposable

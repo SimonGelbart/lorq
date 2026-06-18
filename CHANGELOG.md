@@ -2,6 +2,33 @@
 
 All notable changes to LORQ should be documented here.
 
+## 2026-06-18 - Increment 3 runtime: external file adapter process
+
+### Roadmap position
+
+Current increment: Increment 3, .NET run and merge loop. This session adds external one-shot process invocation behind the file-adapter protocol while keeping deterministic fake adapters as the no-token baseline.
+
+### Added
+
+- Added `IFileAdapter` so deterministic and external adapters share the same execution boundary.
+- Added `ExternalFileAdapterProcess` to write `adapter-request.json`, launch a configured process, capture process stdout/stderr, and read/validate `adapter-evidence.json`.
+- Added stable protocol diagnostics for process start failures, timeouts, missing evidence, and malformed evidence.
+- Added `--adapter-command`, repeated `--adapter-arg`, and `--adapter-working-directory` to `run --no-judge`.
+- Added `Lorq.Adapter.TestHost` for no-token external process tests.
+- Added TUnit coverage for external adapter invocation, missing evidence failure, CLI parsing, and `run --no-judge` with an external file adapter.
+
+### Validation
+
+Executed during this increment:
+
+- `dotnet build dotnet/Lorq.slnx --no-restore -p:Platform="Any CPU"` -> passed.
+- `dotnet test --solution dotnet/Lorq.slnx --no-restore -p:Platform="Any CPU" --disable-logo --minimum-expected-tests 34` -> 34 passed.
+
+### Known limitations
+
+- External file adapters are available only through the deterministic planned-shard `run --no-judge` path.
+- General workspace materialization, Codex CLI adapter behavior, and Copilot SDK runtime integration remain future work.
+
 ## 2026-06-18 - Increment 3 runtime: .NET deterministic run shard
 
 ### Roadmap position

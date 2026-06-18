@@ -7,4 +7,7 @@ public sealed record RunOptions(
     string PackageId,
     string BenchmarkPath,
     string AdapterFixturePath,
-    bool NoJudge) : CommandOptions;
+    bool NoJudge,
+    string? AdapterCommand,
+    IReadOnlyList<string> AdapterArguments,
+    string? AdapterWorkingDirectory) : CommandOptions;

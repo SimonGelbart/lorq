@@ -14,11 +14,14 @@ public static class LorqCommandOptionsParser
         string packageId = "deterministic-benchmark";
         string? benchmarkPath = null;
         string? adapterFixturePath = null;
+        string? adapterCommand = null;
+        string? adapterWorkingDirectory = null;
+        var adapterArguments = new List<string>();
         var noJudge = false;
 
         for (var index = 0; index < values.Count; index++)
         {
-            index = ParseRunValue(values, index, ref outputRoot, ref suiteRoot, ref shardId, ref packageId, ref benchmarkPath, ref adapterFixturePath, ref noJudge);
+            index = ParseRunValue(values, index, ref outputRoot, ref suiteRoot, ref shardId, ref packageId, ref benchmarkPath, ref adapterFixturePath, ref adapterCommand, adapterArguments, ref adapterWorkingDirectory, ref noJudge);
         }
 
         if (string.IsNullOrWhiteSpace(outputRoot))
@@ -34,7 +37,7 @@ public static class LorqCommandOptionsParser
         shardId ??= Path.GetFileName(Path.TrimEndingDirectorySeparator(outputRoot));
         benchmarkPath ??= "benchmark.yaml";
         adapterFixturePath ??= Path.Combine("fixtures", "fake-agent.yaml");
-        return ParseResult<RunOptions>.Success(new RunOptions(outputRoot, suiteRoot, shardId, packageId, benchmarkPath, adapterFixturePath, noJudge));
+        return ParseResult<RunOptions>.Success(new RunOptions(outputRoot, suiteRoot, shardId, packageId, benchmarkPath, adapterFixturePath, noJudge, adapterCommand, adapterArguments, adapterWorkingDirectory));
     }
 
     public static ParseResult<ValidatePackageOptions> ParseValidatePackage(IReadOnlyList<string> values)
@@ -136,6 +139,9 @@ public static class LorqCommandOptionsParser
         ref string packageId,
         ref string? benchmarkPath,
         ref string? adapterFixturePath,
+        ref string? adapterCommand,
+        List<string> adapterArguments,
+        ref string? adapterWorkingDirectory,
         ref bool noJudge)
     {
         var value = values[index];
@@ -161,6 +167,15 @@ public static class LorqCommandOptionsParser
                 return index + 1;
             case "--adapter-fixture" when index + 1 < values.Count:
                 adapterFixturePath = values[index + 1];
+                return index + 1;
+            case "--adapter-command" when index + 1 < values.Count:
+                adapterCommand = values[index + 1];
+                return index + 1;
+            case "--adapter-arg" when index + 1 < values.Count:
+                adapterArguments.Add(values[index + 1]);
+                return index + 1;
+            case "--adapter-working-directory" when index + 1 < values.Count:
+                adapterWorkingDirectory = values[index + 1];
                 return index + 1;
             default:
                 return index;

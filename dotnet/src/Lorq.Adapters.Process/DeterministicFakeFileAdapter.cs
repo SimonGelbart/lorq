@@ -7,7 +7,7 @@ namespace Lorq.Adapters.Process;
 /// <summary>
 /// In-process deterministic file adapter used to prove LORQ run orchestration without real LLM calls.
 /// </summary>
-public sealed class DeterministicFakeFileAdapter
+public sealed class DeterministicFakeFileAdapter : IFileAdapter
 {
     private readonly DeterministicFakeAgentFixture fixture;
 

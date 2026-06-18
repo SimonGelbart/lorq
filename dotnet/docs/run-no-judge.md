@@ -18,7 +18,7 @@ The command is intentionally limited to the deterministic migration benchmark. I
 CLI run command
 → planned shard selection from benchmark.yaml
 → one file-adapter request per cell
-→ deterministic fake file adapter
+→ deterministic fake file adapter or external one-shot process adapter
 → full adapter evidence contract
 → run-shard package writer
 → .lorq index rebuild
@@ -35,6 +35,22 @@ When omitted, the command derives:
 
 Only `--no-judge` is supported in this slice. Judgement attachment remains a separate package operation.
 
+## External process adapter
+
+`run --no-judge` can now launch an external file adapter process for each planned cell:
+
+```bash
+dotnet run --project dotnet/src/Lorq.Cli -- \
+  run \
+  --no-judge \
+  --suite-root fixtures/conformance/deterministic-orchestration \
+  --out internal/generated/dotnet-run-shard/shard-001 \
+  --adapter-command /path/to/adapter \
+  --adapter-arg --optional-adapter-flag
+```
+
+The deterministic fake adapter remains the default no-token implementation. Use `--adapter-command` only for file-protocol adapters that read `LORQ_ADAPTER_REQUEST` and write `LORQ_ADAPTER_EVIDENCE`.
+
 ## Evidence boundary
 
 Each generated cell contains a full adapter evidence file at:
@@ -47,4 +63,4 @@ The evidence uses `lorq.file-adapter-evidence.v1alpha1` and records adapter iden
 
 ## Current limitation
 
-This command is deterministic fixture orchestration only. General case/mode loading, workspace materialization, repository checkout, external process launching, Codex, and Copilot remain future Increment 3 work.
+This command is still deterministic fixture orchestration only. General case/mode loading, workspace materialization, repository checkout, Codex, and Copilot remain future Increment 3 work.
