@@ -1,6 +1,7 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <ItemGroup>
+    <ProjectReference Include="..\Lorq.Adapters.Process\Lorq.Adapters.Process.csproj" />
     <ProjectReference Include="..\Lorq.Core\Lorq.Core.csproj" />
     <ProjectReference Include="..\Lorq.Reporting\Lorq.Reporting.csproj" />
   </ItemGroup>

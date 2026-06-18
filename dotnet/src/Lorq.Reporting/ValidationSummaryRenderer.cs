@@ -4,6 +4,19 @@ namespace Lorq.Reporting;
 
 public static class ValidationSummaryRenderer
 {
+    public static object FromRunShardWriteResult(LorqRunShardWriteResult result)
+    {
+        return new
+        {
+            ok = result.Ok,
+            package_root = result.PackageRoot,
+            package_id = result.PackageId,
+            shard_id = result.ShardId,
+            cell_count = result.CellCount,
+            diagnostics = result.Diagnostics,
+        };
+    }
+
     public static object FromPackageResult(PackageValidationResult result)
     {
         return new

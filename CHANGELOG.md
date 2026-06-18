@@ -2,6 +2,36 @@
 
 All notable changes to LORQ should be documented here.
 
+## 2026-06-18 - Increment 3 runtime: .NET deterministic run shard
+
+### Roadmap position
+
+Current increment: Increment 3, .NET run and merge loop. This session adds the first narrow `run --no-judge` runtime slice using the deterministic file adapter and frozen benchmark shard plan.
+
+### Added
+
+- Added `run --no-judge` to `Lorq.Cli` with typed command options and handler dispatch.
+- Added deterministic benchmark shard planning from `benchmark.yaml`.
+- Added deterministic fake file adapter execution from `fixtures/fake-agent.yaml`.
+- Added a .NET run-shard package writer that writes cell evidence, adapter evidence, shard manifests, and rebuilt `.lorq` indexes.
+- Added `dotnet/docs/run-no-judge.md` to document the current runtime boundary.
+- Added TUnit coverage for the deterministic adapter and CLI run command.
+
+### Validation
+
+Executed during this increment:
+
+- `dotnet restore dotnet/Lorq.slnx --source <local package cache> -p:Platform="Any CPU"` -> passed.
+- `dotnet build dotnet/Lorq.slnx --no-restore -p:Platform="Any CPU"` -> passed.
+- `dotnet test --solution dotnet/Lorq.slnx --no-restore -p:Platform="Any CPU" --disable-logo --minimum-expected-tests 30` -> 30 passed.
+- `dotnet run --project dotnet/src/Lorq.Cli/Lorq.Cli.csproj --no-restore --property:Platform="Any CPU" -- run --no-judge --suite-root fixtures/conformance/deterministic-orchestration --out ../internal/generated/dotnet-run-shard/shard-001` -> passed.
+- `dotnet run --project dotnet/src/Lorq.Cli/Lorq.Cli.csproj --no-restore --property:Platform="Any CPU" -- validate-package ../internal/generated/dotnet-run-shard/shard-001` -> passed.
+
+### Known limitations
+
+- `run` supports only deterministic `--no-judge` fixture orchestration.
+- General workspace materialization, external process launch, Codex, and Copilot runtime integration remain future work.
+
 ## 2026-06-18 - Increment 3 quality gate: .NET CLI command architecture
 
 ### Roadmap position

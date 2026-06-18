@@ -14,6 +14,7 @@ public sealed class LorqCommandCatalog
     {
         return new LorqCommandCatalog(new ICommandDefinition[]
         {
+            new CommandDefinition<RunOptions>("run", LorqCommandOptionsParser.ParseRun, new RunCommandHandler()),
             new CommandDefinition<ValidatePackageOptions>("validate-package", LorqCommandOptionsParser.ParseValidatePackage, new ValidatePackageCommandHandler()),
             new CommandDefinition<ValidateMergeInputsOptions>("validate-merge-inputs", LorqCommandOptionsParser.ParseValidateMergeInputs, new ValidateMergeInputsCommandHandler()),
             new CommandDefinition<RebuildIndexesOptions>("rebuild-indexes", LorqCommandOptionsParser.ParseRebuildIndexes, new RebuildIndexesCommandHandler()),

@@ -10,11 +10,11 @@ New .NET code follows clean architecture boundaries, object-calisthenics discipl
 
 ## Current projects
 
-- `Lorq.Cli` - command-line entry point. Currently exposes package validation, index rebuild, deterministic merge, deterministic judgement, and deterministic report bootstrap commands.
+- `Lorq.Cli` - command-line entry point. Currently exposes deterministic run-shard export, package validation, index rebuild, deterministic merge, deterministic judgement, and deterministic report bootstrap commands.
 - `Lorq.Core` - experiment, run shard, merge-input, package, judgement, and report domain model plus package validation.
 - `Lorq.Reporting` - JSON command summary shaping.
 - `Lorq.Adapters.Copilot` - reserved for the first-class industrial Copilot SDK adapter.
-- `Lorq.Adapters.Process` - file-based one-shot adapter protocol contracts and future Codex process adapter foundation.
+- `Lorq.Adapters.Process` - file-based one-shot adapter protocol contracts, deterministic fake file adapter, and future Codex process adapter foundation.
 
 ## Current validation commands
 
@@ -22,6 +22,17 @@ New .NET code follows clean architecture boundaries, object-calisthenics discipl
 cd dotnet
 dotnet build Lorq.slnx
 dotnet test --solution Lorq.slnx --disable-logo --minimum-expected-tests 22
+```
+
+
+Run one deterministic no-judge shard:
+
+```bash
+dotnet run --project src/Lorq.Cli -- \
+  run \
+  --no-judge \
+  --suite-root ../fixtures/conformance/deterministic-orchestration \
+  --out ../internal/generated/dotnet-run-shard/shard-001
 ```
 
 Validate a frozen package:
@@ -98,7 +109,7 @@ The TUnit suite compares the complete generated experiment package with `fixture
 
 ## Not implemented yet
 
-- `lorq run` execution orchestration
+- general `lorq run` execution orchestration beyond the deterministic fake file adapter slice
 - production `lorq judge` backed by real/external judge adapters
 - production/general `lorq report` beyond the deterministic frozen package report bootstrap
 - real Codex or Copilot integration
@@ -108,3 +119,4 @@ Those will be implemented only after the package model, merge writer, and fixtur
 ## Documentation
 
 - `docs/cli-architecture.md` describes the command handler boundary for `Lorq.Cli`.
+- `docs/run-no-judge.md` describes the deterministic `run --no-judge` slice.
