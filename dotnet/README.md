@@ -10,7 +10,7 @@ New .NET code follows clean architecture boundaries, object-calisthenics discipl
 
 ## Current projects
 
-- `Lorq.Cli` - command-line entry point. Currently exposes package validation, index rebuild, and deterministic merge bootstrap commands.
+- `Lorq.Cli` - command-line entry point. Currently exposes package validation, index rebuild, deterministic merge, and deterministic judgement bootstrap commands.
 - `Lorq.Core` - experiment, run shard, merge-input, package, judgement, and report domain model plus package validation.
 - `Lorq.Reporting` - JSON command summary shaping.
 - `Lorq.Adapters.Copilot` - reserved for the first-class industrial Copilot SDK adapter.
@@ -21,7 +21,7 @@ New .NET code follows clean architecture boundaries, object-calisthenics discipl
 ```bash
 cd dotnet
 dotnet build Lorq.slnx
-dotnet test --solution Lorq.slnx --disable-logo --minimum-expected-tests 11
+dotnet test --solution Lorq.slnx --disable-logo --minimum-expected-tests 14
 ```
 
 Validate a frozen package:
@@ -54,6 +54,17 @@ dotnet run --project src/Lorq.Cli -- \
   --benchmark ../fixtures/conformance/deterministic-orchestration/benchmark.yaml
 ```
 
+
+Attach a deterministic fake judgement pass to a merged experiment package:
+
+```bash
+dotnet run --project src/Lorq.Cli -- \
+  judge-package \
+  ../internal/generated/dotnet-merge-writer/experiment-001 \
+  --name judge-primary \
+  --fixture ../fixtures/conformance/deterministic-orchestration/fixtures/fake-judge.yaml
+```
+
 Validate merge inputs for conflict checks:
 
 ```bash
@@ -68,7 +79,7 @@ See `docs/package-validation.md` for the validator scope and stable error codes.
 ## Not implemented yet
 
 - `lorq run`
-- `lorq judge`
+- production `lorq judge` backed by real/external judge adapters
 - `lorq report`
 - real Codex or Copilot integration
 

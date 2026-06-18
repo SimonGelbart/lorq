@@ -4,13 +4,13 @@ This document describes the first .NET v1 foundation slice. It is intentionally 
 
 ## Scope
 
-The current .NET code does **not** run agents, attach judgements, or render reports. Those behaviors remain future increments. This slice proves that .NET can read, validate, rebuild indexes for, and merge the canonical package shape produced by the frozen Python baseline.
+The current .NET code does **not** run agents or render reports. Those behaviors remain future increments. This slice proves that .NET can read, validate, rebuild indexes for, merge, and attach deterministic judgements to the canonical package shape produced by the frozen Python baseline.
 
 ## Projects
 
 ```text
 Lorq.slnx
-src/Lorq.Core/        Domain records, package validation, index rebuilding, and merge writing.
+src/Lorq.Core/        Domain records, package validation, index rebuilding, merge writing, and deterministic judgement attachment.
 src/Lorq.Reporting/   JSON summary shaping for CLI output.
 src/Lorq.Cli/         Minimal validation command surface.
 tests/Lorq.Core.Tests TUnit fixture validation tests.
@@ -61,7 +61,19 @@ dotnet run --project src/Lorq.Cli -- merge-shards \
   --benchmark ../fixtures/conformance/deterministic-orchestration/benchmark.yaml
 ```
 
-The merge command copies run evidence into a new package, writes `experiment.yaml`, creates `.lorq/merge-log.json`, rebuilds coverage/fingerprint/integrity/cell indexes from package evidence, and rejects duplicate cell IDs or fingerprint mismatches by default. It intentionally does not attach judgements or render reports yet.
+The merge command copies run evidence into a new package, writes `experiment.yaml`, creates `.lorq/merge-log.json`, rebuilds coverage/fingerprint/integrity/cell indexes from package evidence, and rejects duplicate cell IDs or fingerprint mismatches by default.
+
+Attach deterministic judgements from the frozen fake judge fixture:
+
+```bash
+cd dotnet
+dotnet run --project src/Lorq.Cli -- judge-package \
+  ../internal/generated/dotnet-merge-writer/experiment-001 \
+  --name judge-primary \
+  --fixture ../fixtures/conformance/deterministic-orchestration/fixtures/fake-judge.yaml
+```
+
+The judgement command writes `judgements/<name>/`, per-cell judgement files, and `.lorq/judgements/<name>.json`. It is fixture-backed and records `real_llm_used: false`; it intentionally does not call Codex, Copilot, or any judge LLM.
 
 ## Stable validation codes introduced
 
@@ -82,6 +94,7 @@ The merge command copies run evidence into a new package, writes `experiment.yam
 | `LORQ120`-`LORQ123` | Judgement pass references are inconsistent. |
 | `LORQ130`-`LORQ133` | Report references are missing or inconsistent. |
 | `LORQ210` | Duplicate cell IDs across merge inputs. |
+| `LORQ310` | Missing deterministic judgement fixture entries. |
 | `LORQ220` | Repository fingerprint mismatch across merge inputs. |
 | `LORQ900`-`LORQ901` | General package format or JSON parse failure. |
 
