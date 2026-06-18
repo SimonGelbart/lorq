@@ -21,7 +21,7 @@ New .NET code follows clean architecture boundaries, object-calisthenics discipl
 ```bash
 cd dotnet
 dotnet build Lorq.slnx
-dotnet test --solution Lorq.slnx --disable-logo --minimum-expected-tests 16
+dotnet test --solution Lorq.slnx --disable-logo --minimum-expected-tests 18
 ```
 
 Validate a frozen package:
@@ -85,6 +85,16 @@ dotnet run --project src/Lorq.Cli -- \
 ```
 
 See `docs/package-validation.md` for the validator scope and stable error codes. See `docs/engineering-guidelines.md` for .NET architecture, style, testing, and pattern rules.
+
+## Full-loop parity
+
+Increment 2 freezes .NET package parity against the Python v0 deterministic migration baseline. The full package-only loop is:
+
+```bash
+merge-shards -> judge-package -> report-package -> validate-package
+```
+
+The TUnit suite compares the complete generated experiment package with `fixtures/golden/deterministic-orchestration/experiment-001`. See `docs/full-loop-parity.md`.
 
 ## Not implemented yet
 
