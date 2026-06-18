@@ -2,6 +2,32 @@
 
 All notable changes to LORQ should be documented here.
 
+## 2026-06-18 - Increment 3 start: file adapter contract
+
+### Roadmap position
+
+Current increment: Increment 3, .NET run and merge loop. This session started Increment 3 by defining the file-based one-shot adapter protocol before implementing `lorq run`.
+
+### Added
+
+- Added `Lorq.Adapters.Process` with request/evidence contract records and protocol constants.
+- Added committed JSON schemas for file adapter requests and full adapter evidence.
+- Added `dotnet/docs/adapters/file-adapter-protocol.md`.
+- Added TUnit coverage proving protocol constants match schemas and evidence contains more than a final answer.
+
+### Validation
+
+Executed during this increment:
+
+- `dotnet restore dotnet/Lorq.slnx --source <local package cache> -p:Platform="Any CPU"` -> passed.
+- `dotnet build dotnet/Lorq.slnx --no-restore -p:Platform="Any CPU"` -> passed.
+- `dotnet test --solution dotnet/Lorq.slnx --no-restore -p:Platform="Any CPU" --disable-logo --minimum-expected-tests 22` -> passed.
+
+### Known limitations
+
+- The adapter protocol is defined but not yet executed by `lorq run`.
+- Codex and Copilot runtime integrations remain future increments.
+
 ## 2026-06-18 - Increment 2 complete: .NET deterministic parity loop
 
 ### Roadmap position

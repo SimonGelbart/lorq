@@ -1,0 +1,62 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://lorq.local/schemas/lorq-file-adapter-request.v1alpha.schema.json",
+  "title": "LORQ file adapter request v1-alpha",
+  "type": "object",
+  "additionalProperties": true,
+  "required": [
+    "schema_version",
+    "contract_version",
+    "cell",
+    "workspace",
+    "task",
+    "limits",
+    "expected_output"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "lorq.file-adapter-request.v1alpha1"
+    },
+    "contract_version": {
+      "const": "lorq.contract.v1alpha1"
+    },
+    "cell": {
+      "type": "object",
+      "required": [
+        "cell_id",
+        "case_id",
+        "mode_id",
+        "attempt_id",
+        "shard_id"
+      ]
+    },
+    "workspace": {
+      "type": "object",
+      "required": [
+        "root",
+        "evidence_directory",
+        "artifacts_directory"
+      ]
+    },
+    "task": {
+      "type": "object",
+      "required": [
+        "prompt_path",
+        "prompt_text"
+      ]
+    },
+    "limits": {
+      "type": "object",
+      "required": [
+        "timeout_milliseconds"
+      ]
+    },
+    "expected_output": {
+      "type": "object",
+      "required": [
+        "evidence_path",
+        "final_answer_path"
+      ]
+    }
+  }
+}
