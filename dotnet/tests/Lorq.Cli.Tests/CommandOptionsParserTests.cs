@@ -30,6 +30,29 @@ public sealed class CommandOptionsParserTests
         await Assert.That(result.Options.Strict).IsFalse();
     }
 
+
+    [Test]
+    public async Task ParsesExternalAdapterRunOptions()
+    {
+        var result = LorqCommandOptionsParser.ParseRun(new[]
+        {
+            "--no-judge",
+            "--out",
+            "shard-001",
+            "--adapter-command",
+            "dotnet",
+            "--adapter-arg",
+            "adapter.dll",
+            "--adapter-working-directory",
+            ".",
+        });
+
+        await Assert.That(result.Ok).IsTrue().Because(result.ErrorMessage ?? "parse failed");
+        await Assert.That(result.Options!.AdapterCommand).IsEqualTo("dotnet");
+        await Assert.That(result.Options.AdapterArguments).IsEquivalentTo(new[] { "adapter.dll" });
+        await Assert.That(result.Options.AdapterWorkingDirectory).IsEqualTo(".");
+    }
+
     [Test]
     public async Task RejectsIncompleteJudgeOptions()
     {

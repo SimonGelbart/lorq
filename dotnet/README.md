@@ -120,3 +120,8 @@ Those will be implemented only after the package model, merge writer, and fixtur
 
 - `docs/cli-architecture.md` describes the command handler boundary for `Lorq.Cli`.
 - `docs/run-no-judge.md` describes the deterministic `run --no-judge` slice.
+
+
+## External file adapters
+
+Increment 3 includes the first external one-shot file adapter runner. `run --no-judge` can pass `--adapter-command` plus repeated `--adapter-arg` values. The external process receives `LORQ_ADAPTER_REQUEST` and `LORQ_ADAPTER_EVIDENCE` environment variables and must write the full `lorq.file-adapter-evidence.v1alpha1` contract.

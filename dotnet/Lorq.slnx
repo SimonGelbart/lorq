@@ -6,6 +6,7 @@
     <Project Path="src/Lorq.Reporting/Lorq.Reporting.csproj" />
   </Folder>
   <Folder Name="/tests/">
+    <Project Path="tests/Lorq.Adapter.TestHost/Lorq.Adapter.TestHost.csproj" />
     <Project Path="tests/Lorq.Adapters.Tests/Lorq.Adapters.Tests.csproj" />
     <Project Path="tests/Lorq.Cli.Tests/Lorq.Cli.Tests.csproj" />
     <Project Path="tests/Lorq.Core.Tests/Lorq.Core.Tests.csproj" />

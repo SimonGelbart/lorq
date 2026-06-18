@@ -10,8 +10,7 @@ internal static class DeterministicRunShardApplication
     public static async ValueTask<LorqRunShardWriteResult> RunAsync(RunOptions options, CancellationToken cancellationToken)
     {
         var suiteRoot = Path.GetFullPath(options.SuiteRoot);
-        var fixture = DeterministicFakeAgentFixture.Load(ResolveFromSuite(suiteRoot, options.AdapterFixturePath));
-        var adapter = new DeterministicFakeFileAdapter(fixture);
+        var adapter = CreateAdapter(options, suiteRoot);
         var plan = DeterministicBenchmarkShardPlan.ReadFrom(ResolveFromSuite(suiteRoot, options.BenchmarkPath), options.ShardId);
         var cells = new List<LorqRunShardCellEvidence>();
 
@@ -23,10 +22,34 @@ internal static class DeterministicRunShardApplication
         return LorqRunShardPackageWriter.Write(new LorqRunShardWriteRequest(options.PackageId, options.ShardId, options.OutputRoot, cells));
     }
 
+
+    private static IFileAdapter CreateAdapter(RunOptions options, string suiteRoot)
+    {
+        if (!string.IsNullOrWhiteSpace(options.AdapterCommand))
+        {
+            var workingDirectory = ResolveOptionalWorkingDirectory(options.AdapterWorkingDirectory, suiteRoot);
+            var command = new FileAdapterProcessCommand(options.AdapterCommand, options.AdapterArguments, workingDirectory);
+            return new ExternalFileAdapterProcess(command);
+        }
+
+        var fixture = DeterministicFakeAgentFixture.Load(ResolveFromSuite(suiteRoot, options.AdapterFixturePath));
+        return new DeterministicFakeFileAdapter(fixture);
+    }
+
+    private static string? ResolveOptionalWorkingDirectory(string? workingDirectory, string suiteRoot)
+    {
+        if (string.IsNullOrWhiteSpace(workingDirectory))
+        {
+            return null;
+        }
+
+        return Path.IsPathRooted(workingDirectory) ? workingDirectory : Path.GetFullPath(Path.Combine(suiteRoot, workingDirectory));
+    }
+
     private static async ValueTask<LorqRunShardCellEvidence> RunCellAsync(
         RunOptions options,
         string suiteRoot,
-        DeterministicFakeFileAdapter adapter,
+        IFileAdapter adapter,
         DeterministicBenchmarkCell cell,
         CancellationToken cancellationToken)
     {
