@@ -14,14 +14,14 @@ New .NET code follows clean architecture boundaries, object-calisthenics discipl
 - `Lorq.Core` - experiment, run shard, merge-input, package, judgement, and report domain model plus package validation.
 - `Lorq.Reporting` - JSON command summary shaping.
 - `Lorq.Adapters.Copilot` - reserved for the first-class industrial Copilot SDK adapter.
-- `Lorq.Adapters.Process` - reserved for one-shot file-based external adapter protocol and Codex process adapter foundation.
+- `Lorq.Adapters.Process` - file-based one-shot adapter protocol contracts and future Codex process adapter foundation.
 
 ## Current validation commands
 
 ```bash
 cd dotnet
 dotnet build Lorq.slnx
-dotnet test --solution Lorq.slnx --disable-logo --minimum-expected-tests 18
+dotnet test --solution Lorq.slnx --disable-logo --minimum-expected-tests 22
 ```
 
 Validate a frozen package:
@@ -84,7 +84,7 @@ dotnet run --project src/Lorq.Cli -- \
   ../fixtures/conformance/deterministic-orchestration/edge-fixtures/duplicate-cell-conflict/shard-b
 ```
 
-See `docs/package-validation.md` for the validator scope and stable error codes. See `docs/engineering-guidelines.md` for .NET architecture, style, testing, and pattern rules.
+See `docs/package-validation.md` for the validator scope and stable error codes. See `docs/adapters/file-adapter-protocol.md` for the file-based adapter contract. See `docs/engineering-guidelines.md` for .NET architecture, style, testing, and pattern rules.
 
 ## Full-loop parity
 
@@ -98,7 +98,7 @@ The TUnit suite compares the complete generated experiment package with `fixture
 
 ## Not implemented yet
 
-- `lorq run`
+- `lorq run` execution orchestration
 - production `lorq judge` backed by real/external judge adapters
 - production/general `lorq report` beyond the deterministic frozen package report bootstrap
 - real Codex or Copilot integration

@@ -1,0 +1,111 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://lorq.local/schemas/lorq-file-adapter-evidence.v1alpha.schema.json",
+  "title": "LORQ file adapter evidence v1-alpha",
+  "type": "object",
+  "additionalProperties": true,
+  "required": [
+    "schema_version",
+    "contract_version",
+    "cell_id",
+    "adapter",
+    "status",
+    "final_answer",
+    "usage",
+    "counts",
+    "timing",
+    "process",
+    "trace",
+    "artifacts",
+    "integrity_warnings",
+    "diagnostics"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "lorq.file-adapter-evidence.v1alpha1"
+    },
+    "contract_version": {
+      "const": "lorq.contract.v1alpha1"
+    },
+    "cell_id": {
+      "type": "string"
+    },
+    "adapter": {
+      "type": "object",
+      "required": [
+        "id",
+        "kind",
+        "version"
+      ]
+    },
+    "status": {
+      "enum": [
+        "completed",
+        "skipped",
+        "timeout",
+        "no_final_answer",
+        "adapter_failed",
+        "permission_denied",
+        "invalid_artifact",
+        "unknown"
+      ]
+    },
+    "final_answer": {
+      "type": "object",
+      "required": [
+        "present",
+        "path"
+      ]
+    },
+    "usage": {
+      "type": "object"
+    },
+    "counts": {
+      "type": "object",
+      "required": [
+        "tool_call_count",
+        "artifact_count",
+        "trace_event_count"
+      ]
+    },
+    "timing": {
+      "type": "object",
+      "required": [
+        "elapsed_milliseconds",
+        "timed_out"
+      ]
+    },
+    "process": {
+      "type": "object",
+      "required": [
+        "exit_code",
+        "stdout_path",
+        "stderr_path"
+      ]
+    },
+    "trace": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "artifacts": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "integrity_warnings": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "diagnostics": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    }
+  }
+}
