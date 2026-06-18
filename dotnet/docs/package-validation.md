@@ -4,13 +4,13 @@ This document describes the first .NET v1 foundation slice. It is intentionally 
 
 ## Scope
 
-The current .NET code does **not** run agents, merge shards, attach judgements, or render reports. Those behaviors remain future increments. This slice proves that .NET can read and validate the canonical package shape produced by the frozen Python baseline.
+The current .NET code does **not** run agents, attach judgements, or render reports. Those behaviors remain future increments. This slice proves that .NET can read, validate, rebuild indexes for, and merge the canonical package shape produced by the frozen Python baseline.
 
 ## Projects
 
 ```text
 Lorq.slnx
-src/Lorq.Core/        Domain records and package validation.
+src/Lorq.Core/        Domain records, package validation, index rebuilding, and merge writing.
 src/Lorq.Reporting/   JSON summary shaping for CLI output.
 src/Lorq.Cli/         Minimal validation command surface.
 tests/Lorq.Core.Tests TUnit fixture validation tests.
@@ -48,6 +48,21 @@ dotnet run --project src/Lorq.Cli -- rebuild-indexes \
 
 The rebuild command writes `.lorq/cells/`, `coverage.json`, `fingerprints.json`, `integrity.json`, judgement indexes, `merge-log.json`, and `report.json` under the target root. It is intentionally not a .NET merge implementation yet; it proves .NET can write stable package indexes from the frozen Python evidence contract.
 
+
+Merge run shards into a merged experiment package:
+
+```bash
+cd dotnet
+dotnet run --project src/Lorq.Cli -- merge-shards \
+  ../fixtures/golden/deterministic-orchestration/shard-001 \
+  ../fixtures/golden/deterministic-orchestration/shard-002 \
+  --out ../internal/generated/dotnet-merge-writer/experiment-001 \
+  --package-id deterministic-benchmark \
+  --benchmark ../fixtures/conformance/deterministic-orchestration/benchmark.yaml
+```
+
+The merge command copies run evidence into a new package, writes `experiment.yaml`, creates `.lorq/merge-log.json`, rebuilds coverage/fingerprint/integrity/cell indexes from package evidence, and rejects duplicate cell IDs or fingerprint mismatches by default. It intentionally does not attach judgements or render reports yet.
+
 ## Stable validation codes introduced
 
 | Code | Meaning |
@@ -78,7 +93,7 @@ The .NET validator must accept:
 - `fixtures/golden/deterministic-orchestration/shard-002`
 - `fixtures/golden/deterministic-orchestration/experiment-001`
 
-It must reject the hand-authored negative merge fixtures with stable codes:
+Both merge-input validation and the merge writer must reject the hand-authored negative merge fixtures with stable codes:
 
 - duplicate-cell fixture -> `LORQ210`
 - fingerprint-mismatch fixture -> `LORQ220`
