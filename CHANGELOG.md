@@ -2,6 +2,35 @@
 
 All notable changes to LORQ should be documented here.
 
+## 2026-06-18 - Increment 2 complete: .NET deterministic parity loop
+
+### Roadmap position
+
+Current increment: Increment 2, .NET foundation and package model. This session froze the .NET package-only loop against the Python v0 deterministic migration baseline.
+
+### Added
+
+- Added a TUnit full-loop parity test for .NET `merge-shards -> judge-package -> report-package -> validate-package`.
+- Added complete byte-level comparison of the generated .NET experiment package against `fixtures/golden/deterministic-orchestration/experiment-001`.
+- Added documentation for the .NET deterministic full-loop parity boundary.
+
+### Changed
+
+- Marked Increment 2 complete: .NET can read, validate, rebuild indexes, merge deterministic shards, attach deterministic judgements, and render deterministic reports against the frozen package shape.
+
+### Validation
+
+Executed during this increment:
+
+- `dotnet build dotnet/Lorq.slnx --no-restore -p:Platform="Any CPU"` -> passed.
+- `dotnet test --solution dotnet/Lorq.slnx --no-restore -p:Platform="Any CPU" --disable-logo --minimum-expected-tests 18` -> 18 passed.
+- .NET full-loop parity test compared the complete generated package with the frozen Python golden experiment package -> passed.
+
+### Known limitations
+
+- .NET `run` and external adapters remain future Increment 3 work.
+- Real Codex and Copilot runtime behavior remain future work behind adapter contracts.
+
 ## 2026-06-18 - Increment 2 foundation: .NET deterministic judgement
 
 ### Roadmap position

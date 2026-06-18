@@ -302,7 +302,7 @@ shards:
 {renderedShards}
 cell_count: {cellCount}
 """;
-        File.WriteAllText(Path.Combine(outputRoot, "experiment.yaml"), text);
+        File.WriteAllText(Path.Combine(outputRoot, "experiment.yaml"), text + Environment.NewLine);
     }
 
     private static string PortablePath(string path, string outputRoot)
