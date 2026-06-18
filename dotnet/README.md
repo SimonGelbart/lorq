@@ -104,3 +104,7 @@ The TUnit suite compares the complete generated experiment package with `fixture
 - real Codex or Copilot integration
 
 Those will be implemented only after the package model, merge writer, and fixture compatibility remain stable.
+
+## Documentation
+
+- `docs/cli-architecture.md` describes the command handler boundary for `Lorq.Cli`.
