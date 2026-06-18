@@ -10,7 +10,7 @@ New .NET code follows clean architecture boundaries, object-calisthenics discipl
 
 ## Current projects
 
-- `Lorq.Cli` - command-line entry point. Currently exposes validation-only bootstrap commands.
+- `Lorq.Cli` - command-line entry point. Currently exposes package validation, index rebuild, and deterministic merge bootstrap commands.
 - `Lorq.Core` - experiment, run shard, merge-input, package, judgement, and report domain model plus package validation.
 - `Lorq.Reporting` - JSON command summary shaping.
 - `Lorq.Adapters.Copilot` - reserved for the first-class industrial Copilot SDK adapter.
@@ -21,7 +21,7 @@ New .NET code follows clean architecture boundaries, object-calisthenics discipl
 ```bash
 cd dotnet
 dotnet build Lorq.slnx
-dotnet test --solution Lorq.slnx --disable-logo --minimum-expected-tests 7
+dotnet test --solution Lorq.slnx --disable-logo --minimum-expected-tests 11
 ```
 
 Validate a frozen package:
@@ -41,6 +41,19 @@ dotnet run --project src/Lorq.Cli -- \
   ../internal/generated/dotnet-index-rebuild/experiment-001
 ```
 
+
+Merge frozen deterministic run shards into an experiment package:
+
+```bash
+dotnet run --project src/Lorq.Cli -- \
+  merge-shards \
+  ../fixtures/golden/deterministic-orchestration/shard-001 \
+  ../fixtures/golden/deterministic-orchestration/shard-002 \
+  --out ../internal/generated/dotnet-merge-writer/experiment-001 \
+  --package-id deterministic-benchmark \
+  --benchmark ../fixtures/conformance/deterministic-orchestration/benchmark.yaml
+```
+
 Validate merge inputs for conflict checks:
 
 ```bash
@@ -55,9 +68,8 @@ See `docs/package-validation.md` for the validator scope and stable error codes.
 ## Not implemented yet
 
 - `lorq run`
-- `lorq merge`
 - `lorq judge`
 - `lorq report`
 - real Codex or Copilot integration
 
-Those will be implemented only after the package model and fixture compatibility remain stable.
+Those will be implemented only after the package model, merge writer, and fixture compatibility remain stable.

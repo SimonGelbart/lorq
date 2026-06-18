@@ -52,4 +52,21 @@ public static class ValidationSummaryRenderer
         };
     }
 
+    public static object FromPackageMergeResult(LorqPackageMergeResult result)
+    {
+        return new
+        {
+            ok = result.Ok,
+            package_root = result.PackageRoot,
+            package_id = result.PackageId,
+            shard_ids = result.ShardIds,
+            cell_count = result.CellCount,
+            expected_cell_count = result.ExpectedCellCount,
+            missing_cell_ids = result.MissingCellIds,
+            duplicate_cell_ids = result.DuplicateCellIds,
+            fingerprint_mismatch = result.FingerprintMismatch,
+            diagnostics = result.Diagnostics,
+        };
+    }
+
 }

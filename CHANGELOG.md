@@ -2,6 +2,39 @@
 
 All notable changes to LORQ should be documented here.
 
+## 2026-06-18 - Increment 2 foundation: .NET merge writer
+
+### Roadmap position
+
+Current increment: Increment 2, .NET foundation and package model. This session added the first real .NET merge writer for frozen deterministic run-shard packages, still without implementing .NET run, judge, report, Codex, or Copilot runtime behavior.
+
+### Added
+
+- Added `LorqPackageMerger` and the `merge-shards` CLI command.
+- Added deterministic benchmark expected-cell expansion from `benchmark.yaml` for .NET merge coverage.
+- Added merge writing of `experiment.yaml`, copied shard run evidence, `.lorq/merge-log.json`, and rebuilt `.lorq` cell/coverage/fingerprint/integrity indexes.
+- Added TUnit tests proving merged core indexes are byte-stable against the frozen Python golden baseline.
+- Added merge-writer tests proving duplicate-cell and fingerprint-mismatch fixtures are rejected by default with stable diagnostics.
+
+### Validation
+
+Executed during this increment:
+
+- `dotnet restore dotnet/Lorq.slnx --source <local package cache> -p:Platform="Any CPU"` -> passed.
+- `dotnet build dotnet/Lorq.slnx --no-restore -p:Platform="Any CPU"` -> passed.
+- `dotnet test --solution dotnet/Lorq.slnx --no-restore -p:Platform="Any CPU" --disable-logo --minimum-expected-tests 11` -> 11 passed.
+- `dotnet run --project dotnet/src/Lorq.Cli/Lorq.Cli.csproj --no-restore --property:Platform="Any CPU" -- merge-shards <shard-001> <shard-002> --out <temp>/experiment-001 --package-id deterministic-benchmark --benchmark fixtures/conformance/deterministic-orchestration/benchmark.yaml` -> passed.
+- `dotnet run --project dotnet/src/Lorq.Cli/Lorq.Cli.csproj --no-restore --property:Platform="Any CPU" -- validate-package <temp>/experiment-001` -> passed with the expected warning that no report is attached yet.
+- `cd python && python -m pytest -q` -> passed.
+- `cd python && PYTHONPATH=. python -m eval_runner.cli --suite-root .. --validate-config` -> passed.
+- `cd python && PYTHONPATH=. python -m eval_runner.cli --suite-root ../fixtures/conformance/deterministic-orchestration --validate-config` -> passed.
+- `cd python && PYTHONPATH=. python -m eval_runner.cli --run-conformance` -> passed.
+
+### Known limitations
+
+- The .NET merge writer does not attach judgements or render reports yet.
+- .NET `run`, `judge`, and `report` remain future increments.
+
 ## 2026-06-18 - Increment 2 foundation: .NET index rebuild writer
 
 ### Roadmap position

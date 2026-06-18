@@ -19,6 +19,11 @@ public static class LorqPackageIndexRebuilder
 
     public static LorqIndexRebuildResult Rebuild(string packageRoot, string targetRoot)
     {
+        return Rebuild(packageRoot, targetRoot, LorqIndexRebuildOptions.Default);
+    }
+
+    public static LorqIndexRebuildResult Rebuild(string packageRoot, string targetRoot, LorqIndexRebuildOptions options)
+    {
         var sourceRoot = Path.GetFullPath(packageRoot);
         var destinationRoot = Path.GetFullPath(targetRoot);
         var diagnostics = new List<LorqDiagnostic>();
@@ -31,7 +36,12 @@ public static class LorqPackageIndexRebuilder
 
         var packageKind = ReadPackageKind(sourceRoot);
         var orderedCells = LoadCellsInManifestOrder(sourceRoot, packageKind);
-        var expectedCellIds = LoadExpectedCellIds(sourceRoot, orderedCells);
+        var expectedCellIds = options.ExpectedCellIds?.Order(StringComparer.Ordinal).ToArray()
+            ?? LoadExpectedCellIds(sourceRoot, orderedCells);
+        var sourceShardWarnings = ExistingSourceShardWarnings(sourceRoot)
+            .Concat(options.SourceShardWarnings ?? Array.Empty<JsonObject>())
+            .ToArray();
+        var mergeLog = ExistingMergeLog(sourceRoot);
         var generatedFiles = new List<string>();
         var indexRoot = Path.Combine(destinationRoot, ".lorq");
 
@@ -39,8 +49,8 @@ public static class LorqPackageIndexRebuilder
         WriteCellIndexes(indexRoot, orderedCells, generatedFiles);
         WriteJson(indexRoot, "coverage.json", BuildCoverage(orderedCells, expectedCellIds), generatedFiles);
         WriteJson(indexRoot, "fingerprints.json", BuildFingerprints(orderedCells), generatedFiles);
-        WriteJson(indexRoot, "integrity.json", BuildIntegrity(sourceRoot, orderedCells, expectedCellIds), generatedFiles);
-        WriteMergeLogIndex(sourceRoot, indexRoot, generatedFiles);
+        WriteJson(indexRoot, "integrity.json", BuildIntegrity(sourceRoot, orderedCells, expectedCellIds, sourceShardWarnings), generatedFiles);
+        WriteMergeLogIndex(indexRoot, generatedFiles, mergeLog);
         WriteJudgementIndexes(sourceRoot, indexRoot, generatedFiles);
         WriteReportIndex(sourceRoot, indexRoot, generatedFiles);
 
@@ -186,7 +196,11 @@ public static class LorqPackageIndexRebuilder
         };
     }
 
-    private static JsonObject BuildIntegrity(string packageRoot, IReadOnlyList<JsonObject> cells, IReadOnlyList<string> expectedCellIds)
+    private static JsonObject BuildIntegrity(
+        string packageRoot,
+        IReadOnlyList<JsonObject> cells,
+        IReadOnlyList<string> expectedCellIds,
+        IReadOnlyList<JsonObject> sourceShardWarnings)
     {
         var warnings = new JsonArray();
         var presentCellIds = cells.Select(CellId).ToHashSet(StringComparer.Ordinal);
@@ -206,9 +220,9 @@ public static class LorqPackageIndexRebuilder
             });
         }
 
-        foreach (var sourceWarning in ExistingSourceShardWarnings(packageRoot))
+        foreach (var sourceWarning in sourceShardWarnings)
         {
-            warnings.Add(sourceWarning);
+            warnings.Add(PreservedSourceWarning(sourceWarning));
         }
 
         return new JsonObject
@@ -293,6 +307,12 @@ public static class LorqPackageIndexRebuilder
         }
     }
 
+    private static JsonObject? ExistingMergeLog(string packageRoot)
+    {
+        var path = Path.Combine(packageRoot, ".lorq", "merge-log.json");
+        return File.Exists(path) ? ReadJsonObject(path) : null;
+    }
+
     private static IEnumerable<JsonObject> ExistingSourceShardWarnings(string packageRoot)
     {
         var path = Path.Combine(packageRoot, ".lorq", "integrity.json");
@@ -321,16 +341,30 @@ public static class LorqPackageIndexRebuilder
         return warning["severity"]?.GetValue<string>() == "error";
     }
 
-
-    private static void WriteMergeLogIndex(string packageRoot, string indexRoot, List<string> generatedFiles)
+    private static JsonObject PreservedSourceWarning(JsonObject warning)
     {
-        var mergeLogPath = Path.Combine(packageRoot, ".lorq", "merge-log.json");
-        if (!File.Exists(mergeLogPath))
+        var preserved = new JsonObject
+        {
+            ["type"] = "source_shard_integrity_warning",
+            ["severity"] = warning["severity"]?.GetValue<string>() ?? "warning",
+        };
+
+        foreach (var property in warning)
+        {
+            preserved[property.Key] = property.Value?.DeepClone();
+        }
+
+        return preserved;
+    }
+
+    private static void WriteMergeLogIndex(string indexRoot, List<string> generatedFiles, JsonObject? mergeLog)
+    {
+        if (mergeLog is null)
         {
             return;
         }
 
-        WriteJson(indexRoot, "merge-log.json", ReadJsonObject(mergeLogPath), generatedFiles);
+        WriteJson(indexRoot, "merge-log.json", mergeLog, generatedFiles);
     }
 
     private static void WriteJudgementIndexes(string packageRoot, string indexRoot, List<string> generatedFiles)
