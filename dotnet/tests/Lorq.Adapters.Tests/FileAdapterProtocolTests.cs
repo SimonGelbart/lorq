@@ -100,7 +100,7 @@ public sealed class FileAdapterProtocolTests
     {
         using var workspace = TemporaryDirectory.Create();
         var request = AdapterRequest(workspace.Path, "external-case__baseline__attempt-001");
-        var adapter = new ExternalFileAdapterProcess(new FileAdapterProcessCommand(DotnetExecutable(), new[] { TestHostDll() }, TestPaths.RepoRoot()));
+        var adapter = new ExternalFileAdapterProcess(new FileAdapterProcessCommand(DotnetExecutable(), new[] { TestHostDll() }, TestPaths.RepoRoot(), new Dictionary<string, string>()));
 
         var evidence = await adapter.InvokeAsync(request);
 
@@ -113,12 +113,43 @@ public sealed class FileAdapterProtocolTests
         await Assert.That(File.Exists(Path.Combine(workspace.Path, "adapter-process.stderr.txt"))).IsTrue();
     }
 
+
+
+    [Test]
+    public async Task CodexProfileAddsWrapperEnvironmentWithoutLaunchingCodex()
+    {
+        var command = FileAdapterProcessCommand.Create("lorq-codex-wrapper");
+
+        var profiled = CodexFileAdapterProfile.ApplyTo(command, "codex-test", new[] { "exec", "--json", "--model", "test-model" });
+
+        await Assert.That(profiled.Executable).IsEqualTo("lorq-codex-wrapper");
+        await Assert.That(profiled.EnvironmentVariables["LORQ_ADAPTER_PROFILE"]).IsEqualTo("codex-cli");
+        await Assert.That(profiled.EnvironmentVariables["LORQ_CODEX_COMMAND"]).IsEqualTo("codex-test");
+        await Assert.That(profiled.EnvironmentVariables["LORQ_CODEX_ARGUMENTS"]).Contains("--json");
+        await Assert.That(profiled.EnvironmentVariables["LORQ_CODEX_OUTPUT_FORMAT"]).IsEqualTo("codex-jsonl");
+    }
+
+    [Test]
+    public async Task ExternalProcessAdapterPassesCodexProfileEnvironmentToWrapper()
+    {
+        using var workspace = TemporaryDirectory.Create();
+        var request = AdapterRequest(workspace.Path, "codex-profile__baseline__attempt-001");
+        var command = new FileAdapterProcessCommand(DotnetExecutable(), new[] { TestHostDll(), "--assert-codex-profile" }, TestPaths.RepoRoot(), new Dictionary<string, string>());
+        var adapter = new ExternalFileAdapterProcess(CodexFileAdapterProfile.ApplyTo(command, "codex-test", new[] { "exec", "--json" }));
+
+        var evidence = await adapter.InvokeAsync(request);
+
+        await Assert.That(evidence.Adapter.Id).IsEqualTo("codex-profile-test-adapter");
+        await Assert.That(evidence.Trace[0].Message).Contains("codex-profile");
+    }
+
+
     [Test]
     public async Task ExternalProcessAdapterFailsWhenEvidenceIsMissing()
     {
         using var workspace = TemporaryDirectory.Create();
         var request = AdapterRequest(workspace.Path, "missing-evidence__baseline__attempt-001");
-        var adapter = new ExternalFileAdapterProcess(new FileAdapterProcessCommand(DotnetExecutable(), new[] { TestHostDll(), "--fail-without-evidence" }, TestPaths.RepoRoot()));
+        var adapter = new ExternalFileAdapterProcess(new FileAdapterProcessCommand(DotnetExecutable(), new[] { TestHostDll(), "--fail-without-evidence" }, TestPaths.RepoRoot(), new Dictionary<string, string>()));
 
         var exception = await Assert.ThrowsAsync<FileAdapterProtocolException>(() => adapter.InvokeAsync(request).AsTask());
 

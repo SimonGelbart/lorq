@@ -28,12 +28,28 @@ internal static class DeterministicRunShardApplication
         if (!string.IsNullOrWhiteSpace(options.AdapterCommand))
         {
             var workingDirectory = ResolveOptionalWorkingDirectory(options.AdapterWorkingDirectory, suiteRoot);
-            var command = new FileAdapterProcessCommand(options.AdapterCommand, options.AdapterArguments, workingDirectory);
+            var command = new FileAdapterProcessCommand(options.AdapterCommand, options.AdapterArguments, workingDirectory, new Dictionary<string, string>());
+            command = ApplyAdapterProfile(options, command);
             return new ExternalFileAdapterProcess(command);
         }
 
         var fixture = DeterministicFakeAgentFixture.Load(ResolveFromSuite(suiteRoot, options.AdapterFixturePath));
         return new DeterministicFakeFileAdapter(fixture);
+    }
+
+    private static FileAdapterProcessCommand ApplyAdapterProfile(RunOptions options, FileAdapterProcessCommand command)
+    {
+        if (string.IsNullOrWhiteSpace(options.AdapterProfile))
+        {
+            return command;
+        }
+
+        if (string.Equals(options.AdapterProfile, CodexFileAdapterProfile.Name, StringComparison.Ordinal))
+        {
+            return CodexFileAdapterProfile.ApplyTo(command, options.CodexCommand, options.CodexArguments);
+        }
+
+        throw new FileAdapterProtocolException("LORQ-ADAPTER-PROFILE", $"Unknown adapter profile '{options.AdapterProfile}'.");
     }
 
     private static string? ResolveOptionalWorkingDirectory(string? workingDirectory, string suiteRoot)

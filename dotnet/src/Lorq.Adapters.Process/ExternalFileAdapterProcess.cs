@@ -65,6 +65,10 @@ public sealed class ExternalFileAdapterProcess : IFileAdapter
         startInfo.Environment["LORQ_ADAPTER_EVIDENCE"] = EvidencePath(request);
         startInfo.Environment["LORQ_ADAPTER_EXCHANGE_DIR"] = request.Workspace.EvidenceDirectory;
         startInfo.Environment["LORQ_ADAPTER_WORKSPACE_ROOT"] = request.Workspace.Root;
+        foreach (var item in command.EnvironmentVariables)
+        {
+            startInfo.Environment[item.Key] = item.Value;
+        }
         return new System.Diagnostics.Process { StartInfo = startInfo };
     }
 

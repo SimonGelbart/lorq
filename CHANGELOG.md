@@ -2,6 +2,32 @@
 
 All notable changes to LORQ should be documented here.
 
+## 2026-06-18 - Increment 3 adapters: Codex file adapter profile
+
+### Roadmap position
+
+Current increment: Increment 3, .NET run and merge loop. This session adds a Codex-oriented process profile on top of the file-adapter protocol without invoking a real Codex runtime.
+
+### Added
+
+- Added `CodexFileAdapterProfile` as a built-in profile for external one-shot Codex wrapper processes.
+- Added profile environment variables for Codex command, Codex arguments, output format, and one-shot invocation mode.
+- Added `--adapter-profile codex-cli`, `--codex-command`, and repeated `--codex-arg` to `run --no-judge`.
+- Added deterministic TUnit coverage proving the Codex profile is passed to the wrapper process without real Codex execution.
+- Added `dotnet/docs/adapters/codex-file-adapter-profile.md`.
+
+### Validation
+
+Executed during this increment:
+
+- `dotnet restore dotnet/Lorq.slnx --source <local package cache> -p:Platform="Any CPU"` -> passed.
+- `dotnet build dotnet/Lorq.slnx --no-restore -p:Platform="Any CPU"` -> passed.
+- `dotnet test --solution dotnet/Lorq.slnx --no-restore -p:Platform="Any CPU" --disable-logo --minimum-expected-tests 39` -> 39 passed.
+
+### Known limitations
+
+- `codex-cli` currently configures a wrapper process only. LORQ does not call Codex directly and does not use real LLM output as a migration gate.
+
 ## 2026-06-18 - Increment 3 runtime: external file adapter process
 
 ### Roadmap position
