@@ -99,6 +99,37 @@ Executed during this increment:
 - The .NET writer currently rebuilds indexes for existing package evidence only; it does not yet create run shards, merge shards, attach judgements, or render reports.
 - Source-shard integrity warnings in merged packages are preserved from package metadata until .NET merge owns shard input composition.
 
+## 2026-06-18 - Increment 2: .NET deterministic report rendering
+
+### Roadmap position
+
+Current increment: Increment 2, .NET foundation and package model. This session added deterministic package report rendering for judged merged packages.
+
+### Added
+
+- Added .NET `report-package` CLI support with `--primary-judgement`.
+- Added `LorqPackageReportRenderer` to write canonical `reports/report.json`, `reports/report.md`, per-case review packs, and `.lorq/report.json`.
+- Added TUnit tests proving .NET report outputs are byte-stable against the frozen Python golden baseline.
+
+### Changed
+
+- Updated .NET docs and command summaries to include deterministic report rendering.
+- Advanced the practical roadmap status for Increment 2 from judgement attachment to report rendering.
+
+### Validation
+
+Executed during this increment:
+
+- `dotnet restore dotnet/Lorq.slnx --source <local package cache> -p:Platform="Any CPU"` -> passed.
+- `dotnet build dotnet/Lorq.slnx --no-restore -p:Platform="Any CPU"` -> passed.
+- `dotnet test --solution dotnet/Lorq.slnx --no-restore -p:Platform="Any CPU" --disable-logo --minimum-expected-tests 16` -> 16 passed.
+- .NET merge -> judge -> report -> validate smoke under `internal/generated/dotnet-report-package/` -> passed.
+
+### Known limitations
+
+- .NET full-loop parity freeze is still pending.
+- .NET `run`, production/external `judge`, Codex, and Copilot runtime behavior remain future increments.
+
 ## 2026-06-18 - Increment 2 setup: .NET engineering and TUnit standard
 
 ### Roadmap position

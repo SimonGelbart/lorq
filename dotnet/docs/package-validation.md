@@ -4,14 +4,14 @@ This document describes the first .NET v1 foundation slice. It is intentionally 
 
 ## Scope
 
-The current .NET code does **not** run agents or render reports. Those behaviors remain future increments. This slice proves that .NET can read, validate, rebuild indexes for, merge, and attach deterministic judgements to the canonical package shape produced by the frozen Python baseline.
+The current .NET code does **not** run agents or render production/general reports. Those behaviors remain future increments. This slice proves that .NET can read, validate, rebuild indexes for, merge, attach deterministic judgements to, and render deterministic reports from the canonical package shape produced by the frozen Python baseline.
 
 ## Projects
 
 ```text
 Lorq.slnx
 src/Lorq.Core/        Domain records, package validation, index rebuilding, merge writing, and deterministic judgement attachment.
-src/Lorq.Reporting/   JSON summary shaping for CLI output.
+src/Lorq.Reporting/   JSON summary shaping plus deterministic package report rendering.
 src/Lorq.Cli/         Minimal validation command surface.
 tests/Lorq.Core.Tests TUnit fixture validation tests.
 ```
@@ -74,6 +74,18 @@ dotnet run --project src/Lorq.Cli -- judge-package \
 ```
 
 The judgement command writes `judgements/<name>/`, per-cell judgement files, and `.lorq/judgements/<name>.json`. It is fixture-backed and records `real_llm_used: false`; it intentionally does not call Codex, Copilot, or any judge LLM.
+
+
+Render deterministic reports from a judged package:
+
+```bash
+cd dotnet
+dotnet run --project src/Lorq.Cli -- report-package \
+  ../internal/generated/dotnet-merge-writer/experiment-001 \
+  --primary-judgement judge-primary
+```
+
+The report command writes `reports/report.json`, `reports/report.md`, `reports/cases/<case>/case-review.json`, `reports/cases/<case>/case-review.md`, and `.lorq/report.json`. It is deterministic and fixture-backed; it does not invoke any real LLM.
 
 ## Stable validation codes introduced
 

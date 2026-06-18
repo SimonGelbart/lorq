@@ -86,4 +86,20 @@ public static class ValidationSummaryRenderer
         };
     }
 
+    public static object FromPackageReportResult(LorqPackageReportResult result)
+    {
+        return new
+        {
+            ok = result.Ok,
+            package_root = result.PackageRoot,
+            primary_judgement = result.PrimaryJudgement,
+            report_json = result.ReportJson,
+            report_markdown = result.ReportMarkdown,
+            case_pack_count = result.CasePackCount,
+            missing_expected_cell_ids = result.MissingExpectedCellIds,
+            score_summary = result.ScoreSummary,
+            diagnostics = result.Diagnostics,
+        };
+    }
+
 }
