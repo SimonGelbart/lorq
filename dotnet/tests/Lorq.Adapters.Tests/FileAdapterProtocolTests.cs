@@ -69,6 +69,31 @@ public sealed class FileAdapterProtocolTests
         await Assert.That(json).Contains("artifacts");
     }
 
+
+    [Test]
+    public async Task DeterministicFakeAdapterWritesFullEvidenceFile()
+    {
+        using var workspace = TemporaryDirectory.Create();
+        var fixture = DeterministicFakeAgentFixture.Load(Path.Combine(TestPaths.RepoRoot(), "fixtures", "conformance", "deterministic-orchestration", "fixtures", "fake-agent.yaml"));
+        var adapter = new DeterministicFakeFileAdapter(fixture);
+        var request = new FileAdapterRequest(
+            FileAdapterProtocol.RequestSchemaVersion,
+            FileAdapterProtocol.ContractVersion,
+            new FileAdapterCell("successful-comparison__baseline__attempt-001", "successful-comparison", "baseline", "attempt-001", "shard-001"),
+            new FileAdapterWorkspace(workspace.Path, workspace.Path, Path.Combine(workspace.Path, "artifacts")),
+            new FileAdapterTask("prompt.txt", "Explain deterministic evidence."),
+            new FileAdapterLimits(30000),
+            new FileAdapterExpectedOutput(FileAdapterProtocol.EvidenceFileName, "answer.md"));
+
+        var evidence = await adapter.InvokeAsync(request);
+
+        await Assert.That(evidence.Status).IsEqualTo("completed");
+        await Assert.That(evidence.FinalAnswer.Present).IsTrue();
+        await Assert.That(File.Exists(Path.Combine(workspace.Path, FileAdapterProtocol.EvidenceFileName))).IsTrue();
+        await Assert.That(File.ReadAllText(Path.Combine(workspace.Path, FileAdapterProtocol.EvidenceFileName))).Contains("usage");
+        await Assert.That(File.ReadAllText(Path.Combine(workspace.Path, FileAdapterProtocol.EvidenceFileName))).Contains("trace");
+    }
+
     private static string SchemaConst(string fileName)
     {
         var path = Path.Combine(TestPaths.RepoRoot(), "schemas", fileName);
@@ -76,4 +101,28 @@ public sealed class FileAdapterProtocolTests
         return document.RootElement.GetProperty("properties").GetProperty("schema_version").GetProperty("const").GetString()
             ?? throw new InvalidOperationException($"Schema {fileName} does not declare schema_version const.");
     }
+
+    private sealed class TemporaryDirectory : IDisposable
+    {
+        public string Path { get; }
+
+        private TemporaryDirectory(string path)
+        {
+            Path = path;
+        }
+
+        public static TemporaryDirectory Create()
+        {
+            return new TemporaryDirectory(Directory.CreateTempSubdirectory("lorq-adapter-test-").FullName);
+        }
+
+        public void Dispose()
+        {
+            if (Directory.Exists(Path))
+            {
+                Directory.Delete(Path, recursive: true);
+            }
+        }
+    }
+
 }

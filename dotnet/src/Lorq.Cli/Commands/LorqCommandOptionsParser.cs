@@ -5,6 +5,38 @@ namespace Lorq.Cli.Commands;
 /// </summary>
 public static class LorqCommandOptionsParser
 {
+
+    public static ParseResult<RunOptions> ParseRun(IReadOnlyList<string> values)
+    {
+        string? outputRoot = null;
+        string suiteRoot = ".";
+        string? shardId = null;
+        string packageId = "deterministic-benchmark";
+        string? benchmarkPath = null;
+        string? adapterFixturePath = null;
+        var noJudge = false;
+
+        for (var index = 0; index < values.Count; index++)
+        {
+            index = ParseRunValue(values, index, ref outputRoot, ref suiteRoot, ref shardId, ref packageId, ref benchmarkPath, ref adapterFixturePath, ref noJudge);
+        }
+
+        if (string.IsNullOrWhiteSpace(outputRoot))
+        {
+            return ParseResult<RunOptions>.Failure("run --no-judge requires --out <run-shard-root>.");
+        }
+
+        if (!noJudge)
+        {
+            return ParseResult<RunOptions>.Failure("Only run --no-judge is implemented in this migration slice.");
+        }
+
+        shardId ??= Path.GetFileName(Path.TrimEndingDirectorySeparator(outputRoot));
+        benchmarkPath ??= "benchmark.yaml";
+        adapterFixturePath ??= Path.Combine("fixtures", "fake-agent.yaml");
+        return ParseResult<RunOptions>.Success(new RunOptions(outputRoot, suiteRoot, shardId, packageId, benchmarkPath, adapterFixturePath, noJudge));
+    }
+
     public static ParseResult<ValidatePackageOptions> ParseValidatePackage(IReadOnlyList<string> values)
     {
         if (values.Count < 1 || string.IsNullOrWhiteSpace(values[0]))
@@ -92,6 +124,47 @@ public static class LorqCommandOptionsParser
         }
 
         return ParseResult<ReportPackageOptions>.Success(new ReportPackageOptions(packageRoot, primaryJudgement));
+    }
+
+
+    private static int ParseRunValue(
+        IReadOnlyList<string> values,
+        int index,
+        ref string? outputRoot,
+        ref string suiteRoot,
+        ref string? shardId,
+        ref string packageId,
+        ref string? benchmarkPath,
+        ref string? adapterFixturePath,
+        ref bool noJudge)
+    {
+        var value = values[index];
+        switch (value)
+        {
+            case "--no-judge":
+                noJudge = true;
+                return index;
+            case "--out" when index + 1 < values.Count:
+                outputRoot = values[index + 1];
+                return index + 1;
+            case "--suite-root" when index + 1 < values.Count:
+                suiteRoot = values[index + 1];
+                return index + 1;
+            case "--shard-id" when index + 1 < values.Count:
+                shardId = values[index + 1];
+                return index + 1;
+            case "--package-id" when index + 1 < values.Count:
+                packageId = values[index + 1];
+                return index + 1;
+            case "--benchmark" when index + 1 < values.Count:
+                benchmarkPath = values[index + 1];
+                return index + 1;
+            case "--adapter-fixture" when index + 1 < values.Count:
+                adapterFixturePath = values[index + 1];
+                return index + 1;
+            default:
+                return index;
+        }
     }
 
     private static int ParseMergeValue(
