@@ -17,6 +17,9 @@ The command is intentionally limited to the deterministic migration benchmark. I
 ```text
 CLI run command
 → planned shard selection from benchmark.yaml
+→ per-cell workspace planning
+→ local repository copy materialization
+→ mode materialize.copy application
 → one file-adapter request per cell
 → deterministic fake file adapter or external one-shot process adapter
 → full adapter evidence contract
@@ -34,6 +37,14 @@ When omitted, the command derives:
 - `--adapter-fixture fixtures/fake-agent.yaml` under `--suite-root`.
 
 Only `--no-judge` is supported in this slice. Judgement attachment remains a separate package operation.
+
+## Workspace materialization
+
+`run --no-judge` now creates a disposable workspace per planned cell before invoking the adapter. For the deterministic conformance suite, the case `repo:` value resolves through `eval.config.yaml` to `fake_project`, which is copied into the cell workspace.
+
+By default, materialized workspaces are written beside the output shard as `<out>.workspaces/<cell-id>/`, keeping scratch material outside the package root. Use `--work-root <path>` to choose a dedicated workspace root; relative paths are resolved from the current process directory and then grouped by shard id and cell id.
+
+Mode files may declare `materialize.copy` entries. Each `from` path is resolved from `--suite-root` and copied to the requested `to` path inside the cell workspace. Setup commands are still not executed in this slice.
 
 ## External process adapter
 
@@ -63,4 +74,4 @@ The evidence uses `lorq.file-adapter-evidence.v1alpha1` and records adapter iden
 
 ## Current limitation
 
-This command is still deterministic fixture orchestration only. General case/mode loading, workspace materialization, repository checkout, Codex, and Copilot remain future Increment 3 work.
+This command is still deterministic fixture orchestration only. Local repository copy materialization exists, but Git worktree/clone checkout, dirty-policy enforcement, setup command execution, Codex, and Copilot remain future Increment 3 work.

@@ -45,12 +45,15 @@ public sealed class CommandOptionsParserTests
             "adapter.dll",
             "--adapter-working-directory",
             ".",
+            "--work-root",
+            "workspaces",
         });
 
         await Assert.That(result.Ok).IsTrue().Because(result.ErrorMessage ?? "parse failed");
         await Assert.That(result.Options!.AdapterCommand).IsEqualTo("dotnet");
         await Assert.That(result.Options.AdapterArguments).IsEquivalentTo(new[] { "adapter.dll" });
         await Assert.That(result.Options.AdapterWorkingDirectory).IsEqualTo(".");
+        await Assert.That(result.Options.WorkRoot).IsEqualTo("workspaces");
     }
 
 

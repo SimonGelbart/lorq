@@ -12,11 +12,15 @@ internal static class DeterministicRunShardApplication
         var suiteRoot = Path.GetFullPath(options.SuiteRoot);
         var adapter = CreateAdapter(options, suiteRoot);
         var plan = DeterministicBenchmarkShardPlan.ReadFrom(ResolveFromSuite(suiteRoot, options.BenchmarkPath), options.ShardId);
+        var workspacePlanner = new RunWorkspacePlanner();
+        var materializer = new RunWorkspaceMaterializer();
         var cells = new List<LorqRunShardCellEvidence>();
 
         foreach (var cell in plan.Cells)
         {
-            cells.Add(await RunCellAsync(options, suiteRoot, adapter, cell, cancellationToken));
+            var workspace = workspacePlanner.Plan(new RunWorkspacePlanningRequest(suiteRoot, options.OutputRoot, options.ShardId, cell, options.WorkRoot));
+            materializer.Materialize(workspace);
+            cells.Add(await RunCellAsync(options, adapter, cell, workspace, cancellationToken));
         }
 
         return LorqRunShardPackageWriter.Write(new LorqRunShardWriteRequest(options.PackageId, options.ShardId, options.OutputRoot, cells));
@@ -64,30 +68,26 @@ internal static class DeterministicRunShardApplication
 
     private static async ValueTask<LorqRunShardCellEvidence> RunCellAsync(
         RunOptions options,
-        string suiteRoot,
         IFileAdapter adapter,
         DeterministicBenchmarkCell cell,
+        RunWorkspacePlan workspace,
         CancellationToken cancellationToken)
     {
-        var outputRoot = Path.GetFullPath(options.OutputRoot);
-        var cellId = $"{cell.CaseId}__{cell.ModeId}__attempt-{cell.Attempt:000}";
-        var attemptId = $"attempt-{cell.Attempt:000}";
-        var exchangeDirectory = Path.Combine(outputRoot, ".lorq", "tmp", cellId);
-        var promptText = PromptText(suiteRoot, cell.CaseId);
+        var promptText = PromptText(workspace.CasePath);
         var request = new FileAdapterRequest(
             FileAdapterProtocol.RequestSchemaVersion,
             FileAdapterProtocol.ContractVersion,
-            new FileAdapterCell(cellId, cell.CaseId, cell.ModeId, attemptId, options.ShardId),
-            new FileAdapterWorkspace(suiteRoot, exchangeDirectory, Path.Combine(exchangeDirectory, "artifacts")),
+            new FileAdapterCell(workspace.CellId, cell.CaseId, cell.ModeId, workspace.AttemptId, options.ShardId),
+            new FileAdapterWorkspace(workspace.WorkspaceRoot, workspace.EvidenceDirectory, workspace.ArtifactsDirectory),
             new FileAdapterTask("prompt.txt", promptText),
             new FileAdapterLimits(30000),
             new FileAdapterExpectedOutput(FileAdapterProtocol.EvidenceFileName, "answer.md"));
 
-        Directory.CreateDirectory(exchangeDirectory);
-        await File.WriteAllTextAsync(Path.Combine(exchangeDirectory, FileAdapterProtocol.RequestFileName), JsonSerializer.Serialize(request, FileAdapterJson.Options) + Environment.NewLine, cancellationToken);
+        Directory.CreateDirectory(workspace.EvidenceDirectory);
+        await File.WriteAllTextAsync(Path.Combine(workspace.EvidenceDirectory, FileAdapterProtocol.RequestFileName), JsonSerializer.Serialize(request, FileAdapterJson.Options) + Environment.NewLine, cancellationToken);
         var evidence = await adapter.InvokeAsync(request, cancellationToken);
-        var evidenceJson = await File.ReadAllTextAsync(Path.Combine(exchangeDirectory, FileAdapterProtocol.EvidenceFileName), cancellationToken);
-        return ToRunCellEvidence(options.ShardId, cell, promptText, evidence, evidenceJson, exchangeDirectory);
+        var evidenceJson = await File.ReadAllTextAsync(Path.Combine(workspace.EvidenceDirectory, FileAdapterProtocol.EvidenceFileName), cancellationToken);
+        return ToRunCellEvidence(options.ShardId, cell, promptText, evidence, evidenceJson, workspace.EvidenceDirectory);
     }
 
     private static LorqRunShardCellEvidence ToRunCellEvidence(
@@ -253,9 +253,9 @@ internal static class DeterministicRunShardApplication
         return artifacts;
     }
 
-    private static string PromptText(string suiteRoot, string caseId)
+    private static string PromptText(string casePath)
     {
-        var task = CaseTask(Path.Combine(suiteRoot, "cases", caseId + ".yaml"));
+        var task = CaseTask(casePath);
         return "You are evaluating repository evidence. Use only the provided repository context." + Environment.NewLine + Environment.NewLine + "Task:" + Environment.NewLine + task;
     }
 
