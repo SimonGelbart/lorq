@@ -21,7 +21,7 @@ New .NET code follows clean architecture boundaries, object-calisthenics discipl
 ```bash
 cd dotnet
 dotnet build Lorq.slnx
-dotnet test --solution Lorq.slnx --disable-logo --minimum-expected-tests 39
+dotnet test --solution Lorq.slnx --disable-logo --minimum-expected-tests 40
 ```
 
 
@@ -33,6 +33,17 @@ dotnet run --project src/Lorq.Cli -- \
   --no-judge \
   --suite-root ../fixtures/conformance/deterministic-orchestration \
   --out ../internal/generated/dotnet-run-shard/shard-001
+```
+
+Run with an explicit workspace root:
+
+```bash
+dotnet run --project src/Lorq.Cli -- \
+  run \
+  --no-judge \
+  --suite-root ../fixtures/conformance/deterministic-orchestration \
+  --out ../internal/generated/dotnet-run-shard/shard-001 \
+  --work-root ../internal/generated/dotnet-run-workspaces
 ```
 
 Validate a frozen package:
@@ -109,7 +120,7 @@ The TUnit suite compares the complete generated experiment package with `fixture
 
 ## Not implemented yet
 
-- general `lorq run` execution orchestration beyond the deterministic fake file adapter slice
+- general `lorq run` execution orchestration beyond deterministic local-copy workspace materialization and fake/file adapter slices
 - production `lorq judge` backed by real/external judge adapters
 - production/general `lorq report` beyond the deterministic frozen package report bootstrap
 - real Codex or Copilot integration

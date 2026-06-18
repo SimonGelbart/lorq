@@ -21,7 +21,12 @@ public sealed class RunCommandTests
 
         await Assert.That(exitCode).IsEqualTo(0).Because(error.ToString());
         await Assert.That(validationCode).IsEqualTo(0).Because(error.ToString());
+        var cellId = "successful-comparison__baseline__attempt-001";
+        var workspaceRoot = Path.Combine(shardRoot + ".workspaces", cellId);
+
         await Assert.That(File.Exists(Path.Combine(shardRoot, "runs", "shard-001", "shard.manifest.json"))).IsTrue();
+        await Assert.That(File.Exists(Path.Combine(workspaceRoot, "src", "ledger.py"))).IsTrue();
+        await Assert.That(workspaceRoot).Contains(Path.Combine("shard-001.workspaces", cellId));
         await Assert.That(output.ToString()).Contains("\"cell_count\": 3");
         await Assert.That(error.ToString()).IsEmpty();
     }
@@ -97,6 +102,36 @@ public sealed class RunCommandTests
     }
 
 
+
+    [Test]
+    public async Task RunNoJudgeCanMaterializeWorkspaceUnderCustomWorkRoot()
+    {
+        using var workspace = TemporaryDirectory.Create();
+        var shardRoot = Path.Combine(workspace.Path, "shard-001");
+        var workRoot = Path.Combine(workspace.Path, "work-root");
+        var output = new StringWriter();
+        var error = new StringWriter();
+
+        var exitCode = await LorqCliApplication.RunAsync(new[]
+        {
+            "run",
+            "--no-judge",
+            "--suite-root",
+            suiteRoot,
+            "--out",
+            shardRoot,
+            "--work-root",
+            workRoot,
+        }, output, error);
+
+        var cellId = "successful-comparison__baseline__attempt-001";
+        var workspaceRoot = Path.Combine(workRoot, "shard-001", cellId);
+
+        await Assert.That(exitCode).IsEqualTo(0).Because(error.ToString());
+        await Assert.That(File.Exists(Path.Combine(workspaceRoot, "src", "ledger.py"))).IsTrue();
+        await Assert.That(error.ToString()).IsEmpty();
+    }
+
     [Test]
     public async Task RunWithoutNoJudgeFailsDuringParsing()
     {
@@ -112,9 +147,17 @@ public sealed class RunCommandTests
     }
 
 
+
     private static string TestHostDll()
     {
-        return Path.Combine(TestPaths.RepoRoot(), "dotnet", "tests", "Lorq.Adapter.TestHost", "bin", "Debug", "net10.0", "Lorq.Adapter.TestHost.dll");
+        var root = Path.Combine(TestPaths.RepoRoot(), "dotnet", "tests", "Lorq.Adapter.TestHost", "bin");
+        var platformPath = Path.Combine(root, "Any CPU", "Debug", "net10.0", "Lorq.Adapter.TestHost.dll");
+        if (File.Exists(platformPath))
+        {
+            return platformPath;
+        }
+
+        return Path.Combine(root, "Debug", "net10.0", "Lorq.Adapter.TestHost.dll");
     }
 
     private static string DotnetExecutable()

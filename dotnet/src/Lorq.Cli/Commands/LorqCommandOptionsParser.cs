@@ -18,13 +18,14 @@ public static class LorqCommandOptionsParser
         string? adapterWorkingDirectory = null;
         string? adapterProfile = null;
         string? codexCommand = null;
+        string? workRoot = null;
         var adapterArguments = new List<string>();
         var codexArguments = new List<string>();
         var noJudge = false;
 
         for (var index = 0; index < values.Count; index++)
         {
-            index = ParseRunValue(values, index, ref outputRoot, ref suiteRoot, ref shardId, ref packageId, ref benchmarkPath, ref adapterFixturePath, ref adapterCommand, adapterArguments, ref adapterWorkingDirectory, ref adapterProfile, ref codexCommand, codexArguments, ref noJudge);
+            index = ParseRunValue(values, index, ref outputRoot, ref suiteRoot, ref shardId, ref packageId, ref benchmarkPath, ref adapterFixturePath, ref adapterCommand, adapterArguments, ref adapterWorkingDirectory, ref adapterProfile, ref codexCommand, codexArguments, ref workRoot, ref noJudge);
         }
 
         if (string.IsNullOrWhiteSpace(outputRoot))
@@ -45,7 +46,7 @@ public static class LorqCommandOptionsParser
         shardId ??= Path.GetFileName(Path.TrimEndingDirectorySeparator(outputRoot));
         benchmarkPath ??= "benchmark.yaml";
         adapterFixturePath ??= Path.Combine("fixtures", "fake-agent.yaml");
-        return ParseResult<RunOptions>.Success(new RunOptions(outputRoot, suiteRoot, shardId, packageId, benchmarkPath, adapterFixturePath, noJudge, adapterCommand, adapterArguments, adapterWorkingDirectory, adapterProfile, codexCommand, codexArguments));
+        return ParseResult<RunOptions>.Success(new RunOptions(outputRoot, suiteRoot, shardId, packageId, benchmarkPath, adapterFixturePath, noJudge, adapterCommand, adapterArguments, adapterWorkingDirectory, adapterProfile, codexCommand, codexArguments, workRoot));
     }
 
     public static ParseResult<ValidatePackageOptions> ParseValidatePackage(IReadOnlyList<string> values)
@@ -153,6 +154,7 @@ public static class LorqCommandOptionsParser
         ref string? adapterProfile,
         ref string? codexCommand,
         List<string> codexArguments,
+        ref string? workRoot,
         ref bool noJudge)
     {
         var value = values[index];
@@ -196,6 +198,9 @@ public static class LorqCommandOptionsParser
                 return index + 1;
             case "--codex-arg" when index + 1 < values.Count:
                 codexArguments.Add(values[index + 1]);
+                return index + 1;
+            case "--work-root" when index + 1 < values.Count:
+                workRoot = values[index + 1];
                 return index + 1;
             default:
                 return index;

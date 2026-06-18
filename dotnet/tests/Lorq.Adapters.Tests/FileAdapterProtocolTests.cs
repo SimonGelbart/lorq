@@ -179,7 +179,14 @@ public sealed class FileAdapterProtocolTests
 
     private static string TestHostDll()
     {
-        return Path.Combine(TestPaths.RepoRoot(), "dotnet", "tests", "Lorq.Adapter.TestHost", "bin", "Debug", "net10.0", "Lorq.Adapter.TestHost.dll");
+        var root = Path.Combine(TestPaths.RepoRoot(), "dotnet", "tests", "Lorq.Adapter.TestHost", "bin");
+        var platformPath = Path.Combine(root, "Any CPU", "Debug", "net10.0", "Lorq.Adapter.TestHost.dll");
+        if (File.Exists(platformPath))
+        {
+            return platformPath;
+        }
+
+        return Path.Combine(root, "Debug", "net10.0", "Lorq.Adapter.TestHost.dll");
     }
 
     private static string DotnetExecutable()

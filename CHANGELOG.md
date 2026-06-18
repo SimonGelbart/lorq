@@ -2,6 +2,33 @@
 
 All notable changes to LORQ should be documented here.
 
+## 2026-06-19 - Increment 3 runtime: workspace materialization planning
+
+### Roadmap position
+
+Current increment: Increment 3, .NET run and merge loop. This session adds deterministic workspace and materialization planning to `run --no-judge` before introducing general repository orchestration or real LLM adapters.
+
+### Added
+
+- Added per-cell disposable workspace planning for `run --no-judge`.
+- Added local repository source resolution from case `repo:` metadata and suite `eval.config.yaml`.
+- Added repository copy materialization into the adapter workspace before each cell run.
+- Added support for mode `materialize.copy` entries so future modes can copy files or directories into the per-cell workspace.
+- Added `--work-root` to place materialized workspaces outside the run package root.
+- Added TUnit coverage proving deterministic runs materialize `fake_project` workspaces and preserve valid run-shard output.
+
+### Validation
+
+Executed during this increment:
+
+- `dotnet test --solution dotnet/Lorq.slnx --no-restore -p:Platform="Any CPU" --disable-logo --minimum-expected-tests 40` -> 40 passed.
+- `dotnet run --project dotnet/src/Lorq.Cli/Lorq.Cli.csproj --no-restore --property:Platform="Any CPU" -- run --no-judge --suite-root fixtures/conformance/deterministic-orchestration --out ../internal/generated/dotnet-materialized-run/shard-001 --work-root <absolute-work-root>` -> passed.
+
+### Known limitations
+
+- Workspace materialization currently supports local repository copy and mode copy entries only.
+- Git worktree/clone checkout, dirty policy enforcement, setup command execution, direct Codex, and Copilot SDK runtime behavior remain future work.
+
 ## 2026-06-18 - Increment 3 adapters: Codex file adapter profile
 
 ### Roadmap position

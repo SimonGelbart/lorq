@@ -13,4 +13,5 @@ public sealed record RunOptions(
     string? AdapterWorkingDirectory,
     string? AdapterProfile,
     string? CodexCommand,
-    IReadOnlyList<string> CodexArguments) : CommandOptions;
+    IReadOnlyList<string> CodexArguments,
+    string? WorkRoot) : CommandOptions;
