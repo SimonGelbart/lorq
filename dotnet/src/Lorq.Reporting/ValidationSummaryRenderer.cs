@@ -69,4 +69,21 @@ public static class ValidationSummaryRenderer
         };
     }
 
+    public static object FromPackageJudgementResult(LorqPackageJudgementResult result)
+    {
+        return new
+        {
+            ok = result.Ok,
+            package_root = result.PackageRoot,
+            judgement_name = result.JudgementName,
+            backend = result.Backend,
+            cell_count = result.CellCount,
+            judged_cell_count = result.JudgedCellCount,
+            missing_fixture_cell_ids = result.MissingFixtureCellIds,
+            missing_expected_cell_ids = result.MissingExpectedCellIds,
+            score_summary = result.ScoreSummary,
+            diagnostics = result.Diagnostics,
+        };
+    }
+
 }

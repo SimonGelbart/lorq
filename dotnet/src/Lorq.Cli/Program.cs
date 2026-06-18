@@ -10,7 +10,7 @@ var options = new JsonSerializerOptions
 
 if (args.Length < 2)
 {
-    Console.Error.WriteLine("Usage: lorq validate-package <package-root> | validate-merge-inputs <shard-root> <shard-root> [...] | rebuild-indexes <package-root> <target-root> | merge-shards <shard-root> <shard-root> [...] --out <package-root> --package-id <id> [--benchmark <path>] [--allow-incompatible]");
+    Console.Error.WriteLine("Usage: lorq validate-package <package-root> | validate-merge-inputs <shard-root> <shard-root> [...] | rebuild-indexes <package-root> <target-root> | merge-shards <shard-root> <shard-root> [...] --out <package-root> --package-id <id> [--benchmark <path>] [--allow-incompatible] | judge-package <package-root> --name <judge-name> --fixture <path> [--allow-missing-fixtures]");
     return 2;
 }
 
@@ -63,6 +63,20 @@ switch (args[0])
         return result.Ok ? 0 : 1;
     }
 
+    case "judge-package":
+    {
+        var parsed = ParseJudgeArgs(args.Skip(1).ToArray());
+        if (parsed is null)
+        {
+            Console.Error.WriteLine("judge-package requires <package-root>, --name <judge-name>, and --fixture <path>.");
+            return 2;
+        }
+
+        var result = LorqDeterministicPackageJudge.Attach(parsed);
+        Console.WriteLine(JsonSerializer.Serialize(ValidationSummaryRenderer.FromPackageJudgementResult(result), options));
+        return result.Ok ? 0 : 1;
+    }
+
     default:
         Console.Error.WriteLine($"Unknown command '{args[0]}'.");
         return 2;
@@ -106,4 +120,39 @@ static LorqPackageMergeRequest? ParseMergeArgs(IReadOnlyList<string> values)
     }
 
     return new LorqPackageMergeRequest(shardRoots, outputRoot, packageId, benchmarkPath, strict);
+}
+
+static LorqPackageJudgeRequest? ParseJudgeArgs(IReadOnlyList<string> values)
+{
+    string? packageRoot = null;
+    string? judgeName = null;
+    string? fixturePath = null;
+    var strict = true;
+
+    for (var index = 0; index < values.Count; index++)
+    {
+        var value = values[index];
+        switch (value)
+        {
+            case "--name" when index + 1 < values.Count:
+                judgeName = values[++index];
+                break;
+            case "--fixture" when index + 1 < values.Count:
+                fixturePath = values[++index];
+                break;
+            case "--allow-missing-fixtures":
+                strict = false;
+                break;
+            default:
+                packageRoot ??= value;
+                break;
+        }
+    }
+
+    if (string.IsNullOrWhiteSpace(packageRoot) || string.IsNullOrWhiteSpace(judgeName) || string.IsNullOrWhiteSpace(fixturePath))
+    {
+        return null;
+    }
+
+    return new LorqPackageJudgeRequest(packageRoot, judgeName, fixturePath, strict);
 }

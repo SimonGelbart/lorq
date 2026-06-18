@@ -2,6 +2,38 @@
 
 All notable changes to LORQ should be documented here.
 
+## 2026-06-18 - Increment 2 foundation: .NET deterministic judgement
+
+### Roadmap position
+
+Current increment: Increment 2, .NET foundation and package model. This session added .NET deterministic judgement attachment for merged packages, still without implementing .NET run, report, Codex, or Copilot runtime behavior.
+
+### Added
+
+- Added `LorqDeterministicPackageJudge` and the `judge-package` CLI command.
+- Added fixture-backed deterministic fake judge parsing for `fixtures/fake-judge.yaml` without using any real LLM.
+- Added writing of `judgements/<name>/judgement.manifest.json`, `judgement.summary.json`, per-cell judgement files, and `.lorq/judgements/<name>.json`.
+- Added TUnit tests proving judgement output is byte-stable against the frozen Python golden baseline.
+- Added strict missing-fixture diagnostics with stable code `LORQ310`.
+
+### Validation
+
+Executed during this increment:
+
+- `dotnet restore dotnet/Lorq.slnx --source <local package cache> -p:Platform="Any CPU"` -> passed.
+- `dotnet build dotnet/Lorq.slnx --no-restore -p:Platform="Any CPU"` -> passed.
+- `dotnet test --solution dotnet/Lorq.slnx --no-restore -p:Platform="Any CPU" --disable-logo --minimum-expected-tests 14` -> 14 passed.
+- `dotnet run --project dotnet/src/Lorq.Cli/Lorq.Cli.csproj --no-restore --property:Platform="Any CPU" -- judge-package <temp>/experiment-001 --name judge-primary --fixture fixtures/conformance/deterministic-orchestration/fixtures/fake-judge.yaml` -> passed.
+- `cd python && python -m pytest -q` -> passed.
+- `cd python && PYTHONPATH=. python -m eval_runner.cli --suite-root .. --validate-config` -> passed.
+- `cd python && PYTHONPATH=. python -m eval_runner.cli --suite-root ../fixtures/conformance/deterministic-orchestration --validate-config` -> passed.
+- `cd python && PYTHONPATH=. python -m eval_runner.cli --run-conformance` -> passed.
+
+### Known limitations
+
+- .NET report rendering is not implemented yet.
+- .NET `run`, Codex, and Copilot runtime behavior remain future increments.
+
 ## 2026-06-18 - Increment 2 foundation: .NET merge writer
 
 ### Roadmap position

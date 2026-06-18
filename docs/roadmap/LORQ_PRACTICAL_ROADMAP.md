@@ -120,7 +120,7 @@ This is a planning and alignment increment. It does not need to produce final co
 
 ### Current branch status
 
-Increment 1 is frozen on `feat/migration`. Increment 2 now has a .NET package validation foundation, clean engineering/TUnit standards, deterministic index rebuild support, and a deterministic merge writer that produces merged packages from frozen run shards with byte-stable core `.lorq` indexes. .NET run, judge, report, Codex, and Copilot runtime behavior remain future work.
+Increment 1 is frozen on `feat/migration`. Increment 2 now has a .NET package validation foundation, clean engineering/TUnit standards, deterministic index rebuild support, a deterministic merge writer, and deterministic fake judgement attachment with byte-stable judgement outputs against the frozen Python baseline. .NET run, report, Codex, and Copilot runtime behavior remain future work.
 
 ### Quantifiable exit criteria
 
@@ -215,7 +215,7 @@ It must include at least:
 
 ### Current branch status
 
-Increment 1 is frozen on `feat/migration`. Increment 2 now has a .NET package validation foundation, clean engineering/TUnit standards, deterministic index rebuild support, and a deterministic merge writer that produces merged packages from frozen run shards with byte-stable core `.lorq` indexes. .NET run, judge, report, Codex, and Copilot runtime behavior remain future work.
+Increment 1 is frozen on `feat/migration`. Increment 2 now has a .NET package validation foundation, clean engineering/TUnit standards, deterministic index rebuild support, a deterministic merge writer, and deterministic fake judgement attachment with byte-stable judgement outputs against the frozen Python baseline. .NET run, report, Codex, and Copilot runtime behavior remain future work.
 
 ### Quantifiable exit criteria
 
@@ -283,7 +283,7 @@ This increment is about domain modeling, package IO, validation, and fixture com
 
 ### Current branch status
 
-Increment 1 is frozen on `feat/migration`. Increment 2 now has a .NET package validation foundation, clean engineering/TUnit standards, deterministic index rebuild support, and a deterministic merge writer that produces merged packages from frozen run shards with byte-stable core `.lorq` indexes. .NET run, judge, report, Codex, and Copilot runtime behavior remain future work.
+Increment 1 is frozen on `feat/migration`. Increment 2 now has a .NET package validation foundation, clean engineering/TUnit standards, deterministic index rebuild support, a deterministic merge writer, and deterministic fake judgement attachment with byte-stable judgement outputs against the frozen Python baseline. .NET run, report, Codex, and Copilot runtime behavior remain future work.
 
 ### Quantifiable exit criteria
 
@@ -362,7 +362,7 @@ It should still avoid real LLM/runtime integration. The goal is orchestration co
 
 ### Current branch status
 
-Increment 1 is frozen on `feat/migration`. Increment 2 now has a .NET package validation foundation, clean engineering/TUnit standards, deterministic index rebuild support, and a deterministic merge writer that produces merged packages from frozen run shards with byte-stable core `.lorq` indexes. .NET run, judge, report, Codex, and Copilot runtime behavior remain future work.
+Increment 1 is frozen on `feat/migration`. Increment 2 now has a .NET package validation foundation, clean engineering/TUnit standards, deterministic index rebuild support, a deterministic merge writer, and deterministic fake judgement attachment with byte-stable judgement outputs against the frozen Python baseline. .NET run, report, Codex, and Copilot runtime behavior remain future work.
 
 ### Quantifiable exit criteria
 
@@ -443,7 +443,7 @@ It must keep quality judgement separate from execution/integrity.
 
 ### Current branch status
 
-Increment 1 is frozen on `feat/migration`. Increment 2 now has a .NET package validation foundation, clean engineering/TUnit standards, deterministic index rebuild support, and a deterministic merge writer that produces merged packages from frozen run shards with byte-stable core `.lorq` indexes. .NET run, judge, report, Codex, and Copilot runtime behavior remain future work.
+Increment 1 is frozen on `feat/migration`. Increment 2 now has a .NET package validation foundation, clean engineering/TUnit standards, deterministic index rebuild support, a deterministic merge writer, and deterministic fake judgement attachment with byte-stable judgement outputs against the frozen Python baseline. .NET run, report, Codex, and Copilot runtime behavior remain future work.
 
 ### Quantifiable exit criteria
 
@@ -552,7 +552,7 @@ adapter.exit_code
 
 ### Current branch status
 
-Increment 1 is frozen on `feat/migration`. Increment 2 now has a .NET package validation foundation, clean engineering/TUnit standards, deterministic index rebuild support, and a deterministic merge writer that produces merged packages from frozen run shards with byte-stable core `.lorq` indexes. .NET run, judge, report, Codex, and Copilot runtime behavior remain future work.
+Increment 1 is frozen on `feat/migration`. Increment 2 now has a .NET package validation foundation, clean engineering/TUnit standards, deterministic index rebuild support, a deterministic merge writer, and deterministic fake judgement attachment with byte-stable judgement outputs against the frozen Python baseline. .NET run, report, Codex, and Copilot runtime behavior remain future work.
 
 ### Quantifiable exit criteria
 
@@ -617,7 +617,7 @@ This increment validates integration paths. It should not turn into broad model-
 
 ### Current branch status
 
-Increment 1 is frozen on `feat/migration`. Increment 2 now has a .NET package validation foundation, clean engineering/TUnit standards, deterministic index rebuild support, and a deterministic merge writer that produces merged packages from frozen run shards with byte-stable core `.lorq` indexes. .NET run, judge, report, Codex, and Copilot runtime behavior remain future work.
+Increment 1 is frozen on `feat/migration`. Increment 2 now has a .NET package validation foundation, clean engineering/TUnit standards, deterministic index rebuild support, a deterministic merge writer, and deterministic fake judgement attachment with byte-stable judgement outputs against the frozen Python baseline. .NET run, report, Codex, and Copilot runtime behavior remain future work.
 
 ### Quantifiable exit criteria
 
@@ -678,7 +678,7 @@ This increment is about reliability, documentation, packaging, validation, and a
 
 ### Current branch status
 
-Increment 1 is frozen on `feat/migration`. Increment 2 now has a .NET package validation foundation, clean engineering/TUnit standards, deterministic index rebuild support, and a deterministic merge writer that produces merged packages from frozen run shards with byte-stable core `.lorq` indexes. .NET run, judge, report, Codex, and Copilot runtime behavior remain future work.
+Increment 1 is frozen on `feat/migration`. Increment 2 now has a .NET package validation foundation, clean engineering/TUnit standards, deterministic index rebuild support, a deterministic merge writer, and deterministic fake judgement attachment with byte-stable judgement outputs against the frozen Python baseline. .NET run, report, Codex, and Copilot runtime behavior remain future work.
 
 ### Quantifiable exit criteria
 
