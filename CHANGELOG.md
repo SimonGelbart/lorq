@@ -2,6 +2,32 @@
 
 All notable changes to LORQ should be documented here.
 
+## 2026-06-18 - Increment 3 quality gate: .NET CLI command architecture
+
+### Roadmap position
+
+Current increment: Increment 3, .NET run and merge loop. This session intentionally paused new runtime behavior to clean up the .NET CLI boundary before adding `lorq run --no-judge`.
+
+### Changed
+
+- Refactored `Lorq.Cli` from a procedural top-level switch into typed command options, command definitions, and `ICommandHandler<TOptions>` handlers.
+- Kept the existing CLI behavior and JSON summaries for validation, merge, index rebuild, judgement, and report commands.
+- Added `Lorq.Cli.Tests` with TUnit coverage for command option parsing and application dispatch.
+- Added `dotnet/docs/cli-architecture.md` to define the CLI/application/core split and the command handler pattern.
+
+### Validation
+
+Executed during this increment:
+
+- `dotnet restore dotnet/Lorq.slnx --source <local package cache> -p:Platform="Any CPU"` -> passed.
+- `dotnet build dotnet/Lorq.slnx --no-restore -p:Platform="Any CPU"` -> passed.
+- `dotnet test --solution dotnet/Lorq.slnx --no-restore -p:Platform="Any CPU" --disable-logo --minimum-expected-tests 27` -> 27 passed.
+
+### Known limitations
+
+- The CLI is cleaner, but this is still not a full DI/hosting architecture.
+- `lorq run --no-judge` remains the next runtime increment.
+
 ## 2026-06-18 - Increment 3 start: file adapter contract
 
 ### Roadmap position
