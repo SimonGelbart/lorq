@@ -69,7 +69,6 @@ public sealed class FileAdapterProtocolTests
         await Assert.That(json).Contains("artifacts");
     }
 
-
     [Test]
     public async Task DeterministicFakeAdapterWritesFullEvidenceFile()
     {
@@ -94,7 +93,6 @@ public sealed class FileAdapterProtocolTests
         await Assert.That(File.ReadAllText(Path.Combine(workspace.Path, FileAdapterProtocol.EvidenceFileName))).Contains("trace");
     }
 
-
     [Test]
     public async Task ExternalProcessAdapterReadsEvidenceFromOneShotProtocol()
     {
@@ -112,8 +110,6 @@ public sealed class FileAdapterProtocolTests
         await Assert.That(File.Exists(Path.Combine(workspace.Path, "adapter-process.stdout.txt"))).IsTrue();
         await Assert.That(File.Exists(Path.Combine(workspace.Path, "adapter-process.stderr.txt"))).IsTrue();
     }
-
-
 
     [Test]
     public async Task CodexProfileAddsWrapperEnvironmentWithoutLaunchingCodex()
@@ -143,7 +139,6 @@ public sealed class FileAdapterProtocolTests
         await Assert.That(evidence.Trace[0].Message).Contains("codex-profile");
     }
 
-
     [Test]
     public async Task ExternalProcessAdapterFailsWhenEvidenceIsMissing()
     {
@@ -164,7 +159,6 @@ public sealed class FileAdapterProtocolTests
             ?? throw new InvalidOperationException($"Schema {fileName} does not declare schema_version const.");
     }
 
-
     private static FileAdapterRequest AdapterRequest(string workspace, string cellId)
     {
         return new FileAdapterRequest(
@@ -180,13 +174,21 @@ public sealed class FileAdapterProtocolTests
     private static string TestHostDll()
     {
         var root = Path.Combine(TestPaths.RepoRoot(), "dotnet", "tests", "Lorq.Adapter.TestHost", "bin");
-        var platformPath = Path.Combine(root, "Any CPU", "Debug", "net10.0", "Lorq.Adapter.TestHost.dll");
-        if (File.Exists(platformPath))
+        if (!Directory.Exists(root))
         {
-            return platformPath;
+            throw new DirectoryNotFoundException(root);
         }
 
-        return Path.Combine(root, "Debug", "net10.0", "Lorq.Adapter.TestHost.dll");
+        var candidates = Directory
+            .EnumerateFiles(root, "Lorq.Adapter.TestHost.dll", SearchOption.AllDirectories)
+            .Where(path => path.Contains($"{Path.DirectorySeparatorChar}net10.0{Path.DirectorySeparatorChar}", StringComparison.Ordinal))
+            .OrderByDescending(path => path.Contains($"{Path.DirectorySeparatorChar}Release{Path.DirectorySeparatorChar}", StringComparison.Ordinal))
+            .ThenBy(path => path, StringComparer.Ordinal)
+            .ToArray();
+
+        return candidates.Length > 0
+            ? candidates[0]
+            : throw new FileNotFoundException("Lorq.Adapter.TestHost.dll was not found under " + root);
     }
 
     private static string DotnetExecutable()
@@ -218,5 +220,4 @@ public sealed class FileAdapterProtocolTests
             }
         }
     }
-
 }
