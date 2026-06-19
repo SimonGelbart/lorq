@@ -82,15 +82,23 @@ jobs:
       - name: Build
         run: dotnet build dotnet/Lorq.slnx --configuration Release --no-restore
 
-      - name: Test
-        run: dotnet test dotnet/Lorq.slnx --configuration Release --no-build --logger "trx;LogFilePrefix=dotnet-tests" --results-directory TestResults
+      - name: Test TUnit projects
+        run: >-
+          dotnet test
+          --test-modules "dotnet/tests/**/bin/Release/net10.0/*.Tests.dll"
+          --root-directory .
+          --results-directory TestResults
+          --
+          --report-trx
 
       - name: Upload .NET test results
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: dotnet-test-results
-          path: TestResults/**/*.trx
+          path: |
+            TestResults/*.trx
+            TestResults/**/*.trx
           if-no-files-found: ignore
 
   package:
