@@ -151,13 +151,21 @@ public sealed class RunCommandTests
     private static string TestHostDll()
     {
         var root = Path.Combine(TestPaths.RepoRoot(), "dotnet", "tests", "Lorq.Adapter.TestHost", "bin");
-        var platformPath = Path.Combine(root, "Any CPU", "Debug", "net10.0", "Lorq.Adapter.TestHost.dll");
-        if (File.Exists(platformPath))
+        if (!Directory.Exists(root))
         {
-            return platformPath;
+            throw new DirectoryNotFoundException(root);
         }
 
-        return Path.Combine(root, "Debug", "net10.0", "Lorq.Adapter.TestHost.dll");
+        var candidates = Directory
+            .EnumerateFiles(root, "Lorq.Adapter.TestHost.dll", SearchOption.AllDirectories)
+            .Where(path => path.Contains($"{Path.DirectorySeparatorChar}net10.0{Path.DirectorySeparatorChar}", StringComparison.Ordinal))
+            .OrderByDescending(path => path.Contains($"{Path.DirectorySeparatorChar}Release{Path.DirectorySeparatorChar}", StringComparison.Ordinal))
+            .ThenBy(path => path, StringComparer.Ordinal)
+            .ToArray();
+
+        return candidates.Length > 0
+            ? candidates[0]
+            : throw new FileNotFoundException("Lorq.Adapter.TestHost.dll was not found under " + root);
     }
 
     private static string DotnetExecutable()
