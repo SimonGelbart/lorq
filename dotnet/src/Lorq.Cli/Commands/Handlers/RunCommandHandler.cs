@@ -8,8 +8,16 @@ using Lorq.Cli.Runtime;
 
 namespace Lorq.Cli.Commands.Handlers;
 
-public sealed class RunCommandHandler : ICommandHandler<RunOptions>
+internal sealed class RunCommandHandler : ICommandHandler<RunOptions>
 {
+    private readonly DeterministicRunShardApplication application;
+
+    public RunCommandHandler(DeterministicRunShardApplication application)
+    {
+        ArgumentNullException.ThrowIfNull(application);
+        this.application = application;
+    }
+
     public async ValueTask<CommandResult> HandleAsync(RunOptions options, CancellationToken cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(options);
@@ -21,7 +29,7 @@ public sealed class RunCommandHandler : ICommandHandler<RunOptions>
 
         try
         {
-            var result = await DeterministicRunShardApplication.RunAsync(options, cancellationToken);
+            var result = await application.RunAsync(options, cancellationToken);
             var summary = ValidationSummaryRenderer.FromRunShardWriteResult(result);
             return result.Ok ? CommandResult.Success(summary) : CommandResult.Failure(summary);
         }
