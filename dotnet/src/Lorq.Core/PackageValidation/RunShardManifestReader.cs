@@ -29,9 +29,9 @@ internal sealed class RunShardManifestReader
     }
 
     public void ValidateShardReferences(
-        IReadOnlyList<string> declaredShards,
+        IReadOnlyList<ShardId> declaredShards,
         IReadOnlyList<RunShard> runShards,
-        IReadOnlyList<string> presentCells)
+        IReadOnlyList<CellId> presentCells)
     {
         ValidateDeclaredShards(declaredShards, runShards);
         ValidateShardCells(runShards, presentCells);
@@ -40,32 +40,36 @@ internal sealed class RunShardManifestReader
     private RunShard ReadManifest(string manifestPath)
     {
         using var document = JsonHelpers.ReadDocument(manifestPath);
-        var shardId = JsonHelpers.RequiredString(document.RootElement, "shard_id", manifestPath);
-        var cellIds = JsonHelpers.OptionalStringArray(document.RootElement, "cell_ids");
+        var shardId = new ShardId(JsonHelpers.RequiredString(document.RootElement, "shard_id", manifestPath));
+        var cellIds = JsonHelpers.OptionalStringArray(document.RootElement, "cell_ids").Select(cellId => new CellId(cellId)).ToArray();
         var declaredCount = JsonHelpers.OptionalInt(document.RootElement, "cell_count", -1);
-        if (declaredCount != cellIds.Count)
+        if (declaredCount != cellIds.Length)
         {
-            diagnostics.Error("LORQ081", $"Shard manifest cell_count {declaredCount} does not match cell_ids count {cellIds.Count}.", manifestPath);
+            diagnostics.Error("LORQ081", $"Shard manifest cell_count {declaredCount} does not match cell_ids count {cellIds.Length}.", manifestPath);
         }
 
-        return new RunShard(shardId, declaredCount, cellIds);
+        return new RunShard(shardId.Value, declaredCount, cellIds.Select(cellId => cellId.Value).ToArray());
     }
 
-    private void ValidateDeclaredShards(IReadOnlyList<string> declaredShards, IReadOnlyList<RunShard> runShards)
+    private void ValidateDeclaredShards(IReadOnlyList<ShardId> declaredShards, IReadOnlyList<RunShard> runShards)
     {
-        var manifestShardIds = runShards.Select(shard => shard.ShardId).Order(StringComparer.Ordinal).ToArray();
-        var declaredShardIds = declaredShards.Order(StringComparer.Ordinal).ToArray();
-        if (!declaredShardIds.SequenceEqual(manifestShardIds, StringComparer.Ordinal))
+        var manifestShardIds = runShards.Select(shard => new ShardId(shard.ShardId)).OrderBy(shardId => shardId.Value, StringComparer.Ordinal).ToArray();
+        var declaredShardIds = declaredShards.OrderBy(shardId => shardId.Value, StringComparer.Ordinal).ToArray();
+        if (!declaredShardIds.SequenceEqual(manifestShardIds))
         {
             diagnostics.Error("LORQ110", "experiment.yaml shards do not match run shard manifests.");
         }
     }
 
-    private void ValidateShardCells(IReadOnlyList<RunShard> runShards, IReadOnlyList<string> presentCells)
+    private void ValidateShardCells(IReadOnlyList<RunShard> runShards, IReadOnlyList<CellId> presentCells)
     {
-        var manifestCells = runShards.SelectMany(shard => shard.CellIds).Order(StringComparer.Ordinal).ToArray();
-        var coverageCells = presentCells.Order(StringComparer.Ordinal).ToArray();
-        if (!manifestCells.SequenceEqual(coverageCells, StringComparer.Ordinal))
+        var manifestCells = runShards
+            .SelectMany(shard => shard.CellIds)
+            .Select(cellId => new CellId(cellId))
+            .OrderBy(cellId => cellId.Value, StringComparer.Ordinal)
+            .ToArray();
+        var coverageCells = presentCells.OrderBy(cellId => cellId.Value, StringComparer.Ordinal).ToArray();
+        if (!manifestCells.SequenceEqual(coverageCells))
         {
             diagnostics.Error("LORQ111", "Run shard manifest cells do not match coverage present_cell_ids.");
         }

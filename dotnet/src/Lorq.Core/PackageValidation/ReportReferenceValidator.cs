@@ -10,7 +10,7 @@ internal sealed class ReportReferenceValidator
         this.diagnostics = diagnostics;
     }
 
-    public ReportReference? Read(string root, string packageKind, ISet<string> knownJudgements)
+    public ReportReference? Read(string root, PackageKind packageKind, ISet<string> knownJudgements)
     {
         var reportIndexPath = Path.Combine(root, ".lorq", "report.json");
         if (!File.Exists(reportIndexPath))
@@ -29,9 +29,9 @@ internal sealed class ReportReferenceValidator
         return new ReportReference(primaryJudgement, jsonPath, markdownPath, caseCount);
     }
 
-    private void AddMissingReportWarning(string packageKind, string reportIndexPath)
+    private void AddMissingReportWarning(PackageKind packageKind, string reportIndexPath)
     {
-        if (packageKind == "merged_experiment")
+        if (packageKind.IsMergedExperiment())
         {
             diagnostics.Warning("LORQ130", "Merged package does not have a report index yet.", reportIndexPath);
         }
