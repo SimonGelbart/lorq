@@ -4,6 +4,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageVersion Include="Microsoft.Extensions.Hosting" Version="10.0.9" />
     <PackageVersion Include="TUnit" Version="1.56.0" />
     <PackageVersion Include="TUnit.Mocks" Version="1.56.0" />
   </ItemGroup>

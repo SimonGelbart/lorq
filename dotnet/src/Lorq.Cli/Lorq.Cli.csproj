@@ -1,6 +1,10 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Hosting" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Lorq.Adapters.Process\Lorq.Adapters.Process.csproj" />
     <ProjectReference Include="..\Lorq.Core\Lorq.Core.csproj" />
     <ProjectReference Include="..\Lorq.Reporting\Lorq.Reporting.csproj" />

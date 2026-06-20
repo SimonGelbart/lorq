@@ -2,6 +2,61 @@
 
 All notable changes to LORQ should be documented here.
 
+## 2026-06-20 - Refactor: CLI namespace organization
+
+### Roadmap position
+
+Current branch: `refactor/dotnet-hosted-cli-composition`. This step keeps behavior unchanged and organizes the CLI project into folder-backed namespaces after introducing hosted composition.
+
+### Changed
+
+- Moved hosted composition types under `Lorq.Cli.Hosting`.
+- Split CLI command implementation into `Commands`, `Commands.Parsing`, `Commands.Handlers`, and `Commands.Results`.
+- Moved deterministic run/workspace orchestration helpers under `Lorq.Cli.Runtime`.
+- Updated CLI tests to reference the new namespaces without changing command behavior.
+
+### Validation
+
+Executed during this increment:
+
+- `dotnet restore dotnet/Lorq.slnx --configfile /mnt/data/nuget-local/tracepack-nuget-bundle/NuGet.config -p:Platform="Any CPU"` -> passed.
+- `dotnet build dotnet/Lorq.slnx --no-restore -p:Platform="Any CPU" --nologo -v:minimal` -> passed.
+- `dotnet test --solution dotnet/Lorq.slnx --no-restore -p:Platform="Any CPU" --disable-logo --minimum-expected-tests 42` -> 42 passed.
+- `dotnet build dotnet/Lorq.slnx --no-restore --configuration Release -p:Platform="Any CPU" --nologo -v:minimal` -> passed.
+- `dotnet test --test-modules "dotnet/tests/**/bin/Release/net10.0/*.Tests.dll" --root-directory . --results-directory ../internal/generated/refactor-cli-namespace-test-results -- --report-trx` -> 42 passed.
+
+### Known limitations
+
+- This is a namespace/folder organization commit only; package validation, reporting, and run orchestration internals remain static/procedural and are still candidates for later extraction.
+
+## 2026-06-20 - Refactor: hosted CLI composition
+
+### Roadmap position
+
+Current branch: `refactor/dotnet-hosted-cli-composition`. This step keeps CLI behavior unchanged while moving command construction behind .NET host and dependency-injection composition.
+
+### Changed
+
+- Added hosted CLI composition via `LorqCliHost` and `AddLorqCli`.
+- Registered command handlers and command catalog through dependency injection instead of constructing the default catalog inside the application.
+- Kept `LorqCliApplication.RunAsync` as a test-friendly compatibility entry point backed by the same host composition used by `Program.cs`.
+- Added TUnit coverage proving the host registers `LorqCliApplication`, `LorqCommandCatalog`, and executable command handlers.
+
+### Validation
+
+Executed during this increment:
+
+- `dotnet restore dotnet/Lorq.slnx --configfile /mnt/data/nuget-local/tracepack-nuget-bundle/NuGet.config -p:Platform="Any CPU"` -> passed.
+- `dotnet build dotnet/Lorq.slnx --no-restore -p:Platform="Any CPU" --nologo -v:minimal` -> passed.
+- `dotnet test --solution dotnet/Lorq.slnx --no-restore -p:Platform="Any CPU" --disable-logo --minimum-expected-tests 42` -> 42 passed.
+- `dotnet build dotnet/Lorq.slnx --no-restore --configuration Release -p:Platform="Any CPU" --nologo -v:minimal` -> passed.
+- `dotnet test --test-modules "dotnet/tests/**/bin/Release/net10.0/*.Tests.dll" --root-directory . --results-directory ../internal/generated/refactor-hosted-cli-test-results -- --report-trx` -> 42 passed.
+
+### Known limitations
+
+- Command-line parsing is still hand-written and remains a follow-up candidate for `System.CommandLine`.
+- Core package operations are still mostly static procedural services; this step only changes CLI composition.
+
 ## 2026-06-19 - Increment 3 runtime: workspace materialization planning
 
 ### Roadmap position
