@@ -6,11 +6,19 @@ LORQ is a shard-safe orchestration ledger for agent, tool, and skill evaluations
 
 LORQ is not primarily an LLM intelligence benchmark. The product goal is orchestration, evidence capture, package integrity, adapter conformance, and decision-grade reporting.
 
+## Current implementation status
+
+The repository contains two implementation tracks:
+
+- `python/` is the Python v0 baseline that produced the frozen deterministic conformance fixtures.
+- `dotnet/` is the .NET product implementation. It now covers the deterministic package loop: run shards, merge, deterministic judgement attachment, report rendering, package validation, index rebuilds, and file-adapter evidence contracts.
+
+The current .NET path is still deterministic and no-token by default. Real Codex and Copilot runtime integrations remain adapter work after the deterministic package and orchestration contracts stay stable.
+
 ## Repository layout
 
 ```text
 lorq/
-  .agents/           Source-controlled reusable AI-agent operating rules.
   cases/             Shared benchmark case definitions.
   modes/             Shared mode definitions.
   pricing/           Shared pricing profiles.
@@ -20,29 +28,64 @@ lorq/
   rubrics/           Shared validation and evaluation rubrics.
   repositories/      Shared repository definitions.
   examples/          Shared example suites and fixture repos.
-  fixtures/          Intentional conformance/golden/generated fixtures.
-  docs/              Product roadmap, operating rules, architecture, and Python v0 docs.
-  python/            Current Python v0 prototype and tests.
-  dotnet/            Future .NET LORQ v1 implementation skeleton.
+  fixtures/          Intentional conformance, golden, and generated fixtures.
+  docs/              User, reference, architecture, and roadmap documentation.
+  python/            Python v0 baseline implementation.
+  dotnet/            .NET LORQ implementation.
 ```
 
-## Current state
-
-The repository currently contains the Python v0 prototype reorganized into the target monorepo architecture.
-
-The immediate practical goal is to freeze a deterministic orchestration benchmark in Python v0, then use that as the comparable baseline for the .NET implementation.
-
-## Quick validation
+## .NET quick validation
 
 ```bash
-cd python
-python -m pytest
-PYTHONPATH=. python -m eval_runner.cli --suite-root .. --validate-config
-PYTHONPATH=. python -m eval_runner.cli --run-conformance
+cd dotnet
+dotnet build Lorq.slnx
+dotnet test --solution Lorq.slnx --disable-logo --minimum-expected-tests 42
 ```
 
-## Source-control boundary
+## Deterministic package loop
 
-Only the `lorq/` directory is intended to become the GitHub repository.
+From the repository root, the deterministic .NET loop is:
 
-In delivery artifacts, `internal/` is reserved for handoffs, scratch scripts, session logs, and misc agent material. Do not commit `internal/` by default.
+```bash
+dotnet run --project dotnet/src/Lorq.Cli -- \
+  run \
+  --no-judge \
+  --suite-root fixtures/conformance/deterministic-orchestration \
+  --out internal/generated/dotnet-run-shard/shard-001
+
+dotnet run --project dotnet/src/Lorq.Cli -- \
+  merge-shards \
+  fixtures/golden/deterministic-orchestration/shard-001 \
+  fixtures/golden/deterministic-orchestration/shard-002 \
+  --out internal/generated/dotnet-full-loop/experiment-001 \
+  --package-id deterministic-benchmark \
+  --benchmark fixtures/conformance/deterministic-orchestration/benchmark.yaml
+
+dotnet run --project dotnet/src/Lorq.Cli -- \
+  judge-package \
+  internal/generated/dotnet-full-loop/experiment-001 \
+  --name judge-primary \
+  --fixture fixtures/conformance/deterministic-orchestration/fixtures/fake-judge.yaml
+
+dotnet run --project dotnet/src/Lorq.Cli -- \
+  report-package \
+  internal/generated/dotnet-full-loop/experiment-001 \
+  --primary-judgement judge-primary
+
+dotnet run --project dotnet/src/Lorq.Cli -- \
+  validate-package internal/generated/dotnet-full-loop/experiment-001
+```
+
+See `docs/how-to/dotnet-deterministic-loop.md` for the full walkthrough.
+
+## Documentation
+
+Documentation follows a Diátaxis-inspired split:
+
+- `docs/how-to/` for task-oriented procedures.
+- `docs/reference/` for command, package, and validation contracts.
+- `docs/explanation/` for product and architecture background.
+- `docs/decisions/` for architecture decision records.
+- `docs/roadmap/` for product direction and delivery sequencing.
+
+Start with `docs/README.md` for the documentation map.

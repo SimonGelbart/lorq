@@ -10,13 +10,13 @@ Program
   -> LorqCommandCatalog
   -> CommandDefinition<TOptions>
   -> ICommandHandler<TOptions>
-  -> Core/Reporting service
+  -> Core/Reporting/Adapter service
 ```
 
 ## Boundaries
 
 - `Lorq.Cli` owns host composition, parsing, command dispatch, and console rendering.
-- `Lorq.Core` owns package validation, index rebuild, merge, and deterministic judgement package operations.
+- `Lorq.Core` owns package validation, index rebuilds, merge, deterministic judgement attachment, and deterministic run package services.
 - `Lorq.Reporting` owns deterministic package report rendering.
 - `Lorq.Adapters.Process` owns file-based adapter protocol contracts.
 
@@ -45,8 +45,6 @@ Current commands:
 
 ## Namespace layout
 
-The CLI project is organized around folder-backed namespaces:
-
 ```text
 Lorq.Cli
   Application entry and command dispatch
@@ -61,22 +59,11 @@ Lorq.Cli.Commands.Handlers
 Lorq.Cli.Commands.Results
   Command result and console JSON rendering
 Lorq.Cli.Runtime
-  Deterministic run/workspace orchestration helpers
+  Runtime service registrations and CLI-side runtime helpers
 ```
-
-Keep future namespace changes behavior-preserving. Conceptual extractions in `Core`, `Reporting`, or runtime orchestration should happen in separate commits so review diffs remain readable.
-
-## Quality rules
-
-Domain/package behavior should stay small and testable. CLI classes may be pragmatic DTO/handler code, but new CLI behavior should still use meaningful names, file-scoped namespaces, sealed classes by default, guard clauses, and one type per file.
-
-Do not add a new top-level switch branch in `Program.cs`. Add a typed command instead.
-
 
 ## Hosted composition
 
-`Program.cs` builds a `LorqCliHost` and resolves `LorqCliApplication` from dependency injection. This keeps the CLI entry point thin while making command handlers replaceable and testable through composition.
+`Program.cs` builds a `LorqCliHost` and resolves `LorqCliApplication` from dependency injection. This keeps the entry point small and makes handlers and orchestration services replaceable in tests.
 
 `LorqCliApplication.RunAsync` remains as a compatibility helper for tests and programmatic smoke calls. It uses the same host-backed composition path as `Program.cs`.
-
-This is an intermediate step. Argument parsing is still intentionally unchanged and can be migrated to `System.CommandLine` in a later refactoring PR.

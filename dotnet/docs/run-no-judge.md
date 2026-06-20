@@ -1,6 +1,6 @@
 # Deterministic `run --no-judge`
 
-Increment 3 adds the first narrow .NET runtime slice:
+`run --no-judge` produces a run-shard package from the deterministic conformance benchmark without invoking a judge or real LLM.
 
 ```bash
 dotnet run --project dotnet/src/Lorq.Cli -- \
@@ -9,8 +9,6 @@ dotnet run --project dotnet/src/Lorq.Cli -- \
   --suite-root fixtures/conformance/deterministic-orchestration \
   --out internal/generated/dotnet-run-shard/shard-001
 ```
-
-The command is intentionally limited to the deterministic migration benchmark. It does not run Codex, Copilot, or any real LLM. It proves the file-adapter boundary and run-shard package writer before broader runtime orchestration exists.
 
 ## Flow
 
@@ -27,6 +25,8 @@ CLI run command
 → .lorq index rebuild
 ```
 
+The default deterministic fake adapter reads `fixtures/fake-agent.yaml` under the suite root. External file adapters are supported through `--adapter-command` when they implement the file-adapter protocol.
+
 ## Defaults
 
 When omitted, the command derives:
@@ -36,31 +36,15 @@ When omitted, the command derives:
 - `--benchmark benchmark.yaml` under `--suite-root`.
 - `--adapter-fixture fixtures/fake-agent.yaml` under `--suite-root`.
 
-Only `--no-judge` is supported in this slice. Judgement attachment remains a separate package operation.
+Only `--no-judge` is supported by this command. Judgement is a separate package operation.
 
 ## Workspace materialization
 
-`run --no-judge` now creates a disposable workspace per planned cell before invoking the adapter. For the deterministic conformance suite, the case `repo:` value resolves through `eval.config.yaml` to `fake_project`, which is copied into the cell workspace.
+The command creates a disposable workspace per planned cell before invoking the adapter. For the deterministic conformance suite, a case `repo:` value resolves through `eval.config.yaml` to a local fixture repository, which is copied into the cell workspace.
 
-By default, materialized workspaces are written beside the output shard as `<out>.workspaces/<cell-id>/`, keeping scratch material outside the package root. Use `--work-root <path>` to choose a dedicated workspace root; relative paths are resolved from the current process directory and then grouped by shard id and cell id.
+By default, materialized workspaces are written beside the output shard as `<out>.workspaces/<cell-id>/`. Use `--work-root <path>` to choose a dedicated workspace root.
 
-Mode files may declare `materialize.copy` entries. Each `from` path is resolved from `--suite-root` and copied to the requested `to` path inside the cell workspace. Setup commands are still not executed in this slice.
-
-## External process adapter
-
-`run --no-judge` can now launch an external file adapter process for each planned cell:
-
-```bash
-dotnet run --project dotnet/src/Lorq.Cli -- \
-  run \
-  --no-judge \
-  --suite-root fixtures/conformance/deterministic-orchestration \
-  --out internal/generated/dotnet-run-shard/shard-001 \
-  --adapter-command /path/to/adapter \
-  --adapter-arg --optional-adapter-flag
-```
-
-The deterministic fake adapter remains the default no-token implementation. Use `--adapter-command` only for file-protocol adapters that read `LORQ_ADAPTER_REQUEST` and write `LORQ_ADAPTER_EVIDENCE`.
+Mode files may declare `materialize.copy` entries. Each `from` path is resolved from `--suite-root` and copied to the requested `to` path inside the cell workspace.
 
 ## Evidence boundary
 
@@ -70,8 +54,10 @@ Each generated cell contains a full adapter evidence file at:
 runs/<shard>/cells/<cell>/adapter.evidence.json
 ```
 
-The evidence uses `lorq.file-adapter-evidence.v1alpha1` and records adapter identity, status, final-answer path, usage, timing, process output paths, trace events, artifacts, integrity warnings, and diagnostics. It is not just a final answer.
+The evidence uses `lorq.file-adapter-evidence.v1alpha1` and records adapter identity, status, final-answer path, usage, timing, process output paths, trace events, artifacts, integrity warnings, and diagnostics.
 
-## Current limitation
+## Current limitations
 
-This command is still deterministic fixture orchestration only. Local repository copy materialization exists, but Git worktree/clone checkout, dirty-policy enforcement, setup command execution, Codex, and Copilot remain future Increment 3 work.
+- Setup commands are not executed yet.
+- Git worktree/clone checkout and dirty-policy enforcement are not implemented yet.
+- Codex and Copilot runtime integrations are adapter work, not part of the deterministic gate.

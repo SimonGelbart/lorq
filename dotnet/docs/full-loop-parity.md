@@ -1,8 +1,8 @@
 # .NET deterministic full-loop parity
 
-Increment 2 freezes the .NET package model against the Python v0 deterministic migration baseline.
+The .NET implementation preserves byte-stable parity with the frozen deterministic package baseline.
 
-The .NET loop covered in this increment is intentionally package-only:
+The package loop is:
 
 ```bash
 dotnet run --project dotnet/src/Lorq.Cli -- \
@@ -33,7 +33,7 @@ The generated package must be byte-stable against:
 fixtures/golden/deterministic-orchestration/experiment-001
 ```
 
-The parity test compares the complete generated experiment package, not only selected summaries. This includes:
+The parity test compares the complete generated experiment package, including:
 
 - `experiment.yaml`
 - copied run-shard evidence under `runs/`
@@ -42,8 +42,6 @@ The parity test compares the complete generated experiment package, not only sel
 - canonical report files
 - per-case review packs
 
-## Scope boundary
+## Boundary
 
-This does not mean .NET can run adapters yet. Increment 2 only proves that .NET owns the package model and can reproduce the frozen migration package from deterministic shard evidence.
-
-Future increments may implement `lorq run`, external adapters, and industrial runtime integrations only after they preserve this package contract.
+Parity protects the package contract. Real adapter behavior can evolve independently as long as normalized evidence still produces valid packages and reports.

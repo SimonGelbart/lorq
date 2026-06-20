@@ -51,7 +51,7 @@ shard-001/
       <cell-id>.json
 ```
 
-This is a run-shard package, not a fully judged experiment. Python v0 now also has migration-only merge and deterministic fake judgement attachment paths. JSON report, Markdown rendering, and per-case packs still remain future increments.
+This section describes a run-shard package. Python v0 also contains migration-only merge, deterministic fake judgement attachment, JSON report, Markdown rendering, and per-case review pack paths used to create the frozen migration baseline.
 
 
 ## Migration-only shard merge
