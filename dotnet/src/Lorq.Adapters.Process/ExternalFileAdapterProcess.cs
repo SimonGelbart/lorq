@@ -130,7 +130,16 @@ public sealed class ExternalFileAdapterProcess : IFileAdapter
     {
         var evidencePath = EvidencePath(request);
         var json = await File.ReadAllTextAsync(evidencePath, cancellationToken).ConfigureAwait(false);
-        var evidence = JsonSerializer.Deserialize<FileAdapterEvidence>(json, FileAdapterJson.Options);
+        FileAdapterEvidence? evidence;
+        try
+        {
+            evidence = JsonSerializer.Deserialize<FileAdapterEvidence>(json, FileAdapterJson.Options);
+        }
+        catch (JsonException exception)
+        {
+            throw new FileAdapterProtocolException("LORQ-ADAPTER-EVIDENCE-INVALID", exception.Message);
+        }
+
         if (evidence is null)
         {
             throw new FileAdapterProtocolException("LORQ-ADAPTER-EVIDENCE-INVALID", "The external adapter wrote an empty or invalid evidence contract.");
@@ -145,8 +154,11 @@ public sealed class ExternalFileAdapterProcess : IFileAdapter
         Require(evidence.SchemaVersion == FileAdapterProtocol.EvidenceSchemaVersion, "LORQ-ADAPTER-EVIDENCE-SCHEMA", "The adapter evidence schema_version is not supported.");
         Require(evidence.ContractVersion == FileAdapterProtocol.ContractVersion, "LORQ-ADAPTER-EVIDENCE-CONTRACT", "The adapter evidence contract_version is not supported.");
         Require(evidence.CellId == request.Cell.CellId, "LORQ-ADAPTER-EVIDENCE-CELL", "The adapter evidence cell_id does not match the request cell_id.");
+        Require(evidence.Adapter is not null, "LORQ-ADAPTER-EVIDENCE-ADAPTER", "The adapter evidence must include adapter details.");
         Require(evidence.FinalAnswer is not null, "LORQ-ADAPTER-EVIDENCE-FINAL-ANSWER", "The adapter evidence must include final_answer.");
         Require(evidence.Usage is not null, "LORQ-ADAPTER-EVIDENCE-USAGE", "The adapter evidence must include usage.");
+        Require(evidence.Counts is not null, "LORQ-ADAPTER-EVIDENCE-COUNTS", "The adapter evidence must include counts.");
+        Require(evidence.Timing is not null, "LORQ-ADAPTER-EVIDENCE-TIMING", "The adapter evidence must include timing.");
         Require(evidence.Process is not null, "LORQ-ADAPTER-EVIDENCE-PROCESS", "The adapter evidence must include process details.");
     }
 

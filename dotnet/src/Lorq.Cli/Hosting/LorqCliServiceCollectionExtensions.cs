@@ -1,3 +1,4 @@
+using Lorq.Adapters.Process;
 using Lorq.Cli.Commands;
 using Microsoft.Extensions.DependencyInjection;
 using Lorq.Cli.Commands.Handlers;
@@ -19,7 +20,9 @@ public static class LorqCliServiceCollectionExtensions
         services.AddSingleton<RunCellExecutor>();
         services.AddSingleton<RunShardResultWriter>();
         services.AddSingleton<DeterministicRunShardApplication>();
+        services.AddSingleton<FileAdapterConformanceRunner>();
         services.AddSingleton<ICommandHandler<RunOptions>, RunCommandHandler>();
+        services.AddSingleton<ICommandHandler<AdapterConformanceOptions>, AdapterConformanceCommandHandler>();
         services.AddSingleton<ICommandHandler<ValidatePackageOptions>, ValidatePackageCommandHandler>();
         services.AddSingleton<ICommandHandler<ValidateMergeInputsOptions>, ValidateMergeInputsCommandHandler>();
         services.AddSingleton<ICommandHandler<RebuildIndexesOptions>, RebuildIndexesCommandHandler>();

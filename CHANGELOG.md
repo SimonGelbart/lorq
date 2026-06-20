@@ -2,6 +2,20 @@
 
 All notable changes to LORQ should be documented here.
 
+## 2026-06-20 - Feature: adapter conformance command
+
+### Added
+
+- Added `adapter-conformance` to run a deterministic one-shot file-adapter protocol probe.
+- Added a reusable .NET file-adapter conformance runner with stable JSON summary output.
+- Added deterministic conformance coverage for valid adapters, malformed evidence, missing final answer metadata, missing referenced output files, adapter timeouts, and process start failures.
+- Added an ADR documenting the adapter conformance boundary before real runtime smoke integrations.
+
+### Changed
+
+- Tightened external adapter evidence parsing so malformed evidence JSON is reported as `LORQ-ADAPTER-EVIDENCE-INVALID`.
+- Updated CLI and file-adapter protocol documentation with the conformance command.
+
 ## 2026-06-20 - Docs: clean source documentation
 
 ### Changed

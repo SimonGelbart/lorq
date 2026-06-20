@@ -14,6 +14,7 @@ Completed:
 6. .NET can render deterministic report artifacts and case review packs.
 7. .NET can execute deterministic `run --no-judge` shards through fake and external file-adapter boundaries.
 8. Recent refactoring split package validation, package identifiers, report rendering, and run orchestration into smaller services without changing package or CLI output shape.
+9. .NET can run a deterministic file-adapter conformance probe before using a wrapper in a shard run.
 
 Current focus:
 
@@ -23,7 +24,7 @@ Current focus:
 
 ## Next product increments
 
-1. Adapter conformance: make the file-adapter protocol testable across success and failure scenarios.
+1. Expand adapter conformance: add more adapter-author examples and optional schema-level checks around the file protocol.
 2. Real runtime smoke tests: prove Codex and Copilot adapters can produce LORQ-compliant evidence without changing deterministic gates.
 3. Local-first v1 hardening: stable CLI help, exit codes, `doctor`/validation, packaging, and user-facing quickstart docs.
 4. Post-v1 review surfaces: richer HTML/diff reports and CI comparison gates.

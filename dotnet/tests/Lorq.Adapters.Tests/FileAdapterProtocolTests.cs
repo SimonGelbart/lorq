@@ -156,6 +156,83 @@ public sealed class FileAdapterProtocolTests
         await Assert.That(exception!.Code).IsEqualTo("LORQ-ADAPTER-EVIDENCE-MISSING");
     }
 
+
+
+    [Test]
+    public async Task ConformanceRunnerPassesGoodAdapter()
+    {
+        using var output = TemporaryDirectory.Create();
+        var runner = new FileAdapterConformanceRunner();
+
+        var report = await runner.RunAsync(TestHostCommand(), output.Path, 30000);
+
+        await Assert.That(report.Ok).IsTrue().Because(report.Scenarios[0].Message ?? "conformance failed");
+        await Assert.That(report.TotalCount).IsEqualTo(1);
+        await Assert.That(report.PassedCount).IsEqualTo(1);
+        await Assert.That(report.Scenarios[0].AdapterId).IsEqualTo("external-test-adapter");
+    }
+
+    [Test]
+    public async Task ConformanceRunnerReportsMalformedEvidence()
+    {
+        using var output = TemporaryDirectory.Create();
+        var runner = new FileAdapterConformanceRunner();
+
+        var report = await runner.RunAsync(TestHostCommand("--write-malformed-evidence"), output.Path, 30000);
+
+        await Assert.That(report.Ok).IsFalse();
+        await Assert.That(report.Scenarios[0].Code).IsEqualTo("LORQ-ADAPTER-EVIDENCE-INVALID");
+    }
+
+    [Test]
+    public async Task ConformanceRunnerReportsMissingFinalAnswer()
+    {
+        using var output = TemporaryDirectory.Create();
+        var runner = new FileAdapterConformanceRunner();
+
+        var report = await runner.RunAsync(TestHostCommand("--write-no-final-answer"), output.Path, 30000);
+
+        await Assert.That(report.Ok).IsFalse();
+        await Assert.That(report.Scenarios[0].Code).IsEqualTo("LORQ-ADAPTER-EVIDENCE-FINAL-ANSWER");
+    }
+
+    [Test]
+    public async Task ConformanceRunnerReportsMissingReferencedAnswerFile()
+    {
+        using var output = TemporaryDirectory.Create();
+        var runner = new FileAdapterConformanceRunner();
+
+        var report = await runner.RunAsync(TestHostCommand("--write-missing-answer-file"), output.Path, 30000);
+
+        await Assert.That(report.Ok).IsFalse();
+        await Assert.That(report.Scenarios[0].Code).IsEqualTo("LORQ-ADAPTER-CONFORMANCE-FILES");
+    }
+
+    [Test]
+    public async Task ConformanceRunnerReportsAdapterTimeout()
+    {
+        using var output = TemporaryDirectory.Create();
+        var runner = new FileAdapterConformanceRunner();
+
+        var report = await runner.RunAsync(TestHostCommand("--sleep"), output.Path, 100);
+
+        await Assert.That(report.Ok).IsFalse();
+        await Assert.That(report.Scenarios[0].Code).IsEqualTo("LORQ-ADAPTER-PROCESS-TIMEOUT");
+    }
+
+    [Test]
+    public async Task ConformanceRunnerReportsProcessStartFailure()
+    {
+        using var output = TemporaryDirectory.Create();
+        var runner = new FileAdapterConformanceRunner();
+        var command = FileAdapterProcessCommand.Create("lorq-definitely-missing-adapter-executable");
+
+        var report = await runner.RunAsync(command, output.Path, 30000);
+
+        await Assert.That(report.Ok).IsFalse();
+        await Assert.That(report.Scenarios[0].Code).IsEqualTo("LORQ-ADAPTER-PROCESS-START");
+    }
+
     private static string SchemaConst(string fileName)
     {
         var path = Path.Combine(TestPaths.RepoRoot(), "schemas", fileName);
@@ -175,6 +252,16 @@ public sealed class FileAdapterProtocolTests
             new FileAdapterTask("prompt.txt", "Explain deterministic evidence."),
             new FileAdapterLimits(30000),
             new FileAdapterExpectedOutput(FileAdapterProtocol.EvidenceFileName, "answer.md"));
+    }
+
+
+    private static FileAdapterProcessCommand TestHostCommand(params string[] arguments)
+    {
+        return new FileAdapterProcessCommand(
+            DotnetExecutable(),
+            new[] { TestHostDll() }.Concat(arguments).ToArray(),
+            TestPaths.RepoRoot(),
+            new Dictionary<string, string>());
     }
 
     private static string TestHostDll()

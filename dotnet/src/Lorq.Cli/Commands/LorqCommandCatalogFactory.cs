@@ -12,6 +12,7 @@ internal static class LorqCommandCatalogFactory
         return new LorqCommandCatalog(new ICommandDefinition[]
         {
             Command<RunOptions>(services, "run", LorqCommandOptionsParser.ParseRun),
+            Command<AdapterConformanceOptions>(services, "adapter-conformance", LorqCommandOptionsParser.ParseAdapterConformance),
             Command<ValidatePackageOptions>(services, "validate-package", LorqCommandOptionsParser.ParseValidatePackage),
             Command<ValidateMergeInputsOptions>(services, "validate-merge-inputs", LorqCommandOptionsParser.ParseValidateMergeInputs),
             Command<RebuildIndexesOptions>(services, "rebuild-indexes", LorqCommandOptionsParser.ParseRebuildIndexes),

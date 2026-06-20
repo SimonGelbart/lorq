@@ -14,7 +14,7 @@ Use these when you need precise contracts and command behavior.
 
 - `reference/cli.md` — current CLI commands and options.
 - `reference/package-validation.md` — validation scope and stable error codes.
-- `reference/file-adapter-protocol.md` — file-based adapter evidence contract.
+- `reference/file-adapter-protocol.md` — file-based adapter evidence contract and conformance command.
 
 ## Explanation
 
@@ -28,6 +28,11 @@ Use these when you need background, boundaries, and design rationale.
 ## Decisions
 
 Architecture Decision Records live in `decisions/`. Each ADR should describe context, decision, consequences, and status. Keep ADRs concise and about durable choices, not transient session notes.
+
+Current ADRs:
+
+- `0001-documentation-structure.md` — source documentation structure.
+- `0002-file-adapter-conformance.md` — adapter conformance command and runner.
 
 ## Roadmap
 

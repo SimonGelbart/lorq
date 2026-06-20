@@ -54,6 +54,32 @@ The .NET process adapter writes `adapter-request.json`, then launches the config
 
 The runner captures process stdout/stderr into `adapter-process.stdout.txt` and `adapter-process.stderr.txt` for diagnostics, but the adapter remains responsible for writing the full evidence contract. If no evidence file is produced, the invocation fails with a stable protocol error.
 
+
+## Conformance command
+
+Use `adapter-conformance` to check a local adapter wrapper before using it in `run --no-judge`:
+
+```bash
+lorq adapter-conformance \
+  --adapter-command <adapter-executable> \
+  --adapter-arg <argument-if-needed> \
+  --out ../internal/generated/adapter-conformance
+```
+
+The command currently runs a deterministic `basic-exchange` scenario. It writes the request contract, launches the adapter without shell expansion, reads the evidence contract, verifies required protocol fields, and checks that referenced output files exist.
+
+A failure returns exit code `1` with a stable diagnostic code such as:
+
+- `LORQ-ADAPTER-PROCESS-START` — adapter process could not be started.
+- `LORQ-ADAPTER-PROCESS-TIMEOUT` — adapter exceeded the request timeout.
+- `LORQ-ADAPTER-EVIDENCE-MISSING` — no `adapter-evidence.json` was produced.
+- `LORQ-ADAPTER-EVIDENCE-INVALID` — evidence JSON could not be parsed.
+- `LORQ-ADAPTER-EVIDENCE-FINAL-ANSWER` — final answer metadata is missing.
+- `LORQ-ADAPTER-EVIDENCE-USAGE` — usage metadata is missing.
+- `LORQ-ADAPTER-CONFORMANCE-FILES` — evidence references an output file that does not exist.
+
+Generated exchange directories are local run artifacts. Keep them outside the source tree, usually under the sibling `internal/generated/` workspace used by handoff packages.
+
 ## Scope boundary
 
 This protocol is for deterministic fake adapters, Codex process adapters, and external one-shot adapters. Copilot SDK remains a first-class industrial adapter target, but it should produce the same evidence shape after normalization.

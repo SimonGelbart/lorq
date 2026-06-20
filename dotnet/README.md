@@ -9,7 +9,7 @@ The .NET implementation now owns the deterministic package loop against the froz
 - `Lorq.Cli` — command-line entry point, hosted composition, parsing, command dispatch, and JSON console summaries.
 - `Lorq.Core` — package model, validation, merge, index rebuilds, deterministic judgement attachment, and run package services.
 - `Lorq.Reporting` — deterministic package report rendering.
-- `Lorq.Adapters.Process` — file-based one-shot adapter protocol contracts, deterministic fake file adapter, external process adapter, and Codex-oriented wrapper profile.
+- `Lorq.Adapters.Process` — file-based one-shot adapter protocol contracts, deterministic fake file adapter, external process adapter, conformance runner, and Codex-oriented wrapper profile.
 - `Lorq.Adapters.Copilot` — reserved for the first-class industrial Copilot SDK adapter.
 
 ## Build and test
@@ -29,6 +29,15 @@ dotnet run --project src/Lorq.Cli -- \
   --no-judge \
   --suite-root ../fixtures/conformance/deterministic-orchestration \
   --out ../internal/generated/dotnet-run-shard/shard-001
+```
+
+Check a local file adapter wrapper:
+
+```bash
+dotnet run --project src/Lorq.Cli -- \
+  adapter-conformance \
+  --adapter-command <adapter-executable> \
+  --out ../internal/generated/adapter-conformance
 ```
 
 Validate a package:
@@ -76,13 +85,12 @@ dotnet run --project src/Lorq.Cli -- \
 - `../docs/reference/package-validation.md` — validation scope and stable error codes.
 - `docs/cli-architecture.md` — CLI composition and command handler boundary.
 - `docs/run-no-judge.md` — deterministic run-shard behavior.
-- `docs/adapters/file-adapter-protocol.md` — file-adapter evidence contract.
-- `docs/adapters/codex-file-adapter-profile.md` — Codex wrapper profile.
 - `docs/engineering-guidelines.md` — architecture, style, testing, and pattern rules.
 
 ## Current boundaries
 
 - The default path remains deterministic and no-token.
+- `adapter-conformance` checks external one-shot file adapters before using them in a shard run.
 - `--adapter-command` can invoke external one-shot file adapters.
 - `--adapter-profile codex-cli` passes Codex wrapper metadata to an external adapter; LORQ itself does not call Codex.
 - General Git checkout/worktree orchestration, setup command execution, direct Codex runtime behavior, and Copilot SDK runtime behavior remain future adapter/runtime work.
