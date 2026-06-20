@@ -734,7 +734,7 @@ backend:
   extensions:
     codex:
       approval_policy: on-request
-      sandbox: workspace-write
+      workspace_policy: workspace-write
 ```
 
 Example:
