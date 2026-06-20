@@ -1,3 +1,7 @@
 using Lorq.Cli;
+using Microsoft.Extensions.DependencyInjection;
+using Lorq.Cli.Hosting;
 
-return await LorqCliApplication.RunAsync(args, Console.Out, Console.Error);
+using var host = LorqCliHost.Build(args);
+var application = host.Services.GetRequiredService<LorqCliApplication>();
+return await application.ExecuteAsync(args, Console.Out, Console.Error);

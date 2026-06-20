@@ -69,6 +69,7 @@ public sealed class FileAdapterProtocolTests
         await Assert.That(json).Contains("artifacts");
     }
 
+
     [Test]
     public async Task DeterministicFakeAdapterWritesFullEvidenceFile()
     {
@@ -93,6 +94,7 @@ public sealed class FileAdapterProtocolTests
         await Assert.That(File.ReadAllText(Path.Combine(workspace.Path, FileAdapterProtocol.EvidenceFileName))).Contains("trace");
     }
 
+
     [Test]
     public async Task ExternalProcessAdapterReadsEvidenceFromOneShotProtocol()
     {
@@ -110,6 +112,8 @@ public sealed class FileAdapterProtocolTests
         await Assert.That(File.Exists(Path.Combine(workspace.Path, "adapter-process.stdout.txt"))).IsTrue();
         await Assert.That(File.Exists(Path.Combine(workspace.Path, "adapter-process.stderr.txt"))).IsTrue();
     }
+
+
 
     [Test]
     public async Task CodexProfileAddsWrapperEnvironmentWithoutLaunchingCodex()
@@ -139,6 +143,7 @@ public sealed class FileAdapterProtocolTests
         await Assert.That(evidence.Trace[0].Message).Contains("codex-profile");
     }
 
+
     [Test]
     public async Task ExternalProcessAdapterFailsWhenEvidenceIsMissing()
     {
@@ -158,6 +163,7 @@ public sealed class FileAdapterProtocolTests
         return document.RootElement.GetProperty("properties").GetProperty("schema_version").GetProperty("const").GetString()
             ?? throw new InvalidOperationException($"Schema {fileName} does not declare schema_version const.");
     }
+
 
     private static FileAdapterRequest AdapterRequest(string workspace, string cellId)
     {
@@ -220,4 +226,5 @@ public sealed class FileAdapterProtocolTests
             }
         }
     }
+
 }

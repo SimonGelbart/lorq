@@ -1,4 +1,4 @@
-using Lorq.Cli.Commands;
+using Lorq.Cli.Commands.Parsing;
 using TUnit.Assertions;
 using TUnit.Core;
 

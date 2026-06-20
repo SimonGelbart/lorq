@@ -1,4 +1,7 @@
 using Lorq.Cli.Commands;
+using Microsoft.Extensions.DependencyInjection;
+using Lorq.Cli.Commands.Results;
+using Lorq.Cli.Hosting;
 
 namespace Lorq.Cli;
 
@@ -12,10 +15,11 @@ public sealed class LorqCliApplication
         this.catalog = catalog;
     }
 
-    public static ValueTask<int> RunAsync(string[] args, TextWriter output, TextWriter error, CancellationToken cancellationToken = default)
+    public static async ValueTask<int> RunAsync(string[] args, TextWriter output, TextWriter error, CancellationToken cancellationToken = default)
     {
-        var application = new LorqCliApplication(LorqCommandCatalog.CreateDefault());
-        return application.ExecuteAsync(args, output, error, cancellationToken);
+        using var host = LorqCliHost.Build(args);
+        var application = host.Services.GetRequiredService<LorqCliApplication>();
+        return await application.ExecuteAsync(args, output, error, cancellationToken).ConfigureAwait(false);
     }
 
     public async ValueTask<int> ExecuteAsync(IReadOnlyList<string> args, TextWriter output, TextWriter error, CancellationToken cancellationToken = default)
