@@ -2,6 +2,32 @@
 
 All notable changes to LORQ should be documented here.
 
+## 2026-06-20 - Refactor: report rendering pipeline
+
+### Roadmap position
+
+Current branch: `refactor/dotnet-core-cleanup`. This is commit 3 of the remaining refactoring batch and keeps report output unchanged while splitting report rendering into smaller pipeline components.
+
+### Changed
+
+- Kept `LorqPackageReportRenderer` as the public static facade.
+- Extracted report rendering orchestration, package report source reading, report document construction, case review pack construction, markdown rendering, JSON/file writing, and result construction into focused internal reporting components.
+- Preserved report JSON, report markdown, case-review JSON, case-review markdown, and `.lorq/report.json` output shape.
+
+### Validation
+
+Executed during this increment:
+
+- `dotnet restore dotnet/Lorq.slnx --configfile /mnt/data/nuget-local/NuGet.absolute.config -p:Platform="Any CPU" --disable-parallel` -> passed.
+- `dotnet build dotnet/Lorq.slnx --no-restore -p:Platform="Any CPU" --nologo -v:minimal` -> passed.
+- `dotnet test --solution dotnet/Lorq.slnx --no-restore -p:Platform="Any CPU" --disable-logo` -> 42 passed.
+- `dotnet build dotnet/Lorq.slnx --configuration Release --no-restore -p:Platform="Any CPU" --nologo -v:minimal` -> passed.
+- `dotnet test --test-modules "dotnet/tests/**/bin/Release/net10.0/*.Tests.dll" --root-directory . --results-directory ../internal/generated/refactor-report-rendering-pipeline-test-results -- --report-trx` -> 42 passed.
+
+### Known limitations
+
+- This commit intentionally does not move CLI run orchestration; that remains the final commit in the current refactoring batch.
+
 ## 2026-06-20 - Refactor: package domain identifiers
 
 ### Roadmap position
