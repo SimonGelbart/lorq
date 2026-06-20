@@ -2,6 +2,33 @@
 
 All notable changes to LORQ should be documented here.
 
+## 2026-06-20 - Refactor: run orchestration services
+
+### Roadmap position
+
+Current branch: `refactor/dotnet-core-cleanup`. This is commit 4 of the remaining refactoring batch and keeps `run --no-judge` behavior unchanged while extracting orchestration responsibilities from the deterministic run application.
+
+### Changed
+
+- Reworked `DeterministicRunShardApplication` into an injected orchestration service instead of a static procedural coordinator.
+- Extracted adapter creation/profile application, per-cell adapter execution, prompt construction, cell-evidence mapping, and shard result writing into focused internal runtime services.
+- Registered the run orchestration services through CLI host composition so command dispatch still uses the same hosted path.
+- Preserved deterministic fake adapter behavior, external file-adapter behavior, Codex profile wrapper behavior, workspace layout, package output, and CLI JSON summary shape.
+
+### Validation
+
+Executed during this increment:
+
+- `dotnet restore dotnet/Lorq.slnx --configfile /mnt/data/nuget-local/tracepack-nuget-bundle/NuGet.config -p:Platform="Any CPU" --disable-parallel --ignore-failed-sources` -> passed.
+- `dotnet build dotnet/Lorq.slnx --no-restore -p:Platform="Any CPU" --nologo -v:minimal` -> passed.
+- `dotnet test --solution dotnet/Lorq.slnx --no-restore -p:Platform="Any CPU" --disable-logo` -> 42 passed.
+- `dotnet build dotnet/Lorq.slnx --configuration Release --no-restore -p:Platform="Any CPU" --nologo -v:minimal` -> passed.
+- `dotnet test --test-modules "dotnet/tests/**/bin/Release/net10.0/*.Tests.dll" --root-directory . --results-directory ../internal/generated/refactor-run-orchestration-test-results -- --report-trx` -> 42 passed.
+
+### Known limitations
+
+- This completes the current four-commit refactoring batch. The package is still local-only; no branch was pushed and no PR was opened.
+
 ## 2026-06-20 - Refactor: report rendering pipeline
 
 ### Roadmap position
