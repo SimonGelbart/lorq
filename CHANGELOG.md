@@ -2,6 +2,32 @@
 
 All notable changes to LORQ should be documented here.
 
+## 2026-06-20 - Refactor: package validation components
+
+### Roadmap position
+
+Current branch: `refactor/dotnet-core-cleanup`. This step keeps package validation behavior unchanged while extracting the large validator into smaller internal validation components.
+
+### Changed
+
+- Kept `LorqPackageValidator` as the public static facade for package and merge-input validation.
+- Extracted package file discovery, manifest reading, coverage/fingerprint/integrity/merge-log validation, run shard/cell reading, judgement validation, report reference validation, and merge input validation into internal package-validation components.
+- Preserved existing diagnostics, validation result records, and CLI JSON output shape.
+
+### Validation
+
+Executed during this increment:
+
+- `dotnet restore dotnet/Lorq.slnx --configfile /mnt/data/nuget-config/NuGet.config -p:Platform="Any CPU" --disable-parallel` -> passed.
+- `dotnet build dotnet/Lorq.slnx --no-restore -p:Platform="Any CPU" --nologo -v:minimal` -> passed.
+- `dotnet test --solution dotnet/Lorq.slnx --no-restore -p:Platform="Any CPU" --disable-logo` -> 42 passed.
+- `dotnet build dotnet/Lorq.slnx --configuration Release --no-restore -p:Platform="Any CPU" --nologo -v:minimal` -> passed.
+- `dotnet test --test-modules "dotnet/tests/**/bin/Release/net10.0/*.Tests.dll" --root-directory . --results-directory ../internal/generated/refactor-package-validation-test-results -- --report-trx` -> 42 passed.
+
+### Known limitations
+
+- This commit intentionally does not introduce broader package domain identifiers or value objects; those remain for the next refactoring commit.
+
 ## 2026-06-20 - Refactor: CLI namespace organization
 
 ### Roadmap position
