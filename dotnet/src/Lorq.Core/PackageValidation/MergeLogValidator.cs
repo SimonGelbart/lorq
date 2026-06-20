@@ -10,7 +10,7 @@ internal sealed class MergeLogValidator
         this.diagnostics = diagnostics;
     }
 
-    public void Validate(string path, string packageKind)
+    public void Validate(string path, PackageKind packageKind)
     {
         using var document = JsonHelpers.ReadDocument(path);
         var schema = JsonHelpers.RequiredString(document.RootElement, "schema_version", path);
@@ -20,7 +20,7 @@ internal sealed class MergeLogValidator
         }
 
         var operation = JsonHelpers.RequiredString(document.RootElement, "operation", path);
-        if (packageKind == "merged_experiment" && operation != "python-v0-merge-run-shards")
+        if (packageKind.IsMergedExperiment() && operation != "python-v0-merge-run-shards")
         {
             diagnostics.Error("LORQ061", $"Merged package has unexpected merge operation '{operation}'.", path);
         }

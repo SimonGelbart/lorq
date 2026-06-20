@@ -13,10 +13,10 @@ internal sealed class PackageManifestReader
     public PackageManifest Read(string path)
     {
         var manifest = YamlLite.ParseTopLevel(path);
-        var packageId = YamlLite.RequiredString(manifest, "package_id", path);
-        var packageKind = YamlLite.RequiredString(manifest, "package_kind", path);
-        var schemaVersion = YamlLite.RequiredInt(manifest, "package_schema_version", path);
-        var declaredShards = YamlLite.OptionalStringList(manifest, "shards");
+        var packageId = new PackageId(YamlLite.RequiredString(manifest, "package_id", path));
+        var packageKind = new PackageKind(YamlLite.RequiredString(manifest, "package_kind", path));
+        var schemaVersion = new PackageSchemaVersion(YamlLite.RequiredInt(manifest, "package_schema_version", path));
+        var declaredShards = YamlLite.OptionalStringList(manifest, "shards").Select(shardId => new ShardId(shardId)).ToArray();
 
         ValidateSchemaVersion(schemaVersion, path);
         ValidatePackageKind(packageKind, path);
@@ -24,19 +24,19 @@ internal sealed class PackageManifestReader
         return new PackageManifest(packageId, packageKind, schemaVersion, declaredShards);
     }
 
-    private void ValidateSchemaVersion(int schemaVersion, string path)
+    private void ValidateSchemaVersion(PackageSchemaVersion schemaVersion, string path)
     {
-        if (schemaVersion != 1)
+        if (!schemaVersion.IsSupported())
         {
-            diagnostics.Error("LORQ020", $"Unsupported package_schema_version '{schemaVersion}'.", path);
+            diagnostics.Error("LORQ020", $"Unsupported package_schema_version '{schemaVersion.Value}'.", path);
         }
     }
 
-    private void ValidatePackageKind(string packageKind, string path)
+    private void ValidatePackageKind(PackageKind packageKind, string path)
     {
-        if (packageKind is not ("run_shard" or "merged_experiment"))
+        if (!packageKind.IsSupported())
         {
-            diagnostics.Error("LORQ021", $"Unsupported package_kind '{packageKind}'.", path);
+            diagnostics.Error("LORQ021", $"Unsupported package_kind '{packageKind.Value}'.", path);
         }
     }
 }

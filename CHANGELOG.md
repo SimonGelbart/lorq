@@ -2,6 +2,33 @@
 
 All notable changes to LORQ should be documented here.
 
+## 2026-06-20 - Refactor: package domain identifiers
+
+### Roadmap position
+
+Current branch: `refactor/dotnet-core-cleanup`. This is commit 2 of the remaining refactoring batch and keeps package validation behavior unchanged while introducing small internal identifiers for package validation concepts.
+
+### Changed
+
+- Added internal package validation identifiers for package ids, package kinds, schema versions, shard ids, and cell ids.
+- Updated package manifest, coverage, merge-log, shard, and report validation internals to pass identifier types across validation boundaries.
+- Converted identifiers back to the existing public DTO string/int shapes at the package validation facade boundary.
+
+### Validation
+
+Executed during this increment:
+
+- `dotnet restore dotnet/Lorq.slnx --configfile /mnt/data/nuget-config/NuGet.config -p:Platform="Any CPU" --disable-parallel` -> passed.
+- `dotnet build dotnet/Lorq.slnx --no-restore -p:Platform="Any CPU" --nologo -v:minimal` -> passed.
+- `dotnet test --solution dotnet/Lorq.slnx --no-restore -p:Platform="Any CPU" --disable-logo` -> 42 passed.
+- `dotnet build dotnet/Lorq.slnx --configuration Release --no-restore -p:Platform="Any CPU" --nologo -v:minimal` -> passed.
+- `dotnet test --test-modules "dotnet/tests/**/bin/Release/net10.0/*.Tests.dll" --root-directory . --results-directory ../internal/generated/refactor-package-domain-identifiers-test-results -- --report-trx` -> 42 passed.
+
+### Known limitations
+
+- Public validation result records intentionally still expose primitive JSON-friendly values so CLI and report output shape remain unchanged.
+- Report rendering and run orchestration extraction remain later commits in this batch.
+
 ## 2026-06-20 - Refactor: package validation components
 
 ### Roadmap position
