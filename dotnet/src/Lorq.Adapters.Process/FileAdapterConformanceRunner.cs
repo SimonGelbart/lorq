@@ -1,5 +1,3 @@
-using System.Text.Json;
-
 namespace Lorq.Adapters.Process;
 
 /// <summary>
@@ -7,7 +5,12 @@ namespace Lorq.Adapters.Process;
 /// </summary>
 public sealed class FileAdapterConformanceRunner
 {
-    private const string ScenarioName = "basic-exchange";
+    private static readonly ConformanceScenario[] Scenarios =
+    {
+        new("basic-exchange", "conformance-basic", "Produce a deterministic one-line answer for a LORQ file adapter conformance probe."),
+        new("metadata-capture", "conformance-metadata", "Produce an answer and complete usage, timing, trace, and process metadata."),
+        new("artifact-reference", "conformance-artifact", "Produce an answer with valid artifact references relative to the exchange directory."),
+    };
 
     public async ValueTask<FileAdapterConformanceReport> RunAsync(
         FileAdapterProcessCommand command,
@@ -23,36 +26,44 @@ public sealed class FileAdapterConformanceRunner
         }
 
         Directory.CreateDirectory(outputRoot);
-        var exchangeRoot = Path.Combine(outputRoot, ScenarioName);
+        var results = new List<FileAdapterConformanceScenarioResult>();
+        foreach (var scenario in Scenarios)
+        {
+            var exchangeRoot = PrepareScenarioDirectory(outputRoot, scenario.Name);
+            var request = CreateRequest(exchangeRoot, scenario, timeoutMilliseconds);
+            await WritePromptAsync(request, cancellationToken).ConfigureAwait(false);
+            results.Add(await RunScenarioAsync(command, scenario.Name, request, cancellationToken).ConfigureAwait(false));
+        }
+
+        return CreateReport(results);
+    }
+
+    private static string PrepareScenarioDirectory(string outputRoot, string scenarioName)
+    {
+        var exchangeRoot = Path.Combine(outputRoot, scenarioName);
         if (Directory.Exists(exchangeRoot))
         {
             Directory.Delete(exchangeRoot, recursive: true);
         }
 
         Directory.CreateDirectory(exchangeRoot);
-        var request = CreateRequest(exchangeRoot, timeoutMilliseconds);
-        await WritePromptAsync(request, cancellationToken).ConfigureAwait(false);
-        var result = await RunScenarioAsync(command, request, cancellationToken).ConfigureAwait(false);
-        return CreateReport(result);
+        return exchangeRoot;
     }
 
     private static async ValueTask<FileAdapterConformanceScenarioResult> RunScenarioAsync(
         FileAdapterProcessCommand command,
+        string scenarioName,
         FileAdapterRequest request,
         CancellationToken cancellationToken)
     {
         try
         {
             var evidence = await new ExternalFileAdapterProcess(command).InvokeAsync(request, cancellationToken).ConfigureAwait(false);
-            return PassedResult(request, evidence);
+            return PassedResult(scenarioName, request, evidence);
         }
         catch (FileAdapterProtocolException exception)
         {
-            return FailedResult(request, exception.Code, exception.Message);
-        }
-        catch (JsonException exception)
-        {
-            return FailedResult(request, "LORQ-ADAPTER-EVIDENCE-INVALID", exception.Message);
+            return FailedResult(scenarioName, request, exception.Code, exception.Message);
         }
         catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
         {
@@ -60,11 +71,11 @@ public sealed class FileAdapterConformanceRunner
         }
         catch (Exception exception) when (exception is IOException or UnauthorizedAccessException)
         {
-            return FailedResult(request, "LORQ-ADAPTER-CONFORMANCE-IO", exception.Message);
+            return FailedResult(scenarioName, request, "LORQ-ADAPTER-CONFORMANCE-IO", exception.Message);
         }
     }
 
-    private static FileAdapterConformanceScenarioResult PassedResult(FileAdapterRequest request, FileAdapterEvidence evidence)
+    private static FileAdapterConformanceScenarioResult PassedResult(string scenarioName, FileAdapterRequest request, FileAdapterEvidence evidence)
     {
         var observations = new List<string>
         {
@@ -73,20 +84,22 @@ public sealed class FileAdapterConformanceRunner
         };
 
         observations.AddRange(ValidateExchangeFiles(request, evidence));
+        observations.AddRange(ValidateEvidenceMetadata(evidence));
+        observations.AddRange(ValidateArtifactReferences(request, evidence));
         if (observations.Any(observation => observation.StartsWith("missing ", StringComparison.Ordinal)))
         {
             return new FileAdapterConformanceScenarioResult(
-                ScenarioName,
+                scenarioName,
                 false,
                 "LORQ-ADAPTER-CONFORMANCE-FILES",
-                "The adapter evidence references files that were not written in the exchange directory.",
+                "The adapter evidence references files or metadata that were not written in the exchange directory.",
                 request.Workspace.EvidenceDirectory,
                 evidence.Adapter.Id,
                 observations);
         }
 
         return new FileAdapterConformanceScenarioResult(
-            ScenarioName,
+            scenarioName,
             true,
             null,
             null,
@@ -104,6 +117,27 @@ public sealed class FileAdapterConformanceRunner
         yield return ExistingObservation(request.Workspace.EvidenceDirectory, evidence.Process.StderrPath, "evidence stderr capture");
     }
 
+    private static IEnumerable<string> ValidateEvidenceMetadata(FileAdapterEvidence evidence)
+    {
+        yield return evidence.Usage.InputTokens >= 0 && evidence.Usage.OutputTokens >= 0 && evidence.Usage.EstimatedCostUsd >= 0
+            ? "usage metadata is complete"
+            : "missing usage metadata";
+        yield return evidence.Timing.ElapsedMilliseconds >= 0
+            ? "timing metadata is complete"
+            : "missing timing metadata";
+        yield return evidence.Trace.Count > 0
+            ? "trace output is present"
+            : "missing trace output";
+    }
+
+    private static IEnumerable<string> ValidateArtifactReferences(FileAdapterRequest request, FileAdapterEvidence evidence)
+    {
+        foreach (var artifact in evidence.Artifacts)
+        {
+            yield return ExistingObservation(request.Workspace.EvidenceDirectory, artifact.Path, "artifact " + artifact.Kind);
+        }
+    }
+
     private static string ExistingObservation(string root, string relativePath, string name)
     {
         if (string.IsNullOrWhiteSpace(relativePath))
@@ -116,10 +150,10 @@ public sealed class FileAdapterConformanceRunner
             : "missing " + name + " file";
     }
 
-    private static FileAdapterConformanceScenarioResult FailedResult(FileAdapterRequest request, string code, string message)
+    private static FileAdapterConformanceScenarioResult FailedResult(string scenarioName, FileAdapterRequest request, string code, string message)
     {
         return new FileAdapterConformanceScenarioResult(
-            ScenarioName,
+            scenarioName,
             false,
             code,
             message,
@@ -128,17 +162,17 @@ public sealed class FileAdapterConformanceRunner
             new[] { "adapter command did not complete a valid protocol exchange" });
     }
 
-    private static FileAdapterConformanceReport CreateReport(FileAdapterConformanceScenarioResult result)
+    private static FileAdapterConformanceReport CreateReport(IReadOnlyList<FileAdapterConformanceScenarioResult> results)
     {
         return new FileAdapterConformanceReport(
-            result.Passed,
+            results.All(result => result.Passed),
             FileAdapterProtocol.ContractVersion,
             FileAdapterProtocol.RequestSchemaVersion,
             FileAdapterProtocol.EvidenceSchemaVersion,
-            new[] { result });
+            results);
     }
 
-    private static FileAdapterRequest CreateRequest(string exchangeRoot, int timeoutMilliseconds)
+    private static FileAdapterRequest CreateRequest(string exchangeRoot, ConformanceScenario scenario, int timeoutMilliseconds)
     {
         var workspaceRoot = Path.Combine(exchangeRoot, "workspace");
         var evidenceRoot = Path.Combine(exchangeRoot, "exchange");
@@ -150,9 +184,9 @@ public sealed class FileAdapterConformanceRunner
         return new FileAdapterRequest(
             FileAdapterProtocol.RequestSchemaVersion,
             FileAdapterProtocol.ContractVersion,
-            new FileAdapterCell("conformance-basic__baseline__attempt-001", "conformance-basic", "baseline", "attempt-001", "shard-001"),
+            new FileAdapterCell(scenario.CaseId + "__baseline__attempt-001", scenario.CaseId, "baseline", "attempt-001", "shard-001"),
             new FileAdapterWorkspace(workspaceRoot, evidenceRoot, artifactsRoot),
-            new FileAdapterTask("prompt.txt", "Produce a deterministic one-line answer for a LORQ file adapter conformance probe."),
+            new FileAdapterTask("prompt.txt", scenario.PromptText),
             new FileAdapterLimits(timeoutMilliseconds),
             new FileAdapterExpectedOutput(FileAdapterProtocol.EvidenceFileName, "answer.md"));
     }
@@ -162,4 +196,6 @@ public sealed class FileAdapterConformanceRunner
         var promptPath = Path.Combine(request.Workspace.Root, request.Task.PromptPath);
         await File.WriteAllTextAsync(promptPath, request.Task.PromptText + Environment.NewLine, cancellationToken).ConfigureAwait(false);
     }
+
+    private sealed record ConformanceScenario(string Name, string CaseId, string PromptText);
 }

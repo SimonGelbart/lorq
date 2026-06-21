@@ -23,6 +23,11 @@ if (args.Contains("--write-malformed-evidence", StringComparer.Ordinal))
     return 0;
 }
 
+if (args.Contains("--throw-before-evidence", StringComparer.Ordinal))
+{
+    throw new InvalidOperationException("The adapter crashed before writing evidence.");
+}
+
 var assertCodexProfile = args.Contains("--assert-codex-profile", StringComparer.Ordinal);
 if (assertCodexProfile && !HasCodexProfileEnvironment())
 {
@@ -37,6 +42,8 @@ var stderrPath = Path.Combine(request.Workspace.EvidenceDirectory, "stderr.txt")
 File.WriteAllText(answerPath, "External one-shot adapter answer for " + request.Cell.CellId + Environment.NewLine);
 File.WriteAllText(stdoutPath, "{\"type\":\"tool.command\",\"command\":\"external adapter\"}" + Environment.NewLine);
 File.WriteAllText(stderrPath, string.Empty);
+Console.WriteLine("adapter-test-host stdout for " + request.Cell.CellId);
+Console.Error.WriteLine("adapter-test-host stderr for " + request.Cell.CellId);
 
 var adapterId = assertCodexProfile ? "codex-profile-test-adapter" : "external-test-adapter";
 var evidence = CreateEvidence(request, adapterId, assertCodexProfile);
@@ -48,6 +55,24 @@ if (args.Contains("--write-no-final-answer", StringComparer.Ordinal))
 if (args.Contains("--write-no-usage", StringComparer.Ordinal))
 {
     evidence = evidence with { Usage = null! };
+}
+
+if (args.Contains("--write-no-timing", StringComparer.Ordinal))
+{
+    evidence = evidence with { Timing = null! };
+}
+
+if (args.Contains("--write-empty-trace", StringComparer.Ordinal))
+{
+    evidence = evidence with { Trace = Array.Empty<FileAdapterTraceEvent>() };
+}
+
+if (args.Contains("--write-invalid-artifact", StringComparer.Ordinal))
+{
+    evidence = evidence with
+    {
+        Artifacts = new[] { new FileAdapterArtifact("answer", "missing-artifact.txt", "sha256-missing") }
+    };
 }
 
 if (args.Contains("--write-unsupported-evidence-schema", StringComparer.Ordinal))
