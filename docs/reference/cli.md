@@ -51,9 +51,15 @@ lorq report-package <experiment-root> --primary-judgement <judgement-name>
 `report.json` is the canonical report. Markdown files are renderings of canonical data.
 
 
-## `adapter-conformance`
+## `adapter conformance`
 
-Runs a deterministic one-shot protocol probe against an external file adapter. Use it before running a full shard with a new adapter wrapper.
+Runs deterministic one-shot protocol probes against an external file adapter. Use it before running a full shard with a new adapter wrapper.
+
+```bash
+lorq adapter conformance --adapter-command <executable> --adapter-arg <arg> --out <output-root>
+```
+
+The legacy flat alias remains available:
 
 ```bash
 lorq adapter-conformance --adapter-command <executable> --adapter-arg <arg> --out <output-root>
@@ -67,7 +73,7 @@ Common options:
 - `--out <path>` — required conformance exchange output root.
 - `--timeout-ms <milliseconds>` — optional per-scenario timeout; default is 30000.
 
-The command writes machine-readable JSON with protocol versions, scenario counts, and per-scenario diagnostics. A passing adapter can complete the `basic-exchange` scenario by reading `adapter-request.json`, writing `adapter-evidence.json`, and writing referenced answer/stdout/stderr files in the exchange directory.
+The command writes machine-readable JSON with protocol versions, scenario counts, and per-scenario diagnostics. A passing adapter can complete `basic-exchange`, `metadata-capture`, and `artifact-reference` by reading `adapter-request.json`, writing `adapter-evidence.json`, and writing referenced answer/stdout/stderr/artifact files in the exchange directory.
 
 ## `validate-package`
 

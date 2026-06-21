@@ -7,6 +7,7 @@ The docs are organized by reader need rather than by work session. This follows 
 Use these when you want to complete a task.
 
 - `how-to/dotnet-deterministic-loop.md` — run the deterministic .NET package loop.
+- `how-to/write-file-adapter.md` — write and conformance-check a one-shot file adapter.
 
 ## Reference
 

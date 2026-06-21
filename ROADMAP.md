@@ -24,7 +24,7 @@ Current focus:
 
 ## Next product increments
 
-1. Expand adapter conformance: add more adapter-author examples and optional schema-level checks around the file protocol.
+1. Finish adapter conformance: keep schema/scenario coverage current and use it as the gate before real runtime smoke tests.
 2. Real runtime smoke tests: prove Codex and Copilot adapters can produce LORQ-compliant evidence without changing deterministic gates.
 3. Local-first v1 hardening: stable CLI help, exit codes, `doctor`/validation, packaging, and user-facing quickstart docs.
 4. Post-v1 review surfaces: richer HTML/diff reports and CI comparison gates.

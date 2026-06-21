@@ -2,6 +2,20 @@
 
 All notable changes to LORQ should be documented here.
 
+## 2026-06-20 - Adapter conformance: command group and author workflow
+
+### Changed
+
+- Added `lorq adapter conformance` as the documented command-group form for file-adapter conformance while retaining `adapter-conformance` as a compatibility alias.
+- Added shallow JSON contract checks before typed request/evidence binding.
+- Expanded conformance scenarios to cover metadata and artifact references in addition to the basic exchange.
+- Added a deterministic sample file adapter and adapter-author how-to guide.
+
+### Validation
+
+Executed as part of the local package gate for this increment. Logs are stored outside the source tree under `internal/`.
+
+
 ## 2026-06-20 - Feature: adapter conformance command
 
 ### Added

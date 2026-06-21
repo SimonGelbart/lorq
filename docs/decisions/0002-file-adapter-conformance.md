@@ -12,9 +12,9 @@ Before adding real runtime integrations, LORQ needs a deterministic way to check
 
 ## Decision
 
-Add a first-class `adapter-conformance` CLI command backed by a reusable .NET conformance runner.
+Add a first-class `adapter conformance` CLI command group backed by a reusable .NET conformance runner. Keep `adapter-conformance` as a compatibility alias while docs use the command-group form.
 
-The initial conformance command runs a `basic-exchange` scenario. It writes a canonical request, starts the supplied adapter command without shell expansion, reads the evidence contract, checks stable protocol requirements, and verifies that referenced output files exist in the exchange directory.
+The conformance command runs `basic-exchange`, `metadata-capture`, and `artifact-reference` scenarios. It writes canonical requests, starts the supplied adapter command without shell expansion, reads evidence contracts, checks stable protocol requirements, validates shallow JSON contract shape, and verifies that referenced output files and metadata exist in each exchange directory.
 
 The conformance runner reports JSON with:
 
@@ -28,5 +28,6 @@ Negative protocol scenarios remain deterministic tests around the conformance ru
 
 - Adapter authors get a local command to validate protocol wiring before running a full benchmark shard.
 - Future Codex and Copilot smoke adapters can be gated by the same file-adapter conformance boundary.
-- The first command validates one canonical scenario; additional conformance scenarios can be added without changing the external request/evidence contract.
+- Additional conformance scenarios can be added without changing the external request/evidence contract.
+- Adapter authors have a minimal sample process under `examples/adapters/file-adapter-sample/`.
 - The command writes generated exchange files to an explicit `--out` directory so source-controlled docs and fixtures stay clean.

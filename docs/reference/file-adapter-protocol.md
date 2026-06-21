@@ -57,16 +57,18 @@ The runner captures process stdout/stderr into `adapter-process.stdout.txt` and 
 
 ## Conformance command
 
-Use `adapter-conformance` to check a local adapter wrapper before using it in `run --no-judge`:
+Use `adapter conformance` to check a local adapter wrapper before using it in `run --no-judge`:
 
 ```bash
-lorq adapter-conformance \
+lorq adapter conformance \
   --adapter-command <adapter-executable> \
   --adapter-arg <argument-if-needed> \
   --out ../internal/generated/adapter-conformance
 ```
 
-The command currently runs a deterministic `basic-exchange` scenario. It writes the request contract, launches the adapter without shell expansion, reads the evidence contract, verifies required protocol fields, and checks that referenced output files exist.
+The legacy `adapter-conformance` command remains available as an alias.
+
+The command currently runs deterministic `basic-exchange`, `metadata-capture`, and `artifact-reference` scenarios. It writes request contracts, launches the adapter without shell expansion, reads evidence contracts, verifies required protocol fields, and checks that referenced output files and metadata exist.
 
 A failure returns exit code `1` with a stable diagnostic code such as:
 
@@ -78,7 +80,7 @@ A failure returns exit code `1` with a stable diagnostic code such as:
 - `LORQ-ADAPTER-EVIDENCE-USAGE` — usage metadata is missing.
 - `LORQ-ADAPTER-CONFORMANCE-FILES` — evidence references an output file that does not exist.
 
-Generated exchange directories are local run artifacts. Keep them outside the source tree, usually under the sibling `internal/generated/` workspace used by handoff packages.
+Generated exchange directories are local run artifacts. Keep them outside the source tree, usually under the sibling `internal/generated/` workspace used by handoff packages. See `docs/how-to/write-file-adapter.md` and `examples/adapters/file-adapter-sample/` for a minimal adapter-author workflow.
 
 ## Scope boundary
 
