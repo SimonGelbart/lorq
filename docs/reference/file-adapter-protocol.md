@@ -33,14 +33,14 @@ Schema: `schemas/lorq-file-adapter-evidence.v1alpha.schema.json`
 The evidence file must be a full evidence contract, not just a final answer. It must include:
 
 - adapter identity and version
-- status/failure class
+- status and product-facing failure class when the scenario fails
 - final answer presence and path
 - token/cost usage when available
 - timing and timeout state
 - process exit code and raw stdout/stderr paths
 - normalized trace events
-- artifact references with checksums when available
-- integrity warnings
+- artifact references with SHA-256 checksums
+- integrity warnings that remain visible but do not block conformance by themselves
 - diagnostics
 
 ## Process invocation
@@ -52,7 +52,7 @@ The .NET process adapter writes `adapter-request.json`, then launches the config
 - `LORQ_ADAPTER_EXCHANGE_DIR`: directory shared for request, evidence, and raw adapter files
 - `LORQ_ADAPTER_WORKSPACE_ROOT`: workspace root visible to the adapter
 
-The runner captures process stdout/stderr into `adapter-process.stdout.txt` and `adapter-process.stderr.txt` for diagnostics, but the adapter remains responsible for writing the full evidence contract. If no evidence file is produced, the invocation fails with a stable protocol error.
+The runner captures process stdout/stderr into `adapter-process.stdout.txt` and `adapter-process.stderr.txt` for diagnostics, but the adapter remains responsible for writing the full evidence contract. If no evidence file is produced, the invocation fails with a stable protocol error. If evidence is produced after a non-zero process exit, the evidence `process.exit_code` must match the observed process exit code and the evidence `status` determines the product-facing failure class.
 
 
 ## Conformance command
@@ -68,17 +68,17 @@ lorq adapter conformance \
 
 The legacy `adapter-conformance` command remains available as an alias.
 
-The command currently runs deterministic `basic-exchange`, `metadata-capture`, and `artifact-reference` scenarios. It writes request contracts, launches the adapter without shell expansion, reads evidence contracts, verifies required protocol fields, and checks that referenced output files and metadata exist.
+The command currently runs deterministic `basic-exchange`, `metadata-capture`, and `artifact-reference` scenarios. It writes request contracts, launches the adapter without shell expansion, reads evidence contracts, verifies required protocol fields, checks referenced output files, verifies artifact SHA-256 values, preserves integrity warnings as observations, and maps failures to the ADR 0007 taxonomy.
 
-A failure returns exit code `1` with a stable diagnostic code such as:
+A failure returns exit code `1` with a stable diagnostic code and a `failure_class` such as:
 
-- `LORQ-ADAPTER-PROCESS-START` — adapter process could not be started.
-- `LORQ-ADAPTER-PROCESS-TIMEOUT` — adapter exceeded the request timeout.
-- `LORQ-ADAPTER-EVIDENCE-MISSING` — no `adapter-evidence.json` was produced.
-- `LORQ-ADAPTER-EVIDENCE-INVALID` — evidence JSON could not be parsed.
-- `LORQ-ADAPTER-EVIDENCE-FINAL-ANSWER` — final answer metadata is missing.
-- `LORQ-ADAPTER-EVIDENCE-USAGE` — usage metadata is missing.
-- `LORQ-ADAPTER-CONFORMANCE-FILES` — evidence references an output file that does not exist.
+- `LORQ-ADAPTER-PROCESS-START` / `setup_failure` — adapter process could not be started.
+- `LORQ-ADAPTER-PROCESS-TIMEOUT` / `timeout` — adapter exceeded the request timeout.
+- `LORQ-ADAPTER-EVIDENCE-MISSING` / `adapter_failed` — no `adapter-evidence.json` was produced.
+- `LORQ-ADAPTER-EVIDENCE-INVALID` / `setup_failure` — evidence JSON could not be parsed.
+- `LORQ-ADAPTER-EVIDENCE-FINAL-ANSWER` / `no_final_answer` — final answer metadata is missing.
+- `LORQ-ADAPTER-EVIDENCE-STATUS` / evidence status class — evidence reported `timeout`, `no_final_answer`, `adapter_failed`, `permission_denied`, or `invalid_artifact`.
+- `LORQ-ADAPTER-CONFORMANCE-FILES` / `invalid_artifact` — evidence references a missing output file or an artifact checksum is missing or invalid.
 
 Generated exchange directories are local run artifacts. Keep them outside the source tree, usually under the sibling `internal/generated/` workspace used by handoff packages. See `docs/how-to/write-file-adapter.md` and `examples/adapters/file-adapter-sample/` for a minimal adapter-author workflow.
 

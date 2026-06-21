@@ -2,6 +2,19 @@
 
 All notable changes to LORQ should be documented here.
 
+## 2026-06-21 - Adapter conformance: failure classes and readiness boundary
+
+### Changed
+
+- Added product-facing adapter conformance failure classes alongside low-level diagnostic codes.
+- Added deterministic permission-denied, non-zero-exit, exit-code mismatch, artifact checksum, and integrity-warning conformance coverage.
+- Documented the conformance readiness boundary across adapter protocol reference docs and ADRs without adding volatile test-count details.
+
+### Validation
+
+Executed as part of the local package gate for this increment. Logs are stored outside the source tree under `internal/`.
+
+
 ## 2026-06-20 - Adapter conformance: command group and author workflow
 
 ### Changed

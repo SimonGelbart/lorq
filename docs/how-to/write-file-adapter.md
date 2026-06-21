@@ -33,12 +33,12 @@ The evidence contract is not just the answer. It must include:
 - schema and contract versions;
 - matching `cell_id`;
 - adapter id/kind/version;
-- final answer path;
+- final answer presence and path;
 - usage metadata, even when token counts are zero or unknown;
 - timing metadata;
 - process stdout/stderr paths;
 - trace events;
-- artifact references;
+- artifact references with SHA-256 checksums;
 - diagnostics and integrity warnings arrays.
 
 See `examples/adapters/file-adapter-sample/sample_file_adapter.py` for a minimal deterministic implementation.
@@ -57,7 +57,7 @@ lorq adapter conformance \
 
 The legacy `adapter-conformance` alias remains available for existing automation, but new docs should use `adapter conformance`.
 
-A passing adapter currently completes `basic-exchange`, `metadata-capture`, and `artifact-reference` scenarios. Failures return stable diagnostic codes and write generated exchange files under the requested `--out` directory.
+A passing adapter currently completes `basic-exchange`, `metadata-capture`, and `artifact-reference` scenarios. Failures return stable diagnostic codes plus product-facing failure classes. Integrity warnings are preserved as observations; missing files, checksum problems, malformed contracts, timeouts, permission denial, and adapter failures fail conformance. Generated exchange files are written under the requested `--out` directory.
 
 ## 5. Use the adapter in a run shard
 

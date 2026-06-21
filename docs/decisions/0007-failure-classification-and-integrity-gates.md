@@ -29,6 +29,8 @@ Severity is determined by trust impact:
 - Moderate findings can lower confidence or require caution.
 - Minor findings are warnings that remain visible but do not block the loop.
 
+Adapter conformance reports both low-level diagnostic codes and product-facing `failure_class` values. Process exit codes are evidence, not judgement scores: if an adapter exits non-zero but writes a valid evidence file, the evidence status and failure class determine the conformance outcome; if exit-code metadata disagrees with the observed process exit, conformance fails as a setup/evidence integrity problem.
+
 ## Consequences
 
 - Quality judges should not silently score cells whose execution evidence is invalid.

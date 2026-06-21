@@ -73,7 +73,7 @@ Common options:
 - `--out <path>` — required conformance exchange output root.
 - `--timeout-ms <milliseconds>` — optional per-scenario timeout; default is 30000.
 
-The command writes machine-readable JSON with protocol versions, scenario counts, and per-scenario diagnostics. A passing adapter can complete `basic-exchange`, `metadata-capture`, and `artifact-reference` by reading `adapter-request.json`, writing `adapter-evidence.json`, and writing referenced answer/stdout/stderr/artifact files in the exchange directory.
+The command writes machine-readable JSON with protocol versions, scenario counts, per-scenario diagnostics, and `failure_class` values for failed scenarios. A passing adapter can complete `basic-exchange`, `metadata-capture`, and `artifact-reference` by reading `adapter-request.json`, writing `adapter-evidence.json`, and writing referenced answer/stdout/stderr/artifact files with matching checksums in the exchange directory.
 
 ## `validate-package`
 

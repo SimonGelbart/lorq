@@ -812,7 +812,7 @@ cell/
 Example `cell_result.json` shape:
 
 ```yaml
-status: success | timeout | no_final_answer | adapter_failed | permission_denied | invalid_artifact
+status: completed | timeout | no_final_answer | adapter_failed | permission_denied | invalid_artifact
 final_answer_path: final_answer.md
 usage:
   input_tokens: 1234
@@ -934,10 +934,10 @@ invalid_artifact result
 usage/cost metadata
 timing metadata
 trace output
-artifact manifest
+artifact references and checksums
 warnings
 stdout/stderr capture
-exit-code handling
+exit-code consistency
 ```
 
 ---
@@ -1277,7 +1277,7 @@ Exit criteria:
 
 ```text
 A third-party executable can implement the protocol.
-Adapter conformance catches missing files, invalid statuses, bad metadata, and trace/artifact issues.
+Adapter conformance catches missing files, invalid statuses, bad metadata, permission denial, warning handling, exit-code mismatches, and trace/artifact issues.
 ```
 
 ### Milestone 5 — Real runtime smoke tests

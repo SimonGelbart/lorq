@@ -14,15 +14,15 @@ Before adding real runtime integrations, LORQ needs a deterministic way to check
 
 Add a first-class `adapter conformance` CLI command group backed by a reusable .NET conformance runner. Keep `adapter-conformance` as a compatibility alias while docs use the command-group form.
 
-The conformance command runs `basic-exchange`, `metadata-capture`, and `artifact-reference` scenarios. It writes canonical requests, starts the supplied adapter command without shell expansion, reads evidence contracts, checks stable protocol requirements, validates shallow JSON contract shape, and verifies that referenced output files and metadata exist in each exchange directory.
+The conformance command runs `basic-exchange`, `metadata-capture`, and `artifact-reference` scenarios. It writes canonical requests, starts the supplied adapter command without shell expansion, reads evidence contracts, checks stable protocol requirements, validates shallow JSON contract shape, verifies referenced output files and artifact checksums, preserves integrity warnings as observations, and maps failures to ADR 0007 classes.
 
 The conformance runner reports JSON with:
 
 - protocol contract/schema versions;
 - total, passed, and failed scenario counts;
-- per-scenario status, adapter id, diagnostic code, diagnostic message, exchange directory, and observations.
+- per-scenario status, adapter id, diagnostic code, failure class, diagnostic message, exchange directory, and observations.
 
-Negative protocol scenarios remain deterministic tests around the conformance runner and the test adapter host. Real adapters are expected to pass the same basic exchange before they are used in product smoke paths.
+Negative protocol scenarios remain deterministic tests around the conformance runner and the test adapter host. They cover setup failure, timeout, adapter failure, permission denial, missing final answers, invalid artifacts, warning preservation, exit-code consistency, and malformed or incomplete evidence. Real adapters are expected to pass the same conformance boundary before they are used in product smoke paths.
 
 ## Consequences
 

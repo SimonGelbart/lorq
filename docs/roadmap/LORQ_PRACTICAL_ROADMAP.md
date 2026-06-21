@@ -79,13 +79,13 @@ Deliverables:
 
 - `lorq adapter conformance` command-group test runner, with `adapter-conformance` retained as a compatibility alias.
 - Adapter input and output JSON contract checks.
-- Deterministic conformance scenarios and negative tests covering success, timeout, no final answer, adapter failure, process start failure, invalid artifact, usage metadata, timing metadata, trace output, and stdout/stderr capture.
+- Deterministic conformance scenarios and negative tests covering success, timeout, no final answer, adapter failure, permission denied, process start failure, invalid artifact, artifact checksums, integrity warnings, usage metadata, timing metadata, trace output, stdout/stderr capture, and exit-code consistency.
 - A sample external adapter outside the core project.
 
 Exit criteria:
 
 - A well-formed external adapter passes conformance.
-- A malformed adapter fails with actionable errors.
+- A malformed adapter fails with actionable diagnostic codes and ADR 0007 failure classes.
 - Core domain code still has no direct dependency on Codex or Copilot SDK types.
 
 ### Increment B — Real runtime smoke tests
