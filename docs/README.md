@@ -37,6 +37,9 @@ Current ADRs:
 - `0003-package-lifecycle-and-evidence-model.md` — run, merge, judge, report, and validation package lifecycle.
 - `0004-cli-command-model.md` — canonical command shape and compatibility aliases.
 - `0005-sdk-independent-adapter-architecture.md` — adapter boundary and SDK independence.
+- `0006-report-data-and-rendering-boundary.md` — canonical report data and renderers.
+- `0007-failure-classification-and-integrity-gates.md` — failure classes and validity gates.
+- `0008-pre-v1-schema-versioning.md` — schema evolution before v1.
 
 ## Roadmap
 

@@ -139,6 +139,8 @@ Candidate deliverables:
 
 ## Anti-goals for v1
 
+Schema versioning is recorded in `../decisions/0008-pre-v1-schema-versioning.md`; report data/rendering decisions are recorded in `../decisions/0006-report-data-and-rendering-boundary.md`; failure classification is recorded in `../decisions/0007-failure-classification-and-integrity-gates.md`.
+
 Avoid these until the deterministic product loop is trusted:
 
 - Full runtime comparison verdicts.
