@@ -91,4 +91,4 @@ The current .NET `run --no-judge` path can use this process adapter for determin
 
 ## Built-in process profiles
 
-The first built-in process profile is `codex-cli`. It injects Codex wrapper metadata into an external one-shot adapter process while preserving the same request/evidence contract. See `codex-file-adapter-profile.md`.
+The first built-in process profile is `codex-cli`. It injects Codex wrapper metadata into an external one-shot adapter process while preserving the same request/evidence contract. See `../../dotnet/docs/adapters/codex-file-adapter-profile.md`.

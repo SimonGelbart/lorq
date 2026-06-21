@@ -55,11 +55,7 @@ lorq adapter conformance \
   --out ../internal/generated/sample-file-adapter-conformance
 ```
 
-The legacy flat command remains available:
-
-```bash
-lorq adapter-conformance --adapter-command python3 --adapter-arg examples/adapters/file-adapter-sample/sample_file_adapter.py --adapter-working-directory . --out ../internal/generated/sample-file-adapter-conformance
-```
+The legacy `adapter-conformance` alias remains available for existing automation, but new docs should use `adapter conformance`.
 
 A passing adapter currently completes `basic-exchange`, `metadata-capture`, and `artifact-reference` scenarios. Failures return stable diagnostic codes and write generated exchange files under the requested `--out` directory.
 

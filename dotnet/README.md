@@ -16,7 +16,7 @@ The .NET implementation now owns the deterministic package loop against the froz
 
 ```bash
 dotnet build Lorq.slnx
-dotnet test --solution Lorq.slnx --disable-logo --minimum-expected-tests 42
+dotnet test --solution Lorq.slnx --disable-logo
 ```
 
 ## Common commands
@@ -35,7 +35,7 @@ Check a local file adapter wrapper:
 
 ```bash
 dotnet run --project src/Lorq.Cli -- \
-  adapter-conformance \
+  adapter conformance \
   --adapter-command <adapter-executable> \
   --out ../internal/generated/adapter-conformance
 ```
@@ -90,7 +90,7 @@ dotnet run --project src/Lorq.Cli -- \
 ## Current boundaries
 
 - The default path remains deterministic and no-token.
-- `adapter-conformance` checks external one-shot file adapters before using them in a shard run.
+- `adapter conformance` checks external one-shot file adapters before using them in a shard run; `adapter-conformance` remains a compatibility alias.
 - `--adapter-command` can invoke external one-shot file adapters.
 - `--adapter-profile codex-cli` passes Codex wrapper metadata to an external adapter; LORQ itself does not call Codex.
 - General Git checkout/worktree orchestration, setup command execution, direct Codex runtime behavior, and Copilot SDK runtime behavior remain future adapter/runtime work.

@@ -39,7 +39,7 @@ lorq/
 ```bash
 cd dotnet
 dotnet build Lorq.slnx
-dotnet test --solution Lorq.slnx --disable-logo --minimum-expected-tests 42
+dotnet test --solution Lorq.slnx --disable-logo
 ```
 
 ## Deterministic package loop

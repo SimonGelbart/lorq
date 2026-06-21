@@ -13,7 +13,7 @@ This guide runs the no-token .NET package loop against the frozen deterministic 
 ```bash
 cd dotnet
 dotnet build Lorq.slnx
-dotnet test --solution Lorq.slnx --disable-logo --minimum-expected-tests 42
+dotnet test --solution Lorq.slnx --disable-logo
 cd ..
 ```
 

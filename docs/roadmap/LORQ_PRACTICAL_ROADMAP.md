@@ -79,7 +79,7 @@ Deliverables:
 
 - `lorq adapter conformance` command-group test runner, with `adapter-conformance` retained as a compatibility alias.
 - Adapter input and output JSON contract checks.
-- Deterministic conformance scenarios and negative tests covering success, timeout, no final answer, adapter crash, process start failure, invalid artifact, usage metadata, timing metadata, trace output, and stdout/stderr capture.
+- Deterministic conformance scenarios and negative tests covering success, timeout, no final answer, adapter failure, process start failure, invalid artifact, usage metadata, timing metadata, trace output, and stdout/stderr capture.
 - A sample external adapter outside the core project.
 
 Exit criteria:
