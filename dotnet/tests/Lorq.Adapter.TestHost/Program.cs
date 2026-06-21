@@ -50,6 +50,11 @@ if (args.Contains("--write-no-usage", StringComparer.Ordinal))
     evidence = evidence with { Usage = null! };
 }
 
+if (args.Contains("--write-unsupported-evidence-schema", StringComparer.Ordinal))
+{
+    evidence = evidence with { SchemaVersion = "lorq.file-adapter-evidence.unsupported" };
+}
+
 if (args.Contains("--write-missing-answer-file", StringComparer.Ordinal))
 {
     File.Delete(answerPath);

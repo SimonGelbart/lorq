@@ -233,6 +233,80 @@ public sealed class FileAdapterProtocolTests
         await Assert.That(report.Scenarios[0].Code).IsEqualTo("LORQ-ADAPTER-PROCESS-START");
     }
 
+
+    [Test]
+    public async Task ProtocolJsonValidatorAcceptsSerializedRequestAndEvidence()
+    {
+        using var workspace = TemporaryDirectory.Create();
+        var request = AdapterRequest(workspace.Path, "schema-valid__baseline__attempt-001");
+        var evidence = new FileAdapterEvidence(
+            FileAdapterProtocol.EvidenceSchemaVersion,
+            FileAdapterProtocol.ContractVersion,
+            request.Cell.CellId,
+            new FileAdapterDescriptor("schema-test-adapter", "file-adapter", "v1"),
+            "completed",
+            new FileAdapterFinalAnswer(true, "answer.md", "Schema check answer."),
+            new FileAdapterUsage(1, 2, 3, 0, 0m),
+            new FileAdapterCounts(1, 1, 1),
+            new FileAdapterTiming(5, false),
+            new FileAdapterProcessResult(0, "stdout.raw.txt", "stderr.txt"),
+            Array.Empty<FileAdapterTraceEvent>(),
+            Array.Empty<FileAdapterArtifact>(),
+            Array.Empty<string>(),
+            Array.Empty<FileAdapterDiagnostic>());
+        var validator = new FileAdapterProtocolJsonValidator();
+
+        var requestJson = JsonSerializer.Serialize(request, FileAdapterJson.Options);
+        var evidenceJson = JsonSerializer.Serialize(evidence, FileAdapterJson.Options);
+        validator.ValidateRequestJson(requestJson);
+        validator.ValidateEvidenceJson(evidenceJson, request.Cell.CellId);
+
+        await Assert.That(evidenceJson).Contains("schema_version");
+    }
+
+    [Test]
+    public async Task ProtocolJsonValidatorRejectsUnsupportedEvidenceSchema()
+    {
+        using var workspace = TemporaryDirectory.Create();
+        var request = AdapterRequest(workspace.Path, "schema-invalid__baseline__attempt-001");
+        var evidence = new FileAdapterEvidence(
+            "lorq.file-adapter-evidence.unsupported",
+            FileAdapterProtocol.ContractVersion,
+            request.Cell.CellId,
+            new FileAdapterDescriptor("schema-test-adapter", "file-adapter", "v1"),
+            "completed",
+            new FileAdapterFinalAnswer(true, "answer.md", "Schema check answer."),
+            new FileAdapterUsage(1, 2, 3, 0, 0m),
+            new FileAdapterCounts(1, 1, 1),
+            new FileAdapterTiming(5, false),
+            new FileAdapterProcessResult(0, "stdout.raw.txt", "stderr.txt"),
+            Array.Empty<FileAdapterTraceEvent>(),
+            Array.Empty<FileAdapterArtifact>(),
+            Array.Empty<string>(),
+            Array.Empty<FileAdapterDiagnostic>());
+        var validator = new FileAdapterProtocolJsonValidator();
+
+        var exception = await Assert.ThrowsAsync<FileAdapterProtocolException>(() =>
+        {
+            validator.ValidateEvidenceJson(JsonSerializer.Serialize(evidence, FileAdapterJson.Options), request.Cell.CellId);
+            return Task.CompletedTask;
+        });
+
+        await Assert.That(exception!.Code).IsEqualTo("LORQ-ADAPTER-EVIDENCE-SCHEMA");
+    }
+
+    [Test]
+    public async Task ExternalProcessAdapterReportsUnsupportedEvidenceSchema()
+    {
+        using var workspace = TemporaryDirectory.Create();
+        var request = AdapterRequest(workspace.Path, "unsupported-schema__baseline__attempt-001");
+        var adapter = new ExternalFileAdapterProcess(TestHostCommand("--write-unsupported-evidence-schema"));
+
+        var exception = await Assert.ThrowsAsync<FileAdapterProtocolException>(() => adapter.InvokeAsync(request).AsTask());
+
+        await Assert.That(exception!.Code).IsEqualTo("LORQ-ADAPTER-EVIDENCE-SCHEMA");
+    }
+
     private static string SchemaConst(string fileName)
     {
         var path = Path.Combine(TestPaths.RepoRoot(), "schemas", fileName);

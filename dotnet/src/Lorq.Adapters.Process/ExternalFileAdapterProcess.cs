@@ -30,6 +30,7 @@ public sealed class ExternalFileAdapterProcess : IFileAdapter
         Directory.CreateDirectory(request.Workspace.ArtifactsDirectory);
         var requestPath = RequestPath(request);
         var requestJson = JsonSerializer.Serialize(request, FileAdapterJson.Options) + Environment.NewLine;
+        new FileAdapterProtocolJsonValidator().ValidateRequestJson(requestJson);
         await File.WriteAllTextAsync(requestPath, requestJson, cancellationToken).ConfigureAwait(false);
     }
 
@@ -131,6 +132,7 @@ public sealed class ExternalFileAdapterProcess : IFileAdapter
         var evidencePath = EvidencePath(request);
         var json = await File.ReadAllTextAsync(evidencePath, cancellationToken).ConfigureAwait(false);
         FileAdapterEvidence? evidence;
+        new FileAdapterProtocolJsonValidator().ValidateEvidenceJson(json, request.Cell.CellId);
         try
         {
             evidence = JsonSerializer.Deserialize<FileAdapterEvidence>(json, FileAdapterJson.Options);
