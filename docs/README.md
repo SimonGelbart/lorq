@@ -8,6 +8,7 @@ Use these when you want to complete a task.
 
 - `how-to/dotnet-deterministic-loop.md` — run the deterministic .NET package loop.
 - `how-to/write-file-adapter.md` — write and conformance-check a one-shot file adapter.
+- `how-to/run-runtime-smoke.md` — run optional Codex/Copilot smoke adapters without changing deterministic gates.
 
 ## Reference
 

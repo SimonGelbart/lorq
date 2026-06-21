@@ -45,6 +45,7 @@ The process adapter injects:
 - `LORQ_CODEX_COMMAND`, defaulting to `codex`
 - `LORQ_CODEX_ARGUMENTS`, newline-delimited, defaulting to `exec` and `--json`
 - `LORQ_CODEX_OUTPUT_FORMAT=codex-jsonl`
+- `LORQ_CODEX_PERMISSION_PROFILE=local-smoke`
 - `LORQ_CODEX_INVOCATION=one-shot-file-adapter`
 
 The standard file-adapter variables are still present:
@@ -56,4 +57,4 @@ The standard file-adapter variables are still present:
 
 ## Current implementation status
 
-This increment adds the Codex-oriented profile and deterministic tests using `Lorq.Adapter.TestHost`. It intentionally does not run a real Codex process and does not make Codex a migration gate.
+The profile has deterministic tests using `Lorq.Adapter.TestHost`, plus an optional local smoke wrapper under `examples/adapters/codex-cli-file-adapter/`. It intentionally does not make Codex a migration gate.

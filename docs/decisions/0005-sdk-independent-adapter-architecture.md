@@ -20,5 +20,6 @@ Agent-runtime adapters and judge adapters use separate business contracts even i
 
 - Real runtime integrations are adapter work, not package/report logic work.
 - Deterministic gates can use fake adapters and conformance checks without real LLM calls.
-- Provider-specific metadata belongs in namespaced extension blocks or adapter metadata, not in core package assumptions.
+- Provider-specific metadata belongs in `adapter.runtime` metadata and namespaced extension blocks, not in core package assumptions.
+- Codex CLI and Copilot SDK smoke paths must remain optional local adapter checks rather than deterministic CI gates.
 - ADR 0002 governs file-adapter conformance; this ADR governs the broader SDK-independence boundary.
