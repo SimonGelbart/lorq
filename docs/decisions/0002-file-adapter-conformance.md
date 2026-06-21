@@ -6,7 +6,7 @@ Accepted.
 
 ## Context
 
-LORQ adapters are external processes that receive `adapter-request.json` and write `adapter-evidence.json` plus referenced artifacts. The protocol is intentionally file-based so deterministic fake adapters, Codex wrappers, Copilot wrappers, and other local runtimes can share the same evidence boundary.
+LORQ adapters are external processes that receive `adapter-request.json` and write `adapter-evidence.json` plus referenced artifacts. The protocol is intentionally file-based so deterministic fake adapters, Codex wrappers, Copilot wrappers, and other local runtimes can share the same evidence boundary. ADR 0005 records the broader SDK-independent adapter architecture; this ADR records the conformance decision for the file-adapter boundary.
 
 Before adding real runtime integrations, LORQ needs a deterministic way to check whether an adapter process can complete a valid one-shot exchange. This check must not call real LLMs and must produce machine-readable diagnostics that are stable enough for local development and CI.
 

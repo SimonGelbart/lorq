@@ -71,6 +71,8 @@ Public folders remain browseable. `.lorq/` contains machine-owned indexes and pr
 
 ### Increment A — Adapter conformance
 
+Adapter architecture decisions are recorded in `../decisions/0005-sdk-independent-adapter-architecture.md`; file-adapter conformance is recorded in `../decisions/0002-file-adapter-conformance.md`.
+
 Outcome: make pluggability testable without coupling the core to one SDK.
 
 Deliverables:
