@@ -7,6 +7,7 @@ public sealed record FileAdapterConformanceScenarioResult(
     string Name,
     bool Passed,
     string? Code,
+    string? FailureClass,
     string? Message,
     string ExchangeDirectory,
     string? AdapterId,

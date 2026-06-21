@@ -86,12 +86,26 @@ public sealed class FileAdapterConformanceRunner
         observations.AddRange(ValidateExchangeFiles(request, evidence));
         observations.AddRange(ValidateEvidenceMetadata(evidence));
         observations.AddRange(ValidateArtifactReferences(request, evidence));
+        if (!string.Equals(evidence.Status, "completed", StringComparison.Ordinal))
+        {
+            return new FileAdapterConformanceScenarioResult(
+                scenarioName,
+                false,
+                "LORQ-ADAPTER-EVIDENCE-STATUS",
+                FileAdapterFailureClassifier.ClassifyEvidenceStatus(evidence.Status),
+                "The adapter evidence reported a non-completed status.",
+                request.Workspace.EvidenceDirectory,
+                evidence.Adapter.Id,
+                observations);
+        }
+
         if (observations.Any(observation => observation.StartsWith("missing ", StringComparison.Ordinal)))
         {
             return new FileAdapterConformanceScenarioResult(
                 scenarioName,
                 false,
                 "LORQ-ADAPTER-CONFORMANCE-FILES",
+                FileAdapterFailureClassifier.ClassifyDiagnosticCode("LORQ-ADAPTER-CONFORMANCE-FILES"),
                 "The adapter evidence references files or metadata that were not written in the exchange directory.",
                 request.Workspace.EvidenceDirectory,
                 evidence.Adapter.Id,
@@ -101,6 +115,7 @@ public sealed class FileAdapterConformanceRunner
         return new FileAdapterConformanceScenarioResult(
             scenarioName,
             true,
+            null,
             null,
             null,
             request.Workspace.EvidenceDirectory,
@@ -156,6 +171,7 @@ public sealed class FileAdapterConformanceRunner
             scenarioName,
             false,
             code,
+            FileAdapterFailureClassifier.ClassifyDiagnosticCode(code),
             message,
             request.Workspace.EvidenceDirectory,
             null,

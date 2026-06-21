@@ -177,6 +177,7 @@ public sealed class FileAdapterProtocolTests
 
         await Assert.That(report.Ok).IsFalse();
         await Assert.That(report.Scenarios[0].Code).IsEqualTo("LORQ-ADAPTER-EVIDENCE-INVALID");
+        await Assert.That(report.Scenarios[0].FailureClass).IsEqualTo(FileAdapterFailureClassifier.SetupFailure);
     }
 
     [Test]
@@ -189,6 +190,7 @@ public sealed class FileAdapterProtocolTests
 
         await Assert.That(report.Ok).IsFalse();
         await Assert.That(report.Scenarios[0].Code).IsEqualTo("LORQ-ADAPTER-EVIDENCE-FINAL-ANSWER");
+        await Assert.That(report.Scenarios[0].FailureClass).IsEqualTo(FileAdapterFailureClassifier.NoFinalAnswer);
     }
 
     [Test]
@@ -213,6 +215,7 @@ public sealed class FileAdapterProtocolTests
 
         await Assert.That(report.Ok).IsFalse();
         await Assert.That(report.Scenarios[0].Code).IsEqualTo("LORQ-ADAPTER-PROCESS-TIMEOUT");
+        await Assert.That(report.Scenarios[0].FailureClass).IsEqualTo(FileAdapterFailureClassifier.Timeout);
     }
 
     [Test]
@@ -226,6 +229,7 @@ public sealed class FileAdapterProtocolTests
 
         await Assert.That(report.Ok).IsFalse();
         await Assert.That(report.Scenarios[0].Code).IsEqualTo("LORQ-ADAPTER-PROCESS-START");
+        await Assert.That(report.Scenarios[0].FailureClass).IsEqualTo(FileAdapterFailureClassifier.SetupFailure);
     }
 
     [Test]
@@ -287,6 +291,7 @@ public sealed class FileAdapterProtocolTests
 
         await Assert.That(report.Ok).IsFalse();
         await Assert.That(report.Scenarios[0].Code).IsEqualTo("LORQ-ADAPTER-EVIDENCE-MISSING");
+        await Assert.That(report.Scenarios[0].FailureClass).IsEqualTo(FileAdapterFailureClassifier.AdapterFailed);
     }
 
     [Test]
