@@ -136,7 +136,37 @@ public sealed class FileAdapterProtocolTests
         var evidence = await adapter.InvokeAsync(request);
 
         await Assert.That(evidence.Adapter.Id).IsEqualTo("codex-profile-test-adapter");
+        await Assert.That(evidence.Adapter.Runtime).IsNotNull();
+        await Assert.That(evidence.Adapter.Runtime!.Provider).IsEqualTo("openai");
+        await Assert.That(evidence.Adapter.Runtime.Runtime).IsEqualTo("codex-cli");
+        await Assert.That(evidence.Adapter.Runtime.PermissionProfile).IsEqualTo(CodexFileAdapterProfile.DefaultPermissionProfile);
         await Assert.That(evidence.Trace[0].Message).Contains("codex-profile");
+    }
+
+    [Test]
+    public async Task EvidenceContractSerializesRuntimeMetadata()
+    {
+        var evidence = new FileAdapterEvidence(
+            FileAdapterProtocol.EvidenceSchemaVersion,
+            FileAdapterProtocol.ContractVersion,
+            "runtime-metadata__baseline__attempt-001",
+            new FileAdapterDescriptor("runtime-test", "file-adapter", "v1", FileAdapterRuntimeMetadata.CodexCli("codex-test", "codex-jsonl", "local-smoke")),
+            "completed",
+            new FileAdapterFinalAnswer(true, "answer.md", "Runtime metadata answer."),
+            new FileAdapterUsage(1, 0, 1, 0, 0m),
+            new FileAdapterCounts(0, 0, 0),
+            new FileAdapterTiming(1, false),
+            new FileAdapterProcessResult(0, "stdout.raw.txt", "stderr.txt"),
+            Array.Empty<FileAdapterTraceEvent>(),
+            Array.Empty<FileAdapterArtifact>(),
+            Array.Empty<string>(),
+            Array.Empty<FileAdapterDiagnostic>());
+
+        var json = JsonSerializer.Serialize(evidence, FileAdapterJson.Options);
+
+        await Assert.That(json).Contains("runtime");
+        await Assert.That(json).Contains("codex-cli");
+        await Assert.That(json).Contains("permission_profile");
     }
 
     [Test]

@@ -50,17 +50,47 @@ internal sealed class RunCellEvidenceFactory
 
     private static JsonObject AdapterObject(FileAdapterEvidence evidence)
     {
-        return new JsonObject
+        var adapter = new JsonObject
         {
             ["id"] = evidence.Adapter.Id,
-            ["backend"] = "deterministic-file-adapter",
-            ["output_format"] = FileAdapterProtocol.EvidenceSchemaVersion,
+            ["kind"] = evidence.Adapter.Kind,
+            ["version"] = evidence.Adapter.Version,
+            ["backend"] = evidence.Adapter.Runtime?.Runtime ?? evidence.Adapter.Kind,
+            ["output_format"] = evidence.Adapter.Runtime?.OutputFormat ?? FileAdapterProtocol.EvidenceSchemaVersion,
             ["input_mode"] = "file",
             ["exit_code"] = evidence.Process.ExitCode,
             ["timed_out"] = evidence.Timing.TimedOut,
             ["ok"] = evidence.Status == "completed",
             ["error_category"] = evidence.Status == "completed" ? null : evidence.Status,
         };
+        if (evidence.Adapter.Runtime is not null)
+        {
+            adapter["runtime"] = RuntimeObject(evidence.Adapter.Runtime);
+        }
+
+        return adapter;
+    }
+
+    private static JsonObject RuntimeObject(FileAdapterRuntimeMetadata runtime)
+    {
+        var node = new JsonObject
+        {
+            ["provider"] = runtime.Provider,
+            ["runtime"] = runtime.Runtime,
+            ["runtime_version"] = runtime.RuntimeVersion,
+            ["profile"] = runtime.Profile,
+            ["command"] = runtime.Command,
+            ["permission_profile"] = runtime.PermissionProfile,
+            ["output_format"] = runtime.OutputFormat,
+        };
+        var extensions = new JsonObject();
+        foreach (var item in runtime.Extensions)
+        {
+            extensions[item.Key] = item.Value;
+        }
+
+        node["extensions"] = extensions;
+        return node;
     }
 
     private static JsonObject UsageObject(FileAdapterUsage usage)

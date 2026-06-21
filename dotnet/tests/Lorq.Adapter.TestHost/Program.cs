@@ -149,7 +149,7 @@ static FileAdapterEvidence CreateEvidence(FileAdapterRequest request, string ada
         FileAdapterProtocol.EvidenceSchemaVersion,
         FileAdapterProtocol.ContractVersion,
         request.Cell.CellId,
-        new FileAdapterDescriptor(adapterId, "file-adapter", "v1alpha1"),
+        new FileAdapterDescriptor(adapterId, "file-adapter", "v1alpha1", RuntimeMetadata(assertCodexProfile)),
         "completed",
         new FileAdapterFinalAnswer(true, request.ExpectedOutput.FinalAnswerPath, "External one-shot adapter answer."),
         new FileAdapterUsage(11, 1, 13, 0, 0m),
@@ -162,6 +162,23 @@ static FileAdapterEvidence CreateEvidence(FileAdapterRequest request, string ada
         Array.Empty<FileAdapterDiagnostic>());
 }
 
+static FileAdapterRuntimeMetadata? RuntimeMetadata(bool assertCodexProfile)
+{
+    if (!assertCodexProfile)
+    {
+        return null;
+    }
+
+    return FileAdapterRuntimeMetadata.CodexCli(
+        Environment.GetEnvironmentVariable("LORQ_CODEX_COMMAND") ?? "codex",
+        Environment.GetEnvironmentVariable("LORQ_CODEX_OUTPUT_FORMAT") ?? CodexFileAdapterProfile.OutputFormat,
+        Environment.GetEnvironmentVariable("LORQ_CODEX_PERMISSION_PROFILE") ?? CodexFileAdapterProfile.DefaultPermissionProfile,
+        new Dictionary<string, string>
+        {
+            ["invocation"] = Environment.GetEnvironmentVariable("LORQ_CODEX_INVOCATION") ?? string.Empty,
+        });
+}
+
 static string ComputeSha256(string path)
 {
     return Convert.ToHexString(SHA256.HashData(File.ReadAllBytes(path))).ToLowerInvariant();
@@ -172,7 +189,8 @@ static bool HasCodexProfileEnvironment()
     return Environment.GetEnvironmentVariable("LORQ_ADAPTER_PROFILE") == "codex-cli"
         && !string.IsNullOrWhiteSpace(Environment.GetEnvironmentVariable("LORQ_CODEX_COMMAND"))
         && (Environment.GetEnvironmentVariable("LORQ_CODEX_ARGUMENTS") ?? string.Empty).Contains("exec", StringComparison.Ordinal)
-        && Environment.GetEnvironmentVariable("LORQ_CODEX_OUTPUT_FORMAT") == "codex-jsonl"
+        && Environment.GetEnvironmentVariable("LORQ_CODEX_OUTPUT_FORMAT") == CodexFileAdapterProfile.OutputFormat
+        && Environment.GetEnvironmentVariable("LORQ_CODEX_PERMISSION_PROFILE") == CodexFileAdapterProfile.DefaultPermissionProfile
         && Environment.GetEnvironmentVariable("LORQ_CODEX_INVOCATION") == "one-shot-file-adapter";
 }
 
