@@ -23,4 +23,4 @@ The expected missing cell is:
 skipped-coverage__graphify-plus__attempt-001
 ```
 
-Golden files are intentionally source-controlled. Session logs, worktrees, raw generation folders, and scratch commands remain outside the repo under `internal/`.
+Golden files are intentionally source-controlled. Local logs, worktrees, raw generation folders, and scratch commands remain outside the repository.

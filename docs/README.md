@@ -1,6 +1,22 @@
 # LORQ documentation
 
-The docs are organized by reader need rather than by work session. This follows the Diátaxis distinction between how-to guides, reference, explanation, and tutorials.
+The docs are organized by reader need rather than by implementation batch. This follows the Diátaxis distinction between how-to guides, reference, explanation, and tutorials.
+
+
+## Repository guidance
+
+For contribution and automation guidance, start with:
+
+- `../AGENTS.md`
+- `reference/project-profile.md`
+- `reference/repository-layout.md`
+- `reference/git-workflow.md`
+- `reference/validation.md`
+- `reference/documentation-standards.md`
+- `reference/architecture/architecture-principles.md`
+- `reference/architecture/boundaries.md`
+- `reference/architecture/design-patterns.md`
+- `adr/README.md`
 
 ## How-to guides
 
@@ -27,9 +43,9 @@ Use these when you need background, boundaries, and design rationale.
 - `dotnet/docs/engineering-guidelines.md` — .NET engineering rules.
 - `dotnet/docs/full-loop-parity.md` — deterministic parity model.
 
-## Decisions
+## Architecture Decision Records
 
-Architecture Decision Records live in `decisions/`. Each ADR should describe context, decision, consequences, and status. Keep ADRs concise and about durable choices, not transient session notes.
+Architecture Decision Records live in `adr/`. Each ADR should describe context, decision, consequences, and status. Keep ADRs concise and about durable choices, not transient task notes.
 
 Current ADRs:
 
@@ -49,4 +65,4 @@ Roadmap files are retained as product planning documents:
 - `roadmap/LORQ_PRACTICAL_ROADMAP.md`
 - `roadmap/LORQ_ROADMAP_GOAL_REFINEMENT.md`
 
-Session handoffs, local packaging rules, validation transcripts, and extracted artifact notes do not belong in this directory. Keep them in the sibling `internal/` workspace used by local delivery packages.
+Temporary task notes and extracted artifact notes do not belong in this directory. Keep them outside the source tree.

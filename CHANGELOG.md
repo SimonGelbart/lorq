@@ -11,11 +11,6 @@ All notable changes to LORQ should be documented here.
 - Added a Copilot SDK adapter profile scaffold without adding a core SDK dependency.
 - Documented optional runtime smoke workflows and kept deterministic CI fake/no-token.
 
-### Validation
-
-Executed as part of the local package gate for this increment. Logs are stored outside the source tree under `internal/`.
-
-
 ## 2026-06-21 - Adapter conformance: failure classes and readiness boundary
 
 ### Changed
@@ -23,11 +18,6 @@ Executed as part of the local package gate for this increment. Logs are stored o
 - Added product-facing adapter conformance failure classes alongside low-level diagnostic codes.
 - Added deterministic permission-denied, non-zero-exit, exit-code mismatch, artifact checksum, and integrity-warning conformance coverage.
 - Documented the conformance readiness boundary across adapter protocol reference docs and ADRs without adding volatile test-count details.
-
-### Validation
-
-Executed as part of the local package gate for this increment. Logs are stored outside the source tree under `internal/`.
-
 
 ## 2026-06-20 - Adapter conformance: command group and author workflow
 
@@ -37,11 +27,6 @@ Executed as part of the local package gate for this increment. Logs are stored o
 - Added shallow JSON contract checks before typed request/evidence binding.
 - Expanded conformance scenarios to cover metadata and artifact references in addition to the basic exchange.
 - Added a deterministic sample file adapter and adapter-author how-to guide.
-
-### Validation
-
-Executed as part of the local package gate for this increment. Logs are stored outside the source tree under `internal/`.
-
 
 ## 2026-06-20 - Feature: adapter conformance command
 
@@ -64,7 +49,7 @@ Executed as part of the local package gate for this increment. Logs are stored o
 - Reorganized documentation around reader needs: how-to guides, reference, explanation, decisions, and roadmap material.
 - Added a documentation-structure ADR.
 - Updated top-level README, roadmap summary, .NET README, CLI architecture, run, package validation, parity, and engineering guidance docs to reflect the current deterministic .NET package loop.
-- Moved session-specific handoffs, repository bootstrap notes, local packaging rules, and reusable agent prompts out of the source tree and into the delivery package `internal/` archive.
+- Removed transient task notes, repository bootstrap notes, and reusable agent prompts from source documentation.
 - Removed local validation command transcripts and local branch/package notes from source-controlled changelog entries.
 
 ## 2026-06-20 - Refactor: run orchestration services

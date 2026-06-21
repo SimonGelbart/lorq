@@ -2,7 +2,7 @@
 
 Product: **LORQ — Ledger for Orchestrated Run Quality**
 
-This roadmap tracks product increments, not work-session handoffs. Session notes, validation transcripts, and package manifests belong outside the source tree in the local `internal/` workspace.
+This roadmap tracks product increments, not temporary task notes. Generated logs and package manifests belong outside the source tree.
 
 ## Product goal
 
@@ -34,7 +34,7 @@ Current product boundary:
 
 ## Canonical loop
 
-Durable lifecycle decisions are recorded in `../decisions/0003-package-lifecycle-and-evidence-model.md`. This roadmap only tracks sequencing and remaining work.
+Durable lifecycle decisions are recorded in `../adr/0003-package-lifecycle-and-evidence-model.md`. This roadmap only tracks sequencing and remaining work.
 
 ```bash
 lorq run --no-judge --out shard-001
@@ -71,7 +71,7 @@ Public folders remain browseable. `.lorq/` contains machine-owned indexes and pr
 
 ### Increment A — Adapter conformance
 
-Adapter architecture decisions are recorded in `../decisions/0005-sdk-independent-adapter-architecture.md`; file-adapter conformance is recorded in `../decisions/0002-file-adapter-conformance.md`.
+Adapter architecture decisions are recorded in `../adr/0005-sdk-independent-adapter-architecture.md`; file-adapter conformance is recorded in `../adr/0002-file-adapter-conformance.md`.
 
 Outcome: make pluggability testable without coupling the core to one SDK.
 
@@ -141,7 +141,7 @@ Candidate deliverables:
 
 ## Anti-goals for v1
 
-Schema versioning is recorded in `../decisions/0008-pre-v1-schema-versioning.md`; report data/rendering decisions are recorded in `../decisions/0006-report-data-and-rendering-boundary.md`; failure classification is recorded in `../decisions/0007-failure-classification-and-integrity-gates.md`.
+Schema versioning is recorded in `../adr/0008-pre-v1-schema-versioning.md`; report data/rendering decisions are recorded in `../adr/0006-report-data-and-rendering-boundary.md`; failure classification is recorded in `../adr/0007-failure-classification-and-integrity-gates.md`.
 
 Avoid these until the deterministic product loop is trusted:
 

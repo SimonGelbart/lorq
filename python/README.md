@@ -114,12 +114,12 @@ The migration-only package tools can export run shards, merge them, and attach d
 
 ```bash
 PYTHONPATH=. python -m eval_runner.cli \
-  --merge-lorq-shards ../internal/generated/deterministic-benchmark/shard-001 ../internal/generated/deterministic-benchmark/shard-002 \
-  --lorq-merge-out ../internal/generated/deterministic-benchmark/experiment-001 \
+  --merge-lorq-shards ../results/deterministic-benchmark/shard-001 ../results/deterministic-benchmark/shard-002 \
+  --lorq-merge-out ../results/deterministic-benchmark/experiment-001 \
   --lorq-benchmark ../fixtures/conformance/deterministic-orchestration/benchmark.yaml
 
 PYTHONPATH=. python -m eval_runner.cli \
-  --judge-lorq-package ../internal/generated/deterministic-benchmark/experiment-001 \
+  --judge-lorq-package ../results/deterministic-benchmark/experiment-001 \
   --lorq-judge-name judge-primary \
   --suite-root ../fixtures/conformance/deterministic-orchestration \
   --lorq-judge-fixture fixtures/fake-judge.yaml
@@ -199,7 +199,7 @@ Export existing Python v0 results into the v1-alpha LORQ run-shard package shape
 PYTHONPATH=. python -m eval_runner.cli \
   --suite-root .. \
   --out ./results/smoke \
-  --export-lorq-shard ../internal/generated/shard-001 \
+  --export-lorq-shard ../results/shard-001 \
   --lorq-shard-id shard-001
 ```
 
@@ -340,7 +340,7 @@ A future .NET implementation should target these contracts rather than Python in
 
 ```bash
 PYTHONPATH=. python -m eval_runner.cli \
-  --report-lorq-package ../../internal/generated/deterministic-benchmark/experiment-001 \
+  --report-lorq-package ../../results/deterministic-benchmark/experiment-001 \
   --primary-judgement judge-primary
 ```
 

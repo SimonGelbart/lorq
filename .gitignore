@@ -31,7 +31,6 @@ runtime-homes/
 # Logs and scratch
 *.log
 scratch/
-internal/
 
 # Archives
 *.zip

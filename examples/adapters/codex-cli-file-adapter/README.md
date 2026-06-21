@@ -7,7 +7,7 @@ It is intended for optional local smoke checks only. It is not part of determini
 ```bash
 lorq run --no-judge \
   --suite-root fixtures/conformance/deterministic-orchestration \
-  --out ../internal/generated/codex-smoke/shard-001 \
+  --out ../results/codex-smoke/shard-001 \
   --adapter-command python3 \
   --adapter-arg examples/adapters/codex-cli-file-adapter/lorq_codex_cli_adapter.py \
   --adapter-profile codex-cli \

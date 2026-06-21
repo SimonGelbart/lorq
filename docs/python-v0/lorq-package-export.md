@@ -183,7 +183,7 @@ The exporter records integrity warnings in `.lorq/integrity.json` for trust-rele
 - `fixtures/fake-judge.yaml` drives deterministic quality scores without real LLM calls.
 - `cases/`, `modes/`, `prompt_styles/`, `rubrics/`, and `fake_project/` make the fixture self-contained.
 
-The session workflow can generate two candidate run shards under `internal/generated/deterministic-benchmark/`. The generated outputs remain outside source control until the benchmark is fully frozen and promoted to committed golden fixtures.
+The local workflow can generate two candidate run shards under `results/deterministic-benchmark/`. The generated outputs remain outside source control until the benchmark is fully frozen and promoted to committed golden fixtures.
 
 ## Current limitations
 
@@ -202,7 +202,7 @@ After deterministic judgement attachment, Python v0 can render the canonical rep
 
 ```bash
 PYTHONPATH=. python -m eval_runner.cli \
-  --report-lorq-package ../../internal/generated/deterministic-benchmark/experiment-001 \
+  --report-lorq-package ../../results/deterministic-benchmark/experiment-001 \
   --primary-judgement judge-primary
 ```
 
