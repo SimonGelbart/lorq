@@ -2,6 +2,22 @@
 
 The docs are organized by reader need rather than by work session. This follows the Diátaxis distinction between how-to guides, reference, explanation, and tutorials.
 
+
+## Repository guidance
+
+For contribution and automation guidance, start with:
+
+- `../AGENTS.md`
+- `reference/project-profile.md`
+- `reference/repository-layout.md`
+- `reference/git-workflow.md`
+- `reference/validation.md`
+- `reference/documentation-standards.md`
+- `reference/architecture/architecture-principles.md`
+- `reference/architecture/boundaries.md`
+- `reference/architecture/design-patterns.md`
+- `adr/README.md`
+
 ## How-to guides
 
 Use these when you want to complete a task.
