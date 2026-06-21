@@ -30,7 +30,6 @@ public sealed class CommandOptionsParserTests
         await Assert.That(result.Options.Strict).IsFalse();
     }
 
-
     [Test]
     public async Task ParsesExternalAdapterRunOptions()
     {
@@ -55,8 +54,6 @@ public sealed class CommandOptionsParserTests
         await Assert.That(result.Options.AdapterWorkingDirectory).IsEqualTo(".");
         await Assert.That(result.Options.WorkRoot).IsEqualTo("workspaces");
     }
-
-
 
     [Test]
     public async Task ParsesCodexProfileRunOptions()
@@ -84,9 +81,6 @@ public sealed class CommandOptionsParserTests
         await Assert.That(result.Options.CodexArguments).IsEquivalentTo(new[] { "exec", "--json" });
     }
 
-
-
-
     [Test]
     public async Task RejectsCodexProfileWithoutWrapperCommand()
     {
@@ -102,9 +96,6 @@ public sealed class CommandOptionsParserTests
         await Assert.That(result.Ok).IsFalse();
         await Assert.That(result.ErrorMessage).Contains("--adapter-command");
     }
-
-
-
 
     [Test]
     public async Task ParsesAdapterConformanceOptions()
@@ -140,7 +131,6 @@ public sealed class CommandOptionsParserTests
         await Assert.That(result.ErrorMessage).Contains("--out");
     }
 
-
     [Test]
     public async Task RejectsIncompleteJudgeOptions()
     {
@@ -158,4 +148,31 @@ public sealed class CommandOptionsParserTests
         await Assert.That(result.Ok).IsTrue().Because(result.ErrorMessage ?? "parse failed");
         await Assert.That(result.Options!.PrimaryJudgement).IsEqualTo("judge-primary");
     }
+
+    [Test]
+    public async Task ParsesAdapterCommandGroupConformanceAlias()
+    {
+        var result = LorqCommandOptionsParser.ParseAdapterCommand(new[]
+        {
+            "conformance",
+            "--adapter-command",
+            "adapter",
+            "--out",
+            "out",
+        });
+
+        await Assert.That(result.Options).IsNotNull();
+        await Assert.That(result.Options!.AdapterCommand).IsEqualTo("adapter");
+        await Assert.That(result.Options.OutputRoot).IsEqualTo("out");
+    }
+
+    [Test]
+    public async Task RejectsUnknownAdapterSubcommand()
+    {
+        var result = LorqCommandOptionsParser.ParseAdapterCommand(new[] { "unknown" });
+
+        await Assert.That(result.Options).IsNull();
+        await Assert.That(result.ErrorMessage).Contains("conformance");
+    }
+
 }

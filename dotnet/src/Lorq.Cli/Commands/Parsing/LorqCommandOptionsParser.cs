@@ -49,6 +49,15 @@ public static class LorqCommandOptionsParser
         return ParseResult<RunOptions>.Success(new RunOptions(outputRoot, suiteRoot, shardId, packageId, benchmarkPath, adapterFixturePath, noJudge, adapterCommand, adapterArguments, adapterWorkingDirectory, adapterProfile, codexCommand, codexArguments, workRoot));
     }
 
+    public static ParseResult<AdapterConformanceOptions> ParseAdapterCommand(IReadOnlyList<string> values)
+    {
+        if (values.Count == 0 || !string.Equals(values[0], "conformance", StringComparison.Ordinal))
+        {
+            return ParseResult<AdapterConformanceOptions>.Failure("adapter requires the conformance subcommand.");
+        }
+
+        return ParseAdapterConformance(values.Skip(1).ToArray());
+    }
 
     public static ParseResult<AdapterConformanceOptions> ParseAdapterConformance(IReadOnlyList<string> values)
     {
@@ -164,8 +173,6 @@ public static class LorqCommandOptionsParser
 
         return ParseResult<ReportPackageOptions>.Success(new ReportPackageOptions(packageRoot, primaryJudgement));
     }
-
-
 
     private static int ParseAdapterConformanceValue(
         IReadOnlyList<string> values,

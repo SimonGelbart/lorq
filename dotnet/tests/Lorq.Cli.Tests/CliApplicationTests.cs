@@ -22,8 +22,6 @@ public sealed class CliApplicationTests
         await Assert.That(error.ToString()).IsEmpty();
     }
 
-
-
     [Test]
     public async Task AdapterConformanceCommandWritesJsonSummary()
     {
@@ -34,6 +32,33 @@ public sealed class CliApplicationTests
         var exitCode = await LorqCliApplication.RunAsync(new[]
         {
             "adapter-conformance",
+            "--adapter-command",
+            DotnetExecutable(),
+            "--adapter-arg",
+            TestHostDll(),
+            "--adapter-working-directory",
+            TestPaths.RepoRoot(),
+            "--out",
+            outputRoot.Path,
+        }, output, error);
+
+        await Assert.That(exitCode).IsEqualTo(0).Because(error.ToString());
+        await Assert.That(output.ToString()).Contains("\"ok\": true");
+        await Assert.That(output.ToString()).Contains("basic-exchange");
+        await Assert.That(error.ToString()).IsEmpty();
+    }
+
+    [Test]
+    public async Task AdapterCommandGroupConformanceWritesJsonSummary()
+    {
+        using var outputRoot = TemporaryDirectory.Create();
+        var output = new StringWriter();
+        var error = new StringWriter();
+
+        var exitCode = await LorqCliApplication.RunAsync(new[]
+        {
+            "adapter",
+            "conformance",
             "--adapter-command",
             DotnetExecutable(),
             "--adapter-arg",
@@ -76,7 +101,6 @@ public sealed class CliApplicationTests
         await Assert.That(output.ToString()).Contains("LORQ-ADAPTER-EVIDENCE-INVALID");
         await Assert.That(error.ToString()).IsEmpty();
     }
-
 
     [Test]
     public async Task UnknownCommandReturnsUsageExitCode()

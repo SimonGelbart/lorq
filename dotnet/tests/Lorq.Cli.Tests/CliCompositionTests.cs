@@ -19,6 +19,8 @@ public sealed class CliCompositionTests
 
         await Assert.That(application).IsNotNull();
         await Assert.That(catalog.TryFind("validate-package", out _)).IsTrue();
+        await Assert.That(catalog.TryFind("adapter", out _)).IsTrue();
+        await Assert.That(catalog.TryFind("adapter-conformance", out _)).IsTrue();
         await Assert.That(catalog.TryFind("run", out _)).IsTrue();
     }
 
