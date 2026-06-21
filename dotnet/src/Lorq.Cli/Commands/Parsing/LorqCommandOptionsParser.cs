@@ -49,6 +49,42 @@ public static class LorqCommandOptionsParser
         return ParseResult<RunOptions>.Success(new RunOptions(outputRoot, suiteRoot, shardId, packageId, benchmarkPath, adapterFixturePath, noJudge, adapterCommand, adapterArguments, adapterWorkingDirectory, adapterProfile, codexCommand, codexArguments, workRoot));
     }
 
+    public static ParseResult<AdapterConformanceOptions> ParseAdapterCommand(IReadOnlyList<string> values)
+    {
+        if (values.Count == 0 || !string.Equals(values[0], "conformance", StringComparison.Ordinal))
+        {
+            return ParseResult<AdapterConformanceOptions>.Failure("adapter requires the conformance subcommand.");
+        }
+
+        return ParseAdapterConformance(values.Skip(1).ToArray());
+    }
+
+    public static ParseResult<AdapterConformanceOptions> ParseAdapterConformance(IReadOnlyList<string> values)
+    {
+        string? adapterCommand = null;
+        string? adapterWorkingDirectory = null;
+        string? outputRoot = null;
+        var timeoutMilliseconds = 30000;
+        var adapterArguments = new List<string>();
+
+        for (var index = 0; index < values.Count; index++)
+        {
+            index = ParseAdapterConformanceValue(values, index, ref adapterCommand, adapterArguments, ref adapterWorkingDirectory, ref outputRoot, ref timeoutMilliseconds);
+        }
+
+        if (string.IsNullOrWhiteSpace(adapterCommand) || string.IsNullOrWhiteSpace(outputRoot))
+        {
+            return ParseResult<AdapterConformanceOptions>.Failure("adapter-conformance requires --adapter-command <executable> and --out <output-root>.");
+        }
+
+        if (timeoutMilliseconds <= 0)
+        {
+            return ParseResult<AdapterConformanceOptions>.Failure("adapter-conformance requires --timeout-ms to be greater than zero.");
+        }
+
+        return ParseResult<AdapterConformanceOptions>.Success(new AdapterConformanceOptions(adapterCommand, adapterArguments, adapterWorkingDirectory, outputRoot, timeoutMilliseconds));
+    }
+
     public static ParseResult<ValidatePackageOptions> ParseValidatePackage(IReadOnlyList<string> values)
     {
         if (values.Count < 1 || string.IsNullOrWhiteSpace(values[0]))
@@ -138,6 +174,37 @@ public static class LorqCommandOptionsParser
         return ParseResult<ReportPackageOptions>.Success(new ReportPackageOptions(packageRoot, primaryJudgement));
     }
 
+    private static int ParseAdapterConformanceValue(
+        IReadOnlyList<string> values,
+        int index,
+        ref string? adapterCommand,
+        List<string> adapterArguments,
+        ref string? adapterWorkingDirectory,
+        ref string? outputRoot,
+        ref int timeoutMilliseconds)
+    {
+        var value = values[index];
+        switch (value)
+        {
+            case "--adapter-command" when index + 1 < values.Count:
+                adapterCommand = values[index + 1];
+                return index + 1;
+            case "--adapter-arg" when index + 1 < values.Count:
+                adapterArguments.Add(values[index + 1]);
+                return index + 1;
+            case "--adapter-working-directory" when index + 1 < values.Count:
+                adapterWorkingDirectory = values[index + 1];
+                return index + 1;
+            case "--out" when index + 1 < values.Count:
+                outputRoot = values[index + 1];
+                return index + 1;
+            case "--timeout-ms" when index + 1 < values.Count && int.TryParse(values[index + 1], out var parsed):
+                timeoutMilliseconds = parsed;
+                return index + 1;
+            default:
+                return index;
+        }
+    }
 
     private static int ParseRunValue(
         IReadOnlyList<string> values,

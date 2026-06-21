@@ -2,6 +2,47 @@
 
 All notable changes to LORQ should be documented here.
 
+## 2026-06-21 - Adapter conformance: failure classes and readiness boundary
+
+### Changed
+
+- Added product-facing adapter conformance failure classes alongside low-level diagnostic codes.
+- Added deterministic permission-denied, non-zero-exit, exit-code mismatch, artifact checksum, and integrity-warning conformance coverage.
+- Documented the conformance readiness boundary across adapter protocol reference docs and ADRs without adding volatile test-count details.
+
+### Validation
+
+Executed as part of the local package gate for this increment. Logs are stored outside the source tree under `internal/`.
+
+
+## 2026-06-20 - Adapter conformance: command group and author workflow
+
+### Changed
+
+- Added `lorq adapter conformance` as the documented command-group form for file-adapter conformance while retaining `adapter-conformance` as a compatibility alias.
+- Added shallow JSON contract checks before typed request/evidence binding.
+- Expanded conformance scenarios to cover metadata and artifact references in addition to the basic exchange.
+- Added a deterministic sample file adapter and adapter-author how-to guide.
+
+### Validation
+
+Executed as part of the local package gate for this increment. Logs are stored outside the source tree under `internal/`.
+
+
+## 2026-06-20 - Feature: adapter conformance command
+
+### Added
+
+- Added `adapter-conformance` to run a deterministic one-shot file-adapter protocol probe.
+- Added a reusable .NET file-adapter conformance runner with stable JSON summary output.
+- Added deterministic conformance coverage for valid adapters, malformed evidence, missing final answer metadata, missing referenced output files, adapter timeouts, and process start failures.
+- Added an ADR documenting the adapter conformance boundary before real runtime smoke integrations.
+
+### Changed
+
+- Tightened external adapter evidence parsing so malformed evidence JSON is reported as `LORQ-ADAPTER-EVIDENCE-INVALID`.
+- Updated CLI and file-adapter protocol documentation with the conformance command.
+
 ## 2026-06-20 - Docs: clean source documentation
 
 ### Changed

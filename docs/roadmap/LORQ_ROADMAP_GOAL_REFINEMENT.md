@@ -531,7 +531,7 @@ failure_type:
   - no_final_answer
   - timeout
   - setup_failure
-  - adapter_crash
+  - adapter_failed
   - permission_denied
   - invalid_artifact
 ```
@@ -542,7 +542,7 @@ Rules:
 no_final_answer / timeout:
   quality loss if comparable modes answered
 
-setup_failure / adapter_crash:
+setup_failure / adapter_failed:
   execution validity issue; may require rerun
 
 permission_denied:
@@ -812,7 +812,7 @@ cell/
 Example `cell_result.json` shape:
 
 ```yaml
-status: success | timeout | no_final_answer | adapter_crash | permission_denied | invalid_artifact
+status: completed | timeout | no_final_answer | adapter_failed | permission_denied | invalid_artifact
 final_answer_path: final_answer.md
 usage:
   input_tokens: 1234
@@ -928,16 +928,16 @@ Adapter conformance should test:
 success result
 timeout result
 no_final_answer result
-adapter_crash result
+adapter_failed result
 permission_denied result
 invalid_artifact result
 usage/cost metadata
 timing metadata
 trace output
-artifact manifest
+artifact references and checksums
 warnings
 stdout/stderr capture
-exit-code handling
+exit-code consistency
 ```
 
 ---
@@ -1277,7 +1277,7 @@ Exit criteria:
 
 ```text
 A third-party executable can implement the protocol.
-Adapter conformance catches missing files, invalid statuses, bad metadata, and trace/artifact issues.
+Adapter conformance catches missing files, invalid statuses, bad metadata, permission denial, warning handling, exit-code mismatches, and trace/artifact issues.
 ```
 
 ### Milestone 5 — Real runtime smoke tests

@@ -20,8 +20,8 @@ public sealed class ExternalFileAdapterProcess : IFileAdapter
     {
         ArgumentNullException.ThrowIfNull(request);
         await PrepareExchangeAsync(request, cancellationToken).ConfigureAwait(false);
-        await RunProcessAsync(request, cancellationToken).ConfigureAwait(false);
-        return await ReadEvidenceAsync(request, cancellationToken).ConfigureAwait(false);
+        var exitCode = await RunProcessAsync(request, cancellationToken).ConfigureAwait(false);
+        return await ReadEvidenceAsync(request, exitCode, cancellationToken).ConfigureAwait(false);
     }
 
     private static async ValueTask PrepareExchangeAsync(FileAdapterRequest request, CancellationToken cancellationToken)
@@ -30,10 +30,11 @@ public sealed class ExternalFileAdapterProcess : IFileAdapter
         Directory.CreateDirectory(request.Workspace.ArtifactsDirectory);
         var requestPath = RequestPath(request);
         var requestJson = JsonSerializer.Serialize(request, FileAdapterJson.Options) + Environment.NewLine;
+        new FileAdapterProtocolJsonValidator().ValidateRequestJson(requestJson);
         await File.WriteAllTextAsync(requestPath, requestJson, cancellationToken).ConfigureAwait(false);
     }
 
-    private async ValueTask RunProcessAsync(FileAdapterRequest request, CancellationToken cancellationToken)
+    private async ValueTask<int> RunProcessAsync(FileAdapterRequest request, CancellationToken cancellationToken)
     {
         using var process = BuildProcess(request);
         using var timeout = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
@@ -44,6 +45,7 @@ public sealed class ExternalFileAdapterProcess : IFileAdapter
         await WaitForExitAsync(process, timeout.Token).ConfigureAwait(false);
         await PersistProcessLogsAsync(request, await stdout.ConfigureAwait(false), await stderr.ConfigureAwait(false), cancellationToken).ConfigureAwait(false);
         EnsureEvidenceOrSuccessfulExit(request, process.ExitCode);
+        return process.ExitCode;
     }
 
     private System.Diagnostics.Process BuildProcess(FileAdapterRequest request)
@@ -126,28 +128,43 @@ public sealed class ExternalFileAdapterProcess : IFileAdapter
         throw new FileAdapterProtocolException("LORQ-ADAPTER-EVIDENCE-MISSING", $"The external adapter exited with code {exitCode} without writing adapter-evidence.json.");
     }
 
-    private static async ValueTask<FileAdapterEvidence> ReadEvidenceAsync(FileAdapterRequest request, CancellationToken cancellationToken)
+    private static async ValueTask<FileAdapterEvidence> ReadEvidenceAsync(FileAdapterRequest request, int observedExitCode, CancellationToken cancellationToken)
     {
         var evidencePath = EvidencePath(request);
         var json = await File.ReadAllTextAsync(evidencePath, cancellationToken).ConfigureAwait(false);
-        var evidence = JsonSerializer.Deserialize<FileAdapterEvidence>(json, FileAdapterJson.Options);
+        FileAdapterEvidence? evidence;
+        new FileAdapterProtocolJsonValidator().ValidateEvidenceJson(json, request.Cell.CellId);
+        try
+        {
+            evidence = JsonSerializer.Deserialize<FileAdapterEvidence>(json, FileAdapterJson.Options);
+        }
+        catch (JsonException exception)
+        {
+            throw new FileAdapterProtocolException("LORQ-ADAPTER-EVIDENCE-INVALID", exception.Message);
+        }
+
         if (evidence is null)
         {
             throw new FileAdapterProtocolException("LORQ-ADAPTER-EVIDENCE-INVALID", "The external adapter wrote an empty or invalid evidence contract.");
         }
 
-        ValidateEvidence(request, evidence);
+        ValidateEvidence(request, evidence, observedExitCode);
         return evidence;
     }
 
-    private static void ValidateEvidence(FileAdapterRequest request, FileAdapterEvidence evidence)
+    private static void ValidateEvidence(FileAdapterRequest request, FileAdapterEvidence evidence, int observedExitCode)
     {
         Require(evidence.SchemaVersion == FileAdapterProtocol.EvidenceSchemaVersion, "LORQ-ADAPTER-EVIDENCE-SCHEMA", "The adapter evidence schema_version is not supported.");
         Require(evidence.ContractVersion == FileAdapterProtocol.ContractVersion, "LORQ-ADAPTER-EVIDENCE-CONTRACT", "The adapter evidence contract_version is not supported.");
         Require(evidence.CellId == request.Cell.CellId, "LORQ-ADAPTER-EVIDENCE-CELL", "The adapter evidence cell_id does not match the request cell_id.");
+        Require(evidence.Adapter is not null, "LORQ-ADAPTER-EVIDENCE-ADAPTER", "The adapter evidence must include adapter details.");
         Require(evidence.FinalAnswer is not null, "LORQ-ADAPTER-EVIDENCE-FINAL-ANSWER", "The adapter evidence must include final_answer.");
         Require(evidence.Usage is not null, "LORQ-ADAPTER-EVIDENCE-USAGE", "The adapter evidence must include usage.");
-        Require(evidence.Process is not null, "LORQ-ADAPTER-EVIDENCE-PROCESS", "The adapter evidence must include process details.");
+        Require(evidence.Counts is not null, "LORQ-ADAPTER-EVIDENCE-COUNTS", "The adapter evidence must include counts.");
+        Require(evidence.Timing is not null, "LORQ-ADAPTER-EVIDENCE-TIMING", "The adapter evidence must include timing.");
+        var process = evidence.Process;
+        Require(process is not null, "LORQ-ADAPTER-EVIDENCE-PROCESS", "The adapter evidence must include process details.");
+        Require(process!.ExitCode == observedExitCode, "LORQ-ADAPTER-EVIDENCE-PROCESS", "The adapter evidence process exit_code must match the observed adapter process exit code.");
     }
 
     private static void Require(bool condition, string code, string message)

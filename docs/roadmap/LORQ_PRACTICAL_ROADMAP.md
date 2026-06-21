@@ -34,6 +34,8 @@ Current product boundary:
 
 ## Canonical loop
 
+Durable lifecycle decisions are recorded in `../decisions/0003-package-lifecycle-and-evidence-model.md`. This roadmap only tracks sequencing and remaining work.
+
 ```bash
 lorq run --no-judge --out shard-001
 lorq run --no-judge --out shard-002
@@ -69,19 +71,21 @@ Public folders remain browseable. `.lorq/` contains machine-owned indexes and pr
 
 ### Increment A — Adapter conformance
 
+Adapter architecture decisions are recorded in `../decisions/0005-sdk-independent-adapter-architecture.md`; file-adapter conformance is recorded in `../decisions/0002-file-adapter-conformance.md`.
+
 Outcome: make pluggability testable without coupling the core to one SDK.
 
 Deliverables:
 
-- `lorq adapter conformance` or equivalent test runner.
-- Adapter input and output schema validation.
-- At least 10 conformance scenarios covering success, timeout, no final answer, adapter crash, permission denied, invalid artifact, usage metadata, timing metadata, trace output, and stdout/stderr capture.
+- `lorq adapter conformance` command-group test runner, with `adapter-conformance` retained as a compatibility alias.
+- Adapter input and output JSON contract checks.
+- Deterministic conformance scenarios and negative tests covering success, timeout, no final answer, adapter failure, permission denied, process start failure, invalid artifact, artifact checksums, integrity warnings, usage metadata, timing metadata, trace output, stdout/stderr capture, and exit-code consistency.
 - A sample external adapter outside the core project.
 
 Exit criteria:
 
 - A well-formed external adapter passes conformance.
-- A malformed adapter fails with actionable errors.
+- A malformed adapter fails with actionable diagnostic codes and ADR 0007 failure classes.
 - Core domain code still has no direct dependency on Codex or Copilot SDK types.
 
 ### Increment B — Real runtime smoke tests
@@ -134,6 +138,8 @@ Candidate deliverables:
 - Shard planning and partial workflow support.
 
 ## Anti-goals for v1
+
+Schema versioning is recorded in `../decisions/0008-pre-v1-schema-versioning.md`; report data/rendering decisions are recorded in `../decisions/0006-report-data-and-rendering-boundary.md`; failure classification is recorded in `../decisions/0007-failure-classification-and-integrity-gates.md`.
 
 Avoid these until the deterministic product loop is trusted:
 

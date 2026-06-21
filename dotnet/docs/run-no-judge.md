@@ -25,7 +25,7 @@ CLI run command
 → .lorq index rebuild
 ```
 
-The default deterministic fake adapter reads `fixtures/fake-agent.yaml` under the suite root. External file adapters are supported through `--adapter-command` when they implement the file-adapter protocol.
+The default deterministic fake adapter reads `fixtures/fake-agent.yaml` under the suite root. External file adapters are supported through `--adapter-command` when they implement the file-adapter protocol. Use `adapter conformance` first when wiring a new external wrapper.
 
 ## Defaults
 
