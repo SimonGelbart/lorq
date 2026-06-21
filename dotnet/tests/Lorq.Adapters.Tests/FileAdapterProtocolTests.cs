@@ -193,6 +193,21 @@ public sealed class FileAdapterProtocolTests
         await Assert.That(report.Scenarios[0].FailureClass).IsEqualTo(FileAdapterFailureClassifier.NoFinalAnswer);
     }
 
+
+    [Test]
+    public async Task ConformanceRunnerReportsPermissionDeniedEvidenceStatus()
+    {
+        using var output = TemporaryDirectory.Create();
+        var runner = new FileAdapterConformanceRunner();
+
+        var report = await runner.RunAsync(TestHostCommand("--write-permission-denied"), output.Path, 30000);
+
+        await Assert.That(report.Ok).IsFalse();
+        await Assert.That(report.Scenarios[0].Code).IsEqualTo("LORQ-ADAPTER-EVIDENCE-STATUS");
+        await Assert.That(report.Scenarios[0].FailureClass).IsEqualTo(FileAdapterFailureClassifier.PermissionDenied);
+        await Assert.That(report.Scenarios[0].Observations).Contains("final answer intentionally absent");
+    }
+
     [Test]
     public async Task ConformanceRunnerReportsMissingReferencedAnswerFile()
     {

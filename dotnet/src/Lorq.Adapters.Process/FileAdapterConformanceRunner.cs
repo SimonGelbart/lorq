@@ -127,7 +127,9 @@ public sealed class FileAdapterConformanceRunner
     {
         yield return ExistingObservation(request.Workspace.EvidenceDirectory, "adapter-process.stdout.txt", "adapter process stdout capture");
         yield return ExistingObservation(request.Workspace.EvidenceDirectory, "adapter-process.stderr.txt", "adapter process stderr capture");
-        yield return ExistingObservation(request.Workspace.EvidenceDirectory, request.ExpectedOutput.FinalAnswerPath, "final answer");
+        yield return evidence.FinalAnswer.Present
+            ? ExistingObservation(request.Workspace.EvidenceDirectory, request.ExpectedOutput.FinalAnswerPath, "final answer")
+            : "final answer intentionally absent";
         yield return ExistingObservation(request.Workspace.EvidenceDirectory, evidence.Process.StdoutPath, "evidence stdout capture");
         yield return ExistingObservation(request.Workspace.EvidenceDirectory, evidence.Process.StderrPath, "evidence stderr capture");
     }

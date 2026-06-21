@@ -52,6 +52,17 @@ if (args.Contains("--write-no-final-answer", StringComparer.Ordinal))
     evidence = evidence with { FinalAnswer = null! };
 }
 
+if (args.Contains("--write-permission-denied", StringComparer.Ordinal))
+{
+    File.Delete(answerPath);
+    evidence = evidence with
+    {
+        Status = FileAdapterFailureClassifier.PermissionDenied,
+        FinalAnswer = new FileAdapterFinalAnswer(false, request.ExpectedOutput.FinalAnswerPath, ""),
+        Diagnostics = new[] { new FileAdapterDiagnostic("LORQ-ADAPTER-PERMISSION-DENIED", "critical", "The adapter could not access the requested workspace path.") }
+    };
+}
+
 if (args.Contains("--write-no-usage", StringComparer.Ordinal))
 {
     evidence = evidence with { Usage = null! };
