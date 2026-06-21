@@ -91,13 +91,32 @@ if (args.Contains("--write-unsupported-evidence-schema", StringComparer.Ordinal)
     evidence = evidence with { SchemaVersion = "lorq.file-adapter-evidence.unsupported" };
 }
 
+var exitCode = 0;
+if (args.Contains("--exit-nonzero-after-evidence", StringComparer.Ordinal))
+{
+    exitCode = 13;
+    File.Delete(answerPath);
+    evidence = evidence with
+    {
+        Status = FileAdapterFailureClassifier.AdapterFailed,
+        FinalAnswer = new FileAdapterFinalAnswer(false, request.ExpectedOutput.FinalAnswerPath, ""),
+        Process = evidence.Process with { ExitCode = exitCode },
+        Diagnostics = new[] { new FileAdapterDiagnostic("LORQ-ADAPTER-FAILED", "critical", "The adapter reported a process failure after writing evidence.") }
+    };
+}
+
+if (args.Contains("--exit-nonzero-with-mismatched-evidence", StringComparer.Ordinal))
+{
+    exitCode = 13;
+}
+
 if (args.Contains("--write-missing-answer-file", StringComparer.Ordinal))
 {
     File.Delete(answerPath);
 }
 
 File.WriteAllText(evidencePath, JsonSerializer.Serialize(evidence, FileAdapterJson.Options) + Environment.NewLine);
-return 0;
+return exitCode;
 
 static FileAdapterEvidence CreateEvidence(FileAdapterRequest request, string adapterId, bool assertCodexProfile)
 {

@@ -309,6 +309,45 @@ public sealed class FileAdapterProtocolTests
         await Assert.That(report.Scenarios[0].FailureClass).IsEqualTo(FileAdapterFailureClassifier.AdapterFailed);
     }
 
+
+    [Test]
+    public async Task ExternalProcessAdapterReadsClassifiedEvidenceAfterNonZeroExit()
+    {
+        using var workspace = TemporaryDirectory.Create();
+        var request = AdapterRequest(workspace.Path, "nonzero-evidence__baseline__attempt-001");
+        var adapter = new ExternalFileAdapterProcess(TestHostCommand("--exit-nonzero-after-evidence"));
+
+        var evidence = await adapter.InvokeAsync(request);
+
+        await Assert.That(evidence.Status).IsEqualTo(FileAdapterFailureClassifier.AdapterFailed);
+        await Assert.That(evidence.Process.ExitCode).IsEqualTo(13);
+    }
+
+    [Test]
+    public async Task ExternalProcessAdapterRejectsMismatchedEvidenceExitCode()
+    {
+        using var workspace = TemporaryDirectory.Create();
+        var request = AdapterRequest(workspace.Path, "mismatched-exit__baseline__attempt-001");
+        var adapter = new ExternalFileAdapterProcess(TestHostCommand("--exit-nonzero-with-mismatched-evidence"));
+
+        var exception = await Assert.ThrowsAsync<FileAdapterProtocolException>(() => adapter.InvokeAsync(request).AsTask());
+
+        await Assert.That(exception!.Code).IsEqualTo("LORQ-ADAPTER-EVIDENCE-PROCESS");
+    }
+
+    [Test]
+    public async Task ConformanceRunnerClassifiesNonZeroExitEvidenceStatus()
+    {
+        using var output = TemporaryDirectory.Create();
+        var runner = new FileAdapterConformanceRunner();
+
+        var report = await runner.RunAsync(TestHostCommand("--exit-nonzero-after-evidence"), output.Path, 30000);
+
+        await Assert.That(report.Ok).IsFalse();
+        await Assert.That(report.Scenarios[0].Code).IsEqualTo("LORQ-ADAPTER-EVIDENCE-STATUS");
+        await Assert.That(report.Scenarios[0].FailureClass).IsEqualTo(FileAdapterFailureClassifier.AdapterFailed);
+    }
+
     [Test]
     public async Task ExternalProcessAdapterCapturesStdoutAndStderr()
     {
