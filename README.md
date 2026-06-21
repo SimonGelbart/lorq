@@ -51,29 +51,29 @@ dotnet run --project dotnet/src/Lorq.Cli -- \
   run \
   --no-judge \
   --suite-root fixtures/conformance/deterministic-orchestration \
-  --out internal/generated/dotnet-run-shard/shard-001
+  --out results/dotnet-run-shard/shard-001
 
 dotnet run --project dotnet/src/Lorq.Cli -- \
   merge-shards \
   fixtures/golden/deterministic-orchestration/shard-001 \
   fixtures/golden/deterministic-orchestration/shard-002 \
-  --out internal/generated/dotnet-full-loop/experiment-001 \
+  --out results/dotnet-full-loop/experiment-001 \
   --package-id deterministic-benchmark \
   --benchmark fixtures/conformance/deterministic-orchestration/benchmark.yaml
 
 dotnet run --project dotnet/src/Lorq.Cli -- \
   judge-package \
-  internal/generated/dotnet-full-loop/experiment-001 \
+  results/dotnet-full-loop/experiment-001 \
   --name judge-primary \
   --fixture fixtures/conformance/deterministic-orchestration/fixtures/fake-judge.yaml
 
 dotnet run --project dotnet/src/Lorq.Cli -- \
   report-package \
-  internal/generated/dotnet-full-loop/experiment-001 \
+  results/dotnet-full-loop/experiment-001 \
   --primary-judgement judge-primary
 
 dotnet run --project dotnet/src/Lorq.Cli -- \
-  validate-package internal/generated/dotnet-full-loop/experiment-001
+  validate-package results/dotnet-full-loop/experiment-001
 ```
 
 See `docs/how-to/dotnet-deterministic-loop.md` for the full walkthrough.

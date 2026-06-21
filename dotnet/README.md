@@ -28,7 +28,7 @@ dotnet run --project src/Lorq.Cli -- \
   run \
   --no-judge \
   --suite-root ../fixtures/conformance/deterministic-orchestration \
-  --out ../internal/generated/dotnet-run-shard/shard-001
+  --out ../results/dotnet-run-shard/shard-001
 ```
 
 Check a local file adapter wrapper:
@@ -37,7 +37,7 @@ Check a local file adapter wrapper:
 dotnet run --project src/Lorq.Cli -- \
   adapter conformance \
   --adapter-command <adapter-executable> \
-  --out ../internal/generated/adapter-conformance
+  --out ../results/adapter-conformance
 ```
 
 Validate a package:
@@ -54,7 +54,7 @@ dotnet run --project src/Lorq.Cli -- \
   merge-shards \
   ../fixtures/golden/deterministic-orchestration/shard-001 \
   ../fixtures/golden/deterministic-orchestration/shard-002 \
-  --out ../internal/generated/dotnet-merge-writer/experiment-001 \
+  --out ../results/dotnet-merge-writer/experiment-001 \
   --package-id deterministic-benchmark \
   --benchmark ../fixtures/conformance/deterministic-orchestration/benchmark.yaml
 ```
@@ -64,7 +64,7 @@ Attach deterministic fake judgement:
 ```bash
 dotnet run --project src/Lorq.Cli -- \
   judge-package \
-  ../internal/generated/dotnet-merge-writer/experiment-001 \
+  ../results/dotnet-merge-writer/experiment-001 \
   --name judge-primary \
   --fixture ../fixtures/conformance/deterministic-orchestration/fixtures/fake-judge.yaml
 ```
@@ -74,7 +74,7 @@ Render deterministic reports:
 ```bash
 dotnet run --project src/Lorq.Cli -- \
   report-package \
-  ../internal/generated/dotnet-merge-writer/experiment-001 \
+  ../results/dotnet-merge-writer/experiment-001 \
   --primary-judgement judge-primary
 ```
 

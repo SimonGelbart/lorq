@@ -37,7 +37,7 @@ Rebuild indexes into a target root:
 cd dotnet
 dotnet run --project src/Lorq.Cli -- rebuild-indexes \
   ../fixtures/golden/deterministic-orchestration/experiment-001 \
-  ../internal/generated/dotnet-index-rebuild/experiment-001
+  ../results/dotnet-index-rebuild/experiment-001
 ```
 
 ## Stable validation codes

@@ -1,6 +1,6 @@
 # LORQ documentation
 
-The docs are organized by reader need rather than by work session. This follows the Diátaxis distinction between how-to guides, reference, explanation, and tutorials.
+The docs are organized by reader need rather than by implementation batch. This follows the Diátaxis distinction between how-to guides, reference, explanation, and tutorials.
 
 
 ## Repository guidance
@@ -45,7 +45,7 @@ Use these when you need background, boundaries, and design rationale.
 
 ## Architecture Decision Records
 
-Architecture Decision Records live in `adr/`. Each ADR should describe context, decision, consequences, and status. Keep ADRs concise and about durable choices, not transient session notes.
+Architecture Decision Records live in `adr/`. Each ADR should describe context, decision, consequences, and status. Keep ADRs concise and about durable choices, not transient task notes.
 
 Current ADRs:
 
@@ -65,4 +65,4 @@ Roadmap files are retained as product planning documents:
 - `roadmap/LORQ_PRACTICAL_ROADMAP.md`
 - `roadmap/LORQ_ROADMAP_GOAL_REFINEMENT.md`
 
-Session handoffs, local packaging rules, validation transcripts, and extracted artifact notes do not belong in this directory. Keep them in the sibling `internal/` workspace used by local delivery packages.
+Temporary task notes and extracted artifact notes do not belong in this directory. Keep them outside the source tree.

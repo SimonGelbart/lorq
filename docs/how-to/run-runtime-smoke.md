@@ -2,7 +2,7 @@
 
 Use runtime smoke adapters after the deterministic fake loop and file-adapter conformance pass. Smoke adapters prove a real runtime boundary can produce LORQ-compliant evidence, but they are not deterministic CI gates.
 
-Keep generated outputs under `internal/generated/` or another local workspace. Do not update golden fixtures from a real runtime smoke run.
+Keep generated outputs under an ignored local output directory such as `results/`. Do not update golden fixtures from a real runtime smoke run.
 
 ## Codex CLI smoke
 
@@ -11,7 +11,7 @@ The Codex CLI smoke path uses the regular file-adapter process boundary. LORQ la
 ```bash
 lorq run --no-judge \
   --suite-root fixtures/conformance/deterministic-orchestration \
-  --out ../internal/generated/codex-smoke/shard-001 \
+  --out ../results/codex-smoke/shard-001 \
   --adapter-command python3 \
   --adapter-arg examples/adapters/codex-cli-file-adapter/lorq_codex_cli_adapter.py \
   --adapter-profile codex-cli \
@@ -28,7 +28,7 @@ Before using the wrapper in `run --no-judge`, run conformance:
 lorq adapter conformance \
   --adapter-command python3 \
   --adapter-arg examples/adapters/codex-cli-file-adapter/lorq_codex_cli_adapter.py \
-  --out ../internal/generated/codex-smoke-conformance
+  --out ../results/codex-smoke-conformance
 ```
 
 ## Copilot SDK smoke boundary
@@ -38,7 +38,7 @@ The Copilot SDK boundary is represented as a file-adapter profile named `copilot
 ```bash
 lorq run --no-judge \
   --suite-root fixtures/conformance/deterministic-orchestration \
-  --out ../internal/generated/copilot-smoke/shard-001 \
+  --out ../results/copilot-smoke/shard-001 \
   --adapter-command <copilot-wrapper> \
   --adapter-profile copilot-sdk
 ```

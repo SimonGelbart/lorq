@@ -2,7 +2,7 @@
 
 Product: **LORQ — Ledger for Orchestrated Run Quality**
 
-This roadmap tracks product increments, not work-session handoffs. Session notes, validation transcripts, and package manifests belong outside the source tree in the local `internal/` workspace.
+This roadmap tracks product increments, not temporary task notes. Generated logs and package manifests belong outside the source tree.
 
 ## Product goal
 

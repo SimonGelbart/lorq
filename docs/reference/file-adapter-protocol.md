@@ -63,7 +63,7 @@ Use `adapter conformance` to check a local adapter wrapper before using it in `r
 lorq adapter conformance \
   --adapter-command <adapter-executable> \
   --adapter-arg <argument-if-needed> \
-  --out ../internal/generated/adapter-conformance
+  --out ../results/adapter-conformance
 ```
 
 The legacy `adapter-conformance` command remains available as an alias.
@@ -80,7 +80,7 @@ A failure returns exit code `1` with a stable diagnostic code and a `failure_cla
 - `LORQ-ADAPTER-EVIDENCE-STATUS` / evidence status class — evidence reported `timeout`, `no_final_answer`, `adapter_failed`, `permission_denied`, or `invalid_artifact`.
 - `LORQ-ADAPTER-CONFORMANCE-FILES` / `invalid_artifact` — evidence references a missing output file or an artifact checksum is missing or invalid.
 
-Generated exchange directories are local run artifacts. Keep them outside the source tree, usually under the sibling `internal/generated/` workspace used by handoff packages. See `docs/how-to/write-file-adapter.md` and `examples/adapters/file-adapter-sample/` for a minimal adapter-author workflow.
+Generated exchange directories are local run artifacts. Keep them outside the source tree, usually under an ignored output directory such as `results/`. See `docs/how-to/write-file-adapter.md` and `examples/adapters/file-adapter-sample/` for a minimal adapter-author workflow.
 
 ## Scope boundary
 

@@ -7,7 +7,7 @@ dotnet run --project dotnet/src/Lorq.Cli -- \
   run \
   --no-judge \
   --suite-root fixtures/conformance/deterministic-orchestration \
-  --out internal/generated/dotnet-run-shard/shard-001
+  --out results/dotnet-run-shard/shard-001
 ```
 
 ## Flow

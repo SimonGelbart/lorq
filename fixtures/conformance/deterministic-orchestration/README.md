@@ -26,15 +26,15 @@ PYTHONPATH=. python -m eval_runner.cli \
   --modes baseline,graphify,graphify-plus \
   --cases successful-comparison \
   --agent-profile deterministic-fake \
-  --out ../../internal/generated/deterministic-benchmark/python-results/shard-001 \
-  --worktree-root ../../internal/generated/deterministic-benchmark/worktrees/shard-001 \
+  --out ../../results/deterministic-benchmark/python-results/shard-001 \
+  --worktree-root ../../results/deterministic-benchmark/worktrees/shard-001 \
   --dirty-policy allow \
   --cleanup never
 
 PYTHONPATH=. python -m eval_runner.cli \
   --suite-root ../fixtures/conformance/deterministic-orchestration \
-  --out ../../internal/generated/deterministic-benchmark/python-results/shard-001 \
-  --export-lorq-shard ../../internal/generated/deterministic-benchmark/shard-001 \
+  --out ../../results/deterministic-benchmark/python-results/shard-001 \
+  --export-lorq-shard ../../results/deterministic-benchmark/shard-001 \
   --lorq-shard-id shard-001 \
   --lorq-package-id deterministic-benchmark
 ```
@@ -47,8 +47,8 @@ Merge the two exported shards:
 ```bash
 cd python
 PYTHONPATH=. python -m eval_runner.cli \
-  --merge-lorq-shards ../../internal/generated/deterministic-benchmark/shard-001 ../../internal/generated/deterministic-benchmark/shard-002 \
-  --lorq-merge-out ../../internal/generated/deterministic-benchmark/experiment-001 \
+  --merge-lorq-shards ../../results/deterministic-benchmark/shard-001 ../../results/deterministic-benchmark/shard-002 \
+  --lorq-merge-out ../../results/deterministic-benchmark/experiment-001 \
   --lorq-package-id deterministic-benchmark \
   --lorq-benchmark ../fixtures/conformance/deterministic-orchestration/benchmark.yaml
 ```

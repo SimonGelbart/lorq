@@ -11,7 +11,7 @@ current_slice:
     - deterministic fake agent fixture
     - deterministic fake judge fixture
     - self-contained cases, modes, prompt style, rubric, and tiny repository
-    - two candidate run-shard export path under internal/generated during sessions
+    - two candidate run-shard export paths under an ignored local output directory
     - migration-only package-level merge command with expected coverage
     - package-level deterministic judgement attachment under judgements/judge-primary
     - report.json and report.md rendering

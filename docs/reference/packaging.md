@@ -2,7 +2,7 @@
 
 This file describes durable source repository packaging boundaries.
 
-It does not describe maintainer-specific delivery mechanics, local execution environments, or temporary handoff files.
+It does not describe maintainer-specific delivery mechanics, local execution environments, or temporary task files.
 
 ## Source repository contents
 

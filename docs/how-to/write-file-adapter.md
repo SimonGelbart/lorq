@@ -52,7 +52,7 @@ lorq adapter conformance \
   --adapter-command python3 \
   --adapter-arg examples/adapters/file-adapter-sample/sample_file_adapter.py \
   --adapter-working-directory . \
-  --out ../internal/generated/sample-file-adapter-conformance
+  --out ../results/sample-file-adapter-conformance
 ```
 
 The legacy `adapter-conformance` alias remains available for existing automation, but new docs should use `adapter conformance`.
@@ -66,10 +66,10 @@ After conformance passes, use the same command with `run --no-judge`:
 ```bash
 lorq run --no-judge \
   --suite-root fixtures/conformance/deterministic-orchestration \
-  --out ../internal/generated/sample-adapter-shard \
+  --out ../results/sample-adapter-shard \
   --adapter-command python3 \
   --adapter-arg examples/adapters/file-adapter-sample/sample_file_adapter.py \
   --adapter-working-directory .
 ```
 
-Keep generated outputs under `internal/generated/` or another local workspace, not in the source tree.
+Keep generated outputs under an ignored local output directory such as `results/`, not in the source tree.

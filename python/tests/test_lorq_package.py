@@ -422,4 +422,4 @@ def test_frozen_deterministic_golden_outputs_have_full_loop_and_no_local_paths()
         text = path.read_text(encoding="utf-8")
         assert "/mnt/data" not in text
         assert "lorq_finish" not in text
-        assert "internal/generated" not in text
+        assert "results/generated" not in text
