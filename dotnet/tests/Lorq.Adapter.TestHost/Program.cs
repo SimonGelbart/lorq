@@ -1,3 +1,4 @@
+using System.Security.Cryptography;
 using System.Text.Json;
 using Lorq.Adapters.Process;
 
@@ -46,7 +47,7 @@ Console.WriteLine("adapter-test-host stdout for " + request.Cell.CellId);
 Console.Error.WriteLine("adapter-test-host stderr for " + request.Cell.CellId);
 
 var adapterId = assertCodexProfile ? "codex-profile-test-adapter" : "external-test-adapter";
-var evidence = CreateEvidence(request, adapterId, assertCodexProfile);
+var evidence = CreateEvidence(request, adapterId, assertCodexProfile, ComputeSha256(answerPath));
 if (args.Contains("--write-no-final-answer", StringComparer.Ordinal))
 {
     evidence = evidence with { FinalAnswer = null! };
@@ -86,6 +87,30 @@ if (args.Contains("--write-invalid-artifact", StringComparer.Ordinal))
     };
 }
 
+if (args.Contains("--write-missing-artifact-checksum", StringComparer.Ordinal))
+{
+    evidence = evidence with
+    {
+        Artifacts = new[] { new FileAdapterArtifact("answer", request.ExpectedOutput.FinalAnswerPath, "") }
+    };
+}
+
+if (args.Contains("--write-invalid-artifact-checksum", StringComparer.Ordinal))
+{
+    evidence = evidence with
+    {
+        Artifacts = new[] { new FileAdapterArtifact("answer", request.ExpectedOutput.FinalAnswerPath, "sha256-mismatch") }
+    };
+}
+
+if (args.Contains("--write-integrity-warning", StringComparer.Ordinal))
+{
+    evidence = evidence with
+    {
+        IntegrityWarnings = new[] { "adapter reported a non-blocking fixture warning" }
+    };
+}
+
 if (args.Contains("--write-unsupported-evidence-schema", StringComparer.Ordinal))
 {
     evidence = evidence with { SchemaVersion = "lorq.file-adapter-evidence.unsupported" };
@@ -118,7 +143,7 @@ if (args.Contains("--write-missing-answer-file", StringComparer.Ordinal))
 File.WriteAllText(evidencePath, JsonSerializer.Serialize(evidence, FileAdapterJson.Options) + Environment.NewLine);
 return exitCode;
 
-static FileAdapterEvidence CreateEvidence(FileAdapterRequest request, string adapterId, bool assertCodexProfile)
+static FileAdapterEvidence CreateEvidence(FileAdapterRequest request, string adapterId, bool assertCodexProfile, string answerSha256)
 {
     return new FileAdapterEvidence(
         FileAdapterProtocol.EvidenceSchemaVersion,
@@ -132,9 +157,14 @@ static FileAdapterEvidence CreateEvidence(FileAdapterRequest request, string ada
         new FileAdapterTiming(17, false),
         new FileAdapterProcessResult(0, "stdout.raw.txt", "stderr.txt"),
         new[] { new FileAdapterTraceEvent("tool.command", TraceMessage(assertCodexProfile), null) },
-        new[] { new FileAdapterArtifact("answer", request.ExpectedOutput.FinalAnswerPath, "sha256-test") },
+        new[] { new FileAdapterArtifact("answer", request.ExpectedOutput.FinalAnswerPath, answerSha256) },
         Array.Empty<string>(),
         Array.Empty<FileAdapterDiagnostic>());
+}
+
+static string ComputeSha256(string path)
+{
+    return Convert.ToHexString(SHA256.HashData(File.ReadAllBytes(path))).ToLowerInvariant();
 }
 
 static bool HasCodexProfileEnvironment()

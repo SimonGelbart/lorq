@@ -1,3 +1,5 @@
+using System.Security.Cryptography;
+
 namespace Lorq.Adapters.Process;
 
 /// <summary>
@@ -99,7 +101,7 @@ public sealed class FileAdapterConformanceRunner
                 observations);
         }
 
-        if (observations.Any(observation => observation.StartsWith("missing ", StringComparison.Ordinal)))
+        if (observations.Any(IsBlockingObservation))
         {
             return new FileAdapterConformanceScenarioResult(
                 scenarioName,
@@ -151,8 +153,39 @@ public sealed class FileAdapterConformanceRunner
     {
         foreach (var artifact in evidence.Artifacts)
         {
-            yield return ExistingObservation(request.Workspace.EvidenceDirectory, artifact.Path, "artifact " + artifact.Kind);
+            var artifactPath = Path.Combine(request.Workspace.EvidenceDirectory, artifact.Path);
+            if (!File.Exists(artifactPath))
+            {
+                yield return "missing artifact " + artifact.Kind + " file";
+                continue;
+            }
+
+            if (string.IsNullOrWhiteSpace(artifact.Sha256))
+            {
+                yield return "missing artifact " + artifact.Kind + " checksum";
+                continue;
+            }
+
+            yield return string.Equals(artifact.Sha256, ComputeSha256(artifactPath), StringComparison.OrdinalIgnoreCase)
+                ? "artifact " + artifact.Kind + " checksum matches"
+                : "invalid artifact " + artifact.Kind + " checksum";
         }
+
+        foreach (var warning in evidence.IntegrityWarnings)
+        {
+            yield return "integrity warning: " + warning;
+        }
+    }
+
+    private static bool IsBlockingObservation(string observation)
+    {
+        return observation.StartsWith("missing ", StringComparison.Ordinal)
+            || observation.StartsWith("invalid ", StringComparison.Ordinal);
+    }
+
+    private static string ComputeSha256(string path)
+    {
+        return Convert.ToHexString(SHA256.HashData(File.ReadAllBytes(path))).ToLowerInvariant();
     }
 
     private static string ExistingObservation(string root, string relativePath, string name)

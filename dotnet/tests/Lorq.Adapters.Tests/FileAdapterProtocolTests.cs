@@ -294,6 +294,47 @@ public sealed class FileAdapterProtocolTests
 
         await Assert.That(report.Ok).IsFalse();
         await Assert.That(report.Scenarios[0].Code).IsEqualTo("LORQ-ADAPTER-CONFORMANCE-FILES");
+        await Assert.That(report.Scenarios[0].FailureClass).IsEqualTo(FileAdapterFailureClassifier.InvalidArtifact);
+    }
+
+    [Test]
+    public async Task ConformanceRunnerReportsMissingArtifactChecksum()
+    {
+        using var output = TemporaryDirectory.Create();
+        var runner = new FileAdapterConformanceRunner();
+
+        var report = await runner.RunAsync(TestHostCommand("--write-missing-artifact-checksum"), output.Path, 30000);
+
+        await Assert.That(report.Ok).IsFalse();
+        await Assert.That(report.Scenarios[0].Code).IsEqualTo("LORQ-ADAPTER-CONFORMANCE-FILES");
+        await Assert.That(report.Scenarios[0].FailureClass).IsEqualTo(FileAdapterFailureClassifier.InvalidArtifact);
+        await Assert.That(report.Scenarios[0].Observations).Contains("missing artifact answer checksum");
+    }
+
+    [Test]
+    public async Task ConformanceRunnerReportsInvalidArtifactChecksum()
+    {
+        using var output = TemporaryDirectory.Create();
+        var runner = new FileAdapterConformanceRunner();
+
+        var report = await runner.RunAsync(TestHostCommand("--write-invalid-artifact-checksum"), output.Path, 30000);
+
+        await Assert.That(report.Ok).IsFalse();
+        await Assert.That(report.Scenarios[0].Code).IsEqualTo("LORQ-ADAPTER-CONFORMANCE-FILES");
+        await Assert.That(report.Scenarios[0].FailureClass).IsEqualTo(FileAdapterFailureClassifier.InvalidArtifact);
+        await Assert.That(report.Scenarios[0].Observations).Contains("invalid artifact answer checksum");
+    }
+
+    [Test]
+    public async Task ConformanceRunnerPreservesIntegrityWarningsWithoutFailing()
+    {
+        using var output = TemporaryDirectory.Create();
+        var runner = new FileAdapterConformanceRunner();
+
+        var report = await runner.RunAsync(TestHostCommand("--write-integrity-warning"), output.Path, 30000);
+
+        await Assert.That(report.Ok).IsTrue().Because(report.Scenarios[0].Message ?? "conformance failed");
+        await Assert.That(report.Scenarios[0].Observations).Contains("integrity warning: adapter reported a non-blocking fixture warning");
     }
 
     [Test]
