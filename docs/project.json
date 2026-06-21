@@ -1,0 +1,13 @@
+{
+  "name": "LORQ",
+  "slug": "lorq",
+  "kind": "Technical lab",
+  "status": "Active prototype",
+  "stack": "Python / .NET planning",
+  "focus": "Orchestration, reproducibility, evaluation, reporting",
+  "summary": "Ledger for Orchestrated Run Quality: reproducible agent, tool, and skill evaluation runs with evidence capture, integrity, adapter conformance, and reports.",
+  "repo": "https://github.com/SimonGelbart/lorq",
+  "docs": "https://simongelbart.github.io/lorq/",
+  "adr": "https://simongelbart.github.io/lorq/adr/",
+  "roadmap": "https://simongelbart.github.io/lorq/roadmap/"
+}

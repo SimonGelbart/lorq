@@ -2,6 +2,11 @@
 
 The docs are organized by reader need rather than by implementation batch. This follows the Diátaxis distinction between how-to guides, reference, explanation, and tutorials.
 
+This directory is also the source for the public LORQ documentation site:
+
+```text
+https://simongelbart.github.io/lorq/
+```
 
 ## Repository guidance
 
@@ -13,6 +18,7 @@ For contribution and automation guidance, start with:
 - `reference/git-workflow.md`
 - `reference/validation.md`
 - `reference/documentation-standards.md`
+- `reference/documentation-site.md`
 - `reference/architecture/architecture-principles.md`
 - `reference/architecture/boundaries.md`
 - `reference/architecture/design-patterns.md`
@@ -33,6 +39,7 @@ Use these when you need precise contracts and command behavior.
 - `reference/cli.md` — current CLI commands and options.
 - `reference/package-validation.md` — validation scope and stable error codes.
 - `reference/file-adapter-protocol.md` — file-based adapter evidence contract and conformance command.
+- `reference/documentation-site.md` — GitHub Pages documentation publication model.
 
 ## Explanation
 
