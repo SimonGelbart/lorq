@@ -85,7 +85,7 @@ Documentation follows a Diátaxis-inspired split:
 - `docs/how-to/` for task-oriented procedures.
 - `docs/reference/` for command, package, and validation contracts.
 - `docs/explanation/` for product and architecture background.
-- `docs/decisions/` for architecture decision records.
+- `docs/adr/` for architecture decision records.
 - `docs/roadmap/` for product direction and delivery sequencing.
 
 Start with `docs/README.md` for the documentation map.

@@ -36,9 +36,9 @@ lorq report --input experiment-001 --primary-judgement judge-primary
 
 ## See also
 
-- `../decisions/0003-package-lifecycle-and-evidence-model.md` records the durable package lifecycle and evidence model.
+- `../adr/0003-package-lifecycle-and-evidence-model.md` records the durable package lifecycle and evidence model.
 - `../reference/cli.md` describes the current command surface.
 - `../reference/package-validation.md` describes current validation behavior and stable error codes.
-- `../decisions/0006-report-data-and-rendering-boundary.md` records the canonical report JSON and rendering boundary.
-- `../decisions/0007-failure-classification-and-integrity-gates.md` records how execution failures affect validity and confidence.
-- `../decisions/0008-pre-v1-schema-versioning.md` records the pre-v1 schema compatibility stance.
+- `../adr/0006-report-data-and-rendering-boundary.md` records the canonical report JSON and rendering boundary.
+- `../adr/0007-failure-classification-and-integrity-gates.md` records how execution failures affect validity and confidence.
+- `../adr/0008-pre-v1-schema-versioning.md` records the pre-v1 schema compatibility stance.

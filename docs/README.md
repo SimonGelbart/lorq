@@ -27,9 +27,9 @@ Use these when you need background, boundaries, and design rationale.
 - `dotnet/docs/engineering-guidelines.md` — .NET engineering rules.
 - `dotnet/docs/full-loop-parity.md` — deterministic parity model.
 
-## Decisions
+## Architecture Decision Records
 
-Architecture Decision Records live in `decisions/`. Each ADR should describe context, decision, consequences, and status. Keep ADRs concise and about durable choices, not transient session notes.
+Architecture Decision Records live in `adr/`. Each ADR should describe context, decision, consequences, and status. Keep ADRs concise and about durable choices, not transient session notes.
 
 Current ADRs:
 

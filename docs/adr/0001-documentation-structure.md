@@ -15,7 +15,7 @@ Use a Diátaxis-inspired documentation structure:
 - `docs/how-to/` for task-oriented procedures.
 - `docs/reference/` for precise command, package, schema, and adapter contracts.
 - `docs/explanation/` for product and architecture background.
-- `docs/decisions/` for durable architecture decisions.
+- `docs/adr/` for durable architecture decisions.
 - `docs/roadmap/` for product direction and delivery sequencing.
 
 Keep session handoffs, packaging manifests, validation logs, extracted archives, and session-specific notes in the sibling `internal/` workspace instead of the source repository.
