@@ -36,7 +36,66 @@
         "id",
         "kind",
         "version"
-      ]
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "kind": {
+          "type": "string"
+        },
+        "version": {
+          "type": "string"
+        },
+        "runtime": {
+          "type": "object",
+          "required": [
+            "provider",
+            "runtime"
+          ],
+          "properties": {
+            "provider": {
+              "type": "string"
+            },
+            "runtime": {
+              "type": "string"
+            },
+            "runtime_version": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "profile": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "command": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "permission_profile": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "output_format": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "extensions": {
+              "type": "object"
+            }
+          }
+        }
+      }
     },
     "status": {
       "enum": [

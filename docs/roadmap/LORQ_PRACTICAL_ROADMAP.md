@@ -90,13 +90,15 @@ Exit criteria:
 
 ### Increment B — Real runtime smoke tests
 
+Status: in progress.
+
 Outcome: prove real runtime integrations can produce LORQ-compliant evidence without becoming the deterministic gate.
 
 Deliverables:
 
-- Codex wrapper smoke run.
-- Copilot SDK smoke run.
-- Runtime metadata capture.
+- Codex wrapper smoke run scaffold.
+- Copilot SDK smoke boundary scaffold.
+- Runtime metadata capture in adapter evidence.
 - Provider extension block examples.
 
 Exit criteria:

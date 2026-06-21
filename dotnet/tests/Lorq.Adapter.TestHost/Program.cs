@@ -30,9 +30,15 @@ if (args.Contains("--throw-before-evidence", StringComparer.Ordinal))
 }
 
 var assertCodexProfile = args.Contains("--assert-codex-profile", StringComparer.Ordinal);
+var assertCopilotProfile = args.Contains("--assert-copilot-profile", StringComparer.Ordinal);
 if (assertCodexProfile && !HasCodexProfileEnvironment())
 {
     return 43;
+}
+
+if (assertCopilotProfile && !HasCopilotProfileEnvironment())
+{
+    return 44;
 }
 
 Directory.CreateDirectory(request.Workspace.EvidenceDirectory);
@@ -46,8 +52,8 @@ File.WriteAllText(stderrPath, string.Empty);
 Console.WriteLine("adapter-test-host stdout for " + request.Cell.CellId);
 Console.Error.WriteLine("adapter-test-host stderr for " + request.Cell.CellId);
 
-var adapterId = assertCodexProfile ? "codex-profile-test-adapter" : "external-test-adapter";
-var evidence = CreateEvidence(request, adapterId, assertCodexProfile, ComputeSha256(answerPath));
+var adapterId = AdapterId(assertCodexProfile, assertCopilotProfile);
+var evidence = CreateEvidence(request, adapterId, assertCodexProfile, assertCopilotProfile, ComputeSha256(answerPath));
 if (args.Contains("--write-no-final-answer", StringComparer.Ordinal))
 {
     evidence = evidence with { FinalAnswer = null! };
@@ -143,23 +149,50 @@ if (args.Contains("--write-missing-answer-file", StringComparer.Ordinal))
 File.WriteAllText(evidencePath, JsonSerializer.Serialize(evidence, FileAdapterJson.Options) + Environment.NewLine);
 return exitCode;
 
-static FileAdapterEvidence CreateEvidence(FileAdapterRequest request, string adapterId, bool assertCodexProfile, string answerSha256)
+static FileAdapterEvidence CreateEvidence(FileAdapterRequest request, string adapterId, bool assertCodexProfile, bool assertCopilotProfile, string answerSha256)
 {
     return new FileAdapterEvidence(
         FileAdapterProtocol.EvidenceSchemaVersion,
         FileAdapterProtocol.ContractVersion,
         request.Cell.CellId,
-        new FileAdapterDescriptor(adapterId, "file-adapter", "v1alpha1"),
+        new FileAdapterDescriptor(adapterId, "file-adapter", "v1alpha1", RuntimeMetadata(assertCodexProfile, assertCopilotProfile)),
         "completed",
         new FileAdapterFinalAnswer(true, request.ExpectedOutput.FinalAnswerPath, "External one-shot adapter answer."),
         new FileAdapterUsage(11, 1, 13, 0, 0m),
         new FileAdapterCounts(1, 1, 1),
         new FileAdapterTiming(17, false),
         new FileAdapterProcessResult(0, "stdout.raw.txt", "stderr.txt"),
-        new[] { new FileAdapterTraceEvent("tool.command", TraceMessage(assertCodexProfile), null) },
+        new[] { new FileAdapterTraceEvent("tool.command", TraceMessage(assertCodexProfile, assertCopilotProfile), null) },
         new[] { new FileAdapterArtifact("answer", request.ExpectedOutput.FinalAnswerPath, answerSha256) },
         Array.Empty<string>(),
         Array.Empty<FileAdapterDiagnostic>());
+}
+
+static string AdapterId(bool assertCodexProfile, bool assertCopilotProfile)
+{
+    if (assertCodexProfile)
+    {
+        return "codex-profile-test-adapter";
+    }
+
+    return assertCopilotProfile ? "copilot-profile-test-adapter" : "external-test-adapter";
+}
+
+static FileAdapterRuntimeMetadata? RuntimeMetadata(bool assertCodexProfile, bool assertCopilotProfile)
+{
+    if (assertCodexProfile)
+    {
+        return FileAdapterRuntimeMetadata.CodexCli(
+            Environment.GetEnvironmentVariable("LORQ_CODEX_COMMAND") ?? "codex",
+            Environment.GetEnvironmentVariable("LORQ_CODEX_OUTPUT_FORMAT") ?? CodexFileAdapterProfile.OutputFormat,
+            Environment.GetEnvironmentVariable("LORQ_CODEX_PERMISSION_PROFILE") ?? CodexFileAdapterProfile.DefaultPermissionProfile,
+            new Dictionary<string, string>
+            {
+                ["invocation"] = Environment.GetEnvironmentVariable("LORQ_CODEX_INVOCATION") ?? string.Empty,
+            });
+    }
+
+    return assertCopilotProfile ? CopilotSdkFileAdapterProfile.RuntimeMetadata("copilot-sdk-test") : null;
 }
 
 static string ComputeSha256(string path)
@@ -172,11 +205,25 @@ static bool HasCodexProfileEnvironment()
     return Environment.GetEnvironmentVariable("LORQ_ADAPTER_PROFILE") == "codex-cli"
         && !string.IsNullOrWhiteSpace(Environment.GetEnvironmentVariable("LORQ_CODEX_COMMAND"))
         && (Environment.GetEnvironmentVariable("LORQ_CODEX_ARGUMENTS") ?? string.Empty).Contains("exec", StringComparison.Ordinal)
-        && Environment.GetEnvironmentVariable("LORQ_CODEX_OUTPUT_FORMAT") == "codex-jsonl"
+        && Environment.GetEnvironmentVariable("LORQ_CODEX_OUTPUT_FORMAT") == CodexFileAdapterProfile.OutputFormat
+        && Environment.GetEnvironmentVariable("LORQ_CODEX_PERMISSION_PROFILE") == CodexFileAdapterProfile.DefaultPermissionProfile
         && Environment.GetEnvironmentVariable("LORQ_CODEX_INVOCATION") == "one-shot-file-adapter";
 }
 
-static string TraceMessage(bool assertCodexProfile)
+static bool HasCopilotProfileEnvironment()
 {
-    return assertCodexProfile ? "external codex-profile adapter" : "external adapter";
+    return Environment.GetEnvironmentVariable("LORQ_ADAPTER_PROFILE") == CopilotSdkFileAdapterProfile.Name
+        && Environment.GetEnvironmentVariable("LORQ_COPILOT_OUTPUT_FORMAT") == CopilotSdkFileAdapterProfile.OutputFormat
+        && Environment.GetEnvironmentVariable("LORQ_COPILOT_PERMISSION_PROFILE") == CopilotSdkFileAdapterProfile.DefaultPermissionProfile
+        && Environment.GetEnvironmentVariable("LORQ_COPILOT_INVOCATION") == "one-shot-file-adapter";
+}
+
+static string TraceMessage(bool assertCodexProfile, bool assertCopilotProfile)
+{
+    if (assertCodexProfile)
+    {
+        return "external codex-profile adapter";
+    }
+
+    return assertCopilotProfile ? "external copilot-profile adapter" : "external adapter";
 }

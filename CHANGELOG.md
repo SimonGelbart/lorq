@@ -2,6 +2,20 @@
 
 All notable changes to LORQ should be documented here.
 
+## 2026-06-21 - Runtime smoke: adapter scaffolds and metadata
+
+### Added
+
+- Added an optional Codex CLI file-adapter smoke wrapper example.
+- Added provider runtime metadata to adapter evidence and run-shard adapter summaries.
+- Added a Copilot SDK adapter profile scaffold without adding a core SDK dependency.
+- Documented optional runtime smoke workflows and kept deterministic CI fake/no-token.
+
+### Validation
+
+Executed as part of the local package gate for this increment. Logs are stored outside the source tree under `internal/`.
+
+
 ## 2026-06-21 - Adapter conformance: failure classes and readiness boundary
 
 ### Changed

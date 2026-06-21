@@ -18,7 +18,10 @@ Common options:
 - `--work-root <path>` — optional workspace root for materialized per-cell workspaces.
 - `--adapter-command <path>` — optional external one-shot file adapter.
 - `--adapter-arg <value>` — repeatable external adapter argument.
-- `--adapter-profile codex-cli` — passes Codex wrapper metadata to an external adapter process; LORQ itself still does not call Codex.
+- `--adapter-profile codex-cli` — passes Codex CLI wrapper metadata to an external adapter process; LORQ itself still does not call Codex.
+- `--codex-command <path>` — optional Codex command exposed to a `codex-cli` wrapper.
+- `--codex-arg <value>` — repeatable Codex argument exposed to a `codex-cli` wrapper.
+- `--adapter-profile copilot-sdk` — passes Copilot SDK wrapper metadata to an external adapter process without linking core code to the SDK.
 
 ## `merge-shards`
 

@@ -7,6 +7,8 @@ public static class CodexFileAdapterProfile
 {
     public const string Name = "codex-cli";
     public const string DefaultCodexCommand = "codex";
+    public const string DefaultPermissionProfile = "local-smoke";
+    public const string OutputFormat = "codex-jsonl";
     public static readonly IReadOnlyList<string> DefaultCodexArguments = new[] { "exec", "--json" };
 
     public static FileAdapterProcessCommand ApplyTo(
@@ -21,7 +23,8 @@ public static class CodexFileAdapterProfile
             .WithEnvironmentVariable("LORQ_ADAPTER_PROFILE", Name)
             .WithEnvironmentVariable("LORQ_CODEX_COMMAND", resolvedCodexCommand)
             .WithEnvironmentVariable("LORQ_CODEX_ARGUMENTS", string.Join(Environment.NewLine, resolvedCodexArguments))
-            .WithEnvironmentVariable("LORQ_CODEX_OUTPUT_FORMAT", "codex-jsonl")
+            .WithEnvironmentVariable("LORQ_CODEX_OUTPUT_FORMAT", OutputFormat)
+            .WithEnvironmentVariable("LORQ_CODEX_PERMISSION_PROFILE", DefaultPermissionProfile)
             .WithEnvironmentVariable("LORQ_CODEX_INVOCATION", "one-shot-file-adapter");
     }
 }

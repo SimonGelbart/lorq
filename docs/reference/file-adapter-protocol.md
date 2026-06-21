@@ -32,7 +32,7 @@ Schema: `schemas/lorq-file-adapter-evidence.v1alpha.schema.json`
 
 The evidence file must be a full evidence contract, not just a final answer. It must include:
 
-- adapter identity and version
+- adapter identity, version, and optional provider runtime metadata
 - status and product-facing failure class when the scenario fails
 - final answer presence and path
 - token/cost usage when available
@@ -86,9 +86,13 @@ Generated exchange directories are local run artifacts. Keep them outside the so
 
 This protocol is for deterministic fake adapters, Codex process adapters, and external one-shot adapters. Copilot SDK remains a first-class industrial adapter target, but it should produce the same evidence shape after normalization.
 
-The current .NET `run --no-judge` path can use this process adapter for deterministic planned shards. Setup command execution, Git worktree/clone orchestration, direct Codex runtime behavior, and Copilot SDK runtime behavior remain future adapter/runtime work.
+The current .NET `run --no-judge` path can use this process adapter for deterministic planned shards and optional local runtime smoke wrappers. Setup command execution, Git worktree/clone orchestration, and dirty-worktree policy remain future adapter/runtime work.
 
 
 ## Built-in process profiles
 
-The first built-in process profile is `codex-cli`. It injects Codex wrapper metadata into an external one-shot adapter process while preserving the same request/evidence contract. See `../../dotnet/docs/adapters/codex-file-adapter-profile.md`.
+Built-in process profiles include `codex-cli` and `copilot-sdk`. They inject wrapper metadata into an external one-shot adapter process while preserving the same request/evidence contract. See `../../dotnet/docs/adapters/codex-file-adapter-profile.md` and `../how-to/run-runtime-smoke.md`.
+
+## Runtime metadata
+
+Adapters may include optional `adapter.runtime` metadata in evidence. This metadata is preserved for inspection and reporting, but package validation should not interpret provider-specific details. Stable metadata fields are `provider`, `runtime`, `runtime_version`, `profile`, `command`, `permission_profile`, `output_format`, and provider-specific `extensions`.

@@ -60,4 +60,4 @@ The evidence uses `lorq.file-adapter-evidence.v1alpha1` and records adapter iden
 
 - Setup commands are not executed yet.
 - Git worktree/clone checkout and dirty-policy enforcement are not implemented yet.
-- Codex and Copilot runtime integrations are adapter work, not part of the deterministic gate.
+- Codex and Copilot runtime integrations are optional adapter smoke work, not part of the deterministic gate. See `../../docs/how-to/run-runtime-smoke.md`.

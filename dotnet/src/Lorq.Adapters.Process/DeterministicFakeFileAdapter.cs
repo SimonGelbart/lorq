@@ -50,7 +50,7 @@ public sealed class DeterministicFakeFileAdapter : IFileAdapter
             FileAdapterProtocol.EvidenceSchemaVersion,
             FileAdapterProtocol.ContractVersion,
             request.Cell.CellId,
-            new FileAdapterDescriptor("deterministic-fake", "file-adapter", "v1alpha1"),
+            new FileAdapterDescriptor("deterministic-fake", "file-adapter", "v1alpha1", FileAdapterRuntimeMetadata.DeterministicFake()),
             fixtureCell.Status,
             new FileAdapterFinalAnswer(!string.IsNullOrWhiteSpace(fixtureCell.FinalAnswer), PortablePath(finalAnswerPath, request.Workspace.EvidenceDirectory), Summary(fixtureCell.FinalAnswer)),
             Usage(fixtureCell),

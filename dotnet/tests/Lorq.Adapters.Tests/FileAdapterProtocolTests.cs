@@ -136,7 +136,67 @@ public sealed class FileAdapterProtocolTests
         var evidence = await adapter.InvokeAsync(request);
 
         await Assert.That(evidence.Adapter.Id).IsEqualTo("codex-profile-test-adapter");
+        await Assert.That(evidence.Adapter.Runtime).IsNotNull();
+        await Assert.That(evidence.Adapter.Runtime!.Provider).IsEqualTo("openai");
+        await Assert.That(evidence.Adapter.Runtime.Runtime).IsEqualTo("codex-cli");
+        await Assert.That(evidence.Adapter.Runtime.PermissionProfile).IsEqualTo(CodexFileAdapterProfile.DefaultPermissionProfile);
         await Assert.That(evidence.Trace[0].Message).Contains("codex-profile");
+    }
+
+    [Test]
+    public async Task EvidenceContractSerializesRuntimeMetadata()
+    {
+        var evidence = new FileAdapterEvidence(
+            FileAdapterProtocol.EvidenceSchemaVersion,
+            FileAdapterProtocol.ContractVersion,
+            "runtime-metadata__baseline__attempt-001",
+            new FileAdapterDescriptor("runtime-test", "file-adapter", "v1", FileAdapterRuntimeMetadata.CodexCli("codex-test", "codex-jsonl", "local-smoke")),
+            "completed",
+            new FileAdapterFinalAnswer(true, "answer.md", "Runtime metadata answer."),
+            new FileAdapterUsage(1, 0, 1, 0, 0m),
+            new FileAdapterCounts(0, 0, 0),
+            new FileAdapterTiming(1, false),
+            new FileAdapterProcessResult(0, "stdout.raw.txt", "stderr.txt"),
+            Array.Empty<FileAdapterTraceEvent>(),
+            Array.Empty<FileAdapterArtifact>(),
+            Array.Empty<string>(),
+            Array.Empty<FileAdapterDiagnostic>());
+
+        var json = JsonSerializer.Serialize(evidence, FileAdapterJson.Options);
+
+        await Assert.That(json).Contains("runtime");
+        await Assert.That(json).Contains("codex-cli");
+        await Assert.That(json).Contains("permission_profile");
+    }
+
+    [Test]
+    public async Task CopilotProfileAddsWrapperEnvironmentWithoutLaunchingCopilot()
+    {
+        var command = FileAdapterProcessCommand.Create("lorq-copilot-wrapper");
+
+        var profiled = CopilotSdkFileAdapterProfile.ApplyTo(command);
+
+        await Assert.That(profiled.Executable).IsEqualTo("lorq-copilot-wrapper");
+        await Assert.That(profiled.EnvironmentVariables["LORQ_ADAPTER_PROFILE"]).IsEqualTo("copilot-sdk");
+        await Assert.That(profiled.EnvironmentVariables["LORQ_COPILOT_OUTPUT_FORMAT"]).IsEqualTo(CopilotSdkFileAdapterProfile.OutputFormat);
+        await Assert.That(profiled.EnvironmentVariables["LORQ_COPILOT_PERMISSION_PROFILE"]).IsEqualTo(CopilotSdkFileAdapterProfile.DefaultPermissionProfile);
+    }
+
+    [Test]
+    public async Task ExternalProcessAdapterPassesCopilotProfileEnvironmentToWrapper()
+    {
+        using var workspace = TemporaryDirectory.Create();
+        var request = AdapterRequest(workspace.Path, "copilot-profile__baseline__attempt-001");
+        var command = new FileAdapterProcessCommand(DotnetExecutable(), new[] { TestHostDll(), "--assert-copilot-profile" }, TestPaths.RepoRoot(), new Dictionary<string, string>());
+        var adapter = new ExternalFileAdapterProcess(CopilotSdkFileAdapterProfile.ApplyTo(command));
+
+        var evidence = await adapter.InvokeAsync(request);
+
+        await Assert.That(evidence.Adapter.Id).IsEqualTo("copilot-profile-test-adapter");
+        await Assert.That(evidence.Adapter.Runtime).IsNotNull();
+        await Assert.That(evidence.Adapter.Runtime!.Provider).IsEqualTo("github");
+        await Assert.That(evidence.Adapter.Runtime.Runtime).IsEqualTo("copilot-sdk");
+        await Assert.That(evidence.Trace[0].Message).Contains("copilot-profile");
     }
 
     [Test]
