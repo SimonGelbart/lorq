@@ -37,6 +37,11 @@ internal sealed class RunAdapterFactory
             return CodexFileAdapterProfile.ApplyTo(command, options.CodexCommand, options.CodexArguments);
         }
 
+        if (string.Equals(options.AdapterProfile, CopilotSdkFileAdapterProfile.Name, StringComparison.Ordinal))
+        {
+            return CopilotSdkFileAdapterProfile.ApplyTo(command);
+        }
+
         throw new FileAdapterProtocolException("LORQ-ADAPTER-PROFILE", $"Unknown adapter profile '{options.AdapterProfile}'.");
     }
 

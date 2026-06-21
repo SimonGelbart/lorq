@@ -170,6 +170,36 @@ public sealed class FileAdapterProtocolTests
     }
 
     [Test]
+    public async Task CopilotProfileAddsWrapperEnvironmentWithoutLaunchingCopilot()
+    {
+        var command = FileAdapterProcessCommand.Create("lorq-copilot-wrapper");
+
+        var profiled = CopilotSdkFileAdapterProfile.ApplyTo(command);
+
+        await Assert.That(profiled.Executable).IsEqualTo("lorq-copilot-wrapper");
+        await Assert.That(profiled.EnvironmentVariables["LORQ_ADAPTER_PROFILE"]).IsEqualTo("copilot-sdk");
+        await Assert.That(profiled.EnvironmentVariables["LORQ_COPILOT_OUTPUT_FORMAT"]).IsEqualTo(CopilotSdkFileAdapterProfile.OutputFormat);
+        await Assert.That(profiled.EnvironmentVariables["LORQ_COPILOT_PERMISSION_PROFILE"]).IsEqualTo(CopilotSdkFileAdapterProfile.DefaultPermissionProfile);
+    }
+
+    [Test]
+    public async Task ExternalProcessAdapterPassesCopilotProfileEnvironmentToWrapper()
+    {
+        using var workspace = TemporaryDirectory.Create();
+        var request = AdapterRequest(workspace.Path, "copilot-profile__baseline__attempt-001");
+        var command = new FileAdapterProcessCommand(DotnetExecutable(), new[] { TestHostDll(), "--assert-copilot-profile" }, TestPaths.RepoRoot(), new Dictionary<string, string>());
+        var adapter = new ExternalFileAdapterProcess(CopilotSdkFileAdapterProfile.ApplyTo(command));
+
+        var evidence = await adapter.InvokeAsync(request);
+
+        await Assert.That(evidence.Adapter.Id).IsEqualTo("copilot-profile-test-adapter");
+        await Assert.That(evidence.Adapter.Runtime).IsNotNull();
+        await Assert.That(evidence.Adapter.Runtime!.Provider).IsEqualTo("github");
+        await Assert.That(evidence.Adapter.Runtime.Runtime).IsEqualTo("copilot-sdk");
+        await Assert.That(evidence.Trace[0].Message).Contains("copilot-profile");
+    }
+
+    [Test]
     public async Task ExternalProcessAdapterFailsWhenEvidenceIsMissing()
     {
         using var workspace = TemporaryDirectory.Create();
