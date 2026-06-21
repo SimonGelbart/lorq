@@ -34,6 +34,7 @@ Current ADRs:
 
 - `0001-documentation-structure.md` — source documentation structure.
 - `0002-file-adapter-conformance.md` — adapter conformance command and runner.
+- `0003-package-lifecycle-and-evidence-model.md` — run, merge, judge, report, and validation package lifecycle.
 
 ## Roadmap
 

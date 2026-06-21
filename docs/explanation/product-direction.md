@@ -32,3 +32,10 @@ lorq report --input experiment-001 --primary-judgement judge-primary
 - `.lorq/` indexes are machine-owned and reproducible.
 - Quality judgement is separate from execution integrity.
 - Adapter-specific behavior belongs behind adapter contracts, not in the core package model.
+
+
+## See also
+
+- `../decisions/0003-package-lifecycle-and-evidence-model.md` records the durable package lifecycle and evidence model.
+- `../reference/cli.md` describes the current command surface.
+- `../reference/package-validation.md` describes current validation behavior and stable error codes.

@@ -34,6 +34,8 @@ Current product boundary:
 
 ## Canonical loop
 
+Durable lifecycle decisions are recorded in `../decisions/0003-package-lifecycle-and-evidence-model.md`. This roadmap only tracks sequencing and remaining work.
+
 ```bash
 lorq run --no-judge --out shard-001
 lorq run --no-judge --out shard-002
