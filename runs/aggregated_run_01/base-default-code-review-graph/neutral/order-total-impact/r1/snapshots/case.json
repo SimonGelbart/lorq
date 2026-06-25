@@ -1,0 +1,35 @@
+{
+  "id": "order-total-impact",
+  "title": "Order total contract impact",
+  "category": "refactoring-impact",
+  "difficulty": "hard",
+  "repo": "nopcommerce",
+  "task": "In nopCommerce, if I change the order total calculation contract, what services,\nplugins, checkout code, payment code, discount code, tax code, and tests are\nlikely affected? Return the key source files and relationship evidence.\n",
+  "validation": {
+    "required_symbols": [
+      "IOrderTotalCalculationService",
+      "OrderTotalCalculationService",
+      "OrderProcessingService"
+    ],
+    "required_files": [
+      "src/Libraries/Nop.Services/Orders/IOrderTotalCalculationService.cs",
+      "src/Libraries/Nop.Services/Orders/OrderTotalCalculationService.cs"
+    ],
+    "expected_concepts": [
+      "checkout",
+      "payment",
+      "discount",
+      "tax",
+      "plugin",
+      "tests"
+    ],
+    "required_evidence": {
+      "min_existing_file_references": 4,
+      "min_source_files": 4,
+      "max_missing_cited_files": 0,
+      "require_existing_required_files": true
+    }
+  },
+  "rubric": "repository-exploration",
+  "_path": "/home/simon/repos/lorq/code/lorq/cases/order-total-impact.yaml"
+}

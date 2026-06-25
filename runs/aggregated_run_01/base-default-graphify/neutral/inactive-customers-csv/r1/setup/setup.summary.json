@@ -1,0 +1,44 @@
+{
+  "commands": [
+    {
+      "id": "graphify-codex-install",
+      "run": "graphify codex install",
+      "argv": [
+        "graphify",
+        "codex",
+        "install"
+      ],
+      "shell": false,
+      "cwd": "/home/simon/repos/lorq-worktrees/base-default-graphify__neutral__inactive-customers-csv__r1",
+      "exit_code": 0,
+      "timed_out": false,
+      "elapsed_ms": 40,
+      "required": true,
+      "failed": false,
+      "stdout_path": "graphify-codex-install.stdout.txt",
+      "stderr_path": "graphify-codex-install.stderr.txt"
+    },
+    {
+      "id": "graphify-generate",
+      "run": "graphify .",
+      "argv": [
+        "graphify",
+        "."
+      ],
+      "shell": false,
+      "cwd": "/home/simon/repos/lorq-worktrees/base-default-graphify__neutral__inactive-customers-csv__r1",
+      "exit_code": 0,
+      "timed_out": false,
+      "elapsed_ms": 88340,
+      "required": true,
+      "failed": false,
+      "stdout_path": "graphify-generate.stdout.txt",
+      "stderr_path": "graphify-generate.stderr.txt"
+    }
+  ],
+  "ok": true,
+  "command_count": 2,
+  "required_failed": false,
+  "failed_required_command": null,
+  "elapsed_ms": 88384
+}

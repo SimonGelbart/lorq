@@ -1,0 +1,11 @@
+Answer the following repository exploration task.
+
+Use the repository, available files, and available tools as needed.
+Prefer source-backed evidence. If you use derived artifacts, verify important claims against source files.
+
+Task:
+In nopCommerce, I need to add a new field to the admin product create/edit experience.
+Find the likely source files involved in the admin product controller, product admin model,
+model preparation/factory, edit view, and product/domain persistence path.
+Return concise candidate paths with reasons and source-backed evidence.
+Do not implement the change.

@@ -1,0 +1,5 @@
+Wrote code-review-graph MCP config to /home/simon/repos/lorq-worktrees/base-default-code-review-graph__neutral__cart-to-order-flow__r1/.codex/config.toml
+Repo root: /home/simon/repos/lorq-worktrees/base-default-code-review-graph__neutral__cart-to-order-flow__r1
+Launcher: uvx
+Tool profile: default-all
+Tools: code-review-graph default MCP tool set (no --tools allow-list)

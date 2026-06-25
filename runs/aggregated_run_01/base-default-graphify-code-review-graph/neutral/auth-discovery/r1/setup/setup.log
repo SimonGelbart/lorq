@@ -1,0 +1,214 @@
+$ graphify codex install
+# cwd: /home/simon/repos/lorq-worktrees/base-default-graphify-code-review-graph__neutral__auth-discovery__r1
+# shell: False
+# exit: 0
+
+STDOUT
+graphify section written to /home/simon/repos/lorq-worktrees/base-default-graphify-code-review-graph__neutral__auth-discovery__r1/AGENTS.md
+  .codex/hooks.json  ->  PreToolUse hook registered (/home/simon/.local/bin/graphify hook-check)
+
+Codex will now check the knowledge graph before answering
+codebase questions and rebuild it after code changes.
+
+
+STDERR
+
+
+
+---
+
+$ uvx code-review-graph --version
+# cwd: /home/simon/repos/lorq-worktrees/base-default-graphify-code-review-graph__neutral__auth-discovery__r1
+# shell: False
+# exit: 0
+
+STDOUT
+code-review-graph 2.3.6
+
+
+STDERR
+
+
+
+---
+
+$ python3 .agents/scripts/append-code-review-graph-agents.py --repo-root .
+# cwd: /home/simon/repos/lorq-worktrees/base-default-graphify-code-review-graph__neutral__auth-discovery__r1
+# shell: False
+# exit: 0
+
+STDOUT
+Appended code-review-graph AGENTS.md instructions to /home/simon/repos/lorq-worktrees/base-default-graphify-code-review-graph__neutral__auth-discovery__r1/AGENTS.md
+
+
+STDERR
+
+
+
+---
+
+$ python3 .agents/scripts/write-code-review-graph-codex-config.py --repo-root . --launcher uvx
+# cwd: /home/simon/repos/lorq-worktrees/base-default-graphify-code-review-graph__neutral__auth-discovery__r1
+# shell: False
+# exit: 0
+
+STDOUT
+Wrote code-review-graph MCP config to /home/simon/repos/lorq-worktrees/base-default-graphify-code-review-graph__neutral__auth-discovery__r1/.codex/config.toml
+Repo root: /home/simon/repos/lorq-worktrees/base-default-graphify-code-review-graph__neutral__auth-discovery__r1
+Launcher: uvx
+Tool profile: default-all
+Tools: code-review-graph default MCP tool set (no --tools allow-list)
+
+
+STDERR
+
+
+
+---
+
+$ uvx code-review-graph build --repo .
+# cwd: /home/simon/repos/lorq-worktrees/base-default-graphify-code-review-graph__neutral__auth-discovery__r1
+# shell: False
+# exit: 0
+
+STDOUT
+Full build: 3923 files, 20323 nodes, 62858 edges (postprocess=full)
+
+
+STDERR
+INFO: Schema version 1 -> 9: running migrations
+INFO: Running migration v2
+INFO: Migration v2: added 'signature' column to nodes
+INFO: Running migration v3
+INFO: Migration v3: created flows and flow_memberships tables
+INFO: Running migration v4
+INFO: Migration v4: added 'community_id' column to nodes
+INFO: Migration v4: created communities table
+INFO: Running migration v5
+INFO: Migration v5: created nodes_fts FTS5 virtual table
+INFO: Running migration v6
+INFO: Migration v6: created summary tables (community_summaries, flow_snapshots, risk_index)
+INFO: Running migration v7
+INFO: Migration v7: added compound edge indexes
+INFO: Running migration v8
+INFO: Migration v8: created composite edge index
+INFO: Running migration v9
+INFO: Migration v9: added edge confidence columns
+INFO: Migrations complete, now at schema version 9
+INFO: Progress: 200/3923 files parsed
+INFO: Progress: 400/3923 files parsed
+INFO: Progress: 600/3923 files parsed
+INFO: Progress: 800/3923 files parsed
+INFO: Progress: 1000/3923 files parsed
+INFO: Progress: 1200/3923 files parsed
+INFO: Progress: 1400/3923 files parsed
+INFO: Progress: 1600/3923 files parsed
+INFO: Progress: 1800/3923 files parsed
+INFO: Progress: 2000/3923 files parsed
+INFO: Progress: 2200/3923 files parsed
+INFO: Progress: 2400/3923 files parsed
+INFO: Progress: 2600/3923 files parsed
+INFO: Progress: 2800/3923 files parsed
+INFO: Progress: 3000/3923 files parsed
+INFO: Progress: 3200/3923 files parsed
+INFO: Progress: 3400/3923 files parsed
+INFO: Progress: 3600/3923 files parsed
+INFO: Progress: 3800/3923 files parsed
+INFO: Progress: 3923/3923 files parsed
+INFO: FTS index rebuilt: 17521 rows indexed
+INFO: Loaded 13598 unique nodes, 60437 edges
+INFO: igraph not available, using file-based community detection
+
+
+
+---
+
+$ uvx code-review-graph status --repo .
+# cwd: /home/simon/repos/lorq-worktrees/base-default-graphify-code-review-graph__neutral__auth-discovery__r1
+# shell: False
+# exit: 0
+
+STDOUT
+Nodes: 17521
+Edges: 60437
+Files: 3923
+Languages: csharp, javascript, sql
+Last updated: 2026-06-24T15:25:24
+Built on branch: HEAD
+Built at commit: 91c3bdea3131
+
+
+STDERR
+
+
+
+---
+
+$ graphify .
+# cwd: /home/simon/repos/lorq-worktrees/base-default-graphify-code-review-graph__neutral__auth-discovery__r1
+# shell: False
+# exit: 0
+
+STDOUT
+[graphify extract] scanning /home/simon/repos/lorq-worktrees/base-default-graphify-code-review-graph__neutral__auth-discovery__r1
+[graphify extract] found 5067 code, 0 docs, 0 papers, 0 images
+[graphify extract] AST extraction on 5067 code files...
+  AST extraction: 100/5067 uncached files (1%) [16 workers]
+  AST extraction: 200/5067 uncached files (3%) [16 workers]
+  AST extraction: 300/5067 uncached files (5%) [16 workers]
+  AST extraction: 400/5067 uncached files (7%) [16 workers]
+  AST extraction: 500/5067 uncached files (9%) [16 workers]
+  AST extraction: 600/5067 uncached files (11%) [16 workers]
+  AST extraction: 700/5067 uncached files (13%) [16 workers]
+  AST extraction: 800/5067 uncached files (15%) [16 workers]
+  AST extraction: 900/5067 uncached files (17%) [16 workers]
+  AST extraction: 1000/5067 uncached files (19%) [16 workers]
+  AST extraction: 1100/5067 uncached files (21%) [16 workers]
+  AST extraction: 1200/5067 uncached files (23%) [16 workers]
+  AST extraction: 1300/5067 uncached files (25%) [16 workers]
+  AST extraction: 1400/5067 uncached files (27%) [16 workers]
+  AST extraction: 1500/5067 uncached files (29%) [16 workers]
+  AST extraction: 1600/5067 uncached files (31%) [16 workers]
+  AST extraction: 1700/5067 uncached files (33%) [16 workers]
+  AST extraction: 1800/5067 uncached files (35%) [16 workers]
+  AST extraction: 1900/5067 uncached files (37%) [16 workers]
+  AST extraction: 2000/5067 uncached files (39%) [16 workers]
+  AST extraction: 2100/5067 uncached files (41%) [16 workers]
+  AST extraction: 2200/5067 uncached files (43%) [16 workers]
+  AST extraction: 2300/5067 uncached files (45%) [16 workers]
+  AST extraction: 2400/5067 uncached files (47%) [16 workers]
+  AST extraction: 2500/5067 uncached files (49%) [16 workers]
+  AST extraction: 2600/5067 uncached files (51%) [16 workers]
+  AST extraction: 2700/5067 uncached files (53%) [16 workers]
+  AST extraction: 2800/5067 uncached files (55%) [16 workers]
+  AST extraction: 2900/5067 uncached files (57%) [16 workers]
+  AST extraction: 3000/5067 uncached files (59%) [16 workers]
+  AST extraction: 3100/5067 uncached files (61%) [16 workers]
+  AST extraction: 3200/5067 uncached files (63%) [16 workers]
+  AST extraction: 3300/5067 uncached files (65%) [16 workers]
+  AST extraction: 3400/5067 uncached files (67%) [16 workers]
+  AST extraction: 3500/5067 uncached files (69%) [16 workers]
+  AST extraction: 3600/5067 uncached files (71%) [16 workers]
+  AST extraction: 3700/5067 uncached files (73%) [16 workers]
+  AST extraction: 3800/5067 uncached files (74%) [16 workers]
+  AST extraction: 3900/5067 uncached files (76%) [16 workers]
+  AST extraction: 4000/5067 uncached files (78%) [16 workers]
+  AST extraction: 4100/5067 uncached files (80%) [16 workers]
+  AST extraction: 4200/5067 uncached files (82%) [16 workers]
+  AST extraction: 4300/5067 uncached files (84%) [16 workers]
+  AST extraction: 4400/5067 uncached files (86%) [16 workers]
+  AST extraction: 4500/5067 uncached files (88%) [16 workers]
+  AST extraction: 4600/5067 uncached files (90%) [16 workers]
+  AST extraction: 4700/5067 uncached files (92%) [16 workers]
+  AST extraction: 4800/5067 uncached files (94%) [16 workers]
+  AST extraction: 4900/5067 uncached files (96%) [16 workers]
+  AST extraction: 5000/5067 uncached files (98%) [16 workers]
+  AST extraction: 5067/5067 files (100%) [16 workers]
+[graphify] Deduplicated 5998 node(s) (233 exact, 5070 fuzzy).
+[graphify extract] wrote /home/simon/repos/lorq-worktrees/base-default-graphify-code-review-graph__neutral__auth-discovery__r1/graphify-out/graph.json: 29296 nodes, 51158 edges, 2691 communities
+[graphify extract] wrote /home/simon/repos/lorq-worktrees/base-default-graphify-code-review-graph__neutral__auth-discovery__r1/graphify-out/.graphify_analysis.json
+[graphify extract] next: run `graphify cluster-only /home/simon/repos/lorq-worktrees/base-default-graphify-code-review-graph__neutral__auth-discovery__r1` to generate GRAPH_REPORT.md and name communities
+
+
+STDERR
+

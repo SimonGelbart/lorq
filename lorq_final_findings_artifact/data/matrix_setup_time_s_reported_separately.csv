@@ -1,0 +1,7 @@
+case,base,crg,graphify,graphify+crg
+admin-permissions,0.0,24.238,91.811,106.74
+admin-product-edit-field,0.0,25.551,82.869,109.587
+auth-discovery,0.0,25.271,86.987,108.548
+cart-to-order-flow,0.0,23.716,85.491,109.223
+inactive-customers-csv,0.0,24.666,88.384,109.85
+order-total-impact,0.0,25.039,83.484,108.48

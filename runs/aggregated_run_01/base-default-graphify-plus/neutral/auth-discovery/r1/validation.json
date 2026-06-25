@@ -1,0 +1,746 @@
+{
+  "case_id": "auth-discovery",
+  "mode_id": "base-default-graphify-plus",
+  "ok": false,
+  "hard_passed": 10,
+  "hard_total": 12,
+  "soft_passed": 5,
+  "soft_total": 7,
+  "answer": {
+    "ok": false,
+    "hard_passed": 9,
+    "hard_total": 11,
+    "soft_passed": 3,
+    "soft_total": 5,
+    "checks": [
+      {
+        "type": "answer_not_empty",
+        "ok": true,
+        "message": "answer.md should contain a non-empty final answer"
+      },
+      {
+        "type": "required_symbol",
+        "value": "CustomerController",
+        "ok": true
+      },
+      {
+        "type": "required_symbol",
+        "value": "CustomerRegistrationService",
+        "ok": true
+      },
+      {
+        "type": "required_symbol",
+        "value": "PasswordRecovery",
+        "ok": true
+      },
+      {
+        "type": "required_file",
+        "value": "src/Presentation/Nop.Web/Controllers/CustomerController.cs",
+        "ok": true
+      },
+      {
+        "type": "required_file_exists",
+        "value": "src/Presentation/Nop.Web/Controllers/CustomerController.cs",
+        "ok": true,
+        "message": "required file path should exist in the evaluated worktree"
+      },
+      {
+        "type": "required_file",
+        "value": "src/Libraries/Nop.Services/Customers/CustomerRegistrationService.cs",
+        "ok": true
+      },
+      {
+        "type": "required_file_exists",
+        "value": "src/Libraries/Nop.Services/Customers/CustomerRegistrationService.cs",
+        "ok": true,
+        "message": "required file path should exist in the evaluated worktree"
+      },
+      {
+        "type": "expected_concept",
+        "value": "login",
+        "ok": true,
+        "soft": true
+      },
+      {
+        "type": "expected_concept",
+        "value": "registration",
+        "ok": true,
+        "soft": true
+      },
+      {
+        "type": "expected_concept",
+        "value": "password reset",
+        "ok": false,
+        "soft": true
+      },
+      {
+        "type": "expected_concept",
+        "value": "multi-factor authentication",
+        "ok": true,
+        "soft": true
+      },
+      {
+        "type": "expected_concept",
+        "value": "external authentication",
+        "ok": false,
+        "soft": true
+      },
+      {
+        "type": "minimum_existing_file_references",
+        "ok": false,
+        "actual": 0,
+        "expected_min": 4
+      },
+      {
+        "type": "minimum_source_files",
+        "ok": false,
+        "actual": 0,
+        "expected_min": 4
+      },
+      {
+        "type": "max_missing_cited_files",
+        "ok": true,
+        "actual": 0,
+        "expected_max": 0
+      }
+    ],
+    "evidence": {
+      "answer_empty": false,
+      "file_references": [],
+      "file_reference_count": 0,
+      "unique_file_reference_count": 0,
+      "worktree": "/home/simon/repos/lorq-worktrees/base-default-graphify-plus__neutral__auth-discovery__r1",
+      "worktree_available": true,
+      "existing_file_references": [],
+      "existing_file_reference_count": 0,
+      "missing_file_references": [],
+      "missing_file_reference_count": 0,
+      "unknown_file_references": [],
+      "unknown_file_reference_count": 0
+    }
+  },
+  "behavior": {
+    "ok": true,
+    "hard_passed": 1,
+    "hard_total": 1,
+    "soft_passed": 2,
+    "soft_total": 2,
+    "checks": [
+      {
+        "type": "avoid_generic_graph_queries",
+        "ok": true,
+        "actual": 0,
+        "expected_max": 0,
+        "soft": false
+      },
+      {
+        "type": "graph_query_budget",
+        "ok": true,
+        "actual": 2,
+        "expected_max_before_source_fallback": 2,
+        "source_after_graph": false,
+        "soft": true
+      },
+      {
+        "type": "source_verification_observed",
+        "ok": true,
+        "actual_source_read_count": 2,
+        "soft": true
+      }
+    ],
+    "trace": {
+      "trace_source": "normalized",
+      "normalized_event_count": 47,
+      "normalized_event_type_counts": {
+        "assistant_message": 4,
+        "tool_call": 42,
+        "usage": 1
+      },
+      "command_count": 42,
+      "commands": [
+        {
+          "line": 2,
+          "raw_line": 4,
+          "sequence": 2,
+          "command": "/bin/bash -lc 'bat --paging=never .agents/skills/graphify/SKILL.md .agents/skills/graphify-query-planner/SKILL.md'",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 3,
+          "raw_line": 5,
+          "sequence": 3,
+          "command": "/bin/bash -lc 'bat --paging=never .agents/skills/graphify/SKILL.md .agents/skills/graphify-query-planner/SKILL.md'",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 5,
+          "raw_line": 7,
+          "sequence": 5,
+          "command": "/bin/bash -lc 'bat --paging=never .agents/skills/searching-text/SKILL.md .agents/skills/viewing-files/SKILL.md'",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 6,
+          "raw_line": 8,
+          "sequence": 6,
+          "command": "/bin/bash -lc 'bat --paging=never .agents/skills/searching-text/SKILL.md .agents/skills/viewing-files/SKILL.md'",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 7,
+          "raw_line": 9,
+          "sequence": 7,
+          "command": "/bin/bash -lc \"test -f graphify-out/graph.json && printf 'graphify-out/graph.json exists\\\\n'\"",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 8,
+          "raw_line": 10,
+          "sequence": 8,
+          "command": "/bin/bash -lc \"test -f graphify-out/graph.json && printf 'graphify-out/graph.json exists\\\\n'\"",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 9,
+          "raw_line": 11,
+          "sequence": 9,
+          "command": "/bin/bash -lc \"rg --files | rg -i '(\"'^|/)(customer|authentication|multi.?factor|password|external.?auth|identity|login|register)'\"' | head -120\"",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 10,
+          "raw_line": 12,
+          "sequence": 10,
+          "command": "/bin/bash -lc \"rg --files | rg -i '(\"'^|/)(customer|authentication|multi.?factor|password|external.?auth|identity|login|register)'\"' | head -120\"",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 11,
+          "raw_line": 13,
+          "sequence": 11,
+          "command": "/bin/bash -lc \"rg -n -g '*.cs' -e 'class CustomerController|Login\\\\(|Register\\\\(|PasswordRecovery|MultiFactor|TwoFactor|IAuthenticationService|class CookieAuthenticationService' src --max-count 120\"",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 12,
+          "raw_line": 14,
+          "sequence": 12,
+          "command": "/bin/bash -lc \"rg -n -g '*.cs' -e 'class CustomerController|Login\\\\(|Register\\\\(|PasswordRecovery|MultiFactor|TwoFactor|IAuthenticationService|class CookieAuthenticationService' src --max-count 120\"",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 13,
+          "raw_line": 15,
+          "sequence": 13,
+          "command": "/bin/bash -lc 'graphify query \"CustomerController Login Register PasswordRecovery PasswordRecoveryConfirm MultiFactorVerification CustomerRegistrationService ValidateCustomerAsync RegisterCustomerAsync ChangePasswordAsync CookieAuthenticationService SignInAsync IMultiFactorAuthenticationMethod\" --budget 2200'",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 14,
+          "raw_line": 16,
+          "sequence": 14,
+          "command": "/bin/bash -lc 'graphify query \"CustomerController Login Register PasswordRecovery PasswordRecoveryConfirm MultiFactorVerification CustomerRegistrationService ValidateCustomerAsync RegisterCustomerAsync ChangePasswordAsync CookieAuthenticationService SignInAsync IMultiFactorAuthenticationMethod\" --budget 2200'",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 15,
+          "raw_line": 17,
+          "sequence": 15,
+          "command": "/bin/bash -lc \"rg -n -g 'CustomerController.cs' -e 'Task<IActionResult> (Login|Register|PasswordRecovery|PasswordRecoveryConfirm|MultiFactorAuthentication|MultiFactorVerification|ConfigureMultiFactorAuthenticationProvider)' src/Presentation/Nop.Web/Controllers\"",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 16,
+          "raw_line": 18,
+          "sequence": 16,
+          "command": "/bin/bash -lc \"rg -n -g 'CustomerController.cs' -e 'Task<IActionResult> (Login|Register|PasswordRecovery|PasswordRecoveryConfirm|MultiFactorAuthentication|MultiFactorVerification|ConfigureMultiFactorAuthenticationProvider)' src/Presentation/Nop.Web/Controllers\"",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 17,
+          "raw_line": 19,
+          "sequence": 17,
+          "command": "/bin/bash -lc \"rg -n -g 'RouteProvider.cs' -e 'LOGIN|REGISTER|PASSWORD_RECOVERY|MULTI_FACTOR|MultiFactorVerification|PasswordRecoveryConfirm' src/Presentation/Nop.Web/Infrastructure\"",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 18,
+          "raw_line": 20,
+          "sequence": 18,
+          "command": "/bin/bash -lc \"rg -n -g 'RouteProvider.cs' -e 'LOGIN|REGISTER|PASSWORD_RECOVERY|MULTI_FACTOR|MultiFactorVerification|PasswordRecoveryConfirm' src/Presentation/Nop.Web/Infrastructure\"",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 19,
+          "raw_line": 21,
+          "sequence": 19,
+          "command": "/bin/bash -lc \"rg -n -g 'CustomerRegistrationService.cs' -e 'Task<CustomerLoginResults> ValidateCustomerAsync|Task<CustomerRegistrationResult> RegisterCustomerAsync|Task<ChangePasswordResult> ChangePasswordAsync|MultiFactorAuthenticationRequired' src/Libraries/Nop.Services/Customers\"",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 20,
+          "raw_line": 22,
+          "sequence": 20,
+          "command": "/bin/bash -lc \"rg -n -g 'CustomerRegistrationService.cs' -e 'Task<CustomerLoginResults> ValidateCustomerAsync|Task<CustomerRegistrationResult> RegisterCustomerAsync|Task<ChangePasswordResult> ChangePasswordAsync|MultiFactorAuthenticationRequired' src/Libraries/Nop.Services/Customers\"",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 21,
+          "raw_line": 23,
+          "sequence": 21,
+          "command": "/bin/bash -lc \"rg -n -g '*.cs' -e 'class CookieAuthenticationService|GetAuthenticatedCustomerAsync|SignInAsync|SignOutAsync|class AuthenticationMiddleware|class AuthenticationStartup|class MultiFactorAuthenticationPluginManager|interface IMultiFactorAuthenticationMethod|ValidateTwoFactorToken|PrepareMultiFactorAuthentication' src/Libraries/Nop.Services/Authentication src/Presentation/Nop.Web.Framework/Infrastructure src/Presentation/Nop.Web/Factories src/Plugins/Nop.Plugin.MultiFactorAuth.GoogleAuthenticator --max-count 100\"",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 22,
+          "raw_line": 24,
+          "sequence": 22,
+          "command": "/bin/bash -lc \"rg -n -g '*.cs' -e 'class CookieAuthenticationService|GetAuthenticatedCustomerAsync|SignInAsync|SignOutAsync|class AuthenticationMiddleware|class AuthenticationStartup|class MultiFactorAuthenticationPluginManager|interface IMultiFactorAuthenticationMethod|ValidateTwoFactorToken|PrepareMultiFactorAuthentication' src/Libraries/Nop.Services/Authentication src/Presentation/Nop.Web.Framework/Infrastructure src/Presentation/Nop.Web/Factories src/Plugins/Nop.Plugin.MultiFactorAuth.GoogleAuthenticator --max-count 100\"",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 24,
+          "raw_line": 26,
+          "sequence": 24,
+          "command": "/bin/bash -lc 'bat --color=never --paging=never --style=numbers --line-range 430:545 src/Presentation/Nop.Web/Controllers/CustomerController.cs\nbat --color=never --paging=never --style=numbers --line-range 700:935 src/Presentation/Nop.Web/Controllers/CustomerController.cs\nbat --color=never --paging=never --style=numbers --line-range 950:1065 src/Presentation/Nop.Web/Controllers/CustomerController.cs\nbat --color=never --paging=never --style=numbers --line-range 2180:2295 src/Presentation/Nop.Web/Controllers/CustomerController.cs'",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 25,
+          "raw_line": 27,
+          "sequence": 25,
+          "command": "/bin/bash -lc 'bat --color=never --paging=never --style=numbers --line-range 430:545 src/Presentation/Nop.Web/Controllers/CustomerController.cs\nbat --color=never --paging=never --style=numbers --line-range 700:935 src/Presentation/Nop.Web/Controllers/CustomerController.cs\nbat --color=never --paging=never --style=numbers --line-range 950:1065 src/Presentation/Nop.Web/Controllers/CustomerController.cs\nbat --color=never --paging=never --style=numbers --line-range 2180:2295 src/Presentation/Nop.Web/Controllers/CustomerController.cs'",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 26,
+          "raw_line": 28,
+          "sequence": 26,
+          "command": "/bin/bash -lc 'bat --color=never --paging=never --style=numbers --line-range 130:205 src/Libraries/Nop.Services/Customers/CustomerRegistrationService.cs\nbat --color=never --paging=never --style=numbers --line-range 225:410 src/Libraries/Nop.Services/Customers/CustomerRegistrationService.cs\nbat --color=never --paging=never --style=numbers --line-range 1:145 src/Libraries/Nop.Services/Authentication/CookieAuthenticationService.cs\nbat --color=never --paging=never --style=numbers --line-range 1:110 src/Libraries/Nop.Services/Authentication/AuthenticationMiddleware.cs\nbat --color=never --paging=never --style=numbers --line-range 1:105 src/Presentation/Nop.Web.Framework/Infrastructure/AuthenticationStartup.cs'",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 27,
+          "raw_line": 29,
+          "sequence": 27,
+          "command": "/bin/bash -lc 'bat --color=never --paging=never --style=numbers --line-range 130:205 src/Libraries/Nop.Services/Customers/CustomerRegistrationService.cs\nbat --color=never --paging=never --style=numbers --line-range 225:410 src/Libraries/Nop.Services/Customers/CustomerRegistrationService.cs\nbat --color=never --paging=never --style=numbers --line-range 1:145 src/Libraries/Nop.Services/Authentication/CookieAuthenticationService.cs\nbat --color=never --paging=never --style=numbers --line-range 1:110 src/Libraries/Nop.Services/Authentication/AuthenticationMiddleware.cs\nbat --color=never --paging=never --style=numbers --line-range 1:105 src/Presentation/Nop.Web.Framework/Infrastructure/AuthenticationStartup.cs'",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 28,
+          "raw_line": 30,
+          "sequence": 28,
+          "command": "/bin/bash -lc \"rg -n -g 'CustomerModelFactory.cs' -e 'PrepareLoginModelAsync|PrepareRegisterModelAsync|PreparePasswordRecoveryModelAsync|PrepareMultiFactorAuthentication(Model|ProviderModel)Async' src/Presentation/Nop.Web/Factories\"",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 29,
+          "raw_line": 31,
+          "sequence": 29,
+          "command": "/bin/bash -lc \"rg -n -g 'CustomerModelFactory.cs' -e 'PrepareLoginModelAsync|PrepareRegisterModelAsync|PreparePasswordRecoveryModelAsync|PrepareMultiFactorAuthentication(Model|ProviderModel)Async' src/Presentation/Nop.Web/Factories\"",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 30,
+          "raw_line": 32,
+          "sequence": 30,
+          "command": "/bin/bash -lc \"rg -n -g '*.cshtml' -e 'asp-route=\\\"Login\\\"|asp-route=\\\"Register\\\"|asp-route=\\\"PasswordRecovery\\\"|PasswordRecoveryConfirm|MultiFactorVerification|MultiFactorAuthentication' src/Presentation/Nop.Web/Views/Customer src/Plugins/Nop.Plugin.MultiFactorAuth.GoogleAuthenticator/Views/Customer --max-count 80\"",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 31,
+          "raw_line": 33,
+          "sequence": 31,
+          "command": "/bin/bash -lc \"rg -n -g '*.cs' -e 'IsPasswordRecoveryTokenValidAsync|IsPasswordRecoveryLinkExpiredAsync' src/Libraries/Nop.Services/Customers/CustomerService.cs src/Libraries/Nop.Services/Customers/ICustomerService.cs\"",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 32,
+          "raw_line": 34,
+          "sequence": 32,
+          "command": "/bin/bash -lc \"rg -n -g '*.cshtml' -e 'asp-route=\\\"Login\\\"|asp-route=\\\"Register\\\"|asp-route=\\\"PasswordRecovery\\\"|PasswordRecoveryConfirm|MultiFactorVerification|MultiFactorAuthentication' src/Presentation/Nop.Web/Views/Customer src/Plugins/Nop.Plugin.MultiFactorAuth.GoogleAuthenticator/Views/Customer --max-count 80\"",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 33,
+          "raw_line": 35,
+          "sequence": 33,
+          "command": "/bin/bash -lc \"rg -n -g '*.cs' -e 'IsPasswordRecoveryTokenValidAsync|IsPasswordRecoveryLinkExpiredAsync' src/Libraries/Nop.Services/Customers/CustomerService.cs src/Libraries/Nop.Services/Customers/ICustomerService.cs\"",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 34,
+          "raw_line": 36,
+          "sequence": 34,
+          "command": "/bin/bash -lc \"rg -n -g '*.cs' -e 'class (LoginValidator|RegisterValidator|PasswordRecoveryValidator|PasswordRecoveryConfirmValidator)' src/Presentation/Nop.Web/Validators/Customer\"",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 35,
+          "raw_line": 38,
+          "sequence": 35,
+          "command": "/bin/bash -lc 'bat --color=never --paging=never --style=numbers --line-range 30:52 src/Presentation/Nop.Web/Infrastructure/RouteProvider.cs\nbat --color=never --paging=never --style=numbers --line-range 360:377 src/Presentation/Nop.Web/Infrastructure/RouteProvider.cs\nbat --color=never --paging=never --style=numbers --line-range 1:115 src/Libraries/Nop.Services/Authentication/MultiFactor/IMultiFactorAuthenticationMethod.cs\nbat --color=never --paging=never --style=numbers --line-range 1:100 src/Libraries/Nop.Services/Authentication/MultiFactor/MultiFactorAuthenticationPluginManager.cs\nbat --color=never --paging=never --style=numbers --line-range 35:110 src/Plugins/Nop.Plugin.MultiFactorAuth.GoogleAuthenticator/Controllers/AuthenticationController.cs\nbat --color=never --paging=never --style=numbers --line-range 970:1045 src/Presentation/Nop.Web/Factories/CustomerModelFactory.cs\nbat --color=never --paging=never --style=numbers --line-range 1510:1560 src/Libraries/Nop.Services/Customers/CustomerService.cs'",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 36,
+          "raw_line": 39,
+          "sequence": 36,
+          "command": "/bin/bash -lc 'bat --color=never --paging=never --style=numbers --line-range 30:52 src/Presentation/Nop.Web/Infrastructure/RouteProvider.cs\nbat --color=never --paging=never --style=numbers --line-range 360:377 src/Presentation/Nop.Web/Infrastructure/RouteProvider.cs\nbat --color=never --paging=never --style=numbers --line-range 1:115 src/Libraries/Nop.Services/Authentication/MultiFactor/IMultiFactorAuthenticationMethod.cs\nbat --color=never --paging=never --style=numbers --line-range 1:100 src/Libraries/Nop.Services/Authentication/MultiFactor/MultiFactorAuthenticationPluginManager.cs\nbat --color=never --paging=never --style=numbers --line-range 35:110 src/Plugins/Nop.Plugin.MultiFactorAuth.GoogleAuthenticator/Controllers/AuthenticationController.cs\nbat --color=never --paging=never --style=numbers --line-range 970:1045 src/Presentation/Nop.Web/Factories/CustomerModelFactory.cs\nbat --color=never --paging=never --style=numbers --line-range 1510:1560 src/Libraries/Nop.Services/Customers/CustomerService.cs'",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 37,
+          "raw_line": 40,
+          "sequence": 37,
+          "command": "/bin/bash -lc \"rg -n -g 'CustomerRegistrationService.cs' -e 'SignInCustomerAsync|_authenticationService.SignInAsync|CustomerLoggedinEvent' src/Libraries/Nop.Services/Customers/CustomerRegistrationService.cs\nrg -n -g 'CustomerController.cs' -e 'PasswordRecoveryTokenAttribute.*null|CustomerPasswordChangedEvent|ChangePasswordAsync' src/Presentation/Nop.Web/Controllers/CustomerController.cs\nrg -n -g '*.cs' -e 'AddScoped<IAuthenticationService|CookieAuthenticationService|AuthenticationMiddleware|UseMiddleware<AuthenticationMiddleware' src/Libraries src/Presentation --max-count 80\"",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 38,
+          "raw_line": 41,
+          "sequence": 38,
+          "command": "/bin/bash -lc \"rg -n -g 'CustomerRegistrationService.cs' -e 'SignInCustomerAsync|_authenticationService.SignInAsync|CustomerLoggedinEvent' src/Libraries/Nop.Services/Customers/CustomerRegistrationService.cs\nrg -n -g 'CustomerController.cs' -e 'PasswordRecoveryTokenAttribute.*null|CustomerPasswordChangedEvent|ChangePasswordAsync' src/Presentation/Nop.Web/Controllers/CustomerController.cs\nrg -n -g '*.cs' -e 'AddScoped<IAuthenticationService|CookieAuthenticationService|AuthenticationMiddleware|UseMiddleware<AuthenticationMiddleware' src/Libraries src/Presentation --max-count 80\"",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 39,
+          "raw_line": 42,
+          "sequence": 39,
+          "command": "/bin/bash -lc 'bat --color=never --paging=never --style=numbers --line-range 928:952 src/Presentation/Nop.Web/Controllers/CustomerController.cs\nbat --color=never --paging=never --style=numbers --line-range 445:485 src/Libraries/Nop.Services/Customers/CustomerRegistrationService.cs\nbat --color=never --paging=never --style=numbers --line-range 400:430 src/Libraries/Nop.Services/Customers/CustomerRegistrationService.cs\nbat --color=never --paging=never --style=numbers --line-range 402:420 src/Presentation/Nop.Web.Framework/Infrastructure/Extensions/ApplicationBuilderExtensions.cs\nbat --color=never --paging=never --style=numbers --line-range 202:214 src/Presentation/Nop.Web.Framework/Infrastructure/NopStartup.cs'",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 40,
+          "raw_line": 43,
+          "sequence": 40,
+          "command": "/bin/bash -lc 'bat --color=never --paging=never --style=numbers --line-range 928:952 src/Presentation/Nop.Web/Controllers/CustomerController.cs\nbat --color=never --paging=never --style=numbers --line-range 445:485 src/Libraries/Nop.Services/Customers/CustomerRegistrationService.cs\nbat --color=never --paging=never --style=numbers --line-range 400:430 src/Libraries/Nop.Services/Customers/CustomerRegistrationService.cs\nbat --color=never --paging=never --style=numbers --line-range 402:420 src/Presentation/Nop.Web.Framework/Infrastructure/Extensions/ApplicationBuilderExtensions.cs\nbat --color=never --paging=never --style=numbers --line-range 202:214 src/Presentation/Nop.Web.Framework/Infrastructure/NopStartup.cs'",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 41,
+          "raw_line": 44,
+          "sequence": 41,
+          "command": "/bin/bash -lc \"rg --files src/Presentation/Nop.Web/Models/Customer | rg '/(Login|Register|PasswordRecovery|MultiFactorAuthentication|MultiFactorAuthenticationProvider)Model\\\\.cs\"'$'\"'\"",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 42,
+          "raw_line": 45,
+          "sequence": 42,
+          "command": "/bin/bash -lc \"rg --files src/Presentation/Nop.Web/Models/Customer | rg '/(Login|Register|PasswordRecovery|MultiFactorAuthentication|MultiFactorAuthenticationProvider)Model\\\\.cs\"'$'\"'\"",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 43,
+          "raw_line": 46,
+          "sequence": 43,
+          "command": "/bin/bash -lc \"rg --files src/Presentation/Nop.Web/Models/Customer | rg '/PasswordRecovery'\"",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 44,
+          "raw_line": 47,
+          "sequence": 44,
+          "command": "/bin/bash -lc \"rg --files src/Presentation/Nop.Web/Models/Customer | rg '/PasswordRecovery'\"",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 45,
+          "raw_line": 48,
+          "sequence": 45,
+          "command": "/bin/bash -lc \"rg -n -g '*.cs' -e 'record PasswordRecoveryModel|class PasswordRecoveryModel' src/Presentation/Nop.Web/Models/Customer\"",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        }
+      ],
+      "search_count": 26,
+      "source_read_count": 2,
+      "graphify_command_count": 6,
+      "graphify_query_count": 2,
+      "generic_graphify_query_count": 0,
+      "specific_graphify_query_count": 2,
+      "graphify_queries": [
+        {
+          "command": "/bin/bash -lc 'graphify query \"CustomerController Login Register PasswordRecovery PasswordRecoveryConfirm MultiFactorVerification CustomerRegistrationService ValidateCustomerAsync RegisterCustomerAsync ChangePasswordAsync CookieAuthenticationService SignInAsync IMultiFactorAuthenticationMethod\" --budget 2200'",
+          "query": "CustomerController Login Register PasswordRecovery PasswordRecoveryConfirm MultiFactorVerification CustomerRegistrationService ValidateCustomerAsync RegisterCustomerAsync ChangePasswordAsync CookieAuthenticationService SignInAsync IMultiFactorAuthenticationMethod 2200",
+          "words": [
+            "CustomerController",
+            "Login",
+            "Register",
+            "PasswordRecovery",
+            "PasswordRecoveryConfirm",
+            "MultiFactorVerification",
+            "CustomerRegistrationService",
+            "ValidateCustomerAsync",
+            "RegisterCustomerAsync",
+            "ChangePasswordAsync",
+            "CookieAuthenticationService",
+            "SignInAsync",
+            "IMultiFactorAuthenticationMethod"
+          ],
+          "symbol_like_terms": [
+            "ChangePasswordAsync",
+            "CookieAuthenticationService",
+            "CustomerController",
+            "CustomerRegistrationService",
+            "IMultiFactorAuthenticationMethod",
+            "MultiFactorVerification",
+            "PasswordRecovery",
+            "PasswordRecoveryConfirm",
+            "RegisterCustomerAsync",
+            "SignInAsync",
+            "ValidateCustomerAsync"
+          ],
+          "generic_terms": [
+            "login"
+          ],
+          "is_specific": true,
+          "is_generic": false,
+          "line": 13,
+          "backend": "codex-cli"
+        },
+        {
+          "command": "/bin/bash -lc 'graphify query \"CustomerController Login Register PasswordRecovery PasswordRecoveryConfirm MultiFactorVerification CustomerRegistrationService ValidateCustomerAsync RegisterCustomerAsync ChangePasswordAsync CookieAuthenticationService SignInAsync IMultiFactorAuthenticationMethod\" --budget 2200'",
+          "query": "CustomerController Login Register PasswordRecovery PasswordRecoveryConfirm MultiFactorVerification CustomerRegistrationService ValidateCustomerAsync RegisterCustomerAsync ChangePasswordAsync CookieAuthenticationService SignInAsync IMultiFactorAuthenticationMethod 2200",
+          "words": [
+            "CustomerController",
+            "Login",
+            "Register",
+            "PasswordRecovery",
+            "PasswordRecoveryConfirm",
+            "MultiFactorVerification",
+            "CustomerRegistrationService",
+            "ValidateCustomerAsync",
+            "RegisterCustomerAsync",
+            "ChangePasswordAsync",
+            "CookieAuthenticationService",
+            "SignInAsync",
+            "IMultiFactorAuthenticationMethod"
+          ],
+          "symbol_like_terms": [
+            "ChangePasswordAsync",
+            "CookieAuthenticationService",
+            "CustomerController",
+            "CustomerRegistrationService",
+            "IMultiFactorAuthenticationMethod",
+            "MultiFactorVerification",
+            "PasswordRecovery",
+            "PasswordRecoveryConfirm",
+            "RegisterCustomerAsync",
+            "SignInAsync",
+            "ValidateCustomerAsync"
+          ],
+          "generic_terms": [
+            "login"
+          ],
+          "is_specific": true,
+          "is_generic": false,
+          "line": 14,
+          "backend": "codex-cli"
+        }
+      ],
+      "source_after_graph": false,
+      "first_graph_line": 13,
+      "first_source_line": 9
+    }
+  },
+  "checks": [
+    {
+      "type": "answer_not_empty",
+      "ok": true,
+      "message": "answer.md should contain a non-empty final answer"
+    },
+    {
+      "type": "required_symbol",
+      "value": "CustomerController",
+      "ok": true
+    },
+    {
+      "type": "required_symbol",
+      "value": "CustomerRegistrationService",
+      "ok": true
+    },
+    {
+      "type": "required_symbol",
+      "value": "PasswordRecovery",
+      "ok": true
+    },
+    {
+      "type": "required_file",
+      "value": "src/Presentation/Nop.Web/Controllers/CustomerController.cs",
+      "ok": true
+    },
+    {
+      "type": "required_file_exists",
+      "value": "src/Presentation/Nop.Web/Controllers/CustomerController.cs",
+      "ok": true,
+      "message": "required file path should exist in the evaluated worktree"
+    },
+    {
+      "type": "required_file",
+      "value": "src/Libraries/Nop.Services/Customers/CustomerRegistrationService.cs",
+      "ok": true
+    },
+    {
+      "type": "required_file_exists",
+      "value": "src/Libraries/Nop.Services/Customers/CustomerRegistrationService.cs",
+      "ok": true,
+      "message": "required file path should exist in the evaluated worktree"
+    },
+    {
+      "type": "expected_concept",
+      "value": "login",
+      "ok": true,
+      "soft": true
+    },
+    {
+      "type": "expected_concept",
+      "value": "registration",
+      "ok": true,
+      "soft": true
+    },
+    {
+      "type": "expected_concept",
+      "value": "password reset",
+      "ok": false,
+      "soft": true
+    },
+    {
+      "type": "expected_concept",
+      "value": "multi-factor authentication",
+      "ok": true,
+      "soft": true
+    },
+    {
+      "type": "expected_concept",
+      "value": "external authentication",
+      "ok": false,
+      "soft": true
+    },
+    {
+      "type": "minimum_existing_file_references",
+      "ok": false,
+      "actual": 0,
+      "expected_min": 4
+    },
+    {
+      "type": "minimum_source_files",
+      "ok": false,
+      "actual": 0,
+      "expected_min": 4
+    },
+    {
+      "type": "max_missing_cited_files",
+      "ok": true,
+      "actual": 0,
+      "expected_max": 0
+    },
+    {
+      "type": "avoid_generic_graph_queries",
+      "ok": true,
+      "actual": 0,
+      "expected_max": 0,
+      "soft": false
+    },
+    {
+      "type": "graph_query_budget",
+      "ok": true,
+      "actual": 2,
+      "expected_max_before_source_fallback": 2,
+      "source_after_graph": false,
+      "soft": true
+    },
+    {
+      "type": "source_verification_observed",
+      "ok": true,
+      "actual_source_read_count": 2,
+      "soft": true
+    }
+  ],
+  "schema_version": "agent-eval.validation-result.v1",
+  "contract_version": "agent-eval.contract.v1"
+}

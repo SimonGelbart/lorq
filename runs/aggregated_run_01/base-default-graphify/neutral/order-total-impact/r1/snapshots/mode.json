@@ -1,0 +1,50 @@
+{
+  "id": "base-default-graphify",
+  "description": "Your base skills plus the default Graphify skill, with Graphify Codex integration installed and a fresh graph generated in each run worktree before agent execution.",
+  "materialize": {
+    "copy": [
+      {
+        "from": "execution/base-skills",
+        "to": ".agents/skills"
+      },
+      {
+        "from": "execution/skills/graphify",
+        "to": ".agents/skills/graphify"
+      },
+      {
+        "from": "execution/configs/graphify/.graphifyignore",
+        "to": ".graphifyignore"
+      }
+    ]
+  },
+  "pre_agent": {
+    "setup_scope": "per-run",
+    "commands": [
+      {
+        "id": "graphify-codex-install",
+        "argv": [
+          "graphify",
+          "codex",
+          "install"
+        ],
+        "cwd": ".",
+        "timeout_seconds": 300,
+        "required": true
+      },
+      {
+        "id": "graphify-generate",
+        "argv": [
+          "graphify",
+          "."
+        ],
+        "cwd": ".",
+        "timeout_seconds": 900,
+        "required": true
+      }
+    ]
+  },
+  "expectations": {
+    "should_verify_with_source": true
+  },
+  "_path": "/home/simon/repos/lorq/code/lorq/modes/base-default-graphify.yaml"
+}

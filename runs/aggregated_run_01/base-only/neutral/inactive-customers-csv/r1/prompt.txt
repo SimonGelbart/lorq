@@ -1,0 +1,9 @@
+Answer the following repository exploration task.
+
+Use the repository, available files, and available tools as needed.
+Prefer source-backed evidence. If you use derived artifacts, verify important claims against source files.
+
+Task:
+Explain how an inactive customers export feature would fit into the admin customer flow.
+Identify the likely controller, search model, export service, and response format points.
+Include source-backed evidence.

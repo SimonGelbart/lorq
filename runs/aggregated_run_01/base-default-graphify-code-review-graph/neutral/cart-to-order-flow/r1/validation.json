@@ -1,0 +1,716 @@
+{
+  "case_id": "cart-to-order-flow",
+  "mode_id": "base-default-graphify-code-review-graph",
+  "ok": false,
+  "hard_passed": 13,
+  "hard_total": 15,
+  "soft_passed": 5,
+  "soft_total": 8,
+  "answer": {
+    "ok": false,
+    "hard_passed": 12,
+    "hard_total": 14,
+    "soft_passed": 3,
+    "soft_total": 6,
+    "checks": [
+      {
+        "type": "answer_not_empty",
+        "ok": true,
+        "message": "answer.md should contain a non-empty final answer"
+      },
+      {
+        "type": "required_symbol",
+        "value": "ShoppingCartController",
+        "ok": true
+      },
+      {
+        "type": "required_symbol",
+        "value": "ShoppingCartService",
+        "ok": true
+      },
+      {
+        "type": "required_symbol",
+        "value": "PlaceOrderAsync",
+        "ok": true
+      },
+      {
+        "type": "required_symbol",
+        "value": "OrderProcessingService",
+        "ok": true
+      },
+      {
+        "type": "required_file",
+        "value": "src/Presentation/Nop.Web/Controllers/ShoppingCartController.cs",
+        "ok": true
+      },
+      {
+        "type": "required_file_exists",
+        "value": "src/Presentation/Nop.Web/Controllers/ShoppingCartController.cs",
+        "ok": true,
+        "message": "required file path should exist in the evaluated worktree"
+      },
+      {
+        "type": "required_file",
+        "value": "src/Presentation/Nop.Web/Controllers/CheckoutController.cs",
+        "ok": true
+      },
+      {
+        "type": "required_file_exists",
+        "value": "src/Presentation/Nop.Web/Controllers/CheckoutController.cs",
+        "ok": true,
+        "message": "required file path should exist in the evaluated worktree"
+      },
+      {
+        "type": "required_file",
+        "value": "src/Libraries/Nop.Services/Orders/ShoppingCartService.cs",
+        "ok": true
+      },
+      {
+        "type": "required_file_exists",
+        "value": "src/Libraries/Nop.Services/Orders/ShoppingCartService.cs",
+        "ok": true,
+        "message": "required file path should exist in the evaluated worktree"
+      },
+      {
+        "type": "expected_concept",
+        "value": "add to cart",
+        "ok": false,
+        "soft": true
+      },
+      {
+        "type": "expected_concept",
+        "value": "shopping cart item",
+        "ok": false,
+        "soft": true
+      },
+      {
+        "type": "expected_concept",
+        "value": "checkout",
+        "ok": true,
+        "soft": true
+      },
+      {
+        "type": "expected_concept",
+        "value": "order placement",
+        "ok": true,
+        "soft": true
+      },
+      {
+        "type": "expected_concept",
+        "value": "order item",
+        "ok": false,
+        "soft": true
+      },
+      {
+        "type": "expected_concept",
+        "value": "cart cleanup",
+        "ok": true,
+        "soft": true
+      },
+      {
+        "type": "minimum_existing_file_references",
+        "ok": false,
+        "actual": 0,
+        "expected_min": 5
+      },
+      {
+        "type": "minimum_source_files",
+        "ok": false,
+        "actual": 0,
+        "expected_min": 5
+      },
+      {
+        "type": "max_missing_cited_files",
+        "ok": true,
+        "actual": 0,
+        "expected_max": 0
+      }
+    ],
+    "evidence": {
+      "answer_empty": false,
+      "file_references": [],
+      "file_reference_count": 0,
+      "unique_file_reference_count": 0,
+      "worktree": "/home/simon/repos/lorq-worktrees/base-default-graphify-code-review-graph__neutral__cart-to-order-flow__r1",
+      "worktree_available": true,
+      "existing_file_references": [],
+      "existing_file_reference_count": 0,
+      "missing_file_references": [],
+      "missing_file_reference_count": 0,
+      "unknown_file_references": [],
+      "unknown_file_reference_count": 0
+    }
+  },
+  "behavior": {
+    "ok": true,
+    "hard_passed": 1,
+    "hard_total": 1,
+    "soft_passed": 2,
+    "soft_total": 2,
+    "checks": [
+      {
+        "type": "avoid_generic_graph_queries",
+        "ok": true,
+        "actual": 0,
+        "expected_max": 0,
+        "soft": false
+      },
+      {
+        "type": "graph_query_budget",
+        "ok": true,
+        "actual": 4,
+        "expected_max_before_source_fallback": 2,
+        "source_after_graph": true,
+        "soft": true
+      },
+      {
+        "type": "source_verification_observed",
+        "ok": true,
+        "actual_source_read_count": 6,
+        "soft": true
+      }
+    ],
+    "trace": {
+      "trace_source": "normalized",
+      "normalized_event_count": 34,
+      "normalized_event_type_counts": {
+        "assistant_message": 3,
+        "tool_call": 30,
+        "usage": 1
+      },
+      "command_count": 30,
+      "commands": [
+        {
+          "line": 2,
+          "raw_line": 4,
+          "sequence": 2,
+          "command": "/bin/bash -lc 'bat --paging=never .agents/skills/graphify/SKILL.md .agents/skills/graphify-query-planner/SKILL.md .agents/skills/code-review-graph/SKILL.md'",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 3,
+          "raw_line": 5,
+          "sequence": 3,
+          "command": "/bin/bash -lc 'bat --paging=never .agents/skills/graphify/SKILL.md .agents/skills/graphify-query-planner/SKILL.md .agents/skills/code-review-graph/SKILL.md'",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 4,
+          "raw_line": 6,
+          "sequence": 4,
+          "command": "/bin/bash -lc \"rg -n --glob '*.cs' \\\"(AddToCartAsync|PlaceOrderAsync|DeleteShoppingCartItemAsync|InsertOrderItemAsync|ShoppingCartType\\\\.ShoppingCart)\\\" src | head -160\"",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 5,
+          "raw_line": 7,
+          "sequence": 5,
+          "command": "/bin/bash -lc \"rg -n --glob '*.cs' \\\"(AddToCartAsync|PlaceOrderAsync|DeleteShoppingCartItemAsync|InsertOrderItemAsync|ShoppingCartType\\\\.ShoppingCart)\\\" src | head -160\"",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 6,
+          "raw_line": 10,
+          "sequence": 6,
+          "command": "/bin/bash -lc 'test -f graphify-out/graph.json && graphify query \"ShoppingCartController AddToCartAsync CheckoutController ConfirmOrder PlaceOrderAsync OrderProcessingService InsertOrderItemAsync DeleteShoppingCartItemAsync\" --budget 2600'",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 7,
+          "raw_line": 11,
+          "sequence": 7,
+          "command": "/bin/bash -lc 'test -f graphify-out/graph.json && graphify query \"ShoppingCartController AddToCartAsync CheckoutController ConfirmOrder PlaceOrderAsync OrderProcessingService InsertOrderItemAsync DeleteShoppingCartItemAsync\" --budget 2600'",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 9,
+          "raw_line": 19,
+          "sequence": 9,
+          "command": "/bin/bash -lc \"rg -n --glob '*.cs' \\\"(public|protected) virtual async Task.*(SaveOrder|PlaceOrder|InsertOrderItem|DeleteShoppingCart|AddToCart)|_orderService\\\\.(InsertOrderAsync|InsertOrderItemAsync)|_shoppingCartService\\\\.DeleteShoppingCartItemAsync\\\" src/Libraries/Nop.Services/Orders/OrderProcessingService.cs src/Libraries/Nop.Services/Orders/OrderService.cs src/Libraries/Nop.Services/Orders/ShoppingCartService.cs src/Presentation/Nop.Web/Controllers/CheckoutController.cs src/Presentation/Nop.Web/Controllers/ShoppingCartController.cs\"",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 10,
+          "raw_line": 20,
+          "sequence": 10,
+          "command": "/bin/bash -lc \"rg -n --glob '*.cs' \\\"(public|protected) virtual async Task.*(SaveOrder|PlaceOrder|InsertOrderItem|DeleteShoppingCart|AddToCart)|_orderService\\\\.(InsertOrderAsync|InsertOrderItemAsync)|_shoppingCartService\\\\.DeleteShoppingCartItemAsync\\\" src/Libraries/Nop.Services/Orders/OrderProcessingService.cs src/Libraries/Nop.Services/Orders/OrderService.cs src/Libraries/Nop.Services/Orders/ShoppingCartService.cs src/Presentation/Nop.Web/Controllers/CheckoutController.cs src/Presentation/Nop.Web/Controllers/ShoppingCartController.cs\"",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 11,
+          "raw_line": 21,
+          "sequence": 11,
+          "command": "/bin/bash -lc 'graphify query \"OrderProcessingService PlaceOrderAsync PreparePlaceOrderDetailsAsync SaveOrderDetailsAsync MoveShoppingCartItemsToOrderItemsAsync InsertOrderItemAsync DeleteShoppingCartItemAsync\" --dfs --budget 3200'",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 12,
+          "raw_line": 22,
+          "sequence": 12,
+          "command": "/bin/bash -lc 'graphify query \"OrderProcessingService PlaceOrderAsync PreparePlaceOrderDetailsAsync SaveOrderDetailsAsync MoveShoppingCartItemsToOrderItemsAsync InsertOrderItemAsync DeleteShoppingCartItemAsync\" --dfs --budget 3200'",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 13,
+          "raw_line": 23,
+          "sequence": 13,
+          "command": "/bin/bash -lc 'bat --paging=never --style=numbers --line-range=275:350 src/Presentation/Nop.Web/Controllers/ShoppingCartController.cs; bat --paging=never --style=numbers --line-range=650:815 src/Presentation/Nop.Web/Controllers/ShoppingCartController.cs; bat --paging=never --style=numbers --line-range=1335:1385 src/Presentation/Nop.Web/Controllers/ShoppingCartController.cs; bat --paging=never --style=numbers --line-range=1540:1810 src/Libraries/Nop.Services/Orders/ShoppingCartService.cs'",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 14,
+          "raw_line": 24,
+          "sequence": 14,
+          "command": "/bin/bash -lc 'bat --paging=never --style=numbers --line-range=275:350 src/Presentation/Nop.Web/Controllers/ShoppingCartController.cs; bat --paging=never --style=numbers --line-range=650:815 src/Presentation/Nop.Web/Controllers/ShoppingCartController.cs; bat --paging=never --style=numbers --line-range=1335:1385 src/Presentation/Nop.Web/Controllers/ShoppingCartController.cs; bat --paging=never --style=numbers --line-range=1540:1810 src/Libraries/Nop.Services/Orders/ShoppingCartService.cs'",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 15,
+          "raw_line": 25,
+          "sequence": 15,
+          "command": "/bin/bash -lc \"rg -n \\\"AddProductToCart_|GetProductToCartDetailsAsync|SaveItemAsync\\\\(\\\" src/Presentation/Nop.Web/Controllers/ShoppingCartController.cs; rg -n \\\"public virtual async Task<IActionResult> (Index|ConfirmOrder|OpcConfirmOrder|PaymentMethod|PaymentInfo)\\\" src/Presentation/Nop.Web/Controllers/CheckoutController.cs\"",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 16,
+          "raw_line": 26,
+          "sequence": 16,
+          "command": "/bin/bash -lc \"rg -n \\\"AddProductToCart_|GetProductToCartDetailsAsync|SaveItemAsync\\\\(\\\" src/Presentation/Nop.Web/Controllers/ShoppingCartController.cs; rg -n \\\"public virtual async Task<IActionResult> (Index|ConfirmOrder|OpcConfirmOrder|PaymentMethod|PaymentInfo)\\\" src/Presentation/Nop.Web/Controllers/CheckoutController.cs\"",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 17,
+          "raw_line": 27,
+          "sequence": 17,
+          "command": "/bin/bash -lc 'bat --paging=never --style=numbers --line-range=330:390 src/Presentation/Nop.Web/Controllers/CheckoutController.cs; bat --paging=never --style=numbers --line-range=1265:1360 src/Presentation/Nop.Web/Controllers/CheckoutController.cs; bat --paging=never --style=numbers --line-range=2005:2090 src/Presentation/Nop.Web/Controllers/CheckoutController.cs; bat --paging=never --style=numbers --line-range=470:525 src/Libraries/Nop.Services/Orders/OrderProcessingService.cs; bat --paging=never --style=numbers --line-range=1560:1665 src/Libraries/Nop.Services/Orders/OrderProcessingService.cs'",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 18,
+          "raw_line": 28,
+          "sequence": 18,
+          "command": "/bin/bash -lc 'bat --paging=never --style=numbers --line-range=330:390 src/Presentation/Nop.Web/Controllers/CheckoutController.cs; bat --paging=never --style=numbers --line-range=1265:1360 src/Presentation/Nop.Web/Controllers/CheckoutController.cs; bat --paging=never --style=numbers --line-range=2005:2090 src/Presentation/Nop.Web/Controllers/CheckoutController.cs; bat --paging=never --style=numbers --line-range=470:525 src/Libraries/Nop.Services/Orders/OrderProcessingService.cs; bat --paging=never --style=numbers --line-range=1560:1665 src/Libraries/Nop.Services/Orders/OrderProcessingService.cs'",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 19,
+          "raw_line": 29,
+          "sequence": 19,
+          "command": "/bin/bash -lc 'bat --paging=never --style=numbers --line-range=700:825 src/Libraries/Nop.Services/Orders/OrderProcessingService.cs; bat --paging=never --style=numbers --line-range=1265:1365 src/Libraries/Nop.Services/Orders/OrderProcessingService.cs; bat --paging=never --style=numbers --line-range=570:635 src/Libraries/Nop.Services/Orders/ShoppingCartService.cs; bat --paging=never --style=numbers --line-range=730:765 src/Libraries/Nop.Services/Orders/OrderService.cs'",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 20,
+          "raw_line": 30,
+          "sequence": 20,
+          "command": "/bin/bash -lc 'bat --paging=never --style=numbers --line-range=700:825 src/Libraries/Nop.Services/Orders/OrderProcessingService.cs; bat --paging=never --style=numbers --line-range=1265:1365 src/Libraries/Nop.Services/Orders/OrderProcessingService.cs; bat --paging=never --style=numbers --line-range=570:635 src/Libraries/Nop.Services/Orders/ShoppingCartService.cs; bat --paging=never --style=numbers --line-range=730:765 src/Libraries/Nop.Services/Orders/OrderService.cs'",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 21,
+          "raw_line": 31,
+          "sequence": 21,
+          "command": "/bin/bash -lc \"rg -n \\\"ClearShoppingCartAsync|InsertOrderAsync\\\\(\\\" src/Libraries/Nop.Services/Orders/ShoppingCartService.cs src/Libraries/Nop.Services/Orders/OrderService.cs; bat --paging=never --style=numbers --line-range=690:720 src/Libraries/Nop.Services/Orders/ShoppingCartService.cs; rg -n \\\"PreparePlaceOrderDetailsAsync|PrepareAndValidateShoppingCartAndCheckoutAttributesAsync\\\" src/Libraries/Nop.Services/Orders/OrderProcessingService.cs\"",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 22,
+          "raw_line": 32,
+          "sequence": 22,
+          "command": "/bin/bash -lc \"rg -n \\\"ClearShoppingCartAsync|InsertOrderAsync\\\\(\\\" src/Libraries/Nop.Services/Orders/ShoppingCartService.cs src/Libraries/Nop.Services/Orders/OrderService.cs; bat --paging=never --style=numbers --line-range=690:720 src/Libraries/Nop.Services/Orders/ShoppingCartService.cs; rg -n \\\"PreparePlaceOrderDetailsAsync|PrepareAndValidateShoppingCartAndCheckoutAttributesAsync\\\" src/Libraries/Nop.Services/Orders/OrderProcessingService.cs\"",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 23,
+          "raw_line": 33,
+          "sequence": 23,
+          "command": "/bin/bash -lc 'bat --paging=never --style=numbers --line-range=648:685 src/Libraries/Nop.Services/Orders/ShoppingCartService.cs; bat --paging=never --style=numbers --line-range=345:370 src/Libraries/Nop.Services/Orders/OrderService.cs; bat --paging=never --style=numbers --line-range=275:305 src/Libraries/Nop.Services/Orders/OrderProcessingService.cs; bat --paging=never --style=numbers --line-range=580:715 src/Presentation/Nop.Web/Controllers/ShoppingCartController.cs'",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 24,
+          "raw_line": 34,
+          "sequence": 24,
+          "command": "/bin/bash -lc 'bat --paging=never --style=numbers --line-range=648:685 src/Libraries/Nop.Services/Orders/ShoppingCartService.cs; bat --paging=never --style=numbers --line-range=345:370 src/Libraries/Nop.Services/Orders/OrderService.cs; bat --paging=never --style=numbers --line-range=275:305 src/Libraries/Nop.Services/Orders/OrderProcessingService.cs; bat --paging=never --style=numbers --line-range=580:715 src/Presentation/Nop.Web/Controllers/ShoppingCartController.cs'",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 25,
+          "raw_line": 35,
+          "sequence": 25,
+          "command": "/bin/bash -lc 'bat --paging=never --style=numbers --line-range=385:445 src/Presentation/Nop.Web/Controllers/CheckoutController.cs; bat --paging=never --style=numbers --line-range=1240:1285 src/Presentation/Nop.Web/Controllers/CheckoutController.cs; bat --paging=never --style=numbers --line-range=2080:2130 src/Presentation/Nop.Web/Controllers/CheckoutController.cs; git status --short'",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 26,
+          "raw_line": 36,
+          "sequence": 26,
+          "command": "/bin/bash -lc 'bat --paging=never --style=numbers --line-range=385:445 src/Presentation/Nop.Web/Controllers/CheckoutController.cs; bat --paging=never --style=numbers --line-range=1240:1285 src/Presentation/Nop.Web/Controllers/CheckoutController.cs; bat --paging=never --style=numbers --line-range=2080:2130 src/Presentation/Nop.Web/Controllers/CheckoutController.cs; git status --short'",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 27,
+          "raw_line": 37,
+          "sequence": 27,
+          "command": "/bin/bash -lc \"rg --files src/Libraries/Nop.Core/Domain/Orders | rg '/(ShoppingCartItem|Order|OrderItem)\\\\.cs\"'$'\"'; rg -n \\\"public (int|Guid).*?(OrderId|ProductId|CustomerId|ShoppingCartTypeId)|public virtual Order Order|public ShoppingCartType ShoppingCartType\\\" src/Libraries/Nop.Core/Domain/Orders/ShoppingCartItem.cs src/Libraries/Nop.Core/Domain/Orders/OrderItem.cs | head -60\"",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 28,
+          "raw_line": 38,
+          "sequence": 28,
+          "command": "/bin/bash -lc \"rg --files src/Libraries/Nop.Core/Domain/Orders | rg '/(ShoppingCartItem|Order|OrderItem)\\\\.cs\"'$'\"'; rg -n \\\"public (int|Guid).*?(OrderId|ProductId|CustomerId|ShoppingCartTypeId)|public virtual Order Order|public ShoppingCartType ShoppingCartType\\\" src/Libraries/Nop.Core/Domain/Orders/ShoppingCartItem.cs src/Libraries/Nop.Core/Domain/Orders/OrderItem.cs | head -60\"",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 29,
+          "raw_line": 39,
+          "sequence": 29,
+          "command": "/bin/bash -lc \"rg -n \\\"_sciRepository\\\\.(InsertAsync|UpdateAsync)\\\\(shoppingCartItem\\\\)|ClearShoppingCartAsync\\\\(|DeleteAsync\\\\(cart|SaveOrderDetailsAsync\\\\(|MoveShoppingCartItemsToOrderItemsAsync\\\\(|InsertOrderItemAsync\\\\(orderItem\\\\)|InsertOrderAsync\\\\(order\\\\)|PlaceOrderAsync\\\\(processPaymentRequest\\\\)|AddToCartAsync\\\\(customer: customer|RedirectToRoute\\\\(NopRouteNames.Standard.CHECKOUT\\\\)|PrepareAndValidateShoppingCartAndCheckoutAttributesAsync\\\\(\\\" src/Presentation/Nop.Web/Controllers/ShoppingCartController.cs src/Presentation/Nop.Web/Controllers/CheckoutController.cs src/Libraries/Nop.Services/Orders/ShoppingCartService.cs src/Libraries/Nop.Services/Orders/OrderProcessingService.cs src/Libraries/Nop.Services/Orders/OrderService.cs\"",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 30,
+          "raw_line": 40,
+          "sequence": 30,
+          "command": "/bin/bash -lc \"rg -n \\\"_sciRepository\\\\.(InsertAsync|UpdateAsync)\\\\(shoppingCartItem\\\\)|ClearShoppingCartAsync\\\\(|DeleteAsync\\\\(cart|SaveOrderDetailsAsync\\\\(|MoveShoppingCartItemsToOrderItemsAsync\\\\(|InsertOrderItemAsync\\\\(orderItem\\\\)|InsertOrderAsync\\\\(order\\\\)|PlaceOrderAsync\\\\(processPaymentRequest\\\\)|AddToCartAsync\\\\(customer: customer|RedirectToRoute\\\\(NopRouteNames.Standard.CHECKOUT\\\\)|PrepareAndValidateShoppingCartAndCheckoutAttributesAsync\\\\(\\\" src/Presentation/Nop.Web/Controllers/ShoppingCartController.cs src/Presentation/Nop.Web/Controllers/CheckoutController.cs src/Libraries/Nop.Services/Orders/ShoppingCartService.cs src/Libraries/Nop.Services/Orders/OrderProcessingService.cs src/Libraries/Nop.Services/Orders/OrderService.cs\"",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 31,
+          "raw_line": 41,
+          "sequence": 31,
+          "command": "/bin/bash -lc \"rg -n \\\"SetProcessPaymentRequestAsync\\\\(|CHECKOUT_CONFIRM|CHECKOUT_BILLING_ADDRESS|CHECKOUT_ONE_PAGE|GetProcessPaymentRequestAsync\\\\(\\\" src/Presentation/Nop.Web/Controllers/CheckoutController.cs | head -50\"",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 32,
+          "raw_line": 42,
+          "sequence": 32,
+          "command": "/bin/bash -lc \"rg -n \\\"SetProcessPaymentRequestAsync\\\\(|CHECKOUT_CONFIRM|CHECKOUT_BILLING_ADDRESS|CHECKOUT_ONE_PAGE|GetProcessPaymentRequestAsync\\\\(\\\" src/Presentation/Nop.Web/Controllers/CheckoutController.cs | head -50\"",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        }
+      ],
+      "search_count": 14,
+      "source_read_count": 6,
+      "graphify_command_count": 6,
+      "graphify_query_count": 4,
+      "generic_graphify_query_count": 0,
+      "specific_graphify_query_count": 4,
+      "graphify_queries": [
+        {
+          "command": "/bin/bash -lc 'test -f graphify-out/graph.json && graphify query \"ShoppingCartController AddToCartAsync CheckoutController ConfirmOrder PlaceOrderAsync OrderProcessingService InsertOrderItemAsync DeleteShoppingCartItemAsync\" --budget 2600'",
+          "query": "ShoppingCartController AddToCartAsync CheckoutController ConfirmOrder PlaceOrderAsync OrderProcessingService InsertOrderItemAsync DeleteShoppingCartItemAsync 2600",
+          "words": [
+            "ShoppingCartController",
+            "AddToCartAsync",
+            "CheckoutController",
+            "ConfirmOrder",
+            "PlaceOrderAsync",
+            "OrderProcessingService",
+            "InsertOrderItemAsync",
+            "DeleteShoppingCartItemAsync"
+          ],
+          "symbol_like_terms": [
+            "AddToCartAsync",
+            "CheckoutController",
+            "ConfirmOrder",
+            "DeleteShoppingCartItemAsync",
+            "InsertOrderItemAsync",
+            "OrderProcessingService",
+            "PlaceOrderAsync",
+            "ShoppingCartController"
+          ],
+          "generic_terms": [],
+          "is_specific": true,
+          "is_generic": false,
+          "line": 6,
+          "backend": "codex-cli"
+        },
+        {
+          "command": "/bin/bash -lc 'test -f graphify-out/graph.json && graphify query \"ShoppingCartController AddToCartAsync CheckoutController ConfirmOrder PlaceOrderAsync OrderProcessingService InsertOrderItemAsync DeleteShoppingCartItemAsync\" --budget 2600'",
+          "query": "ShoppingCartController AddToCartAsync CheckoutController ConfirmOrder PlaceOrderAsync OrderProcessingService InsertOrderItemAsync DeleteShoppingCartItemAsync 2600",
+          "words": [
+            "ShoppingCartController",
+            "AddToCartAsync",
+            "CheckoutController",
+            "ConfirmOrder",
+            "PlaceOrderAsync",
+            "OrderProcessingService",
+            "InsertOrderItemAsync",
+            "DeleteShoppingCartItemAsync"
+          ],
+          "symbol_like_terms": [
+            "AddToCartAsync",
+            "CheckoutController",
+            "ConfirmOrder",
+            "DeleteShoppingCartItemAsync",
+            "InsertOrderItemAsync",
+            "OrderProcessingService",
+            "PlaceOrderAsync",
+            "ShoppingCartController"
+          ],
+          "generic_terms": [],
+          "is_specific": true,
+          "is_generic": false,
+          "line": 7,
+          "backend": "codex-cli"
+        },
+        {
+          "command": "/bin/bash -lc 'graphify query \"OrderProcessingService PlaceOrderAsync PreparePlaceOrderDetailsAsync SaveOrderDetailsAsync MoveShoppingCartItemsToOrderItemsAsync InsertOrderItemAsync DeleteShoppingCartItemAsync\" --dfs --budget 3200'",
+          "query": "OrderProcessingService PlaceOrderAsync PreparePlaceOrderDetailsAsync SaveOrderDetailsAsync MoveShoppingCartItemsToOrderItemsAsync InsertOrderItemAsync DeleteShoppingCartItemAsync 3200",
+          "words": [
+            "OrderProcessingService",
+            "PlaceOrderAsync",
+            "PreparePlaceOrderDetailsAsync",
+            "SaveOrderDetailsAsync",
+            "MoveShoppingCartItemsToOrderItemsAsync",
+            "InsertOrderItemAsync",
+            "DeleteShoppingCartItemAsync"
+          ],
+          "symbol_like_terms": [
+            "DeleteShoppingCartItemAsync",
+            "InsertOrderItemAsync",
+            "MoveShoppingCartItemsToOrderItemsAsync",
+            "OrderProcessingService",
+            "PlaceOrderAsync",
+            "PreparePlaceOrderDetailsAsync",
+            "SaveOrderDetailsAsync"
+          ],
+          "generic_terms": [],
+          "is_specific": true,
+          "is_generic": false,
+          "line": 11,
+          "backend": "codex-cli"
+        },
+        {
+          "command": "/bin/bash -lc 'graphify query \"OrderProcessingService PlaceOrderAsync PreparePlaceOrderDetailsAsync SaveOrderDetailsAsync MoveShoppingCartItemsToOrderItemsAsync InsertOrderItemAsync DeleteShoppingCartItemAsync\" --dfs --budget 3200'",
+          "query": "OrderProcessingService PlaceOrderAsync PreparePlaceOrderDetailsAsync SaveOrderDetailsAsync MoveShoppingCartItemsToOrderItemsAsync InsertOrderItemAsync DeleteShoppingCartItemAsync 3200",
+          "words": [
+            "OrderProcessingService",
+            "PlaceOrderAsync",
+            "PreparePlaceOrderDetailsAsync",
+            "SaveOrderDetailsAsync",
+            "MoveShoppingCartItemsToOrderItemsAsync",
+            "InsertOrderItemAsync",
+            "DeleteShoppingCartItemAsync"
+          ],
+          "symbol_like_terms": [
+            "DeleteShoppingCartItemAsync",
+            "InsertOrderItemAsync",
+            "MoveShoppingCartItemsToOrderItemsAsync",
+            "OrderProcessingService",
+            "PlaceOrderAsync",
+            "PreparePlaceOrderDetailsAsync",
+            "SaveOrderDetailsAsync"
+          ],
+          "generic_terms": [],
+          "is_specific": true,
+          "is_generic": false,
+          "line": 12,
+          "backend": "codex-cli"
+        }
+      ],
+      "source_after_graph": true,
+      "first_graph_line": 6,
+      "first_source_line": 4
+    }
+  },
+  "checks": [
+    {
+      "type": "answer_not_empty",
+      "ok": true,
+      "message": "answer.md should contain a non-empty final answer"
+    },
+    {
+      "type": "required_symbol",
+      "value": "ShoppingCartController",
+      "ok": true
+    },
+    {
+      "type": "required_symbol",
+      "value": "ShoppingCartService",
+      "ok": true
+    },
+    {
+      "type": "required_symbol",
+      "value": "PlaceOrderAsync",
+      "ok": true
+    },
+    {
+      "type": "required_symbol",
+      "value": "OrderProcessingService",
+      "ok": true
+    },
+    {
+      "type": "required_file",
+      "value": "src/Presentation/Nop.Web/Controllers/ShoppingCartController.cs",
+      "ok": true
+    },
+    {
+      "type": "required_file_exists",
+      "value": "src/Presentation/Nop.Web/Controllers/ShoppingCartController.cs",
+      "ok": true,
+      "message": "required file path should exist in the evaluated worktree"
+    },
+    {
+      "type": "required_file",
+      "value": "src/Presentation/Nop.Web/Controllers/CheckoutController.cs",
+      "ok": true
+    },
+    {
+      "type": "required_file_exists",
+      "value": "src/Presentation/Nop.Web/Controllers/CheckoutController.cs",
+      "ok": true,
+      "message": "required file path should exist in the evaluated worktree"
+    },
+    {
+      "type": "required_file",
+      "value": "src/Libraries/Nop.Services/Orders/ShoppingCartService.cs",
+      "ok": true
+    },
+    {
+      "type": "required_file_exists",
+      "value": "src/Libraries/Nop.Services/Orders/ShoppingCartService.cs",
+      "ok": true,
+      "message": "required file path should exist in the evaluated worktree"
+    },
+    {
+      "type": "expected_concept",
+      "value": "add to cart",
+      "ok": false,
+      "soft": true
+    },
+    {
+      "type": "expected_concept",
+      "value": "shopping cart item",
+      "ok": false,
+      "soft": true
+    },
+    {
+      "type": "expected_concept",
+      "value": "checkout",
+      "ok": true,
+      "soft": true
+    },
+    {
+      "type": "expected_concept",
+      "value": "order placement",
+      "ok": true,
+      "soft": true
+    },
+    {
+      "type": "expected_concept",
+      "value": "order item",
+      "ok": false,
+      "soft": true
+    },
+    {
+      "type": "expected_concept",
+      "value": "cart cleanup",
+      "ok": true,
+      "soft": true
+    },
+    {
+      "type": "minimum_existing_file_references",
+      "ok": false,
+      "actual": 0,
+      "expected_min": 5
+    },
+    {
+      "type": "minimum_source_files",
+      "ok": false,
+      "actual": 0,
+      "expected_min": 5
+    },
+    {
+      "type": "max_missing_cited_files",
+      "ok": true,
+      "actual": 0,
+      "expected_max": 0
+    },
+    {
+      "type": "avoid_generic_graph_queries",
+      "ok": true,
+      "actual": 0,
+      "expected_max": 0,
+      "soft": false
+    },
+    {
+      "type": "graph_query_budget",
+      "ok": true,
+      "actual": 4,
+      "expected_max_before_source_fallback": 2,
+      "source_after_graph": true,
+      "soft": true
+    },
+    {
+      "type": "source_verification_observed",
+      "ok": true,
+      "actual_source_read_count": 6,
+      "soft": true
+    }
+  ],
+  "schema_version": "agent-eval.validation-result.v1",
+  "contract_version": "agent-eval.contract.v1"
+}

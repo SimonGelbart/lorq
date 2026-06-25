@@ -1,0 +1,22 @@
+{
+  "id": "codex",
+  "profile": {
+    "description": "OpenAI Codex CLI in non-interactive JSONL mode.",
+    "backend": "codex",
+    "command": "codex",
+    "args": [
+      "exec",
+      "--json"
+    ],
+    "input_mode": "stdin",
+    "output_format": "codex-jsonl",
+    "availability_args": [
+      "--version"
+    ],
+    "availability_timeout_seconds": 10,
+    "timeout_seconds": 1200,
+    "isolate_home": false,
+    "isolate_codex_home": false,
+    "id": "codex"
+  }
+}

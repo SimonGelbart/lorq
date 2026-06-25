@@ -1,0 +1,37 @@
+{
+  "id": "cart-to-order-flow",
+  "title": "Cart to order flow tracing",
+  "category": "relationship-tracing",
+  "difficulty": "hard",
+  "repo": "nopcommerce",
+  "task": "In nopCommerce, trace how a product added to cart flows into order creation.\nReturn the key source files and call/relationship evidence from cart mutation\nthrough checkout, order placement, order item persistence, and cart cleanup.\n",
+  "validation": {
+    "required_symbols": [
+      "ShoppingCartController",
+      "ShoppingCartService",
+      "PlaceOrderAsync",
+      "OrderProcessingService"
+    ],
+    "required_files": [
+      "src/Presentation/Nop.Web/Controllers/ShoppingCartController.cs",
+      "src/Presentation/Nop.Web/Controllers/CheckoutController.cs",
+      "src/Libraries/Nop.Services/Orders/ShoppingCartService.cs"
+    ],
+    "expected_concepts": [
+      "add to cart",
+      "shopping cart item",
+      "checkout",
+      "order placement",
+      "order item",
+      "cart cleanup"
+    ],
+    "required_evidence": {
+      "min_existing_file_references": 5,
+      "min_source_files": 5,
+      "max_missing_cited_files": 0,
+      "require_existing_required_files": true
+    }
+  },
+  "rubric": "repository-exploration",
+  "_path": "/home/simon/repos/lorq/code/lorq/cases/cart-to-order-flow.yaml"
+}

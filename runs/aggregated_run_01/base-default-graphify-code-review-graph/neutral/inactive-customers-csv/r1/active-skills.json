@@ -1,0 +1,26 @@
+{
+  "schema_version": "agent-eval.active-skills.v1",
+  "skills": [
+    "analyzing-code",
+    "analyzing-code-structure",
+    "choosing-cli-tools",
+    "code-review-graph",
+    "composing-cli-workflows",
+    "debug-issue",
+    "explore-codebase",
+    "extracting-code-structure",
+    "finding-files",
+    "fuzzy-selecting",
+    "graphify",
+    "graphify-query-planner",
+    "querying-json",
+    "querying-yaml",
+    "refactor-safely",
+    "replacing-text",
+    "review-changes",
+    "searching-text",
+    "viewing-files",
+    "working-with-dotnet-backends"
+  ],
+  "skill_count": 20
+}

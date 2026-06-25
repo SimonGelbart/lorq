@@ -1,0 +1,1210 @@
+{
+  "run_status": "validation_failed",
+  "repo": "nopCommerce",
+  "repo_status": {
+    "type": "local",
+    "ok": true,
+    "path": "/home/simon/repos/to-check/misc/nopCommerce",
+    "ref": "HEAD",
+    "is_git_repo": true,
+    "commit": "91c3bdea3131f8e2cf6187cb8bebded4567683c1",
+    "branch": "feat/test-graphify",
+    "dirty": false,
+    "dirty_entries": []
+  },
+  "mode": "base-default-graphify",
+  "prompt_style": "neutral",
+  "case": "order-total-impact",
+  "category": "refactoring-impact",
+  "repetition": 1,
+  "worktree": "/home/simon/repos/lorq-worktrees/base-default-graphify__neutral__order-total-impact__r1",
+  "run_dir": "/home/simon/repos/lorq/code/lorq/python/results/default-graphify/runs/base-default-graphify/neutral/order-total-impact/r1",
+  "setup": {
+    "setup_scope": "per-run",
+    "worktree": {
+      "strategy": "git-worktree",
+      "source": "/home/simon/repos/to-check/misc/nopCommerce",
+      "dest": "/home/simon/repos/lorq-worktrees/base-default-graphify__neutral__order-total-impact__r1",
+      "ref": "HEAD",
+      "command": {
+        "command": [
+          "git",
+          "-C",
+          "/home/simon/repos/to-check/misc/nopCommerce",
+          "worktree",
+          "add",
+          "--force",
+          "--detach",
+          "/home/simon/repos/lorq-worktrees/base-default-graphify__neutral__order-total-impact__r1",
+          "HEAD"
+        ],
+        "cwd": "/home/simon/repos/to-check/misc/nopCommerce",
+        "exit_code": 0,
+        "timed_out": false,
+        "elapsed_ms": 362,
+        "stdout": "HEAD est maintenant à 91c3bdea31 test graphify\n",
+        "stderr": "Préparation de l'arbre de travail (HEAD détachée 91c3bdea31)\n"
+      }
+    },
+    "materialize": [
+      {
+        "action": "copy",
+        "from": "/home/simon/repos/lorq/code/lorq/execution/base-skills",
+        "to": "/home/simon/repos/lorq-worktrees/base-default-graphify__neutral__order-total-impact__r1/.agents/skills"
+      },
+      {
+        "action": "copy",
+        "from": "/home/simon/repos/lorq/code/lorq/execution/skills/graphify",
+        "to": "/home/simon/repos/lorq-worktrees/base-default-graphify__neutral__order-total-impact__r1/.agents/skills/graphify"
+      },
+      {
+        "action": "copy",
+        "from": "/home/simon/repos/lorq/code/lorq/execution/configs/graphify/.graphifyignore",
+        "to": "/home/simon/repos/lorq-worktrees/base-default-graphify__neutral__order-total-impact__r1/.graphifyignore"
+      }
+    ],
+    "setup": {
+      "commands": [
+        {
+          "id": "graphify-codex-install",
+          "run": "graphify codex install",
+          "argv": [
+            "graphify",
+            "codex",
+            "install"
+          ],
+          "shell": false,
+          "cwd": "/home/simon/repos/lorq-worktrees/base-default-graphify__neutral__order-total-impact__r1",
+          "exit_code": 0,
+          "timed_out": false,
+          "elapsed_ms": 39,
+          "required": true,
+          "failed": false,
+          "stdout_path": "graphify-codex-install.stdout.txt",
+          "stderr_path": "graphify-codex-install.stderr.txt"
+        },
+        {
+          "id": "graphify-generate",
+          "run": "graphify .",
+          "argv": [
+            "graphify",
+            "."
+          ],
+          "shell": false,
+          "cwd": "/home/simon/repos/lorq-worktrees/base-default-graphify__neutral__order-total-impact__r1",
+          "exit_code": 0,
+          "timed_out": false,
+          "elapsed_ms": 83442,
+          "required": true,
+          "failed": false,
+          "stdout_path": "graphify-generate.stdout.txt",
+          "stderr_path": "graphify-generate.stderr.txt"
+        }
+      ],
+      "ok": true,
+      "command_count": 2,
+      "required_failed": false,
+      "failed_required_command": null,
+      "elapsed_ms": 83484
+    }
+  },
+  "agent_check": {
+    "backend": "codex-cli",
+    "command": "codex",
+    "resolved_path": "/home/simon/.local/bin/codex",
+    "available": true,
+    "ok": true,
+    "version_check": {
+      "command": [
+        "codex",
+        "--version"
+      ],
+      "exit_code": 0,
+      "timed_out": false,
+      "elapsed_ms": 7,
+      "stdout_preview": "codex-cli 0.142.0\n",
+      "stderr_preview": "",
+      "ok": true,
+      "error_category": null
+    },
+    "profile_id": "codex",
+    "backend_config": "codex"
+  },
+  "agent_summary": {
+    "agent": "codex-cli",
+    "backend": "codex-cli",
+    "command": [
+      "codex",
+      "exec",
+      "--json"
+    ],
+    "input_mode": "stdin",
+    "output_format": "codex-jsonl",
+    "exit_code": 0,
+    "timed_out": false,
+    "elapsed_ms": 170024,
+    "ok": true,
+    "error_category": null,
+    "usage": {
+      "input_tokens": 512638,
+      "output_tokens": 6410,
+      "cached_input_tokens": 420096,
+      "reasoning_output_tokens": 845
+    },
+    "counts": {
+      "json_events": 75,
+      "tool_events": 0,
+      "command_events": 64
+    },
+    "pricing": {
+      "schema_version": "agent-eval.pricing.v1",
+      "ok": true,
+      "model": "gpt-5.5",
+      "currency": "USD",
+      "source": "https://openai.com/api/pricing/ checked 2026-06-15",
+      "rates_per_1m": {
+        "input": 5.0,
+        "cached_input": 0.5,
+        "output": 30.0
+      },
+      "usage": {
+        "input_tokens": 512638,
+        "output_tokens": 6410,
+        "cached_input_tokens": 420096,
+        "reasoning_output_tokens": 845,
+        "uncached_input_tokens": 92542,
+        "total_tokens": 519048,
+        "cache_hit_rate": 0.8194788525236132
+      },
+      "input_cost": 0.46271,
+      "cached_input_cost": 0.210048,
+      "output_cost": 0.1923,
+      "estimated_cost": 0.865058
+    },
+    "home_isolation": {
+      "enabled": false,
+      "isolate_home": false,
+      "isolate_codex_home": false,
+      "runtime_home": null,
+      "codex_home": null
+    },
+    "active_skills": [
+      "analyzing-code",
+      "analyzing-code-structure",
+      "choosing-cli-tools",
+      "composing-cli-workflows",
+      "extracting-code-structure",
+      "finding-files",
+      "fuzzy-selecting",
+      "graphify",
+      "querying-json",
+      "querying-yaml",
+      "replacing-text",
+      "searching-text",
+      "viewing-files",
+      "working-with-dotnet-backends"
+    ]
+  },
+  "validation": {
+    "case_id": "order-total-impact",
+    "mode_id": "base-default-graphify",
+    "ok": false,
+    "hard_passed": 9,
+    "hard_total": 11,
+    "soft_passed": 7,
+    "soft_total": 7,
+    "answer": {
+      "ok": false,
+      "hard_passed": 9,
+      "hard_total": 11,
+      "soft_passed": 6,
+      "soft_total": 6,
+      "checks": [
+        {
+          "type": "answer_not_empty",
+          "ok": true,
+          "message": "answer.md should contain a non-empty final answer"
+        },
+        {
+          "type": "required_symbol",
+          "value": "IOrderTotalCalculationService",
+          "ok": true
+        },
+        {
+          "type": "required_symbol",
+          "value": "OrderTotalCalculationService",
+          "ok": true
+        },
+        {
+          "type": "required_symbol",
+          "value": "OrderProcessingService",
+          "ok": true
+        },
+        {
+          "type": "required_file",
+          "value": "src/Libraries/Nop.Services/Orders/IOrderTotalCalculationService.cs",
+          "ok": true
+        },
+        {
+          "type": "required_file_exists",
+          "value": "src/Libraries/Nop.Services/Orders/IOrderTotalCalculationService.cs",
+          "ok": true,
+          "message": "required file path should exist in the evaluated worktree"
+        },
+        {
+          "type": "required_file",
+          "value": "src/Libraries/Nop.Services/Orders/OrderTotalCalculationService.cs",
+          "ok": true
+        },
+        {
+          "type": "required_file_exists",
+          "value": "src/Libraries/Nop.Services/Orders/OrderTotalCalculationService.cs",
+          "ok": true,
+          "message": "required file path should exist in the evaluated worktree"
+        },
+        {
+          "type": "expected_concept",
+          "value": "checkout",
+          "ok": true,
+          "soft": true
+        },
+        {
+          "type": "expected_concept",
+          "value": "payment",
+          "ok": true,
+          "soft": true
+        },
+        {
+          "type": "expected_concept",
+          "value": "discount",
+          "ok": true,
+          "soft": true
+        },
+        {
+          "type": "expected_concept",
+          "value": "tax",
+          "ok": true,
+          "soft": true
+        },
+        {
+          "type": "expected_concept",
+          "value": "plugin",
+          "ok": true,
+          "soft": true
+        },
+        {
+          "type": "expected_concept",
+          "value": "tests",
+          "ok": true,
+          "soft": true
+        },
+        {
+          "type": "minimum_existing_file_references",
+          "ok": false,
+          "actual": 0,
+          "expected_min": 4
+        },
+        {
+          "type": "minimum_source_files",
+          "ok": false,
+          "actual": 0,
+          "expected_min": 4
+        },
+        {
+          "type": "max_missing_cited_files",
+          "ok": true,
+          "actual": 0,
+          "expected_max": 0
+        }
+      ],
+      "evidence": {
+        "answer_empty": false,
+        "file_references": [],
+        "file_reference_count": 0,
+        "unique_file_reference_count": 0,
+        "worktree": "/home/simon/repos/lorq-worktrees/base-default-graphify__neutral__order-total-impact__r1",
+        "worktree_available": true,
+        "existing_file_references": [],
+        "existing_file_reference_count": 0,
+        "missing_file_references": [],
+        "missing_file_reference_count": 0,
+        "unknown_file_references": [],
+        "unknown_file_reference_count": 0
+      }
+    },
+    "behavior": {
+      "ok": true,
+      "hard_passed": 0,
+      "hard_total": 0,
+      "soft_passed": 1,
+      "soft_total": 1,
+      "checks": [
+        {
+          "type": "source_verification_observed",
+          "ok": true,
+          "actual_source_read_count": 48,
+          "soft": true
+        }
+      ],
+      "trace": {
+        "trace_source": "normalized",
+        "normalized_event_count": 73,
+        "normalized_event_type_counts": {
+          "assistant_message": 8,
+          "tool_call": 64,
+          "usage": 1
+        },
+        "command_count": 64,
+        "commands": [
+          {
+            "line": 2,
+            "raw_line": 4,
+            "sequence": 2,
+            "command": "/bin/bash -lc \"sed -n '1,220p' /home/simon/repos/lorq-worktrees/base-default-graphify__neutral__order-total-impact__r1/.agents/skills/graphify/SKILL.md\"",
+            "type": "tool_call",
+            "tool": "shell",
+            "backend": "codex-cli"
+          },
+          {
+            "line": 3,
+            "raw_line": 5,
+            "sequence": 3,
+            "command": "/bin/bash -lc \"sed -n '1,220p' /home/simon/repos/lorq-worktrees/base-default-graphify__neutral__order-total-impact__r1/.agents/skills/graphify/SKILL.md\"",
+            "type": "tool_call",
+            "tool": "shell",
+            "backend": "codex-cli"
+          },
+          {
+            "line": 4,
+            "raw_line": 6,
+            "sequence": 4,
+            "command": "/bin/bash -lc \"sed -n '221,520p' /home/simon/repos/lorq-worktrees/base-default-graphify__neutral__order-total-impact__r1/.agents/skills/graphify/SKILL.md\"",
+            "type": "tool_call",
+            "tool": "shell",
+            "backend": "codex-cli"
+          },
+          {
+            "line": 5,
+            "raw_line": 7,
+            "sequence": 5,
+            "command": "/bin/bash -lc \"sed -n '221,520p' /home/simon/repos/lorq-worktrees/base-default-graphify__neutral__order-total-impact__r1/.agents/skills/graphify/SKILL.md\"",
+            "type": "tool_call",
+            "tool": "shell",
+            "backend": "codex-cli"
+          },
+          {
+            "line": 6,
+            "raw_line": 8,
+            "sequence": 6,
+            "command": "/bin/bash -lc \"sed -n '521,900p' /home/simon/repos/lorq-worktrees/base-default-graphify__neutral__order-total-impact__r1/.agents/skills/graphify/SKILL.md\"",
+            "type": "tool_call",
+            "tool": "shell",
+            "backend": "codex-cli"
+          },
+          {
+            "line": 7,
+            "raw_line": 9,
+            "sequence": 7,
+            "command": "/bin/bash -lc \"sed -n '521,900p' /home/simon/repos/lorq-worktrees/base-default-graphify__neutral__order-total-impact__r1/.agents/skills/graphify/SKILL.md\"",
+            "type": "tool_call",
+            "tool": "shell",
+            "backend": "codex-cli"
+          },
+          {
+            "line": 8,
+            "raw_line": 10,
+            "sequence": 8,
+            "command": "/bin/bash -lc 'test -f graphify-out/graph.json && echo yes || echo no'",
+            "type": "tool_call",
+            "tool": "shell",
+            "backend": "codex-cli"
+          },
+          {
+            "line": 9,
+            "raw_line": 11,
+            "sequence": 9,
+            "command": "/bin/bash -lc 'test -f graphify-out/graph.json && echo yes || echo no'",
+            "type": "tool_call",
+            "tool": "shell",
+            "backend": "codex-cli"
+          },
+          {
+            "line": 10,
+            "raw_line": 12,
+            "sequence": 10,
+            "command": "/bin/bash -lc \"test -f graphify-out/wiki/index.md && sed -n '1,180p' graphify-out/wiki/index.md || true\"",
+            "type": "tool_call",
+            "tool": "shell",
+            "backend": "codex-cli"
+          },
+          {
+            "line": 11,
+            "raw_line": 13,
+            "sequence": 11,
+            "command": "/bin/bash -lc \"test -f graphify-out/wiki/index.md && sed -n '1,180p' graphify-out/wiki/index.md || true\"",
+            "type": "tool_call",
+            "tool": "shell",
+            "backend": "codex-cli"
+          },
+          {
+            "line": 13,
+            "raw_line": 15,
+            "sequence": 13,
+            "command": "/bin/bash -lc 'graphify query \"In nopCommerce, if I change the order total calculation contract, what services, plugins, checkout code, payment code, discount code, tax code, and tests are likely affected? Return key source files and relationship evidence.\" --budget 5000'",
+            "type": "tool_call",
+            "tool": "shell",
+            "backend": "codex-cli"
+          },
+          {
+            "line": 14,
+            "raw_line": 16,
+            "sequence": 14,
+            "command": "/bin/bash -lc 'graphify query \"In nopCommerce, if I change the order total calculation contract, what services, plugins, checkout code, payment code, discount code, tax code, and tests are likely affected? Return key source files and relationship evidence.\" --budget 5000'",
+            "type": "tool_call",
+            "tool": "shell",
+            "backend": "codex-cli"
+          },
+          {
+            "line": 16,
+            "raw_line": 18,
+            "sequence": 16,
+            "command": "/bin/bash -lc 'rg -n \"interface IOrderTotal|class OrderTotal|OrderTotalCalculation|GetShoppingCartTotal|UpdateOrderTotals|CalculateOrder\" src test -S'",
+            "type": "tool_call",
+            "tool": "shell",
+            "backend": "codex-cli"
+          },
+          {
+            "line": 17,
+            "raw_line": 19,
+            "sequence": 17,
+            "command": "/bin/bash -lc 'rg -n \"interface IOrderTotal|class OrderTotal|OrderTotalCalculation|GetShoppingCartTotal|UpdateOrderTotals|CalculateOrder\" src test -S'",
+            "type": "tool_call",
+            "tool": "shell",
+            "backend": "codex-cli"
+          },
+          {
+            "line": 18,
+            "raw_line": 20,
+            "sequence": 18,
+            "command": "/bin/bash -lc 'graphify query \"IOrderTotalCalculationService OrderTotalCalculationService GetShoppingCartTotal GetShoppingCartSubTotal order total calculation nopCommerce\" --budget 6000'",
+            "type": "tool_call",
+            "tool": "shell",
+            "backend": "codex-cli"
+          },
+          {
+            "line": 19,
+            "raw_line": 21,
+            "sequence": 19,
+            "command": "/bin/bash -lc 'graphify query \"IOrderTotalCalculationService OrderTotalCalculationService GetShoppingCartTotal GetShoppingCartSubTotal order total calculation nopCommerce\" --budget 6000'",
+            "type": "tool_call",
+            "tool": "shell",
+            "backend": "codex-cli"
+          },
+          {
+            "line": 21,
+            "raw_line": 23,
+            "sequence": 21,
+            "command": "/bin/bash -lc \"sed -n '1,170p' src/Libraries/Nop.Services/Orders/OrderTotalCalculationService.cs\"",
+            "type": "tool_call",
+            "tool": "shell",
+            "backend": "codex-cli"
+          },
+          {
+            "line": 22,
+            "raw_line": 24,
+            "sequence": 22,
+            "command": "/bin/bash -lc \"sed -n '1,170p' src/Libraries/Nop.Services/Orders/OrderTotalCalculationService.cs\"",
+            "type": "tool_call",
+            "tool": "shell",
+            "backend": "codex-cli"
+          },
+          {
+            "line": 23,
+            "raw_line": 25,
+            "sequence": 23,
+            "command": "/bin/bash -lc \"sed -n '1,180p' src/Libraries/Nop.Services/Orders/IOrderTotalCalculationService.cs\"",
+            "type": "tool_call",
+            "tool": "shell",
+            "backend": "codex-cli"
+          },
+          {
+            "line": 24,
+            "raw_line": 26,
+            "sequence": 24,
+            "command": "/bin/bash -lc \"sed -n '1,180p' src/Libraries/Nop.Services/Orders/IOrderTotalCalculationService.cs\"",
+            "type": "tool_call",
+            "tool": "shell",
+            "backend": "codex-cli"
+          },
+          {
+            "line": 25,
+            "raw_line": 27,
+            "sequence": 25,
+            "command": "/bin/bash -lc \"rg -n \\\"IOrderTotalCalculationService|GetShoppingCartTotalAsync\\\\(|GetTaxTotalAsync\\\\(|GetShoppingCartSubTotalAsync\\\\(|UpdateOrderTotalsAsync\\\\(\\\" src/Plugins src/Presentation src/Libraries src/Tests -S\"",
+            "type": "tool_call",
+            "tool": "shell",
+            "backend": "codex-cli"
+          },
+          {
+            "line": 26,
+            "raw_line": 28,
+            "sequence": 26,
+            "command": "/bin/bash -lc \"rg -n \\\"IOrderTotalCalculationService|GetShoppingCartTotalAsync\\\\(|GetTaxTotalAsync\\\\(|GetShoppingCartSubTotalAsync\\\\(|UpdateOrderTotalsAsync\\\\(\\\" src/Plugins src/Presentation src/Libraries src/Tests -S\"",
+            "type": "tool_call",
+            "tool": "shell",
+            "backend": "codex-cli"
+          },
+          {
+            "line": 27,
+            "raw_line": 29,
+            "sequence": 27,
+            "command": "/bin/bash -lc 'graphify path \"IOrderTotalCalculationService\" \"CheckoutModelFactory\"'",
+            "type": "tool_call",
+            "tool": "shell",
+            "backend": "codex-cli"
+          },
+          {
+            "line": 28,
+            "raw_line": 30,
+            "sequence": 28,
+            "command": "/bin/bash -lc 'graphify path \"IOrderTotalCalculationService\" \"PayPalCommerceServiceManager\"'",
+            "type": "tool_call",
+            "tool": "shell",
+            "backend": "codex-cli"
+          },
+          {
+            "line": 29,
+            "raw_line": 31,
+            "sequence": 29,
+            "command": "/bin/bash -lc 'graphify path \"IOrderTotalCalculationService\" \"OrderTotalCalculationServiceTests\"'",
+            "type": "tool_call",
+            "tool": "shell",
+            "backend": "codex-cli"
+          },
+          {
+            "line": 30,
+            "raw_line": 32,
+            "sequence": 30,
+            "command": "/bin/bash -lc 'graphify path \"IOrderTotalCalculationService\" \"PayPalCommerceServiceManager\"'",
+            "type": "tool_call",
+            "tool": "shell",
+            "backend": "codex-cli"
+          },
+          {
+            "line": 31,
+            "raw_line": 33,
+            "sequence": 31,
+            "command": "/bin/bash -lc 'graphify path \"IOrderTotalCalculationService\" \"CheckoutModelFactory\"'",
+            "type": "tool_call",
+            "tool": "shell",
+            "backend": "codex-cli"
+          },
+          {
+            "line": 32,
+            "raw_line": 34,
+            "sequence": 32,
+            "command": "/bin/bash -lc 'graphify path \"IOrderTotalCalculationService\" \"OrderTotalCalculationServiceTests\"'",
+            "type": "tool_call",
+            "tool": "shell",
+            "backend": "codex-cli"
+          },
+          {
+            "line": 34,
+            "raw_line": 36,
+            "sequence": 34,
+            "command": "/bin/bash -lc \"sed -n '1290,1455p' src/Libraries/Nop.Services/Orders/OrderTotalCalculationService.cs\"",
+            "type": "tool_call",
+            "tool": "shell",
+            "backend": "codex-cli"
+          },
+          {
+            "line": 35,
+            "raw_line": 37,
+            "sequence": 35,
+            "command": "/bin/bash -lc \"sed -n '1290,1455p' src/Libraries/Nop.Services/Orders/OrderTotalCalculationService.cs\"",
+            "type": "tool_call",
+            "tool": "shell",
+            "backend": "codex-cli"
+          },
+          {
+            "line": 36,
+            "raw_line": 38,
+            "sequence": 36,
+            "command": "/bin/bash -lc \"sed -n '960,1065p' src/Libraries/Nop.Services/Orders/OrderTotalCalculationService.cs\"",
+            "type": "tool_call",
+            "tool": "shell",
+            "backend": "codex-cli"
+          },
+          {
+            "line": 37,
+            "raw_line": 39,
+            "sequence": 37,
+            "command": "/bin/bash -lc \"sed -n '960,1065p' src/Libraries/Nop.Services/Orders/OrderTotalCalculationService.cs\"",
+            "type": "tool_call",
+            "tool": "shell",
+            "backend": "codex-cli"
+          },
+          {
+            "line": 38,
+            "raw_line": 40,
+            "sequence": 38,
+            "command": "/bin/bash -lc \"sed -n '800,920p' src/Libraries/Nop.Services/Orders/OrderTotalCalculationService.cs\"",
+            "type": "tool_call",
+            "tool": "shell",
+            "backend": "codex-cli"
+          },
+          {
+            "line": 39,
+            "raw_line": 41,
+            "sequence": 39,
+            "command": "/bin/bash -lc \"sed -n '800,920p' src/Libraries/Nop.Services/Orders/OrderTotalCalculationService.cs\"",
+            "type": "tool_call",
+            "tool": "shell",
+            "backend": "codex-cli"
+          },
+          {
+            "line": 40,
+            "raw_line": 42,
+            "sequence": 40,
+            "command": "/bin/bash -lc \"sed -n '360,405p' src/Libraries/Nop.Services/Orders/OrderProcessingService.cs && sed -n '1688,1740p' src/Libraries/Nop.Services/Orders/OrderProcessingService.cs && sed -n '3158,3222p' src/Libraries/Nop.Services/Orders/OrderProcessingService.cs\"",
+            "type": "tool_call",
+            "tool": "shell",
+            "backend": "codex-cli"
+          },
+          {
+            "line": 41,
+            "raw_line": 43,
+            "sequence": 41,
+            "command": "/bin/bash -lc \"sed -n '360,405p' src/Libraries/Nop.Services/Orders/OrderProcessingService.cs && sed -n '1688,1740p' src/Libraries/Nop.Services/Orders/OrderProcessingService.cs && sed -n '3158,3222p' src/Libraries/Nop.Services/Orders/OrderProcessingService.cs\"",
+            "type": "tool_call",
+            "tool": "shell",
+            "backend": "codex-cli"
+          },
+          {
+            "line": 42,
+            "raw_line": 44,
+            "sequence": 42,
+            "command": "/bin/bash -lc \"sed -n '720,760p' src/Libraries/Nop.Services/Tax/TaxService.cs && sed -n '150,176p' src/Plugins/Nop.Plugin.Tax.FixedOrByCountryStateZip/FixedOrByCountryStateZipTaxProvider.cs && sed -n '1334,1350p' src/Plugins/Nop.Plugin.Tax.Avalara/Services/AvalaraTaxManager.cs\"",
+            "type": "tool_call",
+            "tool": "shell",
+            "backend": "codex-cli"
+          },
+          {
+            "line": 43,
+            "raw_line": 45,
+            "sequence": 43,
+            "command": "/bin/bash -lc \"sed -n '100,185p' src/Libraries/Nop.Services/Orders/OrderTotalCalculationService.cs && sed -n '220,310p' src/Libraries/Nop.Services/Orders/OrderTotalCalculationService.cs\"",
+            "type": "tool_call",
+            "tool": "shell",
+            "backend": "codex-cli"
+          },
+          {
+            "line": 44,
+            "raw_line": 46,
+            "sequence": 44,
+            "command": "/bin/bash -lc \"sed -n '100,185p' src/Libraries/Nop.Services/Orders/OrderTotalCalculationService.cs && sed -n '220,310p' src/Libraries/Nop.Services/Orders/OrderTotalCalculationService.cs\"",
+            "type": "tool_call",
+            "tool": "shell",
+            "backend": "codex-cli"
+          },
+          {
+            "line": 45,
+            "raw_line": 47,
+            "sequence": 45,
+            "command": "/bin/bash -lc \"sed -n '720,760p' src/Libraries/Nop.Services/Tax/TaxService.cs && sed -n '150,176p' src/Plugins/Nop.Plugin.Tax.FixedOrByCountryStateZip/FixedOrByCountryStateZipTaxProvider.cs && sed -n '1334,1350p' src/Plugins/Nop.Plugin.Tax.Avalara/Services/AvalaraTaxManager.cs\"",
+            "type": "tool_call",
+            "tool": "shell",
+            "backend": "codex-cli"
+          },
+          {
+            "line": 46,
+            "raw_line": 48,
+            "sequence": 46,
+            "command": "/bin/bash -lc \"sed -n '20,40p' src/Presentation/Nop.Web.Framework/Infrastructure/NopStartup.cs && sed -n '190,206p' src/Presentation/Nop.Web.Framework/Infrastructure/NopStartup.cs && sed -n '365,378p' src/Tests/Nop.Tests/BaseNopTest.cs\"",
+            "type": "tool_call",
+            "tool": "shell",
+            "backend": "codex-cli"
+          },
+          {
+            "line": 47,
+            "raw_line": 49,
+            "sequence": 47,
+            "command": "/bin/bash -lc \"sed -n '20,40p' src/Presentation/Nop.Web.Framework/Infrastructure/NopStartup.cs && sed -n '190,206p' src/Presentation/Nop.Web.Framework/Infrastructure/NopStartup.cs && sed -n '365,378p' src/Tests/Nop.Tests/BaseNopTest.cs\"",
+            "type": "tool_call",
+            "tool": "shell",
+            "backend": "codex-cli"
+          },
+          {
+            "line": 49,
+            "raw_line": 51,
+            "sequence": 49,
+            "command": "/bin/bash -lc \"nl -ba src/Libraries/Nop.Services/Orders/OrderTotalCalculationService.cs | sed -n '20,90p;110,165p;820,835p;990,1003p;1303,1440p'\"",
+            "type": "tool_call",
+            "tool": "shell",
+            "backend": "codex-cli"
+          },
+          {
+            "line": 50,
+            "raw_line": 52,
+            "sequence": 50,
+            "command": "/bin/bash -lc \"nl -ba src/Libraries/Nop.Services/Orders/OrderTotalCalculationService.cs | sed -n '20,90p;110,165p;820,835p;990,1003p;1303,1440p'\"",
+            "type": "tool_call",
+            "tool": "shell",
+            "backend": "codex-cli"
+          },
+          {
+            "line": 51,
+            "raw_line": 53,
+            "sequence": 51,
+            "command": "/bin/bash -lc \"nl -ba src/Libraries/Nop.Services/Orders/IOrderTotalCalculationService.cs | sed -n '1,170p'\"",
+            "type": "tool_call",
+            "tool": "shell",
+            "backend": "codex-cli"
+          },
+          {
+            "line": 52,
+            "raw_line": 54,
+            "sequence": 52,
+            "command": "/bin/bash -lc \"nl -ba src/Libraries/Nop.Services/Orders/IOrderTotalCalculationService.cs | sed -n '1,170p'\"",
+            "type": "tool_call",
+            "tool": "shell",
+            "backend": "codex-cli"
+          },
+          {
+            "line": 53,
+            "raw_line": 55,
+            "sequence": 53,
+            "command": "/bin/bash -lc \"nl -ba src/Libraries/Nop.Services/Orders/OrderProcessingService.cs | sed -n '58,120p;374,399p;1699,1736p;3167,3220p'\"",
+            "type": "tool_call",
+            "tool": "shell",
+            "backend": "codex-cli"
+          },
+          {
+            "line": 54,
+            "raw_line": 56,
+            "sequence": 54,
+            "command": "/bin/bash -lc \"nl -ba src/Libraries/Nop.Services/Orders/OrderProcessingService.cs | sed -n '58,120p;374,399p;1699,1736p;3167,3220p'\"",
+            "type": "tool_call",
+            "tool": "shell",
+            "backend": "codex-cli"
+          },
+          {
+            "line": 55,
+            "raw_line": 57,
+            "sequence": 55,
+            "command": "/bin/bash -lc \"nl -ba src/Presentation/Nop.Web/Factories/ShoppingCartModelFactory.cs | sed -n '64,125p;1068,1084p;1188,1285p'\"",
+            "type": "tool_call",
+            "tool": "shell",
+            "backend": "codex-cli"
+          },
+          {
+            "line": 56,
+            "raw_line": 58,
+            "sequence": 56,
+            "command": "/bin/bash -lc \"nl -ba src/Presentation/Nop.Web/Factories/ShoppingCartModelFactory.cs | sed -n '64,125p;1068,1084p;1188,1285p'\"",
+            "type": "tool_call",
+            "tool": "shell",
+            "backend": "codex-cli"
+          },
+          {
+            "line": 57,
+            "raw_line": 59,
+            "sequence": 57,
+            "command": "/bin/bash -lc \"nl -ba src/Presentation/Nop.Web/Factories/CheckoutModelFactory.cs | sed -n '39,82p;506,518p'\"",
+            "type": "tool_call",
+            "tool": "shell",
+            "backend": "codex-cli"
+          },
+          {
+            "line": 58,
+            "raw_line": 60,
+            "sequence": 58,
+            "command": "/bin/bash -lc \"nl -ba src/Presentation/Nop.Web/Factories/CheckoutModelFactory.cs | sed -n '39,82p;506,518p'\"",
+            "type": "tool_call",
+            "tool": "shell",
+            "backend": "codex-cli"
+          },
+          {
+            "line": 59,
+            "raw_line": 61,
+            "sequence": 59,
+            "command": "/bin/bash -lc \"nl -ba src/Plugins/Nop.Plugin.Payments.PayPalCommerce/Services/PayPalCommerceServiceManager.cs | sed -n '69,116p;226,242p;548,571p;2142,2150p'\"",
+            "type": "tool_call",
+            "tool": "shell",
+            "backend": "codex-cli"
+          },
+          {
+            "line": 60,
+            "raw_line": 62,
+            "sequence": 60,
+            "command": "/bin/bash -lc \"nl -ba src/Plugins/Nop.Plugin.Payments.PayPalCommerce/Services/PayPalCommerceServiceManager.cs | sed -n '69,116p;226,242p;548,571p;2142,2150p'\"",
+            "type": "tool_call",
+            "tool": "shell",
+            "backend": "codex-cli"
+          },
+          {
+            "line": 61,
+            "raw_line": 63,
+            "sequence": 61,
+            "command": "/bin/bash -lc \"nl -ba src/Plugins/Nop.Plugin.Payments.CheckMoneyOrder/CheckMoneyOrderPaymentProcessor.cs | sed -n '18,36p;78,106p' && nl -ba src/Plugins/Nop.Plugin.Payments.Manual/ManualPaymentProcessor.cs | sed -n '20,38p;80,108p'\"",
+            "type": "tool_call",
+            "tool": "shell",
+            "backend": "codex-cli"
+          },
+          {
+            "line": 62,
+            "raw_line": 64,
+            "sequence": 62,
+            "command": "/bin/bash -lc \"nl -ba src/Plugins/Nop.Plugin.Payments.CheckMoneyOrder/CheckMoneyOrderPaymentProcessor.cs | sed -n '18,36p;78,106p' && nl -ba src/Plugins/Nop.Plugin.Payments.Manual/ManualPaymentProcessor.cs | sed -n '20,38p;80,108p'\"",
+            "type": "tool_call",
+            "tool": "shell",
+            "backend": "codex-cli"
+          },
+          {
+            "line": 64,
+            "raw_line": 66,
+            "sequence": 64,
+            "command": "/bin/bash -lc \"nl -ba src/Plugins/Nop.Plugin.Tax.FixedOrByCountryStateZip/FixedOrByCountryStateZipTaxProvider.cs | sed -n '27,51p;152,170p'\nnl -ba src/Plugins/Nop.Plugin.Tax.Avalara/Services/AvalaraTaxManager.cs | sed -n '42,85p;1338,1345p'\nnl -ba src/Libraries/Nop.Services/Tax/TaxService.cs | sed -n '731,748p'\"",
+            "type": "tool_call",
+            "tool": "shell",
+            "backend": "codex-cli"
+          },
+          {
+            "line": 65,
+            "raw_line": 67,
+            "sequence": 65,
+            "command": "/bin/bash -lc \"nl -ba src/Plugins/Nop.Plugin.Tax.FixedOrByCountryStateZip/FixedOrByCountryStateZipTaxProvider.cs | sed -n '27,51p;152,170p'\nnl -ba src/Plugins/Nop.Plugin.Tax.Avalara/Services/AvalaraTaxManager.cs | sed -n '42,85p;1338,1345p'\nnl -ba src/Libraries/Nop.Services/Tax/TaxService.cs | sed -n '731,748p'\"",
+            "type": "tool_call",
+            "tool": "shell",
+            "backend": "codex-cli"
+          },
+          {
+            "line": 66,
+            "raw_line": 68,
+            "sequence": 66,
+            "command": "/bin/bash -lc \"nl -ba src/Plugins/Nop.Plugin.Misc.Brevo/Services/MarketingAutomationManager.cs | sed -n '34,66p;136,145p'\nnl -ba src/Plugins/Nop.Plugin.Misc.Omnisend/Services/OmnisendService.cs | sed -n '27,60p;454,460p'\nnl -ba src/Plugins/Nop.Plugin.Misc.Omnisend/Services/OmnisendEventsService.cs | sed -n '41,78p;233,239p'\nnl -ba src/Plugins/Nop.Plugin.Widgets.FacebookPixel/Services/FacebookPixelService.cs | sed -n '50,82p;814,820p'\nnl -ba src/Plugins/Nop.Plugin.Shipping.UPS/Services/UPSService.cs | sed -n '53,83p;564,602p;688,694p'\"",
+            "type": "tool_call",
+            "tool": "shell",
+            "backend": "codex-cli"
+          },
+          {
+            "line": 67,
+            "raw_line": 69,
+            "sequence": 67,
+            "command": "/bin/bash -lc \"nl -ba src/Plugins/Nop.Plugin.Misc.Brevo/Services/MarketingAutomationManager.cs | sed -n '34,66p;136,145p'\nnl -ba src/Plugins/Nop.Plugin.Misc.Omnisend/Services/OmnisendService.cs | sed -n '27,60p;454,460p'\nnl -ba src/Plugins/Nop.Plugin.Misc.Omnisend/Services/OmnisendEventsService.cs | sed -n '41,78p;233,239p'\nnl -ba src/Plugins/Nop.Plugin.Widgets.FacebookPixel/Services/FacebookPixelService.cs | sed -n '50,82p;814,820p'\nnl -ba src/Plugins/Nop.Plugin.Shipping.UPS/Services/UPSService.cs | sed -n '53,83p;564,602p;688,694p'\"",
+            "type": "tool_call",
+            "tool": "shell",
+            "backend": "codex-cli"
+          },
+          {
+            "line": 68,
+            "raw_line": 70,
+            "sequence": 68,
+            "command": "/bin/bash -lc \"nl -ba src/Tests/Nop.Tests/Nop.Services.Tests/Orders/OrderTotalCalculationServiceTests.cs | sed -n '20,110p;175,194p;508,548p;561,607p;664,685p;700,733p'\nnl -ba src/Tests/Nop.Tests/Nop.Services.Tests/Tax/FixedRateTestTaxProvider.cs | sed -n '10,22p;48,66p'\"",
+            "type": "tool_call",
+            "tool": "shell",
+            "backend": "codex-cli"
+          },
+          {
+            "line": 69,
+            "raw_line": 71,
+            "sequence": 69,
+            "command": "/bin/bash -lc \"nl -ba src/Tests/Nop.Tests/Nop.Services.Tests/Orders/OrderTotalCalculationServiceTests.cs | sed -n '20,110p;175,194p;508,548p;561,607p;664,685p;700,733p'\nnl -ba src/Tests/Nop.Tests/Nop.Services.Tests/Tax/FixedRateTestTaxProvider.cs | sed -n '10,22p;48,66p'\"",
+            "type": "tool_call",
+            "tool": "shell",
+            "backend": "codex-cli"
+          },
+          {
+            "line": 70,
+            "raw_line": 72,
+            "sequence": 70,
+            "command": "/bin/bash -lc \"nl -ba src/Presentation/Nop.Web.Framework/Infrastructure/NopStartup.cs | sed -n '196,203p'\nnl -ba src/Tests/Nop.Tests/BaseNopTest.cs | sed -n '370,376p'\nnl -ba src/Presentation/Nop.Web/Areas/Admin/Controllers/OrderController.cs | sed -n '1208,1252p;1308,1320p;1638,1645p'\"",
+            "type": "tool_call",
+            "tool": "shell",
+            "backend": "codex-cli"
+          },
+          {
+            "line": 71,
+            "raw_line": 73,
+            "sequence": 71,
+            "command": "/bin/bash -lc \"nl -ba src/Presentation/Nop.Web.Framework/Infrastructure/NopStartup.cs | sed -n '196,203p'\nnl -ba src/Tests/Nop.Tests/BaseNopTest.cs | sed -n '370,376p'\nnl -ba src/Presentation/Nop.Web/Areas/Admin/Controllers/OrderController.cs | sed -n '1208,1252p;1308,1320p;1638,1645p'\"",
+            "type": "tool_call",
+            "tool": "shell",
+            "backend": "codex-cli"
+          }
+        ],
+        "search_count": 4,
+        "source_read_count": 48,
+        "graphify_command_count": 20,
+        "graphify_query_count": 4,
+        "generic_graphify_query_count": 0,
+        "specific_graphify_query_count": 4,
+        "graphify_queries": [
+          {
+            "command": "/bin/bash -lc 'graphify query \"In nopCommerce, if I change the order total calculation contract, what services, plugins, checkout code, payment code, discount code, tax code, and tests are likely affected? Return key source files and relationship evidence.\" --budget 5000'",
+            "query": "In nopCommerce, if I change the order total calculation contract, what services, plugins, checkout code, payment code, discount code, tax code, and tests are likely affected? Return key source files and relationship evidence. 5000",
+            "words": [
+              "In",
+              "nopCommerce",
+              "if",
+              "I",
+              "change",
+              "the",
+              "order",
+              "total",
+              "calculation",
+              "contract",
+              "what",
+              "services",
+              "plugins",
+              "checkout",
+              "code",
+              "payment",
+              "code",
+              "discount",
+              "code",
+              "tax",
+              "code",
+              "and",
+              "tests",
+              "are",
+              "likely",
+              "affected",
+              "Return",
+              "key",
+              "source",
+              "files",
+              "and",
+              "relationship",
+              "evidence"
+            ],
+            "symbol_like_terms": [],
+            "generic_terms": [
+              "order",
+              "plugins",
+              "services"
+            ],
+            "is_specific": true,
+            "is_generic": false,
+            "line": 13,
+            "backend": "codex-cli"
+          },
+          {
+            "command": "/bin/bash -lc 'graphify query \"In nopCommerce, if I change the order total calculation contract, what services, plugins, checkout code, payment code, discount code, tax code, and tests are likely affected? Return key source files and relationship evidence.\" --budget 5000'",
+            "query": "In nopCommerce, if I change the order total calculation contract, what services, plugins, checkout code, payment code, discount code, tax code, and tests are likely affected? Return key source files and relationship evidence. 5000",
+            "words": [
+              "In",
+              "nopCommerce",
+              "if",
+              "I",
+              "change",
+              "the",
+              "order",
+              "total",
+              "calculation",
+              "contract",
+              "what",
+              "services",
+              "plugins",
+              "checkout",
+              "code",
+              "payment",
+              "code",
+              "discount",
+              "code",
+              "tax",
+              "code",
+              "and",
+              "tests",
+              "are",
+              "likely",
+              "affected",
+              "Return",
+              "key",
+              "source",
+              "files",
+              "and",
+              "relationship",
+              "evidence"
+            ],
+            "symbol_like_terms": [],
+            "generic_terms": [
+              "order",
+              "plugins",
+              "services"
+            ],
+            "is_specific": true,
+            "is_generic": false,
+            "line": 14,
+            "backend": "codex-cli"
+          },
+          {
+            "command": "/bin/bash -lc 'graphify query \"IOrderTotalCalculationService OrderTotalCalculationService GetShoppingCartTotal GetShoppingCartSubTotal order total calculation nopCommerce\" --budget 6000'",
+            "query": "IOrderTotalCalculationService OrderTotalCalculationService GetShoppingCartTotal GetShoppingCartSubTotal order total calculation nopCommerce 6000",
+            "words": [
+              "IOrderTotalCalculationService",
+              "OrderTotalCalculationService",
+              "GetShoppingCartTotal",
+              "GetShoppingCartSubTotal",
+              "order",
+              "total",
+              "calculation",
+              "nopCommerce"
+            ],
+            "symbol_like_terms": [
+              "GetShoppingCartSubTotal",
+              "GetShoppingCartTotal",
+              "IOrderTotalCalculationService",
+              "OrderTotalCalculationService"
+            ],
+            "generic_terms": [
+              "order"
+            ],
+            "is_specific": true,
+            "is_generic": false,
+            "line": 18,
+            "backend": "codex-cli"
+          },
+          {
+            "command": "/bin/bash -lc 'graphify query \"IOrderTotalCalculationService OrderTotalCalculationService GetShoppingCartTotal GetShoppingCartSubTotal order total calculation nopCommerce\" --budget 6000'",
+            "query": "IOrderTotalCalculationService OrderTotalCalculationService GetShoppingCartTotal GetShoppingCartSubTotal order total calculation nopCommerce 6000",
+            "words": [
+              "IOrderTotalCalculationService",
+              "OrderTotalCalculationService",
+              "GetShoppingCartTotal",
+              "GetShoppingCartSubTotal",
+              "order",
+              "total",
+              "calculation",
+              "nopCommerce"
+            ],
+            "symbol_like_terms": [
+              "GetShoppingCartSubTotal",
+              "GetShoppingCartTotal",
+              "IOrderTotalCalculationService",
+              "OrderTotalCalculationService"
+            ],
+            "generic_terms": [
+              "order"
+            ],
+            "is_specific": true,
+            "is_generic": false,
+            "line": 19,
+            "backend": "codex-cli"
+          }
+        ],
+        "source_after_graph": true,
+        "first_graph_line": 13,
+        "first_source_line": 2
+      }
+    },
+    "checks": [
+      {
+        "type": "answer_not_empty",
+        "ok": true,
+        "message": "answer.md should contain a non-empty final answer"
+      },
+      {
+        "type": "required_symbol",
+        "value": "IOrderTotalCalculationService",
+        "ok": true
+      },
+      {
+        "type": "required_symbol",
+        "value": "OrderTotalCalculationService",
+        "ok": true
+      },
+      {
+        "type": "required_symbol",
+        "value": "OrderProcessingService",
+        "ok": true
+      },
+      {
+        "type": "required_file",
+        "value": "src/Libraries/Nop.Services/Orders/IOrderTotalCalculationService.cs",
+        "ok": true
+      },
+      {
+        "type": "required_file_exists",
+        "value": "src/Libraries/Nop.Services/Orders/IOrderTotalCalculationService.cs",
+        "ok": true,
+        "message": "required file path should exist in the evaluated worktree"
+      },
+      {
+        "type": "required_file",
+        "value": "src/Libraries/Nop.Services/Orders/OrderTotalCalculationService.cs",
+        "ok": true
+      },
+      {
+        "type": "required_file_exists",
+        "value": "src/Libraries/Nop.Services/Orders/OrderTotalCalculationService.cs",
+        "ok": true,
+        "message": "required file path should exist in the evaluated worktree"
+      },
+      {
+        "type": "expected_concept",
+        "value": "checkout",
+        "ok": true,
+        "soft": true
+      },
+      {
+        "type": "expected_concept",
+        "value": "payment",
+        "ok": true,
+        "soft": true
+      },
+      {
+        "type": "expected_concept",
+        "value": "discount",
+        "ok": true,
+        "soft": true
+      },
+      {
+        "type": "expected_concept",
+        "value": "tax",
+        "ok": true,
+        "soft": true
+      },
+      {
+        "type": "expected_concept",
+        "value": "plugin",
+        "ok": true,
+        "soft": true
+      },
+      {
+        "type": "expected_concept",
+        "value": "tests",
+        "ok": true,
+        "soft": true
+      },
+      {
+        "type": "minimum_existing_file_references",
+        "ok": false,
+        "actual": 0,
+        "expected_min": 4
+      },
+      {
+        "type": "minimum_source_files",
+        "ok": false,
+        "actual": 0,
+        "expected_min": 4
+      },
+      {
+        "type": "max_missing_cited_files",
+        "ok": true,
+        "actual": 0,
+        "expected_max": 0
+      },
+      {
+        "type": "source_verification_observed",
+        "ok": true,
+        "actual_source_read_count": 48,
+        "soft": true
+      }
+    ],
+    "schema_version": "agent-eval.validation-result.v1",
+    "contract_version": "agent-eval.contract.v1"
+  },
+  "schema_version": "agent-eval.result.v1",
+  "contract_version": "agent-eval.contract.v1"
+}

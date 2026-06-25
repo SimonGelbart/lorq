@@ -1,0 +1,9 @@
+Answer the following repository exploration task.
+
+Use the repository, available files, and available tools as needed.
+Prefer source-backed evidence. If you use derived artifacts, verify important claims against source files.
+
+Task:
+In nopCommerce, trace how a product added to cart flows into order creation.
+Return the key source files and call/relationship evidence from cart mutation
+through checkout, order placement, order item persistence, and cart cleanup.

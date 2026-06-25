@@ -1,0 +1,514 @@
+<!doctype html>
+<html lang="fr" data-theme="light">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Graphes de code & contexte IA — LORQ Benchmark</title>
+<style>
+:root {
+  color-scheme: light;
+  --bg: #f8f4ec;
+  --paper: #fffdfa;
+  --panel: #fbf7ef;
+  --surface: #f0e9df;
+  --text: #25221d;
+  --muted: #655f56;
+  --quiet: #877d70;
+  --border: #ddd2c1;
+  --border-strong: #c8baa5;
+  --library: #8daa90;
+  --library-soft: #e8efe3;
+  --good: #7f9f81;
+  --good-soft: #e8efe3;
+  --warn: #c5a15c;
+  --warn-soft: #f3ead5;
+  --bad: #b57765;
+  --bad-soft: #f0dfd8;
+  --project-accent: var(--library);
+  --project-accent-soft: var(--library-soft);
+  --radius: 16px;
+  --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme]) {
+    color-scheme: dark;
+    --bg: #1c1a17;
+    --paper: #24211d;
+    --panel: #2a261f;
+    --surface: #332d25;
+    --text: #f2eadf;
+    --muted: #c8bdae;
+    --quiet: #a99f92;
+    --border: #4b4337;
+    --border-strong: #635846;
+    --library: #9db99f;
+    --library-soft: #263528;
+    --good: #9db99f;
+    --good-soft: #263528;
+    --warn: #d2b878;
+    --warn-soft: #443923;
+    --bad: #cf8f7b;
+    --bad-soft: #442a23;
+  }
+}
+html[data-theme='light'] { color-scheme: light; --bg: #f8f4ec; --paper: #fffdfa; --panel: #fbf7ef; --surface: #f0e9df; --text: #25221d; --muted: #655f56; --quiet: #877d70; --border: #ddd2c1; --border-strong: #c8baa5; --library: #8daa90; --library-soft: #e8efe3; --good: #7f9f81; --good-soft: #e8efe3; --warn: #c5a15c; --warn-soft: #f3ead5; --bad: #b57765; --bad-soft: #f0dfd8; }
+html[data-theme='dark'] { color-scheme: dark; --bg: #1c1a17; --paper: #24211d; --panel: #2a261f; --surface: #332d25; --text: #f2eadf; --muted: #c8bdae; --quiet: #a99f92; --border: #4b4337; --border-strong: #635846; --library: #9db99f; --library-soft: #263528; --good: #9db99f; --good-soft: #263528; --warn: #d2b878; --warn-soft: #443923; --bad: #cf8f7b; --bad-soft: #442a23; }
+
+* { box-sizing: border-box; }
+html { background: var(--bg); scroll-behavior: smooth; scroll-snap-type: y mandatory; }
+body { margin: 0; color: var(--text); background: linear-gradient(180deg, color-mix(in srgb, var(--paper) 68%, transparent), transparent 24rem), var(--bg); font-family: Lato, ui-sans-serif, system-ui, sans-serif; line-height: 1.55; overflow-x: hidden; }
+a { color: inherit; text-decoration-color: color-mix(in srgb, currentColor 36%, transparent); text-underline-offset: .2em; }
+a:hover { color: color-mix(in srgb, var(--text) 72%, var(--project-accent)); }
+code, pre { font-family: var(--mono); font-size: .92em; }
+pre { overflow-x: auto; padding: 1rem; border: 1px solid var(--border); border-radius: var(--radius); background: var(--surface); }
+
+.site-header { position: fixed; inset: 0 0 auto 0; z-index: 30; backdrop-filter: blur(18px); background: color-mix(in srgb, var(--paper) 86%, transparent); border-bottom: 1px solid var(--border); }
+.header-inner { width: min(1280px, calc(100% - 2rem)); margin-inline: auto; display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: .75rem 0; }
+.brand { display: inline-flex; gap: .45rem; font-weight: 900; letter-spacing: -.02em; text-decoration: none; white-space: nowrap; }
+.brand small { color: var(--quiet); font-family: var(--mono); font-size: .72rem; font-weight: 400; letter-spacing: .08em; text-transform: uppercase; }
+.nav-strip { flex: 1; display: flex; gap: .35rem; justify-content: center; overflow-x: auto; padding: .15rem .3rem; scrollbar-width: thin; }
+.nav-strip a { flex: 0 0 auto; display: inline-flex; align-items: center; min-height: 2rem; padding: .35rem .58rem; border: 1px solid transparent; border-radius: 999px; color: var(--muted); text-decoration: none; font-family: var(--mono); font-size: .73rem; }
+.nav-strip a:hover, .nav-strip a:focus { background: var(--surface); border-color: var(--border); color: var(--text); outline: none; }
+.theme-toggle { border: 1px solid var(--border); border-radius: 999px; background: var(--panel); color: var(--muted); cursor: pointer; font-family: var(--mono); font-size: .76rem; padding: .45rem .65rem; }
+.theme-toggle:hover { border-color: var(--border-strong); background: var(--surface); color: var(--text); }
+
+.deck { width: 100%; }
+.slide { min-height: 100svh; scroll-snap-align: start; display: grid; align-items: center; padding: 5.2rem 1rem 2.2rem; border-bottom: 1px solid var(--border); }
+.slide-inner { width: min(1180px, 100%); max-height: calc(100svh - 7.4rem); margin-inline: auto; overflow: auto; padding: clamp(1.25rem, 2vw, 2rem); border: 1px solid var(--border); border-radius: calc(var(--radius) + 10px); background: color-mix(in srgb, var(--paper) 76%, transparent); box-shadow: 0 22px 70px color-mix(in srgb, var(--text) 8%, transparent); }
+.title-slide .slide-inner { background: transparent; border: 0; box-shadow: none; overflow: visible; }
+.eyebrow, .slide-kicker { font-family: var(--mono); font-size: .76rem; letter-spacing: .08em; text-transform: uppercase; color: var(--quiet); }
+h1 { max-width: 1060px; font-size: clamp(3.3rem, 8vw, 6.6rem); font-weight: 300; letter-spacing: -.07em; line-height: .94; margin: .7rem 0 1.35rem; }
+h2 { font-size: clamp(2rem, 4.2vw, 4.2rem); font-weight: 330; letter-spacing: -.06em; line-height: .98; margin: .25rem 0 1.05rem; }
+h3 { font-size: 1.28rem; line-height: 1.2; letter-spacing: -.02em; margin: 0 0 .65rem; }
+p { margin: 0 0 1rem; }
+.lede { max-width: 920px; color: var(--muted); font-size: clamp(1.08rem, 2.2vw, 1.45rem); }
+.big-claim { max-width: 1020px; font-size: clamp(1.45rem, 3vw, 2.35rem); line-height: 1.16; letter-spacing: -.035em; margin: 1.25rem 0; }
+.muted { color: var(--muted); }
+.quiet { color: var(--quiet); }
+.grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1rem; }
+.grid-two { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; }
+.grid-four { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1rem; }
+.panel, .card, .note { border: 1px solid var(--border); border-radius: var(--radius); background: var(--panel); padding: clamp(1rem, 1.8vw, 1.45rem); }
+.accent { border-color: var(--project-accent); background: color-mix(in srgb, var(--project-accent-soft) 56%, var(--panel)); }
+.card p, .panel p, .note, li { color: var(--muted); }
+.stat { display: grid; gap: .25rem; }
+.stat strong { font-size: clamp(1.45rem, 3vw, 2rem); letter-spacing: -.04em; }
+.stat span, .label { color: var(--quiet); font-family: var(--mono); font-size: .73rem; text-transform: uppercase; letter-spacing: .08em; }
+.kbd, .tag { font-family: var(--mono); background: var(--surface); border: 1px solid var(--border); border-radius: 999px; padding: .14rem .48rem; white-space: nowrap; }
+.flow { display: grid; gap: .5rem; max-width: 800px; }
+.flow span { padding: .75rem 1rem; border: 1px solid var(--border); border-radius: 999px; background: var(--surface); }
+.flow span::after { content: '↓'; float: right; color: var(--quiet); }
+.flow span:last-child::after { content: ''; }
+blockquote { margin: 1.2rem 0; padding: 1.1rem 1.2rem; border-left: 4px solid var(--project-accent); background: var(--project-accent-soft); border-radius: 0 var(--radius) var(--radius) 0; color: var(--text); font-size: 1.08rem; }
+.table-wrap { overflow: auto; border: 1px solid var(--border); border-radius: var(--radius); background: var(--paper); }
+table { width: 100%; border-collapse: collapse; font-size: .92rem; }
+th, td { padding: .72rem .8rem; border-bottom: 1px solid var(--border); vertical-align: middle; text-align: left; }
+th { position: sticky; top: 0; z-index: 1; color: var(--quiet); font-family: var(--mono); font-size: .68rem; letter-spacing: .07em; text-transform: uppercase; background: var(--panel); }
+tr:last-child td { border-bottom: 0; }
+.num { font-variant-numeric: tabular-nums; white-space: nowrap; }
+.mode-graphify { font-weight: 800; }
+.bar { display: inline-flex; width: 112px; height: .55rem; border-radius: 999px; background: var(--surface); overflow: hidden; margin-right: .6rem; vertical-align: middle; border: 1px solid var(--border); }
+.bar span { display: block; background: var(--project-accent); }
+.tokens-table { min-width: 1060px; table-layout: fixed; }
+.tokens-table th:nth-child(1), .tokens-table td:nth-child(1) { width: 150px; }
+.tokens-table th:nth-child(2), .tokens-table td:nth-child(2),
+.tokens-table th:nth-child(3), .tokens-table td:nth-child(3),
+.tokens-table th:nth-child(4), .tokens-table td:nth-child(4),
+.tokens-table th:nth-child(5), .tokens-table td:nth-child(5),
+.tokens-table th:nth-child(6), .tokens-table td:nth-child(6) { width: 128px; }
+.tokens-table td { font-variant-numeric: tabular-nums; white-space: nowrap; }
+.heatmap { min-width: 900px; table-layout: fixed; }
+.heatmap th:first-child, .heatmap td:first-child { width: 245px; }
+.heatmap td { text-align: center; font-weight: 760; font-variant-numeric: tabular-nums; }
+.heat-good-3 { background: color-mix(in srgb, var(--good-soft) 85%, var(--paper)); border-color: color-mix(in srgb, var(--good) 45%, var(--border)); }
+.heat-good-2 { background: color-mix(in srgb, var(--good-soft) 66%, var(--paper)); }
+.heat-mid { background: color-mix(in srgb, var(--warn-soft) 42%, var(--paper)); }
+.heat-bad-2 { background: color-mix(in srgb, var(--bad-soft) 58%, var(--paper)); }
+.heat-bad-3 { background: color-mix(in srgb, var(--bad-soft) 82%, var(--paper)); border-color: color-mix(in srgb, var(--bad) 42%, var(--border)); }
+.win-cell { outline: 2px solid var(--good); outline-offset: -3px; }
+.lose-cell { outline: 2px solid var(--bad); outline-offset: -3px; }
+.badge { display: inline-flex; align-items: center; gap: .25rem; margin-left: .35rem; padding: .08rem .38rem; border-radius: 999px; font-family: var(--mono); font-size: .66rem; letter-spacing: .05em; text-transform: uppercase; vertical-align: middle; }
+.badge-win { background: var(--good-soft); color: var(--text); border: 1px solid color-mix(in srgb, var(--good) 50%, var(--border)); }
+.badge-lose { background: var(--bad-soft); color: var(--text); border: 1px solid color-mix(in srgb, var(--bad) 50%, var(--border)); }
+.legend { display: flex; flex-wrap: wrap; gap: .55rem; margin: .75rem 0 0; color: var(--muted); font-size: .88rem; }
+.legend span { display: inline-flex; align-items: center; gap: .35rem; }
+.legend i { width: 1.2rem; height: .75rem; border-radius: 999px; border: 1px solid var(--border); display: inline-block; }
+.slide-footer { margin-top: 1.25rem; color: var(--quiet); font-family: var(--mono); font-size: .75rem; display: flex; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
+.controls { position: fixed; right: 1rem; bottom: 1rem; z-index: 40; display: flex; gap: .5rem; }
+.controls button { border: 1px solid var(--border); border-radius: 999px; background: color-mix(in srgb, var(--paper) 90%, transparent); color: var(--muted); padding: .5rem .72rem; cursor: pointer; font-family: var(--mono); }
+.controls button:hover { background: var(--surface); color: var(--text); border-color: var(--border-strong); }
+
+@media (max-width: 980px) {
+  .header-inner { align-items: start; flex-wrap: wrap; }
+  .nav-strip { order: 3; width: 100%; justify-content: start; }
+  .slide { padding-top: 7.7rem; }
+  .slide-inner { max-height: calc(100svh - 9.5rem); }
+  .grid, .grid-two, .grid-four { grid-template-columns: 1fr; }
+  .brand small { display: none; }
+}
+
+.code-compare { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 1rem; align-items: stretch; margin-top: 1rem; }
+.code-card { display: grid; grid-template-rows: auto 1fr; min-height: 0; }
+.code-card pre { margin: 0; height: 100%; min-height: 220px; font-size: .88rem; }
+.speaker-note { display: none; margin: 1.2rem 0 0; padding: 1rem 1.15rem; border-left: 4px solid var(--project-accent); background: var(--project-accent-soft); border-radius: 0 var(--radius) var(--radius) 0; color: var(--text); font-size: 1rem; }
+.show-notes .speaker-note { display: block; }
+.note-toggle.is-active { border-color: var(--project-accent); background: var(--project-accent-soft); color: var(--text); }
+.metric-explainer { gap: 1rem; margin: .6rem 0 1rem; }
+.metric-explainer .panel { padding: 1rem 1.2rem; }
+.metric-explainer ul { margin: 0; padding-left: 1.15rem; }
+.tokens-table { min-width: 1000px; table-layout: fixed; }
+.tokens-table th:nth-child(1), .tokens-table td:nth-child(1) { width: 100px; }
+.tokens-table th:nth-child(2), .tokens-table td:nth-child(2) { width: 90px; }
+.tokens-table th:nth-child(3), .tokens-table td:nth-child(3) { width: 90px; }
+.tokens-table th:nth-child(4), .tokens-table td:nth-child(4) { width: 90px; }
+.tokens-table th:nth-child(6), .tokens-table td:nth-child(6) { width: 80px; }
+.tokens-table th:nth-child(5), .tokens-table td:nth-child(5) { width: 80px; }
+.tokens-table th:nth-child(7), .tokens-table td:nth-child(7) { width: 90px; }
+.tokens-table th:nth-child(8), .tokens-table td:nth-child(8) { width: 60px; }
+.tokens-table th:nth-child(9), .tokens-table td:nth-child(9) { width: 90px; }
+@media (max-width: 1900px) {
+  .code-compare { grid-template-columns: 1fr; }
+  .code-card pre { min-height: 160px; }
+}
+
+@media print {
+  html { scroll-snap-type: none; }
+  .site-header, .controls { display: none; }
+  .slide { min-height: auto; display: block; padding: 1rem 0; border-bottom: 1px solid #ddd; page-break-after: always; }
+  .slide-inner { max-height: none; overflow: visible; box-shadow: none; }
+  body { background: white; color: black; }
+}
+</style>
+</head>
+<body>
+<header class="site-header">
+  <div class="header-inner">
+    <a class="brand" href="#cover">LORQ <small>Graphify / CRG</small></a>
+    <nav class="nav-strip" aria-label="Navigation slides">
+      <a href="#slide-1">1 · Contexte</a>
+      <a href="#slide-2">2 · Structurer</a>
+      <a href="#slide-3">3 · AST/CST</a>
+      <a href="#slide-4">4 · Outils</a>
+      <a href="#slide-5">5 · Méthodo</a>
+      <a href="#slide-6">6 · Résultats</a>
+      <a href="#slide-7">7 · Tokens</a>
+      <a href="#slide-8">8 · Coût</a>
+      <a href="#slide-9">9 · Reco</a>
+      <a href="#annexes">Annexes</a>
+    </nav>
+    <button class="theme-toggle note-toggle" id="notesToggle" type="button" aria-pressed="false">notes</button>
+    <button class="theme-toggle" id="themeToggle" type="button">theme</button>
+  </div>
+</header>
+
+<main class="deck">
+  <section class="slide title-slide" id="cover">
+    <div class="slide-inner">
+      <div class="eyebrow">Présentation rapide · 10–15 minutes · nopCommerce</div>
+      <h1>Graphes de code et contexte IA</h1>
+      <p class="lede">Comment Graphify et Code Review Graph peuvent aider Codex/Copilot à mieux naviguer dans une codebase — et ce que le benchmark LORQ montre vraiment.</p>
+      <div class="grid" style="margin-top: 2rem;">
+        <div class="stat panel"><span>Verdict global</span><strong>Graphify</strong><p>Meilleur candidat steady-state dans ce benchmark.</p></div>
+        <div class="stat panel"><span>Nuance clé</span><strong>Qualité ≠ coût</strong><p>Le gain observé porte surtout sur la navigation et la réponse.</p></div>
+        <div class="stat panel"><span>À ne pas promettre</span><strong>- tokens garanti</strong><p>Le benchmark ne démontre pas une économie automatique.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="slide" id="slide-1">
+    <div class="slide-inner">
+      <div class="slide-kicker">Slide 1</div>
+      <h2>Pourquoi on teste ça ?</h2>
+      <p class="big-claim">Dans une grosse codebase, l’agent IA peut consommer beaucoup de tokens parce qu’il doit retrouver lui-même les bons fichiers, symboles et relations.</p>
+      <div class="grid">
+        <div class="card"><h3>Problème 1</h3><p>Le contexte brut est large : fichiers, références, tests, conventions, dépendances.</p></div>
+        <div class="card"><h3>Problème 2</h3><p>Une grande fenêtre de contexte ne garantit pas que le bon contexte est présent.</p></div>
+        <div class="card accent"><h3>Question</h3><p>Peut-on fournir moins de bruit et plus de contexte utile à Codex/Copilot ?</p></div>
+      </div>
+      <aside class="speaker-note">Note speaker : le sujet n’est pas seulement de réduire les tokens, mais d’augmenter la densité utile du contexte.</aside>
+      <div class="slide-footer"><span>Repo testé : nopCommerce</span><span>Angle : coût input IA + qualité de réponse</span></div>
+    </div>
+  </section>
+
+  <section class="slide" id="slide-2">
+    <div class="slide-inner">
+      <div class="slide-kicker">Slide 2</div>
+      <h2>Structurer le code avant de le donner à l’IA</h2>
+      <p class="big-claim">L’idée est de passer du code comme texte à une carte exploitable de la codebase.</p>
+      <div class="flow" style="margin-top: 1.4rem;">
+        <span>Code source</span>
+        <span>Arbre syntaxique : AST / CST</span>
+        <span>Symboles : classes, méthodes, fonctions, imports</span>
+        <span>Relations : appelle, dépend de, hérite, teste</span>
+        <span>Graphe de code</span>
+        <span>Contexte ciblé pour l’agent IA</span>
+      </div>
+      <div class="note accent" style="margin-top: 1.2rem;">Le graphe sert de carte de départ : il oriente la recherche, mais ne remplace pas la vérification dans le code source.</div>
+    </div>
+  </section>
+
+  <section class="slide" id="slide-3">
+    <div class="slide-inner">
+      <div class="slide-kicker">Slide 3</div>
+      <h2>AST, CST et Tree-sitter en 90 secondes</h2>
+      <p class="big-claim">Tree-sitter transforme le code texte en arbre syntaxique exploitable.</p>L’agent peut ensuite raisonner sur des symboles et des relations, plutôt que sur une simple recherche textuelle.</p>
+      <div class="code-compare" aria-label="Comparaison code source et CST simplifié">
+        <div class="panel code-card">
+          <h3>Code source</h3>
+          <pre><code>public decimal Add(decimal a, decimal b)
+{
+    return a + b;
+}</code></pre>
+        </div>
+        <div class="panel code-card accent">
+          <h3>CST simplifié</h3>
+          <pre><code>method_declaration
+├── modifier: public
+├── return_type: decimal
+├── name: Add
+├── parameters
+│   ├── decimal a
+│   └── decimal b
+└── body
+    └── return_statement
+        └── binary_expression: +
+            ├── identifier: a
+            └── identifier: b</code></pre>
+        </div>
+      </div>
+      <div style="margin-top: 0.8rem;">
+        <div class="panel">
+          <h3>Ce qu’on retient</h3>
+          <p>On peut extraire fonctions, méthodes, classes, imports, appels, héritages ou tests liés.</p>
+        </div>
+      </div>
+      <aside class="speaker-note">Note speaker : ne pas passer plus de 90 secondes ici. Le point important n’est pas la théorie AST/CST, mais la transition “code texte → structure → graphe → contexte IA”.</aside>
+    </div>
+  </section>
+
+  <section class="slide" id="slide-4">
+    <div class="slide-inner">
+      <div class="slide-kicker">Slide 4</div>
+      <h2>Deux outils, deux promesses</h2>
+      <div class="grid-two">
+        <div class="panel accent">
+          <h3>Graphify</h3>
+          <p><strong>Positionnement :</strong> knowledge graph et navigation dans la codebase.</p>
+          <ul>
+            <li>Retrouver les zones pertinentes.</li>
+            <li>Relier code, symboles et contexte projet.</li>
+            <li>Améliorer la qualité du handoff développeur.</li>
+          </ul>
+        </div>
+        <div class="panel">
+          <h3>Code Review Graph</h3>
+          <p><strong>Positionnement :</strong> review, impact analysis et blast radius.</p>
+          <ul>
+            <li>Identifier ce qui est touché par un changement.</li>
+            <li>Explorer dépendances et relations.</li>
+            <li>Servir de contexte local pour l’agent.</li>
+          </ul>
+        </div>
+      </div>
+      <div class="note" style="margin-top: 1rem;">Disponibilité d’un graphe ≠ utilisation optimale du graphe. Le benchmark juge surtout la réponse finale.</div>
+    </div>
+  </section>
+
+  <section class="slide" id="slide-5">
+    <div class="slide-inner">
+      <div class="slide-kicker">Slide 5</div>
+      <h2>Méthodologie benchmark</h2>
+      <div class="grid-two">
+        <div class="panel">
+          <h3>4 modes comparés</h3>
+          <ul>
+            <li><span class="kbd">base</span> — agent seul</li>
+            <li><span class="kbd">graphify</span> — agent + Graphify default</li>
+            <li><span class="kbd">crg</span> — agent + Code Review Graph out-of-box</li>
+            <li><span class="kbd">graphify+crg</span> — combinaison des deux</li>
+          </ul>
+        </div>
+        <div class="panel">
+          <h3>6 cas nopCommerce</h3>
+          <p><strong>Everyday, 70 %</strong> : admin product edit field, admin permissions, inactive customers CSV.</p>
+          <p><strong>Hard graph-friendly, 30 %</strong> : auth discovery, order total impact, cart-to-order flow.</p>
+        </div>
+      </div>
+      <div class="grid-four" style="margin-top: 1rem;">
+        <div class="stat panel"><span>Qualité</span><strong>prioritaire</strong><p>Correctness, coverage, evidence, focus, actionability.</p></div>
+        <div class="stat panel"><span>Coût</span><strong>secondaire</strong><p>Prix modèle estimé via summary d’exécution.</p></div>
+        <div class="stat panel"><span>Temps</span><strong>prompt</strong><p>Le setup est séparé du temps d’exécution.</p></div>
+        <div class="stat panel"><span>Setup</span><strong>caveat</strong><p>Cold-start répété par sandbox, pas steady-state.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="slide" id="slide-6">
+    <div class="slide-inner">
+      <div class="slide-kicker">Slide 6</div>
+      <h2>Résultats globaux</h2>
+      <div class="table-wrap"><table>
+        <thead><tr><th>Mode</th><th>Qualité</th><th>Coût pondéré</th><th>Temps prompt</th><th>Score équilibré</th><th>Lecture</th></tr></thead>
+        <tbody>
+          <tr class="mode-graphify"><td>Graphify</td><td><span class="bar"><span style="width:92%"></span></span>82.8</td><td class="num">0.981 $</td><td class="num">129.1 s</td><td><span class="bar"><span style="width:91%"></span></span>82.1</td><td>Meilleur défaut steady-state</td></tr>
+          <tr><td>Base</td><td><span class="bar"><span style="width:88%"></span></span>79.6</td><td class="num">0.910 $</td><td class="num">145.5 s</td><td><span class="bar"><span style="width:86%"></span></span>77.7</td><td>Fallback très solide</td></tr>
+          <tr><td>Graphify + CRG</td><td><span class="bar"><span style="width:82%"></span></span>74.1</td><td class="num">1.044 $</td><td class="num">151.8 s</td><td><span class="bar"><span style="width:78%"></span></span>70.0</td><td>Utile ponctuellement</td></tr>
+          <tr><td>CRG</td><td><span class="bar"><span style="width:81%"></span></span>73.1</td><td class="num">0.869 $</td><td class="num">135.2 s</td><td><span class="bar"><span style="width:77%"></span></span>69.1</td><td>Pas convaincant seul</td></tr>
+        </tbody>
+      </table></div>
+      <div class="grid-two" style="margin-top: 1rem;">
+        <div class="note accent"><strong>Lecture principale :</strong> Graphify gagne en qualité et en score équilibré.</div>
+        <div class="note"><strong>Nuance :</strong> Base reste fort ; le graphe ne gagne pas mécaniquement tous les cas.</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="slide" id="slide-7">
+    <div class="slide-inner">
+      <div class="slide-kicker">Slide 7</div>
+      <h2>Tokens et coûts : diagnostic moyen</h2>
+      <div class="metric-explainer">
+        <div class="panel accent">
+          <h3>Ce tableau = moyenne simple</h3>
+          <p>Une ligne correspond à la moyenne des 6 runs du mode : 3 cas everyday + 3 cas hard graph-friendly.</p>
+        </div>
+      </div>
+      <div class="table-wrap"><table class="tokens-table">
+        <thead>
+          <tr><th>Mode</th><th>Input tokens / run</th><th>Input caché </th><th>Input non caché </th><th>Output </th><th>Total tokens </th><th>Coût  / run</th><th>Tool calls </th><th>Cache hit </th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Base</td><td>554&nbsp;390</td><td>453&nbsp;717</td><td>100&nbsp;672</td><td>6&nbsp;045</td><td>560&nbsp;434</td><td>0.912&nbsp;$</td><td>36.5</td><td>81.3&nbsp;%</td></tr>
+          <tr><td>CRG</td><td>643&nbsp;125</td><td>549&nbsp;120</td><td>94&nbsp;005</td><td>5&nbsp;425</td><td>648&nbsp;550</td><td>0.907&nbsp;$</td><td>33.0</td><td>84.8&nbsp;%</td></tr>
+          <tr class="mode-graphify"><td>Graphify</td><td>562&nbsp;340</td><td>445&nbsp;653</td><td>116&nbsp;687</td><td>5&nbsp;414</td><td>567&nbsp;755</td><td>0.969&nbsp;$</td><td>65.7</td><td>78.6&nbsp;%</td></tr>
+          <tr><td>Graphify + CRG</td><td>821&nbsp;598</td><td>722&nbsp;987</td><td>98&nbsp;611</td><td>6&nbsp;386</td><td>827&nbsp;984</td><td>1.046&nbsp;$</td><td>29.3</td><td>87.9&nbsp;%</td></tr>
+        </tbody>
+      </table></div>
+      <p class="muted" style="margin-top: 1rem;">Lecture : Graphify améliore la qualité globale, mais son input non caché moyen est supérieur à Base. Le coût modèle ne baisse donc pas automatiquement.</p>
+      <aside class="speaker-note">Note speaker : faire le lien avec la slide 6. La slide 6 sert à recommander un mode via score pondéré ; cette slide sert seulement à diagnostiquer le comportement tokens/coût/tooling.</aside>
+    </div>
+  </section>
+
+  <section class="slide" id="slide-8">
+    <div class="slide-inner">
+      <div class="slide-kicker">Slide 8</div>
+      <h2>Nuance coût : Graphify a un cas cher</h2>
+      <div class="table-wrap"><table>
+        <thead><tr><th>Cas</th><th>Coût Graphify</th><th>Poids</th><th>Contribution</th><th>Lecture</th></tr></thead>
+        <tbody>
+          <tr class="heat-bad-2"><td><strong>Admin permissions</strong></td><td class="num">1.246 $</td><td class="num">23.3 %</td><td class="num">0.291 $</td><td>Explique une grande partie du surcoût pondéré</td></tr>
+          <tr><td>Admin product edit field</td><td class="num">0.932 $</td><td class="num">23.3 %</td><td class="num">0.218 $</td><td>Cas everyday également pondérant</td></tr>
+          <tr><td>Inactive customers CSV</td><td class="num">0.821 $</td><td class="num">23.3 %</td><td class="num">0.192 $</td><td>Graphify moins cher que Base ici</td></tr>
+          <tr><td>Cart to order flow</td><td class="num">0.983 $</td><td class="num">10.0 %</td><td class="num">0.098 $</td><td>Poids global plus faible</td></tr>
+          <tr><td>Auth discovery</td><td class="num">0.964 $</td><td class="num">10.0 %</td><td class="num">0.096 $</td><td>Poids global plus faible</td></tr>
+          <tr><td>Order total impact</td><td class="num">0.865 $</td><td class="num">10.0 %</td><td class="num">0.087 $</td><td>Graphify moins cher que Base ici</td></tr>
+        </tbody>
+      </table></div>
+      <aside class="speaker-note">Note speaker : Graphify ressort légèrement plus cher que Base, mais ce surcoût est fortement concentré sur <code>admin-permissions</code>, un cas everyday très pondéré — et aussi un cas gagné par Graphify en qualité.</aside>
+    </div>
+  </section>
+
+  <section class="slide" id="slide-9">
+    <div class="slide-inner">
+      <div class="slide-kicker">Slide 9</div>
+      <h2>Recommandation opérationnelle</h2>
+      <div class="table-wrap"><table>
+        <thead><tr><th>Situation</th><th>Mode recommandé</th><th>Pourquoi</th></tr></thead>
+        <tbody>
+          <tr><td>Travail quotidien sur codebase</td><td><strong>Graphify</strong></td><td>Meilleure qualité globale et meilleur score équilibré.</td></tr>
+          <tr><td>Besoin simple / pas de setup</td><td><strong>Base</strong></td><td>Solide, rapide à lancer, aucun index.</td></tr>
+          <tr><td>Découverte transverse large</td><td><strong>Graphify + CRG ponctuellement</strong></td><td>A gagné <code>auth-discovery</code>, mais pas globalement.</td></tr>
+          <tr><td>CRG seul out-of-box</td><td><strong>Pas en défaut</strong></td><td>Qualité globale trop faible dans ce run.</td></tr>
+        </tbody>
+      </table></div>
+      <aside class="speaker-note">Note speaker : les graphes de code sont utiles, mais pas magiques. Dans ce benchmark, Graphify aide surtout l’agent à mieux naviguer ; ce n’est pas une preuve d’économie automatique de tokens.</aside>
+    </div>
+  </section>
+
+  <section class="slide" id="annexes">
+    <div class="slide-inner">
+      <div class="slide-kicker">Annexes</div>
+      <h2>Matrices détaillées</h2>
+      <h3>Qualité stricte par cas — plus haut = meilleur</h3>
+      <div class="table-wrap"><table class="heatmap">
+        <thead><tr><th>Cas</th><th>Base</th><th>CRG</th><th>Graphify</th><th>Graphify + CRG</th></tr></thead>
+        <tbody>
+          <tr><td>Admin permissions</td><td class="heat-mid">78</td><td class="heat-good-2">79</td><td class="heat-good-3 win-cell">84 <span class="badge badge-win">win</span></td><td class="heat-bad-3 lose-cell">68 <span class="badge badge-lose">low</span></td></tr>
+          <tr><td>Admin product edit field</td><td class="heat-good-2">80</td><td class="heat-bad-3 lose-cell">70 <span class="badge badge-lose">low</span></td><td class="heat-good-3 win-cell">83 <span class="badge badge-win">win</span></td><td class="heat-mid">76</td></tr>
+          <tr><td>Auth discovery</td><td class="heat-mid">77</td><td class="heat-bad-2 lose-cell">72 <span class="badge badge-lose">low</span></td><td class="heat-good-2">80</td><td class="heat-good-3 win-cell">84 <span class="badge badge-win">win</span></td></tr>
+          <tr><td>Cart to order flow</td><td class="heat-good-2">82</td><td class="heat-bad-3 lose-cell">66 <span class="badge badge-lose">low</span></td><td class="heat-good-3 win-cell">87 <span class="badge badge-win">win</span></td><td class="heat-bad-2">74</td></tr>
+          <tr><td>Inactive customers CSV</td><td class="heat-good-2">79</td><td class="heat-mid">75</td><td class="heat-good-3 win-cell">83 <span class="badge badge-win">win</span></td><td class="heat-bad-2 lose-cell">72 <span class="badge badge-lose">low</span></td></tr>
+          <tr><td>Order total impact</td><td class="heat-good-3 win-cell">84 <span class="badge badge-win">win</span></td><td class="heat-bad-3 lose-cell">70 <span class="badge badge-lose">low</span></td><td class="heat-mid">78</td><td class="heat-good-2">79</td></tr>
+        </tbody>
+      </table></div>
+      <div class="legend"><span><i class="heat-good-3"></i> gagnant / très bon</span><span><i class="heat-mid"></i> intermédiaire</span><span><i class="heat-bad-3"></i> perdant / faible</span></div>
+
+      <h3 style="margin-top: 1.5rem;">Coût modèle par cas — plus bas = meilleur</h3>
+      <div class="table-wrap"><table class="heatmap">
+        <thead><tr><th>Cas</th><th>Base</th><th>CRG</th><th>Graphify</th><th>Graphify + CRG</th></tr></thead>
+        <tbody>
+          <tr><td>Admin permissions</td><td class="heat-good-3 win-cell">0.940 $ <span class="badge badge-win">win</span></td><td class="heat-mid">1.081 $</td><td class="heat-bad-3 lose-cell">1.246 $ <span class="badge badge-lose">high</span></td><td class="heat-bad-2">1.144 $</td></tr>
+          <tr><td>Admin product edit field</td><td class="heat-mid">0.842 $</td><td class="heat-good-3 win-cell">0.735 $ <span class="badge badge-win">win</span></td><td class="heat-bad-3 lose-cell">0.932 $ <span class="badge badge-lose">high</span></td><td class="heat-good-2">0.794 $</td></tr>
+          <tr><td>Auth discovery</td><td class="heat-good-3 win-cell">0.799 $ <span class="badge badge-win">win</span></td><td class="heat-good-3 win-cell">0.799 $ <span class="badge badge-win">win</span></td><td class="heat-mid">0.964 $</td><td class="heat-bad-3 lose-cell">1.136 $ <span class="badge badge-lose">high</span></td></tr>
+          <tr><td>Cart to order flow</td><td class="heat-good-3 win-cell">0.859 $ <span class="badge badge-win">win</span></td><td class="heat-mid">0.954 $</td><td class="heat-bad-3 lose-cell">0.983 $ <span class="badge badge-lose">high</span></td><td class="heat-mid">0.950 $</td></tr>
+          <tr><td>Inactive customers CSV</td><td class="heat-mid">0.941 $</td><td class="heat-good-3 win-cell">0.622 $ <span class="badge badge-win">win</span></td><td class="heat-good-2">0.821 $</td><td class="heat-bad-3 lose-cell">1.183 $ <span class="badge badge-lose">high</span></td></tr>
+          <tr><td>Order total impact</td><td class="heat-mid">1.090 $</td><td class="heat-bad-3 lose-cell">1.253 $ <span class="badge badge-lose">high</span></td><td class="heat-good-3 win-cell">0.865 $ <span class="badge badge-win">win</span></td><td class="heat-mid">1.071 $</td></tr>
+        </tbody>
+      </table></div>
+      <div class="legend"><span><i class="heat-good-3"></i> moins cher</span><span><i class="heat-mid"></i> intermédiaire</span><span><i class="heat-bad-3"></i> plus cher</span></div>
+    </div>
+  </section>
+</main>
+
+<div class="controls" aria-label="Contrôles de navigation">
+  <button type="button" id="prevSlide">←</button>
+  <button type="button" id="nextSlide">→</button>
+</div>
+
+<script>
+const root = document.documentElement;
+const button = document.getElementById('themeToggle');
+const savedTheme = localStorage.getItem('lorq-theme');
+if (savedTheme) root.setAttribute('data-theme', savedTheme);
+button.addEventListener('click', () => {
+  const next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+  root.setAttribute('data-theme', next);
+  localStorage.setItem('lorq-theme', next);
+});
+
+
+const notesButton = document.getElementById('notesToggle');
+if (notesButton) {
+  notesButton.addEventListener('click', () => {
+    const enabled = document.body.classList.toggle('show-notes');
+    notesButton.classList.toggle('is-active', enabled);
+    notesButton.setAttribute('aria-pressed', String(enabled));
+    notesButton.textContent = enabled ? 'notes on' : 'notes';
+  });
+}
+
+const slides = Array.from(document.querySelectorAll('.slide'));
+function currentSlideIndex() {
+  const y = window.scrollY;
+  let best = 0;
+  let bestDist = Infinity;
+  slides.forEach((slide, idx) => {
+    const dist = Math.abs(slide.offsetTop - y);
+    if (dist < bestDist) { best = idx; bestDist = dist; }
+  });
+  return best;
+}
+function go(delta) {
+  const idx = Math.min(Math.max(currentSlideIndex() + delta, 0), slides.length - 1);
+  slides[idx].scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+document.getElementById('prevSlide').addEventListener('click', () => go(-1));
+document.getElementById('nextSlide').addEventListener('click', () => go(1));
+window.addEventListener('keydown', (event) => {
+  if (event.altKey || event.ctrlKey || event.metaKey) return;
+  if (['ArrowRight', 'PageDown', ' '].includes(event.key)) { event.preventDefault(); go(1); }
+  if (['ArrowLeft', 'PageUp'].includes(event.key)) { event.preventDefault(); go(-1); }
+});
+</script>
+</body>
+</html>

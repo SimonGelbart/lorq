@@ -1,0 +1,151 @@
+{
+  "id": "base-default-graphify-code-review-graph",
+  "description": "Your base skills plus Graphify and mostly out-of-box code-review-graph, with upstream CRG skills, AGENTS instructions, and both graphs generated fresh, with CRG generated via uvx, in each run worktree before Codex starts. The project-scoped Codex MCP config omits --tools so CRG exposes its default tool set.",
+  "materialize": {
+    "copy": [
+      {
+        "from": "execution/base-skills",
+        "to": ".agents/skills"
+      },
+      {
+        "from": "execution/skills/graphify",
+        "to": ".agents/skills/graphify"
+      },
+      {
+        "from": "execution/skills/graphify-query-planner",
+        "to": ".agents/skills/graphify-query-planner"
+      },
+      {
+        "from": "execution/skills/code-review-graph",
+        "to": ".agents/skills/code-review-graph"
+      },
+      {
+        "from": "execution/skills/review-changes",
+        "to": ".agents/skills/review-changes"
+      },
+      {
+        "from": "execution/skills/refactor-safely",
+        "to": ".agents/skills/refactor-safely"
+      },
+      {
+        "from": "execution/skills/explore-codebase",
+        "to": ".agents/skills/explore-codebase"
+      },
+      {
+        "from": "execution/skills/debug-issue",
+        "to": ".agents/skills/debug-issue"
+      },
+      {
+        "from": "execution/configs/graphify/.graphifyignore",
+        "to": ".graphifyignore"
+      },
+      {
+        "from": "execution/configs/code-review-graph",
+        "to": ".agents/configs/code-review-graph"
+      },
+      {
+        "from": "execution/scripts/write-code-review-graph-codex-config.py",
+        "to": ".agents/scripts/write-code-review-graph-codex-config.py"
+      },
+      {
+        "from": "execution/scripts/append-code-review-graph-agents.py",
+        "to": ".agents/scripts/append-code-review-graph-agents.py"
+      }
+    ]
+  },
+  "pre_agent": {
+    "setup_scope": "per-run",
+    "commands": [
+      {
+        "id": "graphify-codex-install",
+        "argv": [
+          "graphify",
+          "codex",
+          "install"
+        ],
+        "cwd": ".",
+        "timeout_seconds": 300,
+        "required": true
+      },
+      {
+        "id": "code-review-graph-version",
+        "argv": [
+          "uvx",
+          "code-review-graph",
+          "--version"
+        ],
+        "cwd": ".",
+        "timeout_seconds": 120,
+        "required": true
+      },
+      {
+        "id": "code-review-graph-agents-instructions",
+        "argv": [
+          "python3",
+          ".agents/scripts/append-code-review-graph-agents.py",
+          "--repo-root",
+          "."
+        ],
+        "cwd": ".",
+        "timeout_seconds": 60,
+        "required": true
+      },
+      {
+        "id": "code-review-graph-codex-config",
+        "argv": [
+          "python3",
+          ".agents/scripts/write-code-review-graph-codex-config.py",
+          "--repo-root",
+          ".",
+          "--launcher",
+          "uvx"
+        ],
+        "cwd": ".",
+        "timeout_seconds": 60,
+        "required": true
+      },
+      {
+        "id": "code-review-graph-build",
+        "argv": [
+          "uvx",
+          "code-review-graph",
+          "build",
+          "--repo",
+          "."
+        ],
+        "cwd": ".",
+        "timeout_seconds": 1200,
+        "required": true
+      },
+      {
+        "id": "code-review-graph-status",
+        "argv": [
+          "uvx",
+          "code-review-graph",
+          "status",
+          "--repo",
+          "."
+        ],
+        "cwd": ".",
+        "timeout_seconds": 180,
+        "required": true
+      },
+      {
+        "id": "graphify-generate",
+        "argv": [
+          "graphify",
+          "."
+        ],
+        "cwd": ".",
+        "timeout_seconds": 900,
+        "required": true
+      }
+    ]
+  },
+  "expectations": {
+    "should_verify_with_source": true,
+    "should_avoid_generic_graph_queries": true,
+    "max_graph_queries_before_source_fallback": 2
+  },
+  "_path": "/home/simon/repos/lorq/code/lorq/modes/base-default-graphify-code-review-graph.yaml"
+}

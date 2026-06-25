@@ -1,0 +1,9 @@
+Answer the following repository exploration task.
+
+Use the repository, available files, and available tools as needed.
+Prefer source-backed evidence. If you use derived artifacts, verify important claims against source files.
+
+Task:
+In nopCommerce, find the files involved in customer authentication, login,
+registration, password reset, and multi-factor authentication.
+Return concise candidate paths with reasons and source-backed evidence.

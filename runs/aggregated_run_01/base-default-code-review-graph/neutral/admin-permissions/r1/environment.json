@@ -1,0 +1,52 @@
+{
+  "schema_version": "agent-eval.environment.v1",
+  "contract_version": "agent-eval.contract.v1",
+  "suite_version": "1.2.4",
+  "python": "3.12.3 (main, Mar 23 2026, 19:04:32) [GCC 13.3.0]",
+  "platform": "Linux-7.0.11-76070011-generic-x86_64-with-glibc2.39",
+  "executable": "/usr/bin/python3",
+  "cwd": "/home/simon/repos/lorq-worktrees/base-default-code-review-graph__neutral__admin-permissions__r1",
+  "env_present": {
+    "OPENAI_API_KEY": "[REDACTED]",
+    "GITHUB_TOKEN": false,
+    "ANTHROPIC_API_KEY": "[REDACTED]"
+  },
+  "commands": {
+    "git": {
+      "command": [
+        "git",
+        "--version"
+      ],
+      "available": true,
+      "exit_code": 0,
+      "version": "git version 2.54.0"
+    },
+    "codex": {
+      "command": [
+        "codex",
+        "--version"
+      ],
+      "available": true,
+      "exit_code": 0,
+      "version": "codex-cli 0.142.0"
+    },
+    "copilot": {
+      "command": [
+        "copilot",
+        "--version"
+      ],
+      "available": false,
+      "exit_code": 127,
+      "version": "[Errno 2] No such file or directory: 'copilot'"
+    },
+    "graphify": {
+      "command": [
+        "graphify",
+        "--version"
+      ],
+      "available": true,
+      "exit_code": 0,
+      "version": "graphify 0.8.35"
+    }
+  }
+}

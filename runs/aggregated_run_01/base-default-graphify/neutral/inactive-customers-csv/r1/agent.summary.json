@@ -1,0 +1,75 @@
+{
+  "agent": "codex-cli",
+  "backend": "codex-cli",
+  "command": [
+    "codex",
+    "exec",
+    "--json"
+  ],
+  "input_mode": "stdin",
+  "output_format": "codex-jsonl",
+  "exit_code": 0,
+  "timed_out": false,
+  "elapsed_ms": 101872,
+  "ok": true,
+  "error_category": null,
+  "usage": {
+    "input_tokens": 488101,
+    "output_tokens": 3857,
+    "cached_input_tokens": 385536,
+    "reasoning_output_tokens": 413
+  },
+  "counts": {
+    "json_events": 76,
+    "tool_events": 0,
+    "command_events": 64
+  },
+  "pricing": {
+    "schema_version": "agent-eval.pricing.v1",
+    "ok": true,
+    "model": "gpt-5.5",
+    "currency": "USD",
+    "source": "https://openai.com/api/pricing/ checked 2026-06-15",
+    "rates_per_1m": {
+      "input": 5.0,
+      "cached_input": 0.5,
+      "output": 30.0
+    },
+    "usage": {
+      "input_tokens": 488101,
+      "output_tokens": 3857,
+      "cached_input_tokens": 385536,
+      "reasoning_output_tokens": 413,
+      "uncached_input_tokens": 102565,
+      "total_tokens": 491958,
+      "cache_hit_rate": 0.7898693098354643
+    },
+    "input_cost": 0.512825,
+    "cached_input_cost": 0.192768,
+    "output_cost": 0.11571,
+    "estimated_cost": 0.8213029999999999
+  },
+  "home_isolation": {
+    "enabled": false,
+    "isolate_home": false,
+    "isolate_codex_home": false,
+    "runtime_home": null,
+    "codex_home": null
+  },
+  "active_skills": [
+    "analyzing-code",
+    "analyzing-code-structure",
+    "choosing-cli-tools",
+    "composing-cli-workflows",
+    "extracting-code-structure",
+    "finding-files",
+    "fuzzy-selecting",
+    "graphify",
+    "querying-json",
+    "querying-yaml",
+    "replacing-text",
+    "searching-text",
+    "viewing-files",
+    "working-with-dotnet-backends"
+  ]
+}

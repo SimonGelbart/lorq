@@ -1,0 +1,20 @@
+{
+  "id": "base-only",
+  "description": "Production-like baseline with your controlled base skills only; no Graphify skill or generated graph artifacts.",
+  "materialize": {
+    "copy": [
+      {
+        "from": "execution/base-skills",
+        "to": ".agents/skills"
+      }
+    ]
+  },
+  "pre_agent": {
+    "setup_scope": "none",
+    "commands": []
+  },
+  "expectations": {
+    "should_verify_with_source": true
+  },
+  "_path": "/home/simon/repos/lorq/code/lorq/modes/base-only.yaml"
+}

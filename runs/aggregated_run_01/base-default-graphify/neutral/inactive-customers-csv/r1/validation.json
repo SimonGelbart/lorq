@@ -1,0 +1,816 @@
+{
+  "case_id": "inactive-customers-csv",
+  "mode_id": "base-default-graphify",
+  "ok": true,
+  "hard_passed": 4,
+  "hard_total": 4,
+  "soft_passed": 1,
+  "soft_total": 4,
+  "answer": {
+    "ok": true,
+    "hard_passed": 4,
+    "hard_total": 4,
+    "soft_passed": 0,
+    "soft_total": 3,
+    "checks": [
+      {
+        "type": "answer_not_empty",
+        "ok": true,
+        "message": "answer.md should contain a non-empty final answer"
+      },
+      {
+        "type": "required_symbol",
+        "value": "CustomerController",
+        "ok": true
+      },
+      {
+        "type": "required_symbol",
+        "value": "CustomerSearchModel",
+        "ok": true
+      },
+      {
+        "type": "required_symbol",
+        "value": "ExportManager",
+        "ok": true
+      },
+      {
+        "type": "expected_concept",
+        "value": "admin customer list",
+        "ok": false,
+        "soft": true
+      },
+      {
+        "type": "expected_concept",
+        "value": "search filters",
+        "ok": false,
+        "soft": true
+      },
+      {
+        "type": "expected_concept",
+        "value": "export response",
+        "ok": false,
+        "soft": true
+      }
+    ],
+    "evidence": {
+      "answer_empty": false,
+      "file_references": [],
+      "file_reference_count": 0,
+      "unique_file_reference_count": 0,
+      "worktree": "/home/simon/repos/lorq-worktrees/base-default-graphify__neutral__inactive-customers-csv__r1",
+      "worktree_available": true,
+      "existing_file_references": [],
+      "existing_file_reference_count": 0,
+      "missing_file_references": [],
+      "missing_file_reference_count": 0,
+      "unknown_file_references": [],
+      "unknown_file_reference_count": 0
+    }
+  },
+  "behavior": {
+    "ok": true,
+    "hard_passed": 0,
+    "hard_total": 0,
+    "soft_passed": 1,
+    "soft_total": 1,
+    "checks": [
+      {
+        "type": "source_verification_observed",
+        "ok": true,
+        "actual_source_read_count": 4,
+        "soft": true
+      }
+    ],
+    "trace": {
+      "trace_source": "normalized",
+      "normalized_event_count": 74,
+      "normalized_event_type_counts": {
+        "assistant_message": 9,
+        "tool_call": 64,
+        "usage": 1
+      },
+      "command_count": 64,
+      "commands": [
+        {
+          "line": 2,
+          "raw_line": 4,
+          "sequence": 2,
+          "command": "/bin/bash -lc 'bat --paging=never /home/simon/repos/lorq-worktrees/base-default-graphify__neutral__inactive-customers-csv__r1/.agents/skills/graphify/SKILL.md'",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 3,
+          "raw_line": 5,
+          "sequence": 3,
+          "command": "/bin/bash -lc 'bat --paging=never /home/simon/repos/lorq-worktrees/base-default-graphify__neutral__inactive-customers-csv__r1/.agents/skills/graphify/SKILL.md'",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 5,
+          "raw_line": 7,
+          "sequence": 5,
+          "command": "/bin/bash -lc 'bat --paging=never .agents/skills/searching-text/SKILL.md'",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 6,
+          "raw_line": 8,
+          "sequence": 6,
+          "command": "/bin/bash -lc 'bat --paging=never .agents/skills/searching-text/SKILL.md'",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 7,
+          "raw_line": 9,
+          "sequence": 7,
+          "command": "/bin/bash -lc 'bat --paging=never .agents/skills/viewing-files/SKILL.md'",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 8,
+          "raw_line": 10,
+          "sequence": 8,
+          "command": "/bin/bash -lc 'bat --paging=never .agents/skills/viewing-files/SKILL.md'",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 9,
+          "raw_line": 11,
+          "sequence": 9,
+          "command": "/bin/bash -lc 'test -f graphify-out/graph.json && printf exists || printf missing'",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 10,
+          "raw_line": 12,
+          "sequence": 10,
+          "command": "/bin/bash -lc 'test -f graphify-out/graph.json && printf exists || printf missing'",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 12,
+          "raw_line": 14,
+          "sequence": 12,
+          "command": "/bin/bash -lc 'graphify query \"How would an inactive customers export feature fit into the admin customer flow? Identify controller, search model, export service, and response format points.\"'",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 13,
+          "raw_line": 15,
+          "sequence": 13,
+          "command": "/bin/bash -lc 'graphify query \"How would an inactive customers export feature fit into the admin customer flow? Identify controller, search model, export service, and response format points.\"'",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 15,
+          "raw_line": 17,
+          "sequence": 15,
+          "command": "/bin/bash -lc \"rg -n -g '*.cs' -e 'class CustomerController|CustomerSearchModel|ICustomerModelFactory|IExportManager|ExportManager|ExportCustomers' src\"",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 16,
+          "raw_line": 18,
+          "sequence": 16,
+          "command": "/bin/bash -lc \"rg -n -g '*.cs' -e 'class CustomerController|CustomerSearchModel|ICustomerModelFactory|IExportManager|ExportManager|ExportCustomers' src\"",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 17,
+          "raw_line": 19,
+          "sequence": 17,
+          "command": "/bin/bash -lc \"rg -n -i -g '*.cs' -e 'Customer.*Export|Export.*Customer|inactive|last activity|LastActivity|customers.*csv|Csv' src\"",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 18,
+          "raw_line": 20,
+          "sequence": 18,
+          "command": "/bin/bash -lc \"rg -n -i -g '*.cs' -e 'Customer.*Export|Export.*Customer|inactive|last activity|LastActivity|customers.*csv|Csv' src\"",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 19,
+          "raw_line": 21,
+          "sequence": 19,
+          "command": "/bin/bash -lc \"rg --files src | rg 'Customer|Export|Admin' | head -200\"",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 20,
+          "raw_line": 22,
+          "sequence": 20,
+          "command": "/bin/bash -lc \"rg --files src | rg 'Customer|Export|Admin' | head -200\"",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 22,
+          "raw_line": 24,
+          "sequence": 22,
+          "command": "/bin/bash -lc 'bat --paging=never --style=numbers --line-range 280:325 src/Presentation/Nop.Web/Areas/Admin/Controllers/CustomerController.cs'",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 23,
+          "raw_line": 25,
+          "sequence": 23,
+          "command": "/bin/bash -lc 'bat --paging=never --style=numbers --line-range 280:325 src/Presentation/Nop.Web/Areas/Admin/Controllers/CustomerController.cs'",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 24,
+          "raw_line": 26,
+          "sequence": 24,
+          "command": "/bin/bash -lc 'bat --paging=never --style=numbers --line-range 1:90 src/Presentation/Nop.Web/Areas/Admin/Models/Customers/CustomerSearchModel.cs'",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 25,
+          "raw_line": 27,
+          "sequence": 25,
+          "command": "/bin/bash -lc 'bat --paging=never --style=numbers --line-range 1:90 src/Presentation/Nop.Web/Areas/Admin/Models/Customers/CustomerSearchModel.cs'",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 26,
+          "raw_line": 28,
+          "sequence": 26,
+          "command": "/bin/bash -lc 'bat --paging=never --style=numbers --line-range 1518:1648 src/Presentation/Nop.Web/Areas/Admin/Controllers/CustomerController.cs'",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 27,
+          "raw_line": 29,
+          "sequence": 27,
+          "command": "/bin/bash -lc 'bat --paging=never --style=numbers --line-range 1518:1648 src/Presentation/Nop.Web/Areas/Admin/Controllers/CustomerController.cs'",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 28,
+          "raw_line": 30,
+          "sequence": 28,
+          "command": "/bin/bash -lc 'bat --paging=never --style=numbers --line-range 545:602 src/Presentation/Nop.Web/Areas/Admin/Factories/CustomerModelFactory.cs'",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 29,
+          "raw_line": 31,
+          "sequence": 29,
+          "command": "/bin/bash -lc 'bat --paging=never --style=numbers --line-range 545:602 src/Presentation/Nop.Web/Areas/Admin/Factories/CustomerModelFactory.cs'",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 31,
+          "raw_line": 33,
+          "sequence": 31,
+          "command": "/bin/bash -lc 'bat --paging=never --style=numbers --line-range 90:130 src/Presentation/Nop.Web/Areas/Admin/Models/Customers/CustomerSearchModel.cs'",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 32,
+          "raw_line": 34,
+          "sequence": 32,
+          "command": "/bin/bash -lc 'bat --paging=never --style=numbers --line-range 90:130 src/Presentation/Nop.Web/Areas/Admin/Models/Customers/CustomerSearchModel.cs'",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 33,
+          "raw_line": 35,
+          "sequence": 33,
+          "command": "/bin/bash -lc 'bat --paging=never --style=numbers --line-range 180:275 src/Libraries/Nop.Services/Customers/CustomerService.cs'",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 34,
+          "raw_line": 36,
+          "sequence": 34,
+          "command": "/bin/bash -lc 'bat --paging=never --style=numbers --line-range 180:275 src/Libraries/Nop.Services/Customers/CustomerService.cs'",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 35,
+          "raw_line": 37,
+          "sequence": 35,
+          "command": "/bin/bash -lc \"rg -n -g '*.cs' -e 'GetAllCustomersAsync\\\\(' src/Libraries/Nop.Services src/Presentation/Nop.Web/Areas/Admin | head -80\"",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 36,
+          "raw_line": 38,
+          "sequence": 36,
+          "command": "/bin/bash -lc \"rg -n -g '*.cs' -e 'GetAllCustomersAsync\\\\(' src/Libraries/Nop.Services src/Presentation/Nop.Web/Areas/Admin | head -80\"",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 37,
+          "raw_line": 39,
+          "sequence": 37,
+          "command": "/bin/bash -lc 'bat --paging=never --style=numbers --line-range 210:240 src/Libraries/Nop.Services/ExportImport/IExportManager.cs'",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 38,
+          "raw_line": 40,
+          "sequence": 38,
+          "command": "/bin/bash -lc 'bat --paging=never --style=numbers --line-range 210:240 src/Libraries/Nop.Services/ExportImport/IExportManager.cs'",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 39,
+          "raw_line": 41,
+          "sequence": 39,
+          "command": "/bin/bash -lc 'bat --paging=never --style=numbers --line-range 150:220 src/Libraries/Nop.Services/Customers/CustomerService.cs'",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 40,
+          "raw_line": 42,
+          "sequence": 40,
+          "command": "/bin/bash -lc 'bat --paging=never --style=numbers --line-range 150:220 src/Libraries/Nop.Services/Customers/CustomerService.cs'",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 41,
+          "raw_line": 43,
+          "sequence": 41,
+          "command": "/bin/bash -lc 'bat --paging=never --style=numbers --line-range 35:85 src/Libraries/Nop.Services/Customers/ICustomerService.cs'",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 42,
+          "raw_line": 44,
+          "sequence": 42,
+          "command": "/bin/bash -lc 'bat --paging=never --style=numbers --line-range 35:85 src/Libraries/Nop.Services/Customers/ICustomerService.cs'",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 43,
+          "raw_line": 45,
+          "sequence": 43,
+          "command": "/bin/bash -lc 'bat --paging=never --style=numbers --line-range 2525:2730 src/Libraries/Nop.Services/ExportImport/ExportManager.cs'",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 44,
+          "raw_line": 46,
+          "sequence": 44,
+          "command": "/bin/bash -lc 'bat --paging=never --style=numbers --line-range 2525:2730 src/Libraries/Nop.Services/ExportImport/ExportManager.cs'",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 45,
+          "raw_line": 47,
+          "sequence": 45,
+          "command": "/bin/bash -lc \"rg -n -g '*.cshtml' -e 'exportexcel-all|exportxml-all|SearchLastActivity|customers-grid|CustomerList' src/Presentation/Nop.Web/Areas/Admin/Views/Customer\"",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 46,
+          "raw_line": 48,
+          "sequence": 46,
+          "command": "/bin/bash -lc \"rg -n -g '*.cshtml' -e 'exportexcel-all|exportxml-all|SearchLastActivity|customers-grid|CustomerList' src/Presentation/Nop.Web/Areas/Admin/Views/Customer\"",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 47,
+          "raw_line": 49,
+          "sequence": 47,
+          "command": "/bin/bash -lc 'bat --paging=never --style=numbers --line-range 25:70 src/Presentation/Nop.Web/Areas/Admin/Views/Customer/List.cshtml'",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 48,
+          "raw_line": 50,
+          "sequence": 48,
+          "command": "/bin/bash -lc 'bat --paging=never --style=numbers --line-range 25:70 src/Presentation/Nop.Web/Areas/Admin/Views/Customer/List.cshtml'",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 49,
+          "raw_line": 51,
+          "sequence": 49,
+          "command": "/bin/bash -lc 'bat --paging=never --style=numbers --line-range 168:200 src/Presentation/Nop.Web/Areas/Admin/Views/Customer/List.cshtml'",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 50,
+          "raw_line": 52,
+          "sequence": 50,
+          "command": "/bin/bash -lc 'bat --paging=never --style=numbers --line-range 168:200 src/Presentation/Nop.Web/Areas/Admin/Views/Customer/List.cshtml'",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 51,
+          "raw_line": 53,
+          "sequence": 51,
+          "command": "/bin/bash -lc 'bat --paging=never --style=numbers --line-range 270:305 src/Presentation/Nop.Web/Areas/Admin/Views/Customer/List.cshtml'",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 52,
+          "raw_line": 54,
+          "sequence": 52,
+          "command": "/bin/bash -lc 'bat --paging=never --style=numbers --line-range 270:305 src/Presentation/Nop.Web/Areas/Admin/Views/Customer/List.cshtml'",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 53,
+          "raw_line": 55,
+          "sequence": 53,
+          "command": "/bin/bash -lc 'bat --paging=never --style=numbers --line-range 35:50 src/Libraries/Nop.Core/Domain/Gdpr/GdprSettings.cs'",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 54,
+          "raw_line": 56,
+          "sequence": 54,
+          "command": "/bin/bash -lc 'bat --paging=never --style=numbers --line-range 35:50 src/Libraries/Nop.Core/Domain/Gdpr/GdprSettings.cs'",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 56,
+          "raw_line": 58,
+          "sequence": 56,
+          "command": "/bin/bash -lc 'bat --paging=never --style=numbers --line-range 25:38 src/Libraries/Nop.Core/Domain/Gdpr/GdprSettings.cs'",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 57,
+          "raw_line": 59,
+          "sequence": 57,
+          "command": "/bin/bash -lc 'bat --paging=never --style=numbers --line-range 1:70 src/Libraries/Nop.Services/Gdpr/DeleteInactiveCustomersTask.cs'",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 58,
+          "raw_line": 60,
+          "sequence": 58,
+          "command": "/bin/bash -lc 'bat --paging=never --style=numbers --line-range 1:70 src/Libraries/Nop.Services/Gdpr/DeleteInactiveCustomersTask.cs'",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 59,
+          "raw_line": 61,
+          "sequence": 59,
+          "command": "/bin/bash -lc 'bat --paging=never --style=numbers --line-range 25:38 src/Libraries/Nop.Core/Domain/Gdpr/GdprSettings.cs'",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 60,
+          "raw_line": 62,
+          "sequence": 60,
+          "command": "/bin/bash -lc \"rg -n -g '*.cs' -e 'DeleteInactiveCustomersAfterMonths|SearchLastActivityTo|ActivityLog.ExportCustomers|TextCsv' src/Presentation src/Libraries src/Tests\"",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 61,
+          "raw_line": 63,
+          "sequence": 61,
+          "command": "/bin/bash -lc \"rg -n -g '*.cs' -e 'DeleteInactiveCustomersAfterMonths|SearchLastActivityTo|ActivityLog.ExportCustomers|TextCsv' src/Presentation src/Libraries src/Tests\"",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 63,
+          "raw_line": 65,
+          "sequence": 63,
+          "command": "/bin/bash -lc 'bat --paging=never --style=numbers --line-range 112:120 src/Libraries/Nop.Core/MimeTypes.cs'",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 64,
+          "raw_line": 66,
+          "sequence": 64,
+          "command": "/bin/bash -lc 'bat --paging=never --style=numbers --line-range 210:240 src/Presentation/Nop.Web/Areas/Admin/Controllers/NewsLetterSubscriptionController.cs'",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 65,
+          "raw_line": 67,
+          "sequence": 65,
+          "command": "/bin/bash -lc 'bat --paging=never --style=numbers --line-range 112:120 src/Libraries/Nop.Core/MimeTypes.cs'",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 66,
+          "raw_line": 68,
+          "sequence": 66,
+          "command": "/bin/bash -lc 'bat --paging=never --style=numbers --line-range 210:240 src/Presentation/Nop.Web/Areas/Admin/Controllers/NewsLetterSubscriptionController.cs'",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 67,
+          "raw_line": 69,
+          "sequence": 67,
+          "command": "/bin/bash -lc 'bat --paging=never --style=numbers --line-range 335:352 src/Tests/Nop.Tests/Nop.Services.Tests/ExportImport/ExportManagerTests.cs'",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 68,
+          "raw_line": 70,
+          "sequence": 68,
+          "command": "/bin/bash -lc 'bat --paging=never --style=numbers --line-range 318:338 src/Tests/Nop.Tests/Nop.Services.Tests/ExportImport/ExportManagerTests.cs'",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 69,
+          "raw_line": 71,
+          "sequence": 69,
+          "command": "/bin/bash -lc 'bat --paging=never --style=numbers --line-range 335:352 src/Tests/Nop.Tests/Nop.Services.Tests/ExportImport/ExportManagerTests.cs'",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 70,
+          "raw_line": 72,
+          "sequence": 70,
+          "command": "/bin/bash -lc 'bat --paging=never --style=numbers --line-range 318:338 src/Tests/Nop.Tests/Nop.Services.Tests/ExportImport/ExportManagerTests.cs'",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 71,
+          "raw_line": 73,
+          "sequence": 71,
+          "command": "/bin/bash -lc pwd",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 72,
+          "raw_line": 74,
+          "sequence": 72,
+          "command": "/bin/bash -lc pwd",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        }
+      ],
+      "search_count": 12,
+      "source_read_count": 4,
+      "graphify_command_count": 6,
+      "graphify_query_count": 2,
+      "generic_graphify_query_count": 0,
+      "specific_graphify_query_count": 2,
+      "graphify_queries": [
+        {
+          "command": "/bin/bash -lc 'graphify query \"How would an inactive customers export feature fit into the admin customer flow? Identify controller, search model, export service, and response format points.\"'",
+          "query": "How would an inactive customers export feature fit into the admin customer flow? Identify controller, search model, export service, and response format points.",
+          "words": [
+            "How",
+            "would",
+            "an",
+            "inactive",
+            "customers",
+            "export",
+            "feature",
+            "fit",
+            "into",
+            "the",
+            "admin",
+            "customer",
+            "flow",
+            "Identify",
+            "controller",
+            "search",
+            "model",
+            "export",
+            "service",
+            "and",
+            "response",
+            "format",
+            "points"
+          ],
+          "symbol_like_terms": [],
+          "generic_terms": [
+            "admin",
+            "controller",
+            "customer",
+            "flow",
+            "model",
+            "service"
+          ],
+          "is_specific": true,
+          "is_generic": false,
+          "line": 12,
+          "backend": "codex-cli"
+        },
+        {
+          "command": "/bin/bash -lc 'graphify query \"How would an inactive customers export feature fit into the admin customer flow? Identify controller, search model, export service, and response format points.\"'",
+          "query": "How would an inactive customers export feature fit into the admin customer flow? Identify controller, search model, export service, and response format points.",
+          "words": [
+            "How",
+            "would",
+            "an",
+            "inactive",
+            "customers",
+            "export",
+            "feature",
+            "fit",
+            "into",
+            "the",
+            "admin",
+            "customer",
+            "flow",
+            "Identify",
+            "controller",
+            "search",
+            "model",
+            "export",
+            "service",
+            "and",
+            "response",
+            "format",
+            "points"
+          ],
+          "symbol_like_terms": [],
+          "generic_terms": [
+            "admin",
+            "controller",
+            "customer",
+            "flow",
+            "model",
+            "service"
+          ],
+          "is_specific": true,
+          "is_generic": false,
+          "line": 13,
+          "backend": "codex-cli"
+        }
+      ],
+      "source_after_graph": true,
+      "first_graph_line": 12,
+      "first_source_line": 19
+    }
+  },
+  "checks": [
+    {
+      "type": "answer_not_empty",
+      "ok": true,
+      "message": "answer.md should contain a non-empty final answer"
+    },
+    {
+      "type": "required_symbol",
+      "value": "CustomerController",
+      "ok": true
+    },
+    {
+      "type": "required_symbol",
+      "value": "CustomerSearchModel",
+      "ok": true
+    },
+    {
+      "type": "required_symbol",
+      "value": "ExportManager",
+      "ok": true
+    },
+    {
+      "type": "expected_concept",
+      "value": "admin customer list",
+      "ok": false,
+      "soft": true
+    },
+    {
+      "type": "expected_concept",
+      "value": "search filters",
+      "ok": false,
+      "soft": true
+    },
+    {
+      "type": "expected_concept",
+      "value": "export response",
+      "ok": false,
+      "soft": true
+    },
+    {
+      "type": "source_verification_observed",
+      "ok": true,
+      "actual_source_read_count": 4,
+      "soft": true
+    }
+  ],
+  "schema_version": "agent-eval.validation-result.v1",
+  "contract_version": "agent-eval.contract.v1"
+}

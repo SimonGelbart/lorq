@@ -1,0 +1,107 @@
+{
+  "commands": [
+    {
+      "id": "code-review-graph-version",
+      "run": "uvx code-review-graph --version",
+      "argv": [
+        "uvx",
+        "code-review-graph",
+        "--version"
+      ],
+      "shell": false,
+      "cwd": "/home/simon/repos/lorq-worktrees/base-default-code-review-graph__neutral__admin-product-edit-field__r1",
+      "exit_code": 0,
+      "timed_out": false,
+      "elapsed_ms": 243,
+      "required": true,
+      "failed": false,
+      "stdout_path": "code-review-graph-version.stdout.txt",
+      "stderr_path": "code-review-graph-version.stderr.txt"
+    },
+    {
+      "id": "code-review-graph-agents-instructions",
+      "run": "python3 .agents/scripts/append-code-review-graph-agents.py --repo-root .",
+      "argv": [
+        "python3",
+        ".agents/scripts/append-code-review-graph-agents.py",
+        "--repo-root",
+        "."
+      ],
+      "shell": false,
+      "cwd": "/home/simon/repos/lorq-worktrees/base-default-code-review-graph__neutral__admin-product-edit-field__r1",
+      "exit_code": 0,
+      "timed_out": false,
+      "elapsed_ms": 18,
+      "required": true,
+      "failed": false,
+      "stdout_path": "code-review-graph-agents-instructions.stdout.txt",
+      "stderr_path": "code-review-graph-agents-instructions.stderr.txt"
+    },
+    {
+      "id": "code-review-graph-codex-config",
+      "run": "python3 .agents/scripts/write-code-review-graph-codex-config.py --repo-root . --launcher uvx",
+      "argv": [
+        "python3",
+        ".agents/scripts/write-code-review-graph-codex-config.py",
+        "--repo-root",
+        ".",
+        "--launcher",
+        "uvx"
+      ],
+      "shell": false,
+      "cwd": "/home/simon/repos/lorq-worktrees/base-default-code-review-graph__neutral__admin-product-edit-field__r1",
+      "exit_code": 0,
+      "timed_out": false,
+      "elapsed_ms": 19,
+      "required": true,
+      "failed": false,
+      "stdout_path": "code-review-graph-codex-config.stdout.txt",
+      "stderr_path": "code-review-graph-codex-config.stderr.txt"
+    },
+    {
+      "id": "code-review-graph-build",
+      "run": "uvx code-review-graph build --repo .",
+      "argv": [
+        "uvx",
+        "code-review-graph",
+        "build",
+        "--repo",
+        "."
+      ],
+      "shell": false,
+      "cwd": "/home/simon/repos/lorq-worktrees/base-default-code-review-graph__neutral__admin-product-edit-field__r1",
+      "exit_code": 0,
+      "timed_out": false,
+      "elapsed_ms": 25076,
+      "required": true,
+      "failed": false,
+      "stdout_path": "code-review-graph-build.stdout.txt",
+      "stderr_path": "code-review-graph-build.stderr.txt"
+    },
+    {
+      "id": "code-review-graph-status",
+      "run": "uvx code-review-graph status --repo .",
+      "argv": [
+        "uvx",
+        "code-review-graph",
+        "status",
+        "--repo",
+        "."
+      ],
+      "shell": false,
+      "cwd": "/home/simon/repos/lorq-worktrees/base-default-code-review-graph__neutral__admin-product-edit-field__r1",
+      "exit_code": 0,
+      "timed_out": false,
+      "elapsed_ms": 187,
+      "required": true,
+      "failed": false,
+      "stdout_path": "code-review-graph-status.stdout.txt",
+      "stderr_path": "code-review-graph-status.stderr.txt"
+    }
+  ],
+  "ok": true,
+  "command_count": 5,
+  "required_failed": false,
+  "failed_required_command": null,
+  "elapsed_ms": 25551
+}

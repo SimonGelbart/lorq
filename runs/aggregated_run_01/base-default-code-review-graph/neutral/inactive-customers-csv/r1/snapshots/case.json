@@ -1,0 +1,22 @@
+{
+  "id": "inactive-customers-csv",
+  "title": "Inactive customers export path",
+  "category": "export-flow",
+  "difficulty": "medium",
+  "repo": "nopcommerce",
+  "task": "Explain how an inactive customers export feature would fit into the admin customer flow.\nIdentify the likely controller, search model, export service, and response format points.\nInclude source-backed evidence.\n",
+  "validation": {
+    "required_symbols": [
+      "CustomerController",
+      "CustomerSearchModel",
+      "ExportManager"
+    ],
+    "expected_concepts": [
+      "admin customer list",
+      "search filters",
+      "export response"
+    ]
+  },
+  "rubric": "repository-exploration",
+  "_path": "/home/simon/repos/lorq/code/lorq/cases/inactive-customers-csv.yaml"
+}

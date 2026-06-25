@@ -1,0 +1,34 @@
+{
+  "id": "auth-discovery",
+  "title": "Customer authentication discovery",
+  "category": "broad-discovery",
+  "difficulty": "medium",
+  "repo": "nopcommerce",
+  "task": "In nopCommerce, find the files involved in customer authentication, login,\nregistration, password reset, and multi-factor authentication.\nReturn concise candidate paths with reasons and source-backed evidence.\n",
+  "validation": {
+    "required_symbols": [
+      "CustomerController",
+      "CustomerRegistrationService",
+      "PasswordRecovery"
+    ],
+    "required_files": [
+      "src/Presentation/Nop.Web/Controllers/CustomerController.cs",
+      "src/Libraries/Nop.Services/Customers/CustomerRegistrationService.cs"
+    ],
+    "expected_concepts": [
+      "login",
+      "registration",
+      "password reset",
+      "multi-factor authentication",
+      "external authentication"
+    ],
+    "required_evidence": {
+      "min_existing_file_references": 4,
+      "min_source_files": 4,
+      "max_missing_cited_files": 0,
+      "require_existing_required_files": true
+    }
+  },
+  "rubric": "repository-exploration",
+  "_path": "/home/simon/repos/lorq/code/lorq/cases/auth-discovery.yaml"
+}

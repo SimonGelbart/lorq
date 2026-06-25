@@ -1,0 +1,7 @@
+case,quality_winner,quality_score,prompt_time_value_winner,prompt_time_value_score,cost_winner,cost_usd,prompt_speed_winner,prompt_time_s,setup_speed_winner,setup_time_s
+admin-permissions,graphify,84,graphify,83.67427654887729,base,0.940181,graphify,128.894,base,0.0
+admin-product-edit-field,graphify,83,graphify,82.48620607824456,crg,0.734962,crg,109.359,base,0.0
+auth-discovery,graphify+crg,84,graphify+crg,82.8531146383087,base,0.7986369999999999,crg,114.674,base,0.0
+cart-to-order-flow,graphify,87,graphify,86.85502340529588,base,0.8587800000000001,graphify,125.746,base,0.0
+inactive-customers-csv,graphify,83,graphify,82.6797618339557,crg,0.6220870000000001,graphify,101.872,base,0.0
+order-total-impact,base,84,base,83.54108125896738,graphify,0.865058,graphify+crg,157.262,base,0.0

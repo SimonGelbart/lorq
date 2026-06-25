@@ -1,0 +1,37 @@
+{
+  "id": "admin-product-edit-field",
+  "title": "Admin product edit field localization",
+  "category": "everyday-feature-localization",
+  "difficulty": "medium",
+  "repo": "nopcommerce",
+  "task": "In nopCommerce, I need to add a new field to the admin product create/edit experience.\nFind the likely source files involved in the admin product controller, product admin model,\nmodel preparation/factory, edit view, and product/domain persistence path.\nReturn concise candidate paths with reasons and source-backed evidence.\nDo not implement the change.\n",
+  "validation": {
+    "required_symbols": [
+      "ProductController",
+      "ProductModel",
+      "ProductModelFactory"
+    ],
+    "required_files": [
+      "src/Presentation/Nop.Web/Areas/Admin/Controllers/ProductController.cs",
+      "src/Presentation/Nop.Web/Areas/Admin/Models/Catalog/ProductModel.cs",
+      "src/Presentation/Nop.Web/Areas/Admin/Factories/ProductModelFactory.cs",
+      "src/Presentation/Nop.Web/Areas/Admin/Views/Product/_CreateOrUpdate.Info.cshtml"
+    ],
+    "expected_concepts": [
+      "admin product create edit",
+      "product model",
+      "model factory",
+      "Razor view binding",
+      "controller create update flow",
+      "domain persistence"
+    ],
+    "required_evidence": {
+      "min_existing_file_references": 5,
+      "min_source_files": 5,
+      "max_missing_cited_files": 0,
+      "require_existing_required_files": true
+    }
+  },
+  "rubric": "repository-exploration",
+  "_path": "/home/simon/repos/lorq/code/lorq/cases/admin-product-edit-field.yaml"
+}

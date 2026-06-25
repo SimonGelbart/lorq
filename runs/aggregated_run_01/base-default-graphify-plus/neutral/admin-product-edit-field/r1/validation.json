@@ -1,0 +1,632 @@
+{
+  "case_id": "admin-product-edit-field",
+  "mode_id": "base-default-graphify-plus",
+  "ok": false,
+  "hard_passed": 13,
+  "hard_total": 16,
+  "soft_passed": 2,
+  "soft_total": 9,
+  "answer": {
+    "ok": false,
+    "hard_passed": 12,
+    "hard_total": 15,
+    "soft_passed": 0,
+    "soft_total": 7,
+    "checks": [
+      {
+        "type": "answer_not_empty",
+        "ok": true,
+        "message": "answer.md should contain a non-empty final answer"
+      },
+      {
+        "type": "required_symbol",
+        "value": "ProductController",
+        "ok": true
+      },
+      {
+        "type": "required_symbol",
+        "value": "ProductModel",
+        "ok": true
+      },
+      {
+        "type": "required_symbol",
+        "value": "ProductModelFactory",
+        "ok": true
+      },
+      {
+        "type": "required_file",
+        "value": "src/Presentation/Nop.Web/Areas/Admin/Controllers/ProductController.cs",
+        "ok": true
+      },
+      {
+        "type": "required_file_exists",
+        "value": "src/Presentation/Nop.Web/Areas/Admin/Controllers/ProductController.cs",
+        "ok": true,
+        "message": "required file path should exist in the evaluated worktree"
+      },
+      {
+        "type": "required_file",
+        "value": "src/Presentation/Nop.Web/Areas/Admin/Models/Catalog/ProductModel.cs",
+        "ok": true
+      },
+      {
+        "type": "required_file_exists",
+        "value": "src/Presentation/Nop.Web/Areas/Admin/Models/Catalog/ProductModel.cs",
+        "ok": true,
+        "message": "required file path should exist in the evaluated worktree"
+      },
+      {
+        "type": "required_file",
+        "value": "src/Presentation/Nop.Web/Areas/Admin/Factories/ProductModelFactory.cs",
+        "ok": true
+      },
+      {
+        "type": "required_file_exists",
+        "value": "src/Presentation/Nop.Web/Areas/Admin/Factories/ProductModelFactory.cs",
+        "ok": true,
+        "message": "required file path should exist in the evaluated worktree"
+      },
+      {
+        "type": "required_file",
+        "value": "src/Presentation/Nop.Web/Areas/Admin/Views/Product/_CreateOrUpdate.Info.cshtml",
+        "ok": true
+      },
+      {
+        "type": "required_file_exists",
+        "value": "src/Presentation/Nop.Web/Areas/Admin/Views/Product/_CreateOrUpdate.Info.cshtml",
+        "ok": true,
+        "message": "required file path should exist in the evaluated worktree"
+      },
+      {
+        "type": "expected_concept",
+        "value": "admin product create edit",
+        "ok": false,
+        "soft": true
+      },
+      {
+        "type": "expected_concept",
+        "value": "product model",
+        "ok": false,
+        "soft": true
+      },
+      {
+        "type": "expected_concept",
+        "value": "model factory",
+        "ok": false,
+        "soft": true
+      },
+      {
+        "type": "expected_concept",
+        "value": "Razor view binding",
+        "ok": false,
+        "soft": true
+      },
+      {
+        "type": "expected_concept",
+        "value": "controller create update flow",
+        "ok": false,
+        "soft": true
+      },
+      {
+        "type": "expected_concept",
+        "value": "domain persistence",
+        "ok": false,
+        "soft": true
+      },
+      {
+        "type": "minimum_existing_file_references",
+        "ok": false,
+        "actual": 0,
+        "expected_min": 5
+      },
+      {
+        "type": "minimum_source_files",
+        "ok": false,
+        "actual": 0,
+        "expected_min": 5
+      },
+      {
+        "type": "max_missing_cited_files",
+        "ok": false,
+        "actual": 1,
+        "expected_max": 0
+      },
+      {
+        "type": "cited_file_paths_exist",
+        "ok": false,
+        "actual_missing": 1,
+        "missing": [
+          "UpgradeTo490/SchemaMigration.cs"
+        ],
+        "soft": true
+      }
+    ],
+    "evidence": {
+      "answer_empty": false,
+      "file_references": [
+        "UpgradeTo490/SchemaMigration.cs"
+      ],
+      "file_reference_count": 1,
+      "unique_file_reference_count": 1,
+      "worktree": "/home/simon/repos/lorq-worktrees/base-default-graphify-plus__neutral__admin-product-edit-field__r1",
+      "worktree_available": true,
+      "existing_file_references": [],
+      "existing_file_reference_count": 0,
+      "missing_file_references": [
+        "UpgradeTo490/SchemaMigration.cs"
+      ],
+      "missing_file_reference_count": 1,
+      "unknown_file_references": [],
+      "unknown_file_reference_count": 0
+    }
+  },
+  "behavior": {
+    "ok": true,
+    "hard_passed": 1,
+    "hard_total": 1,
+    "soft_passed": 2,
+    "soft_total": 2,
+    "checks": [
+      {
+        "type": "avoid_generic_graph_queries",
+        "ok": true,
+        "actual": 0,
+        "expected_max": 0,
+        "soft": false
+      },
+      {
+        "type": "graph_query_budget",
+        "ok": true,
+        "actual": 2,
+        "expected_max_before_source_fallback": 2,
+        "source_after_graph": true,
+        "soft": true
+      },
+      {
+        "type": "source_verification_observed",
+        "ok": true,
+        "actual_source_read_count": 6,
+        "soft": true
+      }
+    ],
+    "trace": {
+      "trace_source": "normalized",
+      "normalized_event_count": 26,
+      "normalized_event_type_counts": {
+        "assistant_message": 3,
+        "tool_call": 22,
+        "usage": 1
+      },
+      "command_count": 22,
+      "commands": [
+        {
+          "line": 2,
+          "raw_line": 4,
+          "sequence": 2,
+          "command": "/bin/bash -lc 'bat --paging=never .agents/skills/graphify/SKILL.md .agents/skills/graphify-query-planner/SKILL.md'",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 3,
+          "raw_line": 5,
+          "sequence": 3,
+          "command": "/bin/bash -lc 'bat --paging=never .agents/skills/graphify/SKILL.md .agents/skills/graphify-query-planner/SKILL.md'",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 5,
+          "raw_line": 7,
+          "sequence": 5,
+          "command": "/bin/bash -lc 'bat --paging=never .agents/skills/searching-text/SKILL.md .agents/skills/viewing-files/SKILL.md'",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 6,
+          "raw_line": 8,
+          "sequence": 6,
+          "command": "/bin/bash -lc 'bat --paging=never .agents/skills/searching-text/SKILL.md .agents/skills/viewing-files/SKILL.md'",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 7,
+          "raw_line": 9,
+          "sequence": 7,
+          "command": "/bin/bash -lc \"test -f graphify-out/graph.json && echo graph-present\nrg -n -g '*.cs' -g '*.cshtml' --max-count 20 'class ProductController|class ProductModel\\\\b|class ProductModelFactory|interface IProductModelFactory' src\nrg -n -g '*.cshtml' --max-count 30 'Model\\\\.Product|ProductInfo|ProductModel' src/Presentation/Nop.Web/Areas/Admin/Views/Product 2>/dev/null\"",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 8,
+          "raw_line": 10,
+          "sequence": 8,
+          "command": "/bin/bash -lc \"test -f graphify-out/graph.json && echo graph-present\nrg -n -g '*.cs' -g '*.cshtml' --max-count 20 'class ProductController|class ProductModel\\\\b|class ProductModelFactory|interface IProductModelFactory' src\nrg -n -g '*.cshtml' --max-count 30 'Model\\\\.Product|ProductInfo|ProductModel' src/Presentation/Nop.Web/Areas/Admin/Views/Product 2>/dev/null\"",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 9,
+          "raw_line": 11,
+          "sequence": 9,
+          "command": "/bin/bash -lc 'graphify query \"Admin ProductController ProductModel ProductModelFactory PrepareProductModelAsync Create Edit Product ProductService InsertProductAsync UpdateProductAsync\" --budget 1800'",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 10,
+          "raw_line": 12,
+          "sequence": 10,
+          "command": "/bin/bash -lc 'graphify query \"Admin ProductController ProductModel ProductModelFactory PrepareProductModelAsync Create Edit Product ProductService InsertProductAsync UpdateProductAsync\" --budget 1800'",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 11,
+          "raw_line": 13,
+          "sequence": 11,
+          "command": "/bin/bash -lc \"rg -n -g '*.cs' 'public (virtual )?async Task<IActionResult> (Create|Edit)\\\\b|PrepareProductModelAsync|ToEntity<Product>|InsertProductAsync|UpdateProductAsync' src/Presentation/Nop.Web/Areas/Admin/Controllers/ProductController.cs src/Presentation/Nop.Web/Areas/Admin/Factories/ProductModelFactory.cs src/Presentation/Nop.Web/Areas/Admin/Factories/IProductModelFactory.cs\nrg -n -g '*.cs' 'public partial record ProductModel|public partial class ProductModel|class Product\\\\b|IRepository<Product>|InsertAsync\\\\(product|UpdateAsync\\\\(product' src/Presentation/Nop.Web/Areas/Admin/Models src/Libraries/Nop.Core/Domain/Catalog src/Libraries/Nop.Services/Catalog\nrg -n -g '*.cs' 'class ProductBuilder|MapEntity<Product>|ProductMap|Product' src/Libraries/Nop.Data/Mapping/Builders/Catalog src/Libraries/Nop.Data 2>/dev/null\"",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 12,
+          "raw_line": 14,
+          "sequence": 12,
+          "command": "/bin/bash -lc \"rg -n -g '*.cs' 'public (virtual )?async Task<IActionResult> (Create|Edit)\\\\b|PrepareProductModelAsync|ToEntity<Product>|InsertProductAsync|UpdateProductAsync' src/Presentation/Nop.Web/Areas/Admin/Controllers/ProductController.cs src/Presentation/Nop.Web/Areas/Admin/Factories/ProductModelFactory.cs src/Presentation/Nop.Web/Areas/Admin/Factories/IProductModelFactory.cs\nrg -n -g '*.cs' 'public partial record ProductModel|public partial class ProductModel|class Product\\\\b|IRepository<Product>|InsertAsync\\\\(product|UpdateAsync\\\\(product' src/Presentation/Nop.Web/Areas/Admin/Models src/Libraries/Nop.Core/Domain/Catalog src/Libraries/Nop.Services/Catalog\nrg -n -g '*.cs' 'class ProductBuilder|MapEntity<Product>|ProductMap|Product' src/Libraries/Nop.Data/Mapping/Builders/Catalog src/Libraries/Nop.Data 2>/dev/null\"",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 13,
+          "raw_line": 15,
+          "sequence": 13,
+          "command": "/bin/bash -lc \"rg -n -g '*.cs' 'CreateMap<ProductModel, Product>|CreateMap<Product, ProductModel>|ProductModel.*Product|Product.*ProductModel' src/Presentation/Nop.Web/Areas/Admin/Infrastructure src/Presentation/Nop.Web/Areas/Admin\nbat --paging=never --style=numbers --line-range 1030:1140 src/Presentation/Nop.Web/Areas/Admin/Controllers/ProductController.cs\nbat --paging=never --style=numbers --line-range 1136:1260 src/Presentation/Nop.Web/Areas/Admin/Controllers/ProductController.cs\nbat --paging=never --style=numbers --line-range 1:130 src/Presentation/Nop.Web/Areas/Admin/Models/Catalog/ProductModel.cs\"",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 14,
+          "raw_line": 16,
+          "sequence": 14,
+          "command": "/bin/bash -lc \"rg -n -g '*.cs' 'CreateMap<ProductModel, Product>|CreateMap<Product, ProductModel>|ProductModel.*Product|Product.*ProductModel' src/Presentation/Nop.Web/Areas/Admin/Infrastructure src/Presentation/Nop.Web/Areas/Admin\nbat --paging=never --style=numbers --line-range 1030:1140 src/Presentation/Nop.Web/Areas/Admin/Controllers/ProductController.cs\nbat --paging=never --style=numbers --line-range 1136:1260 src/Presentation/Nop.Web/Areas/Admin/Controllers/ProductController.cs\nbat --paging=never --style=numbers --line-range 1:130 src/Presentation/Nop.Web/Areas/Admin/Models/Catalog/ProductModel.cs\"",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 15,
+          "raw_line": 17,
+          "sequence": 15,
+          "command": "/bin/bash -lc 'bat --paging=never --style=numbers --line-range 880:950 src/Presentation/Nop.Web/Areas/Admin/Factories/ProductModelFactory.cs\nbat --paging=never --style=numbers --line-range 500:570 src/Presentation/Nop.Web/Areas/Admin/Infrastructure/Mapper/AdminMapperConfiguration.cs\nbat --paging=never --style=numbers --line-range 1:125 src/Presentation/Nop.Web/Areas/Admin/Views/Product/Create.cshtml\nbat --paging=never --style=numbers --line-range 1:45 src/Presentation/Nop.Web/Areas/Admin/Views/Product/Edit.cshtml\nbat --paging=never --style=numbers --line-range 1:115 src/Presentation/Nop.Web/Areas/Admin/Views/Product/_CreateOrUpdate.cshtml\nbat --paging=never --style=numbers --line-range 150:225 src/Presentation/Nop.Web/Areas/Admin/Views/Product/_CreateOrUpdate.Info.cshtml'",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 16,
+          "raw_line": 18,
+          "sequence": 16,
+          "command": "/bin/bash -lc 'bat --paging=never --style=numbers --line-range 880:950 src/Presentation/Nop.Web/Areas/Admin/Factories/ProductModelFactory.cs\nbat --paging=never --style=numbers --line-range 500:570 src/Presentation/Nop.Web/Areas/Admin/Infrastructure/Mapper/AdminMapperConfiguration.cs\nbat --paging=never --style=numbers --line-range 1:125 src/Presentation/Nop.Web/Areas/Admin/Views/Product/Create.cshtml\nbat --paging=never --style=numbers --line-range 1:45 src/Presentation/Nop.Web/Areas/Admin/Views/Product/Edit.cshtml\nbat --paging=never --style=numbers --line-range 1:115 src/Presentation/Nop.Web/Areas/Admin/Views/Product/_CreateOrUpdate.cshtml\nbat --paging=never --style=numbers --line-range 150:225 src/Presentation/Nop.Web/Areas/Admin/Views/Product/_CreateOrUpdate.Info.cshtml'",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 17,
+          "raw_line": 19,
+          "sequence": 17,
+          "command": "/bin/bash -lc \"rg -n -g '*.cs' 'AddColumn|AddOrAlterColumnFor<Product>|NopMigration\\\\(' src/Libraries/Nop.Data/Migrations | head -80\nbat --paging=never --style=numbers --line-range 1:85 src/Libraries/Nop.Core/Domain/Catalog/Product.cs\nbat --paging=never --style=numbers --line-range 1:45 src/Libraries/Nop.Data/Mapping/Builders/Catalog/ProductBuilder.cs\nbat --paging=never --style=numbers --line-range 40:100 src/Libraries/Nop.Services/Catalog/ProductService.cs\nbat --paging=never --style=numbers --line-range 555:615 src/Libraries/Nop.Services/Catalog/ProductService.cs\"",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 18,
+          "raw_line": 20,
+          "sequence": 18,
+          "command": "/bin/bash -lc \"rg -n -g '*.cs' 'AddColumn|AddOrAlterColumnFor<Product>|NopMigration\\\\(' src/Libraries/Nop.Data/Migrations | head -80\nbat --paging=never --style=numbers --line-range 1:85 src/Libraries/Nop.Core/Domain/Catalog/Product.cs\nbat --paging=never --style=numbers --line-range 1:45 src/Libraries/Nop.Data/Mapping/Builders/Catalog/ProductBuilder.cs\nbat --paging=never --style=numbers --line-range 40:100 src/Libraries/Nop.Services/Catalog/ProductService.cs\nbat --paging=never --style=numbers --line-range 555:615 src/Libraries/Nop.Services/Catalog/ProductService.cs\"",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 19,
+          "raw_line": 21,
+          "sequence": 19,
+          "command": "/bin/bash -lc \"bat --paging=never --style=numbers --line-range 1:70 src/Libraries/Nop.Data/Migrations/UpgradeTo490/SchemaMigration.cs\nbat --paging=never --style=numbers --line-range 1:80 src/Libraries/Nop.Data/Migrations/UpgradeTo500/SchemaMigration.cs\nrg -n -g '*.cs' 'Admin\\\\.Catalog\\\\.Products\\\\.Fields\\\\.Name|Admin\\\\.Catalog\\\\.Products\\\\.Fields\\\\.AdminComment' src | head -20\nrg -n -g '*.cs' 'ProductValidator|RuleFor\\\\(.*Name' src/Presentation/Nop.Web/Areas/Admin/Validators/Catalog/ProductValidator.cs\"",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 20,
+          "raw_line": 22,
+          "sequence": 20,
+          "command": "/bin/bash -lc \"bat --paging=never --style=numbers --line-range 1:70 src/Libraries/Nop.Data/Migrations/UpgradeTo490/SchemaMigration.cs\nbat --paging=never --style=numbers --line-range 1:80 src/Libraries/Nop.Data/Migrations/UpgradeTo500/SchemaMigration.cs\nrg -n -g '*.cs' 'Admin\\\\.Catalog\\\\.Products\\\\.Fields\\\\.Name|Admin\\\\.Catalog\\\\.Products\\\\.Fields\\\\.AdminComment' src | head -20\nrg -n -g '*.cs' 'ProductValidator|RuleFor\\\\(.*Name' src/Presentation/Nop.Web/Areas/Admin/Validators/Catalog/ProductValidator.cs\"",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 21,
+          "raw_line": 23,
+          "sequence": 21,
+          "command": "/bin/bash -lc \"rg -n -F 'Admin.Catalog.Products.Fields.AdminComment' . --glob '\"'!graphify-out/**'\"' --glob '\"'!**/bin/**'\"' --glob '\"'!**/obj/**'\"' --max-count 20\nrg --files src | rg 'Localization|localization|Language|Resources' | head -60\"",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 22,
+          "raw_line": 24,
+          "sequence": 22,
+          "command": "/bin/bash -lc \"rg -n -F 'Admin.Catalog.Products.Fields.AdminComment' . --glob '\"'!graphify-out/**'\"' --glob '\"'!**/bin/**'\"' --glob '\"'!**/obj/**'\"' --max-count 20\nrg --files src | rg 'Localization|localization|Language|Resources' | head -60\"",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 23,
+          "raw_line": 25,
+          "sequence": 23,
+          "command": "/bin/bash -lc \"rg -n -F 'PartialAsync(\\\"_CreateOrUpdate\\\", Model)' src/Presentation/Nop.Web/Areas/Admin/Views/Product/Create.cshtml src/Presentation/Nop.Web/Areas/Admin/Views/Product/Edit.cshtml\nrg -n -F 'PartialAsync(\\\"_CreateOrUpdate.Info\\\", Model)' src/Presentation/Nop.Web/Areas/Admin/Views/Product/_CreateOrUpdate.cshtml\nrg -n -g '*.cshtml' 'asp-for=\\\"AdminComment\\\"|asp-for=\\\"Name\\\"' src/Presentation/Nop.Web/Areas/Admin/Views/Product/_CreateOrUpdate.Info.cshtml\nrg -n 'public (string|bool|int|decimal|DateTime\\\\??) (Name|AdminComment|ShowOnHomepage)' src/Presentation/Nop.Web/Areas/Admin/Models/Catalog/ProductModel.cs src/Libraries/Nop.Core/Domain/Catalog/Product.cs\"",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 24,
+          "raw_line": 26,
+          "sequence": 24,
+          "command": "/bin/bash -lc \"rg -n -F 'PartialAsync(\\\"_CreateOrUpdate\\\", Model)' src/Presentation/Nop.Web/Areas/Admin/Views/Product/Create.cshtml src/Presentation/Nop.Web/Areas/Admin/Views/Product/Edit.cshtml\nrg -n -F 'PartialAsync(\\\"_CreateOrUpdate.Info\\\", Model)' src/Presentation/Nop.Web/Areas/Admin/Views/Product/_CreateOrUpdate.cshtml\nrg -n -g '*.cshtml' 'asp-for=\\\"AdminComment\\\"|asp-for=\\\"Name\\\"' src/Presentation/Nop.Web/Areas/Admin/Views/Product/_CreateOrUpdate.Info.cshtml\nrg -n 'public (string|bool|int|decimal|DateTime\\\\??) (Name|AdminComment|ShowOnHomepage)' src/Presentation/Nop.Web/Areas/Admin/Models/Catalog/ProductModel.cs src/Libraries/Nop.Core/Domain/Catalog/Product.cs\"",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        }
+      ],
+      "search_count": 14,
+      "source_read_count": 6,
+      "graphify_command_count": 8,
+      "graphify_query_count": 2,
+      "generic_graphify_query_count": 0,
+      "specific_graphify_query_count": 2,
+      "graphify_queries": [
+        {
+          "command": "/bin/bash -lc 'graphify query \"Admin ProductController ProductModel ProductModelFactory PrepareProductModelAsync Create Edit Product ProductService InsertProductAsync UpdateProductAsync\" --budget 1800'",
+          "query": "Admin ProductController ProductModel ProductModelFactory PrepareProductModelAsync Create Edit Product ProductService InsertProductAsync UpdateProductAsync 1800",
+          "words": [
+            "Admin",
+            "ProductController",
+            "ProductModel",
+            "ProductModelFactory",
+            "PrepareProductModelAsync",
+            "Create",
+            "Edit",
+            "Product",
+            "ProductService",
+            "InsertProductAsync",
+            "UpdateProductAsync"
+          ],
+          "symbol_like_terms": [
+            "InsertProductAsync",
+            "PrepareProductModelAsync",
+            "ProductController",
+            "ProductModel",
+            "ProductModelFactory",
+            "ProductService",
+            "UpdateProductAsync"
+          ],
+          "generic_terms": [
+            "admin"
+          ],
+          "is_specific": true,
+          "is_generic": false,
+          "line": 9,
+          "backend": "codex-cli"
+        },
+        {
+          "command": "/bin/bash -lc 'graphify query \"Admin ProductController ProductModel ProductModelFactory PrepareProductModelAsync Create Edit Product ProductService InsertProductAsync UpdateProductAsync\" --budget 1800'",
+          "query": "Admin ProductController ProductModel ProductModelFactory PrepareProductModelAsync Create Edit Product ProductService InsertProductAsync UpdateProductAsync 1800",
+          "words": [
+            "Admin",
+            "ProductController",
+            "ProductModel",
+            "ProductModelFactory",
+            "PrepareProductModelAsync",
+            "Create",
+            "Edit",
+            "Product",
+            "ProductService",
+            "InsertProductAsync",
+            "UpdateProductAsync"
+          ],
+          "symbol_like_terms": [
+            "InsertProductAsync",
+            "PrepareProductModelAsync",
+            "ProductController",
+            "ProductModel",
+            "ProductModelFactory",
+            "ProductService",
+            "UpdateProductAsync"
+          ],
+          "generic_terms": [
+            "admin"
+          ],
+          "is_specific": true,
+          "is_generic": false,
+          "line": 10,
+          "backend": "codex-cli"
+        }
+      ],
+      "source_after_graph": true,
+      "first_graph_line": 9,
+      "first_source_line": 17
+    }
+  },
+  "checks": [
+    {
+      "type": "answer_not_empty",
+      "ok": true,
+      "message": "answer.md should contain a non-empty final answer"
+    },
+    {
+      "type": "required_symbol",
+      "value": "ProductController",
+      "ok": true
+    },
+    {
+      "type": "required_symbol",
+      "value": "ProductModel",
+      "ok": true
+    },
+    {
+      "type": "required_symbol",
+      "value": "ProductModelFactory",
+      "ok": true
+    },
+    {
+      "type": "required_file",
+      "value": "src/Presentation/Nop.Web/Areas/Admin/Controllers/ProductController.cs",
+      "ok": true
+    },
+    {
+      "type": "required_file_exists",
+      "value": "src/Presentation/Nop.Web/Areas/Admin/Controllers/ProductController.cs",
+      "ok": true,
+      "message": "required file path should exist in the evaluated worktree"
+    },
+    {
+      "type": "required_file",
+      "value": "src/Presentation/Nop.Web/Areas/Admin/Models/Catalog/ProductModel.cs",
+      "ok": true
+    },
+    {
+      "type": "required_file_exists",
+      "value": "src/Presentation/Nop.Web/Areas/Admin/Models/Catalog/ProductModel.cs",
+      "ok": true,
+      "message": "required file path should exist in the evaluated worktree"
+    },
+    {
+      "type": "required_file",
+      "value": "src/Presentation/Nop.Web/Areas/Admin/Factories/ProductModelFactory.cs",
+      "ok": true
+    },
+    {
+      "type": "required_file_exists",
+      "value": "src/Presentation/Nop.Web/Areas/Admin/Factories/ProductModelFactory.cs",
+      "ok": true,
+      "message": "required file path should exist in the evaluated worktree"
+    },
+    {
+      "type": "required_file",
+      "value": "src/Presentation/Nop.Web/Areas/Admin/Views/Product/_CreateOrUpdate.Info.cshtml",
+      "ok": true
+    },
+    {
+      "type": "required_file_exists",
+      "value": "src/Presentation/Nop.Web/Areas/Admin/Views/Product/_CreateOrUpdate.Info.cshtml",
+      "ok": true,
+      "message": "required file path should exist in the evaluated worktree"
+    },
+    {
+      "type": "expected_concept",
+      "value": "admin product create edit",
+      "ok": false,
+      "soft": true
+    },
+    {
+      "type": "expected_concept",
+      "value": "product model",
+      "ok": false,
+      "soft": true
+    },
+    {
+      "type": "expected_concept",
+      "value": "model factory",
+      "ok": false,
+      "soft": true
+    },
+    {
+      "type": "expected_concept",
+      "value": "Razor view binding",
+      "ok": false,
+      "soft": true
+    },
+    {
+      "type": "expected_concept",
+      "value": "controller create update flow",
+      "ok": false,
+      "soft": true
+    },
+    {
+      "type": "expected_concept",
+      "value": "domain persistence",
+      "ok": false,
+      "soft": true
+    },
+    {
+      "type": "minimum_existing_file_references",
+      "ok": false,
+      "actual": 0,
+      "expected_min": 5
+    },
+    {
+      "type": "minimum_source_files",
+      "ok": false,
+      "actual": 0,
+      "expected_min": 5
+    },
+    {
+      "type": "max_missing_cited_files",
+      "ok": false,
+      "actual": 1,
+      "expected_max": 0
+    },
+    {
+      "type": "cited_file_paths_exist",
+      "ok": false,
+      "actual_missing": 1,
+      "missing": [
+        "UpgradeTo490/SchemaMigration.cs"
+      ],
+      "soft": true
+    },
+    {
+      "type": "avoid_generic_graph_queries",
+      "ok": true,
+      "actual": 0,
+      "expected_max": 0,
+      "soft": false
+    },
+    {
+      "type": "graph_query_budget",
+      "ok": true,
+      "actual": 2,
+      "expected_max_before_source_fallback": 2,
+      "source_after_graph": true,
+      "soft": true
+    },
+    {
+      "type": "source_verification_observed",
+      "ok": true,
+      "actual_source_read_count": 6,
+      "soft": true
+    }
+  ],
+  "schema_version": "agent-eval.validation-result.v1",
+  "contract_version": "agent-eval.contract.v1"
+}

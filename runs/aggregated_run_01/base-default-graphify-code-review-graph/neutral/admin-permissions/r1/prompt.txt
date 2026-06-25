@@ -1,0 +1,9 @@
+Answer the following repository exploration task.
+
+Use the repository, available files, and available tools as needed.
+Prefer source-backed evidence. If you use derived artifacts, verify important claims against source files.
+
+Task:
+Explain how admin permission checks work for controller actions.
+Identify the main attributes, services, permission records, and registration points.
+Include source-backed evidence.

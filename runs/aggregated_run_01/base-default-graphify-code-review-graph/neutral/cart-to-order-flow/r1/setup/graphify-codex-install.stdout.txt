@@ -1,0 +1,5 @@
+graphify section written to /home/simon/repos/lorq-worktrees/base-default-graphify-code-review-graph__neutral__cart-to-order-flow__r1/AGENTS.md
+  .codex/hooks.json  ->  PreToolUse hook registered (/home/simon/.local/bin/graphify hook-check)
+
+Codex will now check the knowledge graph before answering
+codebase questions and rebuild it after code changes.

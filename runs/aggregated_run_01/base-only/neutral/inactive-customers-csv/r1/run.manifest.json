@@ -1,0 +1,24 @@
+{
+  "suite_version": "1.2.4",
+  "repo": "nopCommerce",
+  "repo_status": {
+    "type": "local",
+    "ok": true,
+    "path": "/home/simon/repos/to-check/misc/nopCommerce",
+    "ref": "HEAD",
+    "is_git_repo": true,
+    "commit": "91c3bdea3131f8e2cf6187cb8bebded4567683c1",
+    "branch": "feat/test-graphify",
+    "dirty": false,
+    "dirty_entries": []
+  },
+  "mode": "base-only",
+  "case": "inactive-customers-csv",
+  "prompt_style": "neutral",
+  "agent_profile": "codex",
+  "repetition": 1,
+  "worktree": "/home/simon/repos/lorq-worktrees/base-only__neutral__inactive-customers-csv__r1",
+  "schema_version": "agent-eval.run-manifest.v1",
+  "contract_version": "agent-eval.contract.v1",
+  "run_status": "completed"
+}

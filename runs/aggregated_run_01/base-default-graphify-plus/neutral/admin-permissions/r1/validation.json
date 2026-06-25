@@ -1,0 +1,482 @@
+{
+  "case_id": "admin-permissions",
+  "mode_id": "base-default-graphify-plus",
+  "ok": true,
+  "hard_passed": 8,
+  "hard_total": 8,
+  "soft_passed": 3,
+  "soft_total": 6,
+  "answer": {
+    "ok": true,
+    "hard_passed": 7,
+    "hard_total": 7,
+    "soft_passed": 1,
+    "soft_total": 4,
+    "checks": [
+      {
+        "type": "answer_not_empty",
+        "ok": true,
+        "message": "answer.md should contain a non-empty final answer"
+      },
+      {
+        "type": "required_symbol",
+        "value": "PermissionService",
+        "ok": true
+      },
+      {
+        "type": "required_symbol",
+        "value": "AuthorizeAdminAttribute",
+        "ok": true
+      },
+      {
+        "type": "required_symbol",
+        "value": "CheckPermissionAttribute",
+        "ok": true
+      },
+      {
+        "type": "required_file",
+        "value": "src/Presentation/Nop.Web.Framework/Mvc/Filters/AuthorizeAdminAttribute.cs",
+        "ok": true
+      },
+      {
+        "type": "required_file_exists",
+        "value": "src/Presentation/Nop.Web.Framework/Mvc/Filters/AuthorizeAdminAttribute.cs",
+        "ok": true,
+        "message": "required file path should exist in the evaluated worktree"
+      },
+      {
+        "type": "expected_concept",
+        "value": "admin authorization filter",
+        "ok": false,
+        "soft": true
+      },
+      {
+        "type": "expected_concept",
+        "value": "permission record registration",
+        "ok": false,
+        "soft": true
+      },
+      {
+        "type": "expected_concept",
+        "value": "permission checking service",
+        "ok": false,
+        "soft": true
+      },
+      {
+        "type": "expected_concept",
+        "value": "controller authorization",
+        "ok": true,
+        "soft": true
+      },
+      {
+        "type": "forbidden_claim",
+        "value": "All admin permissions are hardcoded directly in controllers.",
+        "ok": true
+      }
+    ],
+    "evidence": {
+      "answer_empty": false,
+      "file_references": [],
+      "file_reference_count": 0,
+      "unique_file_reference_count": 0,
+      "worktree": "/home/simon/repos/lorq-worktrees/base-default-graphify-plus__neutral__admin-permissions__r1",
+      "worktree_available": true,
+      "existing_file_references": [],
+      "existing_file_reference_count": 0,
+      "missing_file_references": [],
+      "missing_file_reference_count": 0,
+      "unknown_file_references": [],
+      "unknown_file_reference_count": 0
+    }
+  },
+  "behavior": {
+    "ok": true,
+    "hard_passed": 1,
+    "hard_total": 1,
+    "soft_passed": 2,
+    "soft_total": 2,
+    "checks": [
+      {
+        "type": "avoid_generic_graph_queries",
+        "ok": true,
+        "actual": 0,
+        "expected_max": 0,
+        "soft": false
+      },
+      {
+        "type": "graph_query_budget",
+        "ok": true,
+        "actual": 2,
+        "expected_max_before_source_fallback": 2,
+        "source_after_graph": true,
+        "soft": true
+      },
+      {
+        "type": "source_verification_observed",
+        "ok": true,
+        "actual_source_read_count": 10,
+        "soft": true
+      }
+    ],
+    "trace": {
+      "trace_source": "normalized",
+      "normalized_event_count": 26,
+      "normalized_event_type_counts": {
+        "assistant_message": 3,
+        "tool_call": 22,
+        "usage": 1
+      },
+      "command_count": 22,
+      "commands": [
+        {
+          "line": 2,
+          "raw_line": 4,
+          "sequence": 2,
+          "command": "/bin/bash -lc 'bat --paging=never .agents/skills/graphify/SKILL.md && bat --paging=never .agents/skills/graphify-query-planner/SKILL.md'",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 3,
+          "raw_line": 5,
+          "sequence": 3,
+          "command": "/bin/bash -lc 'bat --paging=never .agents/skills/graphify/SKILL.md && bat --paging=never .agents/skills/graphify-query-planner/SKILL.md'",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 4,
+          "raw_line": 6,
+          "sequence": 4,
+          "command": "/bin/bash -lc \"rg -n --glob '*.cs' 'AdminPermission|PermissionRecord|AuthorizeAdmin|PermissionService|IPermission' . | head -n 240\"",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 5,
+          "raw_line": 7,
+          "sequence": 5,
+          "command": "/bin/bash -lc \"rg -n --glob '*.cs' 'AdminPermission|PermissionRecord|AuthorizeAdmin|PermissionService|IPermission' . | head -n 240\"",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 6,
+          "raw_line": 8,
+          "sequence": 6,
+          "command": "/bin/bash -lc \"rg -n --glob '*.cs' 'class (AuthorizeAdmin|CheckPermission)|\\\\[(CheckPermission|AuthorizeAdmin)|PermissionSystemName|AuthorizeAsync\\\\(' src/Presentation/Nop.Web src/Presentation/Nop.Web.Framework src/Libraries/Nop.Services/Security | head -n 320\"",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 7,
+          "raw_line": 9,
+          "sequence": 7,
+          "command": "/bin/bash -lc \"rg -n --glob '*.cs' 'class (AuthorizeAdmin|CheckPermission)|\\\\[(CheckPermission|AuthorizeAdmin)|PermissionSystemName|AuthorizeAsync\\\\(' src/Presentation/Nop.Web src/Presentation/Nop.Web.Framework src/Libraries/Nop.Services/Security | head -n 320\"",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 8,
+          "raw_line": 10,
+          "sequence": 8,
+          "command": "/bin/bash -lc 'test -f graphify-out/graph.json && graphify query \"AuthorizeAdminAttribute CheckPermissionAttribute PermissionService StandardPermission DefaultPermissionConfigManager controller actions\" --budget 2200'",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 9,
+          "raw_line": 11,
+          "sequence": 9,
+          "command": "/bin/bash -lc 'test -f graphify-out/graph.json && graphify query \"AuthorizeAdminAttribute CheckPermissionAttribute PermissionService StandardPermission DefaultPermissionConfigManager controller actions\" --budget 2200'",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 11,
+          "raw_line": 13,
+          "sequence": 11,
+          "command": "/bin/bash -lc \"rg -n --glob '*.cs' 'AddTransient<IPermissionService|AddScoped<IPermissionService|IPermissionService, PermissionService|DefaultPermissionConfigManager|IPermissionConfigManager|PermissionService' src/Presentation src/Libraries/Nop.Web.Framework src/Libraries/Nop.Services | head -n 160\nrg -n --glob '*.cs' 'class PermissionRecord|class PermissionRecordCustomerRoleMapping|class StandardPermission|static class StandardPermission' src\nrg -n --glob '*.cs' '\\\\[AuthorizeAdmin\\\\]' src/Presentation/Nop.Web/Areas/Admin src/Presentation/Nop.Web.Framework | head -n 40\nrg -n --glob '*.cs' 'class BaseAdminController|Area\\\\(\\\"Admin\\\"\\\\)' src/Presentation/Nop.Web/Areas/Admin | head -n 60\"",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 12,
+          "raw_line": 14,
+          "sequence": 12,
+          "command": "/bin/bash -lc \"rg -n --glob '*.cs' 'AddTransient<IPermissionService|AddScoped<IPermissionService|IPermissionService, PermissionService|DefaultPermissionConfigManager|IPermissionConfigManager|PermissionService' src/Presentation src/Libraries/Nop.Web.Framework src/Libraries/Nop.Services | head -n 160\nrg -n --glob '*.cs' 'class PermissionRecord|class PermissionRecordCustomerRoleMapping|class StandardPermission|static class StandardPermission' src\nrg -n --glob '*.cs' '\\\\[AuthorizeAdmin\\\\]' src/Presentation/Nop.Web/Areas/Admin src/Presentation/Nop.Web.Framework | head -n 40\nrg -n --glob '*.cs' 'class BaseAdminController|Area\\\\(\\\"Admin\\\"\\\\)' src/Presentation/Nop.Web/Areas/Admin | head -n 60\"",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 13,
+          "raw_line": 15,
+          "sequence": 13,
+          "command": "/bin/bash -lc 'bat --paging=never --style=numbers --line-range=1:220 src/Presentation/Nop.Web.Framework/Mvc/Filters/CheckPermissionAttribute.cs\nbat --paging=never --style=numbers --line-range=1:130 src/Presentation/Nop.Web.Framework/Mvc/Filters/AuthorizeAdminAttribute.cs\nbat --paging=never --style=numbers --line-range=1:55 src/Presentation/Nop.Web/Areas/Admin/Controllers/BaseAdminController.cs\nbat --paging=never --style=numbers --line-range=250:355 src/Libraries/Nop.Services/Security/PermissionService.cs'",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 14,
+          "raw_line": 16,
+          "sequence": 14,
+          "command": "/bin/bash -lc 'bat --paging=never --style=numbers --line-range=1:220 src/Presentation/Nop.Web.Framework/Mvc/Filters/CheckPermissionAttribute.cs\nbat --paging=never --style=numbers --line-range=1:130 src/Presentation/Nop.Web.Framework/Mvc/Filters/AuthorizeAdminAttribute.cs\nbat --paging=never --style=numbers --line-range=1:55 src/Presentation/Nop.Web/Areas/Admin/Controllers/BaseAdminController.cs\nbat --paging=never --style=numbers --line-range=250:355 src/Libraries/Nop.Services/Security/PermissionService.cs'",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 15,
+          "raw_line": 17,
+          "sequence": 15,
+          "command": "/bin/bash -lc 'bat --paging=never --style=numbers --line-range=1:180 src/Libraries/Nop.Services/Security/PermissionService.cs\nbat --paging=never --style=numbers --line-range=390:450 src/Libraries/Nop.Services/Security/PermissionService.cs\nbat --paging=never --style=numbers src/Libraries/Nop.Services/Security/IPermissionConfigManager.cs\nbat --paging=never --style=numbers src/Libraries/Nop.Services/Security/DefaultPermissionConfigManager.cs\nbat --paging=never --style=numbers src/Libraries/Nop.Core/Domain/Security/PermissionRecord.cs\nbat --paging=never --style=numbers src/Libraries/Nop.Core/Domain/Security/PermissionRecordCustomerRoleMapping.cs'",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 16,
+          "raw_line": 18,
+          "sequence": 16,
+          "command": "/bin/bash -lc 'bat --paging=never --style=numbers --line-range=1:180 src/Libraries/Nop.Services/Security/PermissionService.cs\nbat --paging=never --style=numbers --line-range=390:450 src/Libraries/Nop.Services/Security/PermissionService.cs\nbat --paging=never --style=numbers src/Libraries/Nop.Services/Security/IPermissionConfigManager.cs\nbat --paging=never --style=numbers src/Libraries/Nop.Services/Security/DefaultPermissionConfigManager.cs\nbat --paging=never --style=numbers src/Libraries/Nop.Core/Domain/Security/PermissionRecord.cs\nbat --paging=never --style=numbers src/Libraries/Nop.Core/Domain/Security/PermissionRecordCustomerRoleMapping.cs'",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 17,
+          "raw_line": 19,
+          "sequence": 17,
+          "command": "/bin/bash -lc \"rg -n --glob '*.cs' 'record PermissionConfig|class PermissionConfig|PermissionConfig\\\\(' src/Libraries/Nop.Services/Security\nbat --paging=never --style=numbers --line-range=1:120 src/Libraries/Nop.Services/Security/StandardPermission.cs\nbat --paging=never --style=numbers --line-range=145:180 src/Presentation/Nop.Web.Framework/Infrastructure/NopStartup.cs\nbat --paging=never --style=numbers --line-range=1:100 src/Presentation/Nop.Web.Framework/Infrastructure/AppStartedConsumer.cs\nbat --paging=never --style=numbers --line-range=1:180 src/Presentation/Nop.Web/Areas/Admin/Controllers/SecurityController.cs\nbat --paging=never --style=numbers --line-range=1:180 src/Presentation/Nop.Web/Areas/Admin/Factories/SecurityModelFactory.cs\"",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 18,
+          "raw_line": 20,
+          "sequence": 18,
+          "command": "/bin/bash -lc \"rg -n --glob '*.cs' 'record PermissionConfig|class PermissionConfig|PermissionConfig\\\\(' src/Libraries/Nop.Services/Security\nbat --paging=never --style=numbers --line-range=1:120 src/Libraries/Nop.Services/Security/StandardPermission.cs\nbat --paging=never --style=numbers --line-range=145:180 src/Presentation/Nop.Web.Framework/Infrastructure/NopStartup.cs\nbat --paging=never --style=numbers --line-range=1:100 src/Presentation/Nop.Web.Framework/Infrastructure/AppStartedConsumer.cs\nbat --paging=never --style=numbers --line-range=1:180 src/Presentation/Nop.Web/Areas/Admin/Controllers/SecurityController.cs\nbat --paging=never --style=numbers --line-range=1:180 src/Presentation/Nop.Web/Areas/Admin/Factories/SecurityModelFactory.cs\"",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 19,
+          "raw_line": 21,
+          "sequence": 19,
+          "command": "/bin/bash -lc \"bat --paging=never --style=numbers src/Libraries/Nop.Services/Security/PermissionConfig.cs\nrg -n --glob '*.cs' '\\\\[AuthorizeAdmin\\\\(true\\\\)\\\\]|\\\\[AuthorizeAdmin\\\\(ignore: true\\\\)\\\\]' src | head -n 80\nrg -n --glob '*.cs' '\\\\[CheckPermission\\\\(new\\\\[\\\\]|\\\\[CheckPermission\\\\(new string\\\\[\\\\]|\\\\[CheckPermission\\\\(new\\\\[\\\\]' src/Presentation/Nop.Web/Areas/Admin | head -n 30\nrg -n --glob '*.cs' 'AddScoped<ISecurityModelFactory|IConsumer<AppStartedEvent>|AppStartedConsumer|PermissionRecordCacheEventConsumer' src/Presentation src/Libraries | head -n 100\nrg -n 'PermissionAllowedCacheKey|PermissionRecordsAllCacheKey' src/Libraries/Nop.Services/Security/NopSecurityDefaults.cs src/Libraries/Nop.Services/Security/Caching/*.cs\"",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 20,
+          "raw_line": 22,
+          "sequence": 20,
+          "command": "/bin/bash -lc \"bat --paging=never --style=numbers src/Libraries/Nop.Services/Security/PermissionConfig.cs\nrg -n --glob '*.cs' '\\\\[AuthorizeAdmin\\\\(true\\\\)\\\\]|\\\\[AuthorizeAdmin\\\\(ignore: true\\\\)\\\\]' src | head -n 80\nrg -n --glob '*.cs' '\\\\[CheckPermission\\\\(new\\\\[\\\\]|\\\\[CheckPermission\\\\(new string\\\\[\\\\]|\\\\[CheckPermission\\\\(new\\\\[\\\\]' src/Presentation/Nop.Web/Areas/Admin | head -n 30\nrg -n --glob '*.cs' 'AddScoped<ISecurityModelFactory|IConsumer<AppStartedEvent>|AppStartedConsumer|PermissionRecordCacheEventConsumer' src/Presentation src/Libraries | head -n 100\nrg -n 'PermissionAllowedCacheKey|PermissionRecordsAllCacheKey' src/Libraries/Nop.Services/Security/NopSecurityDefaults.cs src/Libraries/Nop.Services/Security/Caching/*.cs\"",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 21,
+          "raw_line": 23,
+          "sequence": 21,
+          "command": "/bin/bash -lc 'bat --paging=never --style=numbers --line-range=80:145 src/Presentation/Nop.Web/Areas/Admin/Controllers/ReturnRequestController.cs\nbat --paging=never --style=numbers --line-range=430:455 src/Presentation/Nop.Web/Areas/Admin/Controllers/CommonController.cs\nbat --paging=never --style=numbers src/Libraries/Nop.Services/Security/Caching/PermissionRecordCacheEventConsumer.cs\nbat --paging=never --style=numbers src/Libraries/Nop.Services/Security/Caching/PermissionRecordCustomerRoleMappingCacheEventConsumer.cs\nbat --paging=never --style=numbers src/Libraries/Nop.Data/Mapping/Builders/Security/PermissionRecordBuilder.cs\nbat --paging=never --style=numbers src/Libraries/Nop.Data/Mapping/Builders/Security/PermissionRecordCustomerRoleMappingBuilder.cs\nbat --paging=never --style=numbers src/Plugins/Nop.Plugin.Misc.News/Services/NewsPermissionConfigManager.cs'",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 22,
+          "raw_line": 24,
+          "sequence": 22,
+          "command": "/bin/bash -lc 'bat --paging=never --style=numbers --line-range=80:145 src/Presentation/Nop.Web/Areas/Admin/Controllers/ReturnRequestController.cs\nbat --paging=never --style=numbers --line-range=430:455 src/Presentation/Nop.Web/Areas/Admin/Controllers/CommonController.cs\nbat --paging=never --style=numbers src/Libraries/Nop.Services/Security/Caching/PermissionRecordCacheEventConsumer.cs\nbat --paging=never --style=numbers src/Libraries/Nop.Services/Security/Caching/PermissionRecordCustomerRoleMappingCacheEventConsumer.cs\nbat --paging=never --style=numbers src/Libraries/Nop.Data/Mapping/Builders/Security/PermissionRecordBuilder.cs\nbat --paging=never --style=numbers src/Libraries/Nop.Data/Mapping/Builders/Security/PermissionRecordCustomerRoleMappingBuilder.cs\nbat --paging=never --style=numbers src/Plugins/Nop.Plugin.Misc.News/Services/NewsPermissionConfigManager.cs'",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 23,
+          "raw_line": 25,
+          "sequence": 23,
+          "command": "/bin/bash -lc \"rg -n 'AttributeUsage|public CheckPermissionAttribute|foreach \\\\(var permissionSystemName|AuthorizeAsync\\\\(permissionSystemName\\\\)|CheckPermissionResultType.Default|new RedirectToActionResult|CheckPermissionResultType.Json' src/Presentation/Nop.Web.Framework/Mvc/Filters/CheckPermissionAttribute.cs\nrg -n 'class AuthorizeAdminAttribute|actionFilter|IgnoreFilter|ACCESS_ADMIN_PANEL|ChallengeResult' src/Presentation/Nop.Web.Framework/Mvc/Filters/AuthorizeAdminAttribute.cs\nrg -n '\\\\[AuthorizeAdmin\\\\]|class BaseAdminController' src/Presentation/Nop.Web/Areas/Admin/Controllers/BaseAdminController.cs\nrg -n 'GetCustomerRolesAsync|AuthorizeAsync\\\\(permissionRecordSystemName, role.Id\\\\)|PermissionAllowedCacheKey|GetPermissionRecordsByCustomerRoleIdAsync|FindClassesOfType<IPermissionConfigManager>|InstallPermissionsAsync|new PermissionRecord|DefaultCustomerRoles' src/Libraries/Nop.Services/Security/PermissionService.cs\nrg -n 'AddScoped<IPermissionService|InsertPermissionsAsync' src/Presentation/Nop.Web.Framework/Infrastructure/NopStartup.cs src/Presentation/Nop.Web.Framework/Infrastructure/AppStartedConsumer.cs\nrg -n 'class PermissionRecord|SystemName|Category|PermissionRecordId|CustomerRoleId' src/Libraries/Nop.Core/Domain/Security/PermissionRecord*.cs\nrg -n 'ACCESS_ADMIN_PANEL|ORDERS_VIEW|RETURN_REQUESTS' src/Libraries/Nop.Services/Security/StandardPermission.cs\nrg -n 'Access admin area|Return requests|MANAGE_ACL' src/Libraries/Nop.Services/Security/DefaultPermissionConfigManager.cs\nrg -n 'CheckPermission' src/Presentation/Nop.Web/Areas/Admin/Controllers/ReturnRequestController.cs src/Presentation/Nop.Web/Areas/Admin/Controllers/SecurityController.cs | head -n 20\"",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 24,
+          "raw_line": 26,
+          "sequence": 24,
+          "command": "/bin/bash -lc \"rg -n 'AttributeUsage|public CheckPermissionAttribute|foreach \\\\(var permissionSystemName|AuthorizeAsync\\\\(permissionSystemName\\\\)|CheckPermissionResultType.Default|new RedirectToActionResult|CheckPermissionResultType.Json' src/Presentation/Nop.Web.Framework/Mvc/Filters/CheckPermissionAttribute.cs\nrg -n 'class AuthorizeAdminAttribute|actionFilter|IgnoreFilter|ACCESS_ADMIN_PANEL|ChallengeResult' src/Presentation/Nop.Web.Framework/Mvc/Filters/AuthorizeAdminAttribute.cs\nrg -n '\\\\[AuthorizeAdmin\\\\]|class BaseAdminController' src/Presentation/Nop.Web/Areas/Admin/Controllers/BaseAdminController.cs\nrg -n 'GetCustomerRolesAsync|AuthorizeAsync\\\\(permissionRecordSystemName, role.Id\\\\)|PermissionAllowedCacheKey|GetPermissionRecordsByCustomerRoleIdAsync|FindClassesOfType<IPermissionConfigManager>|InstallPermissionsAsync|new PermissionRecord|DefaultCustomerRoles' src/Libraries/Nop.Services/Security/PermissionService.cs\nrg -n 'AddScoped<IPermissionService|InsertPermissionsAsync' src/Presentation/Nop.Web.Framework/Infrastructure/NopStartup.cs src/Presentation/Nop.Web.Framework/Infrastructure/AppStartedConsumer.cs\nrg -n 'class PermissionRecord|SystemName|Category|PermissionRecordId|CustomerRoleId' src/Libraries/Nop.Core/Domain/Security/PermissionRecord*.cs\nrg -n 'ACCESS_ADMIN_PANEL|ORDERS_VIEW|RETURN_REQUESTS' src/Libraries/Nop.Services/Security/StandardPermission.cs\nrg -n 'Access admin area|Return requests|MANAGE_ACL' src/Libraries/Nop.Services/Security/DefaultPermissionConfigManager.cs\nrg -n 'CheckPermission' src/Presentation/Nop.Web/Areas/Admin/Controllers/ReturnRequestController.cs src/Presentation/Nop.Web/Areas/Admin/Controllers/SecurityController.cs | head -n 20\"",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        }
+      ],
+      "search_count": 12,
+      "source_read_count": 10,
+      "graphify_command_count": 4,
+      "graphify_query_count": 2,
+      "generic_graphify_query_count": 0,
+      "specific_graphify_query_count": 2,
+      "graphify_queries": [
+        {
+          "command": "/bin/bash -lc 'test -f graphify-out/graph.json && graphify query \"AuthorizeAdminAttribute CheckPermissionAttribute PermissionService StandardPermission DefaultPermissionConfigManager controller actions\" --budget 2200'",
+          "query": "AuthorizeAdminAttribute CheckPermissionAttribute PermissionService StandardPermission DefaultPermissionConfigManager controller actions 2200",
+          "words": [
+            "AuthorizeAdminAttribute",
+            "CheckPermissionAttribute",
+            "PermissionService",
+            "StandardPermission",
+            "DefaultPermissionConfigManager",
+            "controller",
+            "actions"
+          ],
+          "symbol_like_terms": [
+            "AuthorizeAdminAttribute",
+            "CheckPermissionAttribute",
+            "DefaultPermissionConfigManager",
+            "PermissionService",
+            "StandardPermission"
+          ],
+          "generic_terms": [
+            "controller"
+          ],
+          "is_specific": true,
+          "is_generic": false,
+          "line": 8,
+          "backend": "codex-cli"
+        },
+        {
+          "command": "/bin/bash -lc 'test -f graphify-out/graph.json && graphify query \"AuthorizeAdminAttribute CheckPermissionAttribute PermissionService StandardPermission DefaultPermissionConfigManager controller actions\" --budget 2200'",
+          "query": "AuthorizeAdminAttribute CheckPermissionAttribute PermissionService StandardPermission DefaultPermissionConfigManager controller actions 2200",
+          "words": [
+            "AuthorizeAdminAttribute",
+            "CheckPermissionAttribute",
+            "PermissionService",
+            "StandardPermission",
+            "DefaultPermissionConfigManager",
+            "controller",
+            "actions"
+          ],
+          "symbol_like_terms": [
+            "AuthorizeAdminAttribute",
+            "CheckPermissionAttribute",
+            "DefaultPermissionConfigManager",
+            "PermissionService",
+            "StandardPermission"
+          ],
+          "generic_terms": [
+            "controller"
+          ],
+          "is_specific": true,
+          "is_generic": false,
+          "line": 9,
+          "backend": "codex-cli"
+        }
+      ],
+      "source_after_graph": true,
+      "first_graph_line": 8,
+      "first_source_line": 4
+    }
+  },
+  "checks": [
+    {
+      "type": "answer_not_empty",
+      "ok": true,
+      "message": "answer.md should contain a non-empty final answer"
+    },
+    {
+      "type": "required_symbol",
+      "value": "PermissionService",
+      "ok": true
+    },
+    {
+      "type": "required_symbol",
+      "value": "AuthorizeAdminAttribute",
+      "ok": true
+    },
+    {
+      "type": "required_symbol",
+      "value": "CheckPermissionAttribute",
+      "ok": true
+    },
+    {
+      "type": "required_file",
+      "value": "src/Presentation/Nop.Web.Framework/Mvc/Filters/AuthorizeAdminAttribute.cs",
+      "ok": true
+    },
+    {
+      "type": "required_file_exists",
+      "value": "src/Presentation/Nop.Web.Framework/Mvc/Filters/AuthorizeAdminAttribute.cs",
+      "ok": true,
+      "message": "required file path should exist in the evaluated worktree"
+    },
+    {
+      "type": "expected_concept",
+      "value": "admin authorization filter",
+      "ok": false,
+      "soft": true
+    },
+    {
+      "type": "expected_concept",
+      "value": "permission record registration",
+      "ok": false,
+      "soft": true
+    },
+    {
+      "type": "expected_concept",
+      "value": "permission checking service",
+      "ok": false,
+      "soft": true
+    },
+    {
+      "type": "expected_concept",
+      "value": "controller authorization",
+      "ok": true,
+      "soft": true
+    },
+    {
+      "type": "forbidden_claim",
+      "value": "All admin permissions are hardcoded directly in controllers.",
+      "ok": true
+    },
+    {
+      "type": "avoid_generic_graph_queries",
+      "ok": true,
+      "actual": 0,
+      "expected_max": 0,
+      "soft": false
+    },
+    {
+      "type": "graph_query_budget",
+      "ok": true,
+      "actual": 2,
+      "expected_max_before_source_fallback": 2,
+      "source_after_graph": true,
+      "soft": true
+    },
+    {
+      "type": "source_verification_observed",
+      "ok": true,
+      "actual_source_read_count": 10,
+      "soft": true
+    }
+  ],
+  "schema_version": "agent-eval.validation-result.v1",
+  "contract_version": "agent-eval.contract.v1"
+}

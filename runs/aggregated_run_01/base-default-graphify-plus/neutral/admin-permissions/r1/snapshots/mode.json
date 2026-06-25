@@ -1,0 +1,56 @@
+{
+  "id": "base-default-graphify-plus",
+  "description": "Your base skills plus default Graphify and the lightweight query-planner companion skill, with Graphify Codex integration installed and a fresh graph generated in each run worktree.",
+  "materialize": {
+    "copy": [
+      {
+        "from": "execution/base-skills",
+        "to": ".agents/skills"
+      },
+      {
+        "from": "execution/skills/graphify",
+        "to": ".agents/skills/graphify"
+      },
+      {
+        "from": "execution/skills/graphify-query-planner",
+        "to": ".agents/skills/graphify-query-planner"
+      },
+      {
+        "from": "execution/configs/graphify/.graphifyignore",
+        "to": ".graphifyignore"
+      }
+    ]
+  },
+  "pre_agent": {
+    "setup_scope": "per-run",
+    "commands": [
+      {
+        "id": "graphify-codex-install",
+        "argv": [
+          "graphify",
+          "codex",
+          "install"
+        ],
+        "cwd": ".",
+        "timeout_seconds": 300,
+        "required": true
+      },
+      {
+        "id": "graphify-generate",
+        "argv": [
+          "graphify",
+          "."
+        ],
+        "cwd": ".",
+        "timeout_seconds": 900,
+        "required": true
+      }
+    ]
+  },
+  "expectations": {
+    "should_verify_with_source": true,
+    "should_avoid_generic_graph_queries": true,
+    "max_graph_queries_before_source_fallback": 2
+  },
+  "_path": "/home/simon/repos/lorq/code/lorq/modes/base-default-graphify-plus.yaml"
+}

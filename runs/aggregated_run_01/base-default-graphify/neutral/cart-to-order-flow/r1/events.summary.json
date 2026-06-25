@@ -1,0 +1,22 @@
+{
+  "event_count": 75,
+  "event_type_counts": {
+    "assistant_message": 10,
+    "tool_call": 64,
+    "usage": 1
+  },
+  "backends": [
+    "codex-cli"
+  ],
+  "usage": {
+    "input_tokens": 504999,
+    "output_tokens": 5672,
+    "cached_input_tokens": 380416,
+    "reasoning_output_tokens": 248,
+    "uncached_input_tokens": 124583,
+    "total_tokens": 510671,
+    "cache_hit_rate": 0.7533005015851516
+  },
+  "schema_version": "agent-eval.event-summary.v1",
+  "contract_version": "agent-eval.contract.v1"
+}

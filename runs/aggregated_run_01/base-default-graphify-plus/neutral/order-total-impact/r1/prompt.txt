@@ -1,0 +1,9 @@
+Answer the following repository exploration task.
+
+Use the repository, available files, and available tools as needed.
+Prefer source-backed evidence. If you use derived artifacts, verify important claims against source files.
+
+Task:
+In nopCommerce, if I change the order total calculation contract, what services,
+plugins, checkout code, payment code, discount code, tax code, and tests are
+likely affected? Return the key source files and relationship evidence.

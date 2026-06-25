@@ -1,0 +1,7 @@
+case,base,crg,graphify,graphify+crg
+admin-permissions,78,79,84,68
+admin-product-edit-field,80,70,83,76
+auth-discovery,77,72,80,84
+cart-to-order-flow,82,66,87,74
+inactive-customers-csv,79,75,83,72
+order-total-impact,84,70,78,79

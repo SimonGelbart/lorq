@@ -1,0 +1,573 @@
+{
+  "case_id": "cart-to-order-flow",
+  "mode_id": "base-default-code-review-graph",
+  "ok": false,
+  "hard_passed": 12,
+  "hard_total": 14,
+  "soft_passed": 4,
+  "soft_total": 7,
+  "answer": {
+    "ok": false,
+    "hard_passed": 12,
+    "hard_total": 14,
+    "soft_passed": 3,
+    "soft_total": 6,
+    "checks": [
+      {
+        "type": "answer_not_empty",
+        "ok": true,
+        "message": "answer.md should contain a non-empty final answer"
+      },
+      {
+        "type": "required_symbol",
+        "value": "ShoppingCartController",
+        "ok": true
+      },
+      {
+        "type": "required_symbol",
+        "value": "ShoppingCartService",
+        "ok": true
+      },
+      {
+        "type": "required_symbol",
+        "value": "PlaceOrderAsync",
+        "ok": true
+      },
+      {
+        "type": "required_symbol",
+        "value": "OrderProcessingService",
+        "ok": true
+      },
+      {
+        "type": "required_file",
+        "value": "src/Presentation/Nop.Web/Controllers/ShoppingCartController.cs",
+        "ok": true
+      },
+      {
+        "type": "required_file_exists",
+        "value": "src/Presentation/Nop.Web/Controllers/ShoppingCartController.cs",
+        "ok": true,
+        "message": "required file path should exist in the evaluated worktree"
+      },
+      {
+        "type": "required_file",
+        "value": "src/Presentation/Nop.Web/Controllers/CheckoutController.cs",
+        "ok": true
+      },
+      {
+        "type": "required_file_exists",
+        "value": "src/Presentation/Nop.Web/Controllers/CheckoutController.cs",
+        "ok": true,
+        "message": "required file path should exist in the evaluated worktree"
+      },
+      {
+        "type": "required_file",
+        "value": "src/Libraries/Nop.Services/Orders/ShoppingCartService.cs",
+        "ok": true
+      },
+      {
+        "type": "required_file_exists",
+        "value": "src/Libraries/Nop.Services/Orders/ShoppingCartService.cs",
+        "ok": true,
+        "message": "required file path should exist in the evaluated worktree"
+      },
+      {
+        "type": "expected_concept",
+        "value": "add to cart",
+        "ok": false,
+        "soft": true
+      },
+      {
+        "type": "expected_concept",
+        "value": "shopping cart item",
+        "ok": false,
+        "soft": true
+      },
+      {
+        "type": "expected_concept",
+        "value": "checkout",
+        "ok": true,
+        "soft": true
+      },
+      {
+        "type": "expected_concept",
+        "value": "order placement",
+        "ok": true,
+        "soft": true
+      },
+      {
+        "type": "expected_concept",
+        "value": "order item",
+        "ok": false,
+        "soft": true
+      },
+      {
+        "type": "expected_concept",
+        "value": "cart cleanup",
+        "ok": true,
+        "soft": true
+      },
+      {
+        "type": "minimum_existing_file_references",
+        "ok": false,
+        "actual": 0,
+        "expected_min": 5
+      },
+      {
+        "type": "minimum_source_files",
+        "ok": false,
+        "actual": 0,
+        "expected_min": 5
+      },
+      {
+        "type": "max_missing_cited_files",
+        "ok": true,
+        "actual": 0,
+        "expected_max": 0
+      }
+    ],
+    "evidence": {
+      "answer_empty": false,
+      "file_references": [],
+      "file_reference_count": 0,
+      "unique_file_reference_count": 0,
+      "worktree": "/home/simon/repos/lorq-worktrees/base-default-code-review-graph__neutral__cart-to-order-flow__r1",
+      "worktree_available": true,
+      "existing_file_references": [],
+      "existing_file_reference_count": 0,
+      "missing_file_references": [],
+      "missing_file_reference_count": 0,
+      "unknown_file_references": [],
+      "unknown_file_reference_count": 0
+    }
+  },
+  "behavior": {
+    "ok": true,
+    "hard_passed": 0,
+    "hard_total": 0,
+    "soft_passed": 1,
+    "soft_total": 1,
+    "checks": [
+      {
+        "type": "source_verification_observed",
+        "ok": true,
+        "actual_source_read_count": 10,
+        "soft": true
+      }
+    ],
+    "trace": {
+      "trace_source": "normalized",
+      "normalized_event_count": 35,
+      "normalized_event_type_counts": {
+        "assistant_message": 4,
+        "tool_call": 30,
+        "usage": 1
+      },
+      "command_count": 30,
+      "commands": [
+        {
+          "line": 2,
+          "raw_line": 4,
+          "sequence": 2,
+          "command": "/bin/bash -lc 'bat --paging=never .agents/skills/code-review-graph/SKILL.md .agents/skills/explore-codebase/SKILL.md'",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 3,
+          "raw_line": 5,
+          "sequence": 3,
+          "command": "/bin/bash -lc 'bat --paging=never .agents/skills/code-review-graph/SKILL.md .agents/skills/explore-codebase/SKILL.md'",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 6,
+          "raw_line": 12,
+          "sequence": 6,
+          "command": "/bin/bash -lc 'bat --paging=never .agents/skills/searching-text/SKILL.md .agents/skills/viewing-files/SKILL.md'",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 7,
+          "raw_line": 13,
+          "sequence": 7,
+          "command": "/bin/bash -lc 'bat --paging=never .agents/skills/searching-text/SKILL.md .agents/skills/viewing-files/SKILL.md'",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 8,
+          "raw_line": 14,
+          "sequence": 8,
+          "command": "/bin/bash -lc \"rg -n -tcs --max-count 80 -e 'AddProductToCart|AddToCart|PlaceOrderAsync|SaveOrderDetailsAsync|DeleteShoppingCartItemAsync|DeleteShoppingCartItemsAsync|ShoppingCartItem' src | head -n 240\"",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 9,
+          "raw_line": 15,
+          "sequence": 9,
+          "command": "/bin/bash -lc \"rg -n -tcs --max-count 80 -e 'AddProductToCart|AddToCart|PlaceOrderAsync|SaveOrderDetailsAsync|DeleteShoppingCartItemAsync|DeleteShoppingCartItemsAsync|ShoppingCartItem' src | head -n 240\"",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 10,
+          "raw_line": 16,
+          "sequence": 10,
+          "command": "/bin/bash -lc \"rg -n -tcs -g '*Controller.cs' -e 'AddProductToCart|AddToCartAsync|PlaceOrderAsync|ConfirmOrder' src/Presentation/Nop.Web | head -n 200\"",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 11,
+          "raw_line": 17,
+          "sequence": 11,
+          "command": "/bin/bash -lc \"rg -n -tcs -g '*Controller.cs' -e 'AddProductToCart|AddToCartAsync|PlaceOrderAsync|ConfirmOrder' src/Presentation/Nop.Web | head -n 200\"",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 12,
+          "raw_line": 18,
+          "sequence": 12,
+          "command": "/bin/bash -lc \"rg -n -tcs -e 'public virtual async Task<IActionResult> (Checkout|BillingAddress|ShippingAddress|ShippingMethod|PaymentMethod|PaymentInfo|ConfirmOrder|OpcConfirmOrder)' src/Presentation/Nop.Web/Controllers/CheckoutController.cs; rg -n -tcs -e 'InsertOrderItemAsync|InsertOrderAsync|DeleteShoppingCartItemAsync|MoveShoppingCartItemsToOrderItemsAsync|SaveOrderDetailsAsync|PreparePlaceOrderDetailsAsync' src/Libraries/Nop.Services/Orders/OrderProcessingService.cs src/Libraries/Nop.Services/Orders/OrderService.cs src/Libraries/Nop.Services/Orders/ShoppingCartService.cs\"",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 13,
+          "raw_line": 19,
+          "sequence": 13,
+          "command": "/bin/bash -lc \"rg -n -tcs -e 'public virtual async Task<IActionResult> (Checkout|BillingAddress|ShippingAddress|ShippingMethod|PaymentMethod|PaymentInfo|ConfirmOrder|OpcConfirmOrder)' src/Presentation/Nop.Web/Controllers/CheckoutController.cs; rg -n -tcs -e 'InsertOrderItemAsync|InsertOrderAsync|DeleteShoppingCartItemAsync|MoveShoppingCartItemsToOrderItemsAsync|SaveOrderDetailsAsync|PreparePlaceOrderDetailsAsync' src/Libraries/Nop.Services/Orders/OrderProcessingService.cs src/Libraries/Nop.Services/Orders/OrderService.cs src/Libraries/Nop.Services/Orders/ShoppingCartService.cs\"",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 14,
+          "raw_line": 20,
+          "sequence": 14,
+          "command": "/bin/bash -lc 'bat --paging=never --style=numbers --line-range 270:335 src/Presentation/Nop.Web/Controllers/ShoppingCartController.cs; bat --paging=never --style=numbers --line-range 585:710 src/Presentation/Nop.Web/Controllers/ShoppingCartController.cs; bat --paging=never --style=numbers --line-range 785:815 src/Presentation/Nop.Web/Controllers/ShoppingCartController.cs; bat --paging=never --style=numbers --line-range 1540:1690 src/Libraries/Nop.Services/Orders/ShoppingCartService.cs'",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 15,
+          "raw_line": 21,
+          "sequence": 15,
+          "command": "/bin/bash -lc 'bat --paging=never --style=numbers --line-range 270:335 src/Presentation/Nop.Web/Controllers/ShoppingCartController.cs; bat --paging=never --style=numbers --line-range 585:710 src/Presentation/Nop.Web/Controllers/ShoppingCartController.cs; bat --paging=never --style=numbers --line-range 785:815 src/Presentation/Nop.Web/Controllers/ShoppingCartController.cs; bat --paging=never --style=numbers --line-range 1540:1690 src/Libraries/Nop.Services/Orders/ShoppingCartService.cs'",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 16,
+          "raw_line": 22,
+          "sequence": 16,
+          "command": "/bin/bash -lc \"rg -n -tcs -e 'SaveItemAsync\\\\(' src/Presentation/Nop.Web/Controllers/ShoppingCartController.cs; bat --paging=never --style=numbers --line-range 1250:1365 src/Presentation/Nop.Web/Controllers/CheckoutController.cs; bat --paging=never --style=numbers --line-range 2005:2090 src/Presentation/Nop.Web/Controllers/CheckoutController.cs\"",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 17,
+          "raw_line": 23,
+          "sequence": 17,
+          "command": "/bin/bash -lc \"rg -n -tcs -e 'SaveItemAsync\\\\(' src/Presentation/Nop.Web/Controllers/ShoppingCartController.cs; bat --paging=never --style=numbers --line-range 1250:1365 src/Presentation/Nop.Web/Controllers/CheckoutController.cs; bat --paging=never --style=numbers --line-range 2005:2090 src/Presentation/Nop.Web/Controllers/CheckoutController.cs\"",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 18,
+          "raw_line": 24,
+          "sequence": 18,
+          "command": "/bin/bash -lc \"rg -n -tcs -g '*Controller.cs' -e 'public virtual.*Checkout\\\\(' -e 'CHECKOUT_BILLING_ADDRESS' -e 'CHECKOUT_ONE_PAGE' src/Presentation/Nop.Web/Controllers | head -n 120; bat --paging=never --style=numbers --line-range 280:570 src/Libraries/Nop.Services/Orders/OrderProcessingService.cs\"",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 19,
+          "raw_line": 25,
+          "sequence": 19,
+          "command": "/bin/bash -lc \"rg -n -tcs -g '*Controller.cs' -e 'public virtual.*Checkout\\\\(' -e 'CHECKOUT_BILLING_ADDRESS' -e 'CHECKOUT_ONE_PAGE' src/Presentation/Nop.Web/Controllers | head -n 120; bat --paging=never --style=numbers --line-range 280:570 src/Libraries/Nop.Services/Orders/OrderProcessingService.cs\"",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 20,
+          "raw_line": 26,
+          "sequence": 20,
+          "command": "/bin/bash -lc 'bat --paging=never --style=numbers --line-range 1335:1415 src/Presentation/Nop.Web/Controllers/ShoppingCartController.cs; bat --paging=never --style=numbers --line-range 380:420 src/Presentation/Nop.Web/Controllers/CheckoutController.cs; bat --paging=never --style=numbers --line-range 700:835 src/Libraries/Nop.Services/Orders/OrderProcessingService.cs; bat --paging=never --style=numbers --line-range 1260:1350 src/Libraries/Nop.Services/Orders/OrderProcessingService.cs; bat --paging=never --style=numbers --line-range 1550:1610 src/Libraries/Nop.Services/Orders/OrderProcessingService.cs'",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 21,
+          "raw_line": 27,
+          "sequence": 21,
+          "command": "/bin/bash -lc 'bat --paging=never --style=numbers --line-range 1335:1415 src/Presentation/Nop.Web/Controllers/ShoppingCartController.cs; bat --paging=never --style=numbers --line-range 380:420 src/Presentation/Nop.Web/Controllers/CheckoutController.cs; bat --paging=never --style=numbers --line-range 700:835 src/Libraries/Nop.Services/Orders/OrderProcessingService.cs; bat --paging=never --style=numbers --line-range 1260:1350 src/Libraries/Nop.Services/Orders/OrderProcessingService.cs; bat --paging=never --style=numbers --line-range 1550:1610 src/Libraries/Nop.Services/Orders/OrderProcessingService.cs'",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 22,
+          "raw_line": 28,
+          "sequence": 22,
+          "command": "/bin/bash -lc \"bat --paging=never --style=numbers --line-range 1580:1655 src/Libraries/Nop.Services/Orders/OrderProcessingService.cs; rg -n -tcs -e 'ClearShoppingCartAsync' src/Libraries/Nop.Services/Orders/ShoppingCartService.cs src/Libraries/Nop.Services/Orders/IShoppingCartService.cs; bat --paging=never --style=numbers --line-range 560:635 src/Libraries/Nop.Services/Orders/ShoppingCartService.cs; bat --paging=never --style=numbers --line-range 340:370 src/Libraries/Nop.Services/Orders/OrderService.cs; bat --paging=never --style=numbers --line-range 735:760 src/Libraries/Nop.Services/Orders/OrderService.cs\"",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 23,
+          "raw_line": 29,
+          "sequence": 23,
+          "command": "/bin/bash -lc \"bat --paging=never --style=numbers --line-range 1580:1655 src/Libraries/Nop.Services/Orders/OrderProcessingService.cs; rg -n -tcs -e 'ClearShoppingCartAsync' src/Libraries/Nop.Services/Orders/ShoppingCartService.cs src/Libraries/Nop.Services/Orders/IShoppingCartService.cs; bat --paging=never --style=numbers --line-range 560:635 src/Libraries/Nop.Services/Orders/ShoppingCartService.cs; bat --paging=never --style=numbers --line-range 340:370 src/Libraries/Nop.Services/Orders/OrderService.cs; bat --paging=never --style=numbers --line-range 735:760 src/Libraries/Nop.Services/Orders/OrderService.cs\"",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 24,
+          "raw_line": 30,
+          "sequence": 24,
+          "command": "/bin/bash -lc 'bat --paging=never --style=numbers --line-range 646:681 src/Libraries/Nop.Services/Orders/ShoppingCartService.cs; bat --paging=never --style=numbers --line-range 850:880 src/Presentation/Nop.Web/Controllers/ShoppingCartController.cs; bat --paging=never --style=numbers --line-range 360:415 src/Presentation/Nop.Web/Controllers/CheckoutController.cs'",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 25,
+          "raw_line": 31,
+          "sequence": 25,
+          "command": "/bin/bash -lc 'bat --paging=never --style=numbers --line-range 646:681 src/Libraries/Nop.Services/Orders/ShoppingCartService.cs; bat --paging=never --style=numbers --line-range 850:880 src/Presentation/Nop.Web/Controllers/ShoppingCartController.cs; bat --paging=never --style=numbers --line-range 360:415 src/Presentation/Nop.Web/Controllers/CheckoutController.cs'",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 26,
+          "raw_line": 32,
+          "sequence": 26,
+          "command": "/bin/bash -lc \"bat --paging=never --style=numbers --line-range 325:370 src/Presentation/Nop.Web/Controllers/CheckoutController.cs; rg -n -tcs -e 'GetProcessPaymentRequestAsync|SetProcessPaymentRequestAsync' src/Libraries/Nop.Services/Orders/OrderProcessingService.cs | head -n 40\"",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 27,
+          "raw_line": 33,
+          "sequence": 27,
+          "command": "/bin/bash -lc \"bat --paging=never --style=numbers --line-range 325:370 src/Presentation/Nop.Web/Controllers/CheckoutController.cs; rg -n -tcs -e 'GetProcessPaymentRequestAsync|SetProcessPaymentRequestAsync' src/Libraries/Nop.Services/Orders/OrderProcessingService.cs | head -n 40\"",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 28,
+          "raw_line": 34,
+          "sequence": 28,
+          "command": "/bin/bash -lc \"rg -n -tcs -e 'CHECKOUT_(SHIPPING_ADDRESS|SHIPPING_METHOD|PAYMENT_METHOD|PAYMENT_INFO|CONFIRM)' src/Presentation/Nop.Web/Controllers/CheckoutController.cs | head -n 120\"",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 29,
+          "raw_line": 35,
+          "sequence": 29,
+          "command": "/bin/bash -lc \"rg -n -tcs -e 'CHECKOUT_(SHIPPING_ADDRESS|SHIPPING_METHOD|PAYMENT_METHOD|PAYMENT_INFO|CONFIRM)' src/Presentation/Nop.Web/Controllers/CheckoutController.cs | head -n 120\"",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 30,
+          "raw_line": 36,
+          "sequence": 30,
+          "command": "/bin/bash -lc 'bat --paging=never --style=numbers --line-range 1145:1250 src/Presentation/Nop.Web/Controllers/CheckoutController.cs; bat --paging=never --style=numbers --line-range 3275:3340 src/Libraries/Nop.Services/Orders/OrderProcessingService.cs'",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 31,
+          "raw_line": 37,
+          "sequence": 31,
+          "command": "/bin/bash -lc 'bat --paging=never --style=numbers --line-range 1145:1250 src/Presentation/Nop.Web/Controllers/CheckoutController.cs; bat --paging=never --style=numbers --line-range 3275:3340 src/Libraries/Nop.Services/Orders/OrderProcessingService.cs'",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 32,
+          "raw_line": 38,
+          "sequence": 32,
+          "command": "/bin/bash -lc \"rg --files src/Libraries/Nop.Core/Domain/Orders | rg '/(ShoppingCartItem|OrderItem|Order)\\\\.cs\"'$'\"'\"",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 33,
+          "raw_line": 39,
+          "sequence": 33,
+          "command": "/bin/bash -lc \"rg --files src/Libraries/Nop.Core/Domain/Orders | rg '/(ShoppingCartItem|OrderItem|Order)\\\\.cs\"'$'\"'\"",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        }
+      ],
+      "search_count": 18,
+      "source_read_count": 10,
+      "graphify_command_count": 0,
+      "graphify_query_count": 0,
+      "generic_graphify_query_count": 0,
+      "specific_graphify_query_count": 0,
+      "graphify_queries": [],
+      "source_after_graph": false,
+      "first_graph_line": null,
+      "first_source_line": 8
+    }
+  },
+  "checks": [
+    {
+      "type": "answer_not_empty",
+      "ok": true,
+      "message": "answer.md should contain a non-empty final answer"
+    },
+    {
+      "type": "required_symbol",
+      "value": "ShoppingCartController",
+      "ok": true
+    },
+    {
+      "type": "required_symbol",
+      "value": "ShoppingCartService",
+      "ok": true
+    },
+    {
+      "type": "required_symbol",
+      "value": "PlaceOrderAsync",
+      "ok": true
+    },
+    {
+      "type": "required_symbol",
+      "value": "OrderProcessingService",
+      "ok": true
+    },
+    {
+      "type": "required_file",
+      "value": "src/Presentation/Nop.Web/Controllers/ShoppingCartController.cs",
+      "ok": true
+    },
+    {
+      "type": "required_file_exists",
+      "value": "src/Presentation/Nop.Web/Controllers/ShoppingCartController.cs",
+      "ok": true,
+      "message": "required file path should exist in the evaluated worktree"
+    },
+    {
+      "type": "required_file",
+      "value": "src/Presentation/Nop.Web/Controllers/CheckoutController.cs",
+      "ok": true
+    },
+    {
+      "type": "required_file_exists",
+      "value": "src/Presentation/Nop.Web/Controllers/CheckoutController.cs",
+      "ok": true,
+      "message": "required file path should exist in the evaluated worktree"
+    },
+    {
+      "type": "required_file",
+      "value": "src/Libraries/Nop.Services/Orders/ShoppingCartService.cs",
+      "ok": true
+    },
+    {
+      "type": "required_file_exists",
+      "value": "src/Libraries/Nop.Services/Orders/ShoppingCartService.cs",
+      "ok": true,
+      "message": "required file path should exist in the evaluated worktree"
+    },
+    {
+      "type": "expected_concept",
+      "value": "add to cart",
+      "ok": false,
+      "soft": true
+    },
+    {
+      "type": "expected_concept",
+      "value": "shopping cart item",
+      "ok": false,
+      "soft": true
+    },
+    {
+      "type": "expected_concept",
+      "value": "checkout",
+      "ok": true,
+      "soft": true
+    },
+    {
+      "type": "expected_concept",
+      "value": "order placement",
+      "ok": true,
+      "soft": true
+    },
+    {
+      "type": "expected_concept",
+      "value": "order item",
+      "ok": false,
+      "soft": true
+    },
+    {
+      "type": "expected_concept",
+      "value": "cart cleanup",
+      "ok": true,
+      "soft": true
+    },
+    {
+      "type": "minimum_existing_file_references",
+      "ok": false,
+      "actual": 0,
+      "expected_min": 5
+    },
+    {
+      "type": "minimum_source_files",
+      "ok": false,
+      "actual": 0,
+      "expected_min": 5
+    },
+    {
+      "type": "max_missing_cited_files",
+      "ok": true,
+      "actual": 0,
+      "expected_max": 0
+    },
+    {
+      "type": "source_verification_observed",
+      "ok": true,
+      "actual_source_read_count": 10,
+      "soft": true
+    }
+  ],
+  "schema_version": "agent-eval.validation-result.v1",
+  "contract_version": "agent-eval.contract.v1"
+}

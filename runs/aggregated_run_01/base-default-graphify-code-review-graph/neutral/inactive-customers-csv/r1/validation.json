@@ -1,0 +1,574 @@
+{
+  "case_id": "inactive-customers-csv",
+  "mode_id": "base-default-graphify-code-review-graph",
+  "ok": true,
+  "hard_passed": 5,
+  "hard_total": 5,
+  "soft_passed": 2,
+  "soft_total": 6,
+  "answer": {
+    "ok": true,
+    "hard_passed": 4,
+    "hard_total": 4,
+    "soft_passed": 0,
+    "soft_total": 4,
+    "checks": [
+      {
+        "type": "answer_not_empty",
+        "ok": true,
+        "message": "answer.md should contain a non-empty final answer"
+      },
+      {
+        "type": "required_symbol",
+        "value": "CustomerController",
+        "ok": true
+      },
+      {
+        "type": "required_symbol",
+        "value": "CustomerSearchModel",
+        "ok": true
+      },
+      {
+        "type": "required_symbol",
+        "value": "ExportManager",
+        "ok": true
+      },
+      {
+        "type": "expected_concept",
+        "value": "admin customer list",
+        "ok": false,
+        "soft": true
+      },
+      {
+        "type": "expected_concept",
+        "value": "search filters",
+        "ok": false,
+        "soft": true
+      },
+      {
+        "type": "expected_concept",
+        "value": "export response",
+        "ok": false,
+        "soft": true
+      },
+      {
+        "type": "cited_file_paths_exist",
+        "ok": false,
+        "actual_missing": 1,
+        "missing": [
+          "Customer/List.cshtml"
+        ],
+        "soft": true
+      }
+    ],
+    "evidence": {
+      "answer_empty": false,
+      "file_references": [
+        "Customer/List.cshtml"
+      ],
+      "file_reference_count": 1,
+      "unique_file_reference_count": 1,
+      "worktree": "/home/simon/repos/lorq-worktrees/base-default-graphify-code-review-graph__neutral__inactive-customers-csv__r1",
+      "worktree_available": true,
+      "existing_file_references": [],
+      "existing_file_reference_count": 0,
+      "missing_file_references": [
+        "Customer/List.cshtml"
+      ],
+      "missing_file_reference_count": 1,
+      "unknown_file_references": [],
+      "unknown_file_reference_count": 0
+    }
+  },
+  "behavior": {
+    "ok": true,
+    "hard_passed": 1,
+    "hard_total": 1,
+    "soft_passed": 2,
+    "soft_total": 2,
+    "checks": [
+      {
+        "type": "avoid_generic_graph_queries",
+        "ok": true,
+        "actual": 0,
+        "expected_max": 0,
+        "soft": false
+      },
+      {
+        "type": "graph_query_budget",
+        "ok": true,
+        "actual": 4,
+        "expected_max_before_source_fallback": 2,
+        "source_after_graph": true,
+        "soft": true
+      },
+      {
+        "type": "source_verification_observed",
+        "ok": true,
+        "actual_source_read_count": 16,
+        "soft": true
+      }
+    ],
+    "trace": {
+      "trace_source": "normalized",
+      "normalized_event_count": 34,
+      "normalized_event_type_counts": {
+        "assistant_message": 3,
+        "tool_call": 30,
+        "usage": 1
+      },
+      "command_count": 30,
+      "commands": [
+        {
+          "line": 2,
+          "raw_line": 4,
+          "sequence": 2,
+          "command": "/bin/bash -lc 'bat --style=plain --paging=never .agents/skills/graphify/SKILL.md .agents/skills/graphify-query-planner/SKILL.md .agents/skills/code-review-graph/SKILL.md'",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 3,
+          "raw_line": 5,
+          "sequence": 3,
+          "command": "/bin/bash -lc 'bat --style=plain --paging=never .agents/skills/graphify/SKILL.md .agents/skills/graphify-query-planner/SKILL.md .agents/skills/code-review-graph/SKILL.md'",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 4,
+          "raw_line": 8,
+          "sequence": 4,
+          "command": "/bin/bash -lc \"rg -n --glob '*.cs' 'class CustomerController|CustomerSearchModel|ExportCustomers|Export.*Customer|ExportManager|Csv' src tests 2>/dev/null | head -n 240\"",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 5,
+          "raw_line": 9,
+          "sequence": 5,
+          "command": "/bin/bash -lc \"rg -n --glob '*.cs' 'class CustomerController|CustomerSearchModel|ExportCustomers|Export.*Customer|ExportManager|Csv' src tests 2>/dev/null | head -n 240\"",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 6,
+          "raw_line": 10,
+          "sequence": 6,
+          "command": "/bin/bash -lc 'if test -f graphify-out/graph.json; then graphify query \"CustomerController ExportExcelAll CustomerSearchModel IExportManager ExportCustomersToXlsxAsync\" --budget 1800; else echo NO_GRAPH; fi'",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 7,
+          "raw_line": 11,
+          "sequence": 7,
+          "command": "/bin/bash -lc 'if test -f graphify-out/graph.json; then graphify query \"CustomerController ExportExcelAll CustomerSearchModel IExportManager ExportCustomersToXlsxAsync\" --budget 1800; else echo NO_GRAPH; fi'",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 8,
+          "raw_line": 12,
+          "sequence": 8,
+          "command": "/bin/bash -lc 'graphify query \"ExportExcelAll ExportXmlAll PrepareCustomerListModelAsync SearchCustomersAsync ExportCustomersToXlsxAsync ExportCustomersToXmlAsync\" --budget 2200'",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 9,
+          "raw_line": 13,
+          "sequence": 9,
+          "command": "/bin/bash -lc 'graphify query \"ExportExcelAll ExportXmlAll PrepareCustomerListModelAsync SearchCustomersAsync ExportCustomersToXlsxAsync ExportCustomersToXmlAsync\" --budget 2200'",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 11,
+          "raw_line": 17,
+          "sequence": 11,
+          "command": "/bin/bash -lc \"rg -n --glob '*.cs' --glob '*.cshtml' 'SearchCustomersAsync\\\\(|ExportExcelAll|ExportXmlAll|CustomersImportExport|CustomerSearchModel|exportexcel-all|exportxml-all' src/Presentation/Nop.Web/Areas/Admin src/Libraries/Nop.Services/Customers src/Libraries/Nop.Services/Security | head -n 280\"",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 12,
+          "raw_line": 18,
+          "sequence": 12,
+          "command": "/bin/bash -lc \"rg -n --glob '*.cs' --glob '*.cshtml' 'SearchCustomersAsync\\\\(|ExportExcelAll|ExportXmlAll|CustomersImportExport|CustomerSearchModel|exportexcel-all|exportxml-all' src/Presentation/Nop.Web/Areas/Admin src/Libraries/Nop.Services/Customers src/Libraries/Nop.Services/Security | head -n 280\"",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 13,
+          "raw_line": 19,
+          "sequence": 13,
+          "command": "/bin/bash -lc \"rg -n --glob '*.cs' 'SearchCustomersAsync' src | head -n 160\"",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 14,
+          "raw_line": 20,
+          "sequence": 14,
+          "command": "/bin/bash -lc \"rg -n --glob '*.cs' 'SearchCustomersAsync' src | head -n 160\"",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 15,
+          "raw_line": 21,
+          "sequence": 15,
+          "command": "/bin/bash -lc 'bat --style=plain --paging=never --line-range 280:325 src/Presentation/Nop.Web/Areas/Admin/Controllers/CustomerController.cs; bat --style=plain --paging=never --line-range 1518:1640 src/Presentation/Nop.Web/Areas/Admin/Controllers/CustomerController.cs; bat --style=plain --paging=never src/Presentation/Nop.Web/Areas/Admin/Models/Customers/CustomerSearchModel.cs; bat --style=plain --paging=never --line-range 500:610 src/Presentation/Nop.Web/Areas/Admin/Factories/CustomerModelFactory.cs'",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 16,
+          "raw_line": 22,
+          "sequence": 16,
+          "command": "/bin/bash -lc 'bat --style=plain --paging=never --line-range 280:325 src/Presentation/Nop.Web/Areas/Admin/Controllers/CustomerController.cs; bat --style=plain --paging=never --line-range 1518:1640 src/Presentation/Nop.Web/Areas/Admin/Controllers/CustomerController.cs; bat --style=plain --paging=never src/Presentation/Nop.Web/Areas/Admin/Models/Customers/CustomerSearchModel.cs; bat --style=plain --paging=never --line-range 500:610 src/Presentation/Nop.Web/Areas/Admin/Factories/CustomerModelFactory.cs'",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 17,
+          "raw_line": 23,
+          "sequence": 17,
+          "command": "/bin/bash -lc \"bat --style=plain --paging=never --line-range 1:110 src/Presentation/Nop.Web/Areas/Admin/Views/Customer/List.cshtml; bat --style=plain --paging=never --line-range 110:290 src/Presentation/Nop.Web/Areas/Admin/Views/Customer/List.cshtml; rg -n --glob '*.cs' 'GetAllCustomersAsync\\\\(' src/Libraries/Nop.Services src/Presentation/Nop.Web/Areas/Admin/Controllers/CustomerController.cs | head -n 120; rg -n --glob '*.cs' 'Task<IPagedList<Customer>> GetAllCustomersAsync|virtual async Task<IPagedList<Customer>> GetAllCustomersAsync|GetAllCustomersAsync' src/Libraries/Nop.Services/Customers\"",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 18,
+          "raw_line": 24,
+          "sequence": 18,
+          "command": "/bin/bash -lc \"bat --style=plain --paging=never --line-range 1:110 src/Presentation/Nop.Web/Areas/Admin/Views/Customer/List.cshtml; bat --style=plain --paging=never --line-range 110:290 src/Presentation/Nop.Web/Areas/Admin/Views/Customer/List.cshtml; rg -n --glob '*.cs' 'GetAllCustomersAsync\\\\(' src/Libraries/Nop.Services src/Presentation/Nop.Web/Areas/Admin/Controllers/CustomerController.cs | head -n 120; rg -n --glob '*.cs' 'Task<IPagedList<Customer>> GetAllCustomersAsync|virtual async Task<IPagedList<Customer>> GetAllCustomersAsync|GetAllCustomersAsync' src/Libraries/Nop.Services/Customers\"",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 19,
+          "raw_line": 25,
+          "sequence": 19,
+          "command": "/bin/bash -lc 'bat --style=plain --paging=never --line-range 35:85 src/Libraries/Nop.Services/Customers/ICustomerService.cs; bat --style=plain --paging=never --line-range 145:245 src/Libraries/Nop.Services/Customers/CustomerService.cs; bat --style=plain --paging=never src/Libraries/Nop.Services/Gdpr/DeleteInactiveCustomersTask.cs; bat --style=plain --paging=never --line-range 285:340 src/Presentation/Nop.Web/Areas/Admin/Views/Customer/List.cshtml'",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 20,
+          "raw_line": 26,
+          "sequence": 20,
+          "command": "/bin/bash -lc 'bat --style=plain --paging=never --line-range 35:85 src/Libraries/Nop.Services/Customers/ICustomerService.cs; bat --style=plain --paging=never --line-range 145:245 src/Libraries/Nop.Services/Customers/CustomerService.cs; bat --style=plain --paging=never src/Libraries/Nop.Services/Gdpr/DeleteInactiveCustomersTask.cs; bat --style=plain --paging=never --line-range 285:340 src/Presentation/Nop.Web/Areas/Admin/Views/Customer/List.cshtml'",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 21,
+          "raw_line": 27,
+          "sequence": 21,
+          "command": "/bin/bash -lc 'bat --style=plain --paging=never --line-range 210:245 src/Libraries/Nop.Services/ExportImport/IExportManager.cs; bat --style=plain --paging=never --line-range 2520:2740 src/Libraries/Nop.Services/ExportImport/ExportManager.cs; bat --style=plain --paging=never --line-range 205:245 src/Presentation/Nop.Web/Areas/Admin/Controllers/NewsLetterSubscriptionController.cs; bat --style=plain --paging=never --line-range 462:488 src/Presentation/Nop.Web/Areas/Admin/Controllers/CountryController.cs; bat --style=plain --paging=never --line-range 108:122 src/Libraries/Nop.Core/MimeTypes.cs'",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 22,
+          "raw_line": 28,
+          "sequence": 22,
+          "command": "/bin/bash -lc 'bat --style=plain --paging=never --line-range 210:245 src/Libraries/Nop.Services/ExportImport/IExportManager.cs; bat --style=plain --paging=never --line-range 2520:2740 src/Libraries/Nop.Services/ExportImport/ExportManager.cs; bat --style=plain --paging=never --line-range 205:245 src/Presentation/Nop.Web/Areas/Admin/Controllers/NewsLetterSubscriptionController.cs; bat --style=plain --paging=never --line-range 462:488 src/Presentation/Nop.Web/Areas/Admin/Controllers/CountryController.cs; bat --style=plain --paging=never --line-range 108:122 src/Libraries/Nop.Core/MimeTypes.cs'",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 23,
+          "raw_line": 29,
+          "sequence": 23,
+          "command": "/bin/bash -lc \"rg -n -i --glob '\"'!graphify-out/**'\"' 'inactive customer|inactivecustomers|customers.*csv|csv.*customers' . | head -n 160; git status --short\"",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 24,
+          "raw_line": 30,
+          "sequence": 24,
+          "command": "/bin/bash -lc \"rg -n -i --glob '\"'!graphify-out/**'\"' 'inactive customer|inactivecustomers|customers.*csv|csv.*customers' . | head -n 160; git status --short\"",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 25,
+          "raw_line": 31,
+          "sequence": 25,
+          "command": "/bin/bash -lc \"rg -n 'ExportNewsLetterSubscribersToTxtAsync|ExportStatesToTxtAsync|Csv' src/Libraries/Nop.Services/ExportImport/ExportManager.cs src/Libraries/Nop.Services/ExportImport/IExportManager.cs | head -n 100; bat --style=plain --paging=never --line-range 2735:2825 src/Libraries/Nop.Services/ExportImport/ExportManager.cs; rg -n 'EscapeCsv|CsvHelper|StringBuilder.*csv|Write.*Csv|ExportToCsv' src/Libraries src/Presentation --glob '*.cs' | head -n 160\"",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 26,
+          "raw_line": 32,
+          "sequence": 26,
+          "command": "/bin/bash -lc \"rg -n 'ExportNewsLetterSubscribersToTxtAsync|ExportStatesToTxtAsync|Csv' src/Libraries/Nop.Services/ExportImport/ExportManager.cs src/Libraries/Nop.Services/ExportImport/IExportManager.cs | head -n 100; bat --style=plain --paging=never --line-range 2735:2825 src/Libraries/Nop.Services/ExportImport/ExportManager.cs; rg -n 'EscapeCsv|CsvHelper|StringBuilder.*csv|Write.*Csv|ExportToCsv' src/Libraries src/Presentation --glob '*.cs' | head -n 160\"",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 27,
+          "raw_line": 33,
+          "sequence": 27,
+          "command": "/bin/bash -lc \"bat --style=plain --paging=never --line-range 30:110 src/Presentation/Nop.Web/Areas/Admin/Controllers/CustomerController.cs; rg -n 'SearchLastActivityFrom|SearchLastActivityTo|SearchIsActive|PrepareCustomerSearchModelAsync|PrepareCustomerListModelAsync|ConvertToUtcTime|GetAllCustomersAsync|ExportCustomersToXlsxAsync|ExportCustomersToXmlAsync|TextCsv|AddScoped<IExportManager|CUSTOMERS_IMPORT_EXPORT|ExportCsv' src/Presentation/Nop.Web/Areas/Admin/Models/Customers/CustomerSearchModel.cs src/Presentation/Nop.Web/Areas/Admin/Factories/CustomerModelFactory.cs src/Presentation/Nop.Web/Areas/Admin/Controllers/CustomerController.cs src/Presentation/Nop.Web/Areas/Admin/Controllers/NewsLetterSubscriptionController.cs src/Presentation/Nop.Web.Framework/Infrastructure/NopStartup.cs src/Libraries/Nop.Core/MimeTypes.cs src/Libraries/Nop.Services/Security/StandardPermission.cs src/Libraries/Nop.Services/ExportImport/IExportManager.cs src/Libraries/Nop.Services/ExportImport/ExportManager.cs src/Libraries/Nop.Services/Gdpr/DeleteInactiveCustomersTask.cs src/Libraries/Nop.Services/Customers/CustomerService.cs | head -n 220\"",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 28,
+          "raw_line": 34,
+          "sequence": 28,
+          "command": "/bin/bash -lc \"bat --style=plain --paging=never --line-range 30:110 src/Presentation/Nop.Web/Areas/Admin/Controllers/CustomerController.cs; rg -n 'SearchLastActivityFrom|SearchLastActivityTo|SearchIsActive|PrepareCustomerSearchModelAsync|PrepareCustomerListModelAsync|ConvertToUtcTime|GetAllCustomersAsync|ExportCustomersToXlsxAsync|ExportCustomersToXmlAsync|TextCsv|AddScoped<IExportManager|CUSTOMERS_IMPORT_EXPORT|ExportCsv' src/Presentation/Nop.Web/Areas/Admin/Models/Customers/CustomerSearchModel.cs src/Presentation/Nop.Web/Areas/Admin/Factories/CustomerModelFactory.cs src/Presentation/Nop.Web/Areas/Admin/Controllers/CustomerController.cs src/Presentation/Nop.Web/Areas/Admin/Controllers/NewsLetterSubscriptionController.cs src/Presentation/Nop.Web.Framework/Infrastructure/NopStartup.cs src/Libraries/Nop.Core/MimeTypes.cs src/Libraries/Nop.Services/Security/StandardPermission.cs src/Libraries/Nop.Services/ExportImport/IExportManager.cs src/Libraries/Nop.Services/ExportImport/ExportManager.cs src/Libraries/Nop.Services/Gdpr/DeleteInactiveCustomersTask.cs src/Libraries/Nop.Services/Customers/CustomerService.cs | head -n 220\"",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 29,
+          "raw_line": 35,
+          "sequence": 29,
+          "command": "/bin/bash -lc \"rg -n 'LastActivityDateUtc|CreatedOnUtc|public bool Active|IsSystemAccount' src/Libraries/Nop.Core/Domain/Customers/Customer.cs; rg -n 'Admin.Common.ExportTo.*Csv|ExportToCsv|exportcsv' src/Presentation/Nop.Web/Areas/Admin/Views src/Presentation/Nop.Web/App_Data/Localization/defaultResources.nopres.xml | head -n 100; rg -n 'ExportNewsLetterSubscribersToTxtAsync|const char separator|return sb.ToString' src/Libraries/Nop.Services/ExportImport/ExportManager.cs | tail -n 20\"",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 30,
+          "raw_line": 36,
+          "sequence": 30,
+          "command": "/bin/bash -lc \"rg -n 'LastActivityDateUtc|CreatedOnUtc|public bool Active|IsSystemAccount' src/Libraries/Nop.Core/Domain/Customers/Customer.cs; rg -n 'Admin.Common.ExportTo.*Csv|ExportToCsv|exportcsv' src/Presentation/Nop.Web/Areas/Admin/Views src/Presentation/Nop.Web/App_Data/Localization/defaultResources.nopres.xml | head -n 100; rg -n 'ExportNewsLetterSubscribersToTxtAsync|const char separator|return sb.ToString' src/Libraries/Nop.Services/ExportImport/ExportManager.cs | tail -n 20\"",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 31,
+          "raw_line": 37,
+          "sequence": 31,
+          "command": "/bin/bash -lc \"rg -n '_gdprSettings|DeleteInactiveCustomersAfterMonths' src/Presentation/Nop.Web/Areas/Admin/Controllers/CustomerController.cs src/Libraries/Nop.Core/Domain/Gdpr/GdprSettings.cs src/Presentation/Nop.Web/Areas/Admin/Models/Settings/GdprSettingsModel.cs\"",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        },
+        {
+          "line": 32,
+          "raw_line": 38,
+          "sequence": 32,
+          "command": "/bin/bash -lc \"rg -n '_gdprSettings|DeleteInactiveCustomersAfterMonths' src/Presentation/Nop.Web/Areas/Admin/Controllers/CustomerController.cs src/Libraries/Nop.Core/Domain/Gdpr/GdprSettings.cs src/Presentation/Nop.Web/Areas/Admin/Models/Settings/GdprSettingsModel.cs\"",
+          "type": "tool_call",
+          "tool": "shell",
+          "backend": "codex-cli"
+        }
+      ],
+      "search_count": 18,
+      "source_read_count": 16,
+      "graphify_command_count": 8,
+      "graphify_query_count": 4,
+      "generic_graphify_query_count": 0,
+      "specific_graphify_query_count": 4,
+      "graphify_queries": [
+        {
+          "command": "/bin/bash -lc 'if test -f graphify-out/graph.json; then graphify query \"CustomerController ExportExcelAll CustomerSearchModel IExportManager ExportCustomersToXlsxAsync\" --budget 1800; else echo NO_GRAPH; fi'",
+          "query": "CustomerController ExportExcelAll CustomerSearchModel IExportManager ExportCustomersToXlsxAsync 1800",
+          "words": [
+            "CustomerController",
+            "ExportExcelAll",
+            "CustomerSearchModel",
+            "IExportManager",
+            "ExportCustomersToXlsxAsync"
+          ],
+          "symbol_like_terms": [
+            "CustomerController",
+            "CustomerSearchModel",
+            "ExportCustomersToXlsxAsync",
+            "ExportExcelAll",
+            "IExportManager"
+          ],
+          "generic_terms": [],
+          "is_specific": true,
+          "is_generic": false,
+          "line": 6,
+          "backend": "codex-cli"
+        },
+        {
+          "command": "/bin/bash -lc 'if test -f graphify-out/graph.json; then graphify query \"CustomerController ExportExcelAll CustomerSearchModel IExportManager ExportCustomersToXlsxAsync\" --budget 1800; else echo NO_GRAPH; fi'",
+          "query": "CustomerController ExportExcelAll CustomerSearchModel IExportManager ExportCustomersToXlsxAsync 1800",
+          "words": [
+            "CustomerController",
+            "ExportExcelAll",
+            "CustomerSearchModel",
+            "IExportManager",
+            "ExportCustomersToXlsxAsync"
+          ],
+          "symbol_like_terms": [
+            "CustomerController",
+            "CustomerSearchModel",
+            "ExportCustomersToXlsxAsync",
+            "ExportExcelAll",
+            "IExportManager"
+          ],
+          "generic_terms": [],
+          "is_specific": true,
+          "is_generic": false,
+          "line": 7,
+          "backend": "codex-cli"
+        },
+        {
+          "command": "/bin/bash -lc 'graphify query \"ExportExcelAll ExportXmlAll PrepareCustomerListModelAsync SearchCustomersAsync ExportCustomersToXlsxAsync ExportCustomersToXmlAsync\" --budget 2200'",
+          "query": "ExportExcelAll ExportXmlAll PrepareCustomerListModelAsync SearchCustomersAsync ExportCustomersToXlsxAsync ExportCustomersToXmlAsync 2200",
+          "words": [
+            "ExportExcelAll",
+            "ExportXmlAll",
+            "PrepareCustomerListModelAsync",
+            "SearchCustomersAsync",
+            "ExportCustomersToXlsxAsync",
+            "ExportCustomersToXmlAsync"
+          ],
+          "symbol_like_terms": [
+            "ExportCustomersToXlsxAsync",
+            "ExportCustomersToXmlAsync",
+            "ExportExcelAll",
+            "ExportXmlAll",
+            "PrepareCustomerListModelAsync",
+            "SearchCustomersAsync"
+          ],
+          "generic_terms": [],
+          "is_specific": true,
+          "is_generic": false,
+          "line": 8,
+          "backend": "codex-cli"
+        },
+        {
+          "command": "/bin/bash -lc 'graphify query \"ExportExcelAll ExportXmlAll PrepareCustomerListModelAsync SearchCustomersAsync ExportCustomersToXlsxAsync ExportCustomersToXmlAsync\" --budget 2200'",
+          "query": "ExportExcelAll ExportXmlAll PrepareCustomerListModelAsync SearchCustomersAsync ExportCustomersToXlsxAsync ExportCustomersToXmlAsync 2200",
+          "words": [
+            "ExportExcelAll",
+            "ExportXmlAll",
+            "PrepareCustomerListModelAsync",
+            "SearchCustomersAsync",
+            "ExportCustomersToXlsxAsync",
+            "ExportCustomersToXmlAsync"
+          ],
+          "symbol_like_terms": [
+            "ExportCustomersToXlsxAsync",
+            "ExportCustomersToXmlAsync",
+            "ExportExcelAll",
+            "ExportXmlAll",
+            "PrepareCustomerListModelAsync",
+            "SearchCustomersAsync"
+          ],
+          "generic_terms": [],
+          "is_specific": true,
+          "is_generic": false,
+          "line": 9,
+          "backend": "codex-cli"
+        }
+      ],
+      "source_after_graph": true,
+      "first_graph_line": 6,
+      "first_source_line": 4
+    }
+  },
+  "checks": [
+    {
+      "type": "answer_not_empty",
+      "ok": true,
+      "message": "answer.md should contain a non-empty final answer"
+    },
+    {
+      "type": "required_symbol",
+      "value": "CustomerController",
+      "ok": true
+    },
+    {
+      "type": "required_symbol",
+      "value": "CustomerSearchModel",
+      "ok": true
+    },
+    {
+      "type": "required_symbol",
+      "value": "ExportManager",
+      "ok": true
+    },
+    {
+      "type": "expected_concept",
+      "value": "admin customer list",
+      "ok": false,
+      "soft": true
+    },
+    {
+      "type": "expected_concept",
+      "value": "search filters",
+      "ok": false,
+      "soft": true
+    },
+    {
+      "type": "expected_concept",
+      "value": "export response",
+      "ok": false,
+      "soft": true
+    },
+    {
+      "type": "cited_file_paths_exist",
+      "ok": false,
+      "actual_missing": 1,
+      "missing": [
+        "Customer/List.cshtml"
+      ],
+      "soft": true
+    },
+    {
+      "type": "avoid_generic_graph_queries",
+      "ok": true,
+      "actual": 0,
+      "expected_max": 0,
+      "soft": false
+    },
+    {
+      "type": "graph_query_budget",
+      "ok": true,
+      "actual": 4,
+      "expected_max_before_source_fallback": 2,
+      "source_after_graph": true,
+      "soft": true
+    },
+    {
+      "type": "source_verification_observed",
+      "ok": true,
+      "actual_source_read_count": 16,
+      "soft": true
+    }
+  ],
+  "schema_version": "agent-eval.validation-result.v1",
+  "contract_version": "agent-eval.contract.v1"
+}

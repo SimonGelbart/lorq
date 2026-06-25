@@ -1,0 +1,123 @@
+$ uvx code-review-graph --version
+# cwd: /home/simon/repos/lorq-worktrees/base-default-code-review-graph__neutral__cart-to-order-flow__r1
+# shell: False
+# exit: 0
+
+STDOUT
+code-review-graph 2.3.6
+
+
+STDERR
+
+
+
+---
+
+$ python3 .agents/scripts/append-code-review-graph-agents.py --repo-root .
+# cwd: /home/simon/repos/lorq-worktrees/base-default-code-review-graph__neutral__cart-to-order-flow__r1
+# shell: False
+# exit: 0
+
+STDOUT
+Appended code-review-graph AGENTS.md instructions to /home/simon/repos/lorq-worktrees/base-default-code-review-graph__neutral__cart-to-order-flow__r1/AGENTS.md
+
+
+STDERR
+
+
+
+---
+
+$ python3 .agents/scripts/write-code-review-graph-codex-config.py --repo-root . --launcher uvx
+# cwd: /home/simon/repos/lorq-worktrees/base-default-code-review-graph__neutral__cart-to-order-flow__r1
+# shell: False
+# exit: 0
+
+STDOUT
+Wrote code-review-graph MCP config to /home/simon/repos/lorq-worktrees/base-default-code-review-graph__neutral__cart-to-order-flow__r1/.codex/config.toml
+Repo root: /home/simon/repos/lorq-worktrees/base-default-code-review-graph__neutral__cart-to-order-flow__r1
+Launcher: uvx
+Tool profile: default-all
+Tools: code-review-graph default MCP tool set (no --tools allow-list)
+
+
+STDERR
+
+
+
+---
+
+$ uvx code-review-graph build --repo .
+# cwd: /home/simon/repos/lorq-worktrees/base-default-code-review-graph__neutral__cart-to-order-flow__r1
+# shell: False
+# exit: 0
+
+STDOUT
+Full build: 3923 files, 20323 nodes, 62858 edges (postprocess=full)
+
+
+STDERR
+INFO: Schema version 1 -> 9: running migrations
+INFO: Running migration v2
+INFO: Migration v2: added 'signature' column to nodes
+INFO: Running migration v3
+INFO: Migration v3: created flows and flow_memberships tables
+INFO: Running migration v4
+INFO: Migration v4: added 'community_id' column to nodes
+INFO: Migration v4: created communities table
+INFO: Running migration v5
+INFO: Migration v5: created nodes_fts FTS5 virtual table
+INFO: Running migration v6
+INFO: Migration v6: created summary tables (community_summaries, flow_snapshots, risk_index)
+INFO: Running migration v7
+INFO: Migration v7: added compound edge indexes
+INFO: Running migration v8
+INFO: Migration v8: created composite edge index
+INFO: Running migration v9
+INFO: Migration v9: added edge confidence columns
+INFO: Migrations complete, now at schema version 9
+INFO: Progress: 200/3923 files parsed
+INFO: Progress: 400/3923 files parsed
+INFO: Progress: 600/3923 files parsed
+INFO: Progress: 800/3923 files parsed
+INFO: Progress: 1000/3923 files parsed
+INFO: Progress: 1200/3923 files parsed
+INFO: Progress: 1400/3923 files parsed
+INFO: Progress: 1600/3923 files parsed
+INFO: Progress: 1800/3923 files parsed
+INFO: Progress: 2000/3923 files parsed
+INFO: Progress: 2200/3923 files parsed
+INFO: Progress: 2400/3923 files parsed
+INFO: Progress: 2600/3923 files parsed
+INFO: Progress: 2800/3923 files parsed
+INFO: Progress: 3000/3923 files parsed
+INFO: Progress: 3200/3923 files parsed
+INFO: Progress: 3400/3923 files parsed
+INFO: Progress: 3600/3923 files parsed
+INFO: Progress: 3800/3923 files parsed
+INFO: Progress: 3923/3923 files parsed
+INFO: FTS index rebuilt: 17521 rows indexed
+INFO: Loaded 13598 unique nodes, 60437 edges
+INFO: igraph not available, using file-based community detection
+
+
+
+---
+
+$ uvx code-review-graph status --repo .
+# cwd: /home/simon/repos/lorq-worktrees/base-default-code-review-graph__neutral__cart-to-order-flow__r1
+# shell: False
+# exit: 0
+
+STDOUT
+Nodes: 17521
+Edges: 60437
+Files: 3923
+Languages: csharp, javascript, sql
+Last updated: 2026-06-24T16:45:52
+Built on branch: HEAD
+Built at commit: 91c3bdea3131
+
+
+STDERR
+

@@ -1,0 +1,7 @@
+Nodes: 17521
+Edges: 60437
+Files: 3923
+Languages: csharp, javascript, sql
+Last updated: 2026-06-24T15:15:42
+Built on branch: HEAD
+Built at commit: 91c3bdea3131
